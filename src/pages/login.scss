@@ -1,0 +1,9 @@
+$rojo-intenso: #ff0000;
+$rojo-medio: rgb(255, 88, 88);
+$rojo-bajo: #ffdada;
+
+.alerta {
+    background-color: $rojo-bajo;
+    border-left: $rojo-medio .5rem solid;
+    color: $rojo-intenso;
+}
