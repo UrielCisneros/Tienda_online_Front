@@ -12,7 +12,8 @@ class Firebase extends Component {
   uiConfig = {
     signInFlow: "popup",
     signInOptions: [
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID
     ],
     callbacks: {
       signInSuccess: () => false
@@ -27,13 +28,18 @@ class Firebase extends Component {
   }
 
   render() {
+    console.log(firebase.auth())
     return (
       <div className="App">
         {this.state.isSignedIn ? (
           <span>
             <div>Signed In!</div>
             <button onClick={() => firebase.auth().signOut()}>Sign out!</button>
-            <h1>Welcome {firebase.auth().currentUser.displayName}</h1>
+            <h5>Nombre: {firebase.auth().currentUser.displayName}</h5>
+            <h5>email: {firebase.auth().currentUser.email}</h5>
+            <h5>url imagen: {firebase.auth().currentUser.photoURL}</h5>
+            <h5>user id: {firebase.auth().currentUser.uid}</h5>
+            <h5>token {firebase.auth().currentUser.refreshToken}</h5>
             <img
               alt="profile picture"
               src={firebase.auth().currentUser.photoURL}

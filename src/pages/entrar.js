@@ -14,17 +14,26 @@ function callback(key) {
 export default function Entrar() {
     return(
         <div>
-            <h4 className="text-center mb-5">
+            <h4 className="text-center mb-4 mt-4">
                 Si aun no tienes cuenta regístrate dando click en "Crear cuenta"
             </h4>
             <div className="tabs">
                 <Tabs className="shadow col-4 bg-white rounded" defaultActiveKey="1" onChange={callback}>
                     <TabPane tab="Iniciar Sesión" key="1">
-                        <Login />
-                        <Firebase />
+                        <div>
+                            <h5 className="">Inicia sesión con tu cuenta de Google o Facebook.</h5>
+                            <Firebase />
+                        </div>
+                        <h5 className="mt-5 border-bottom"></h5>
+                        <div className="mt-3">
+                            <h5>Inicia sesión con tu cuenta.</h5>
+                            <Login />
+                        </div>
                     </TabPane>
                     <TabPane tab="Crear cuenta" key="2">
-                        <Registro />
+                        <div className="mt-3">
+                            <Registro />
+                        </div>
                     </TabPane>
                 </Tabs>
             </div>

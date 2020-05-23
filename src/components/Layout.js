@@ -13,8 +13,8 @@ export default function LayoutBasic(props) {
 			<Layout>
 				<Layout>
 					<Navegacion />
-					<Content style={{ padding: '0 50px', height: "auto" }}>
-						<div className="site-layout-content mt-5 flex">
+					<Content style={{ height: "auto" }}>
+						<div className="site-layout-content flex">
 							<LoadRoutes routes={routes} />
 						</div>
 					</Content>

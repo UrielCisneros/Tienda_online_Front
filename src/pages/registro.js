@@ -15,12 +15,12 @@ export default function Registro() {
 			password: ''
 		},
 		validationSchema: Yup.object({
-			nombre: Yup.string().required('El nombre es obligatorio'),
-			apellido: Yup.string().required('El apellido es obligatorio'),
-			email: Yup.string().email('Email no valido').required('El email es obligatorio'),
+			nombre: Yup.string().required('*El nombre es obligatorio'),
+			apellido: Yup.string().required('*El apellido es obligatorio'),
+			email: Yup.string().email('*Email no valido').required('*El email es obligatorio'),
 			password: Yup.string()
-				.required('El password no debe estar vacio')
-				.min(6, 'El password deber tener un minimo de 6 caracteres')
+				.required('*El password es obligatorio')
+				.min(6, '*El password deber tener un minimo de 6 caracteres')
 		})
 		/* onSubmit: async valores => {
             const { nombre, apellido, email, password } = valores;
@@ -65,6 +65,23 @@ export default function Registro() {
 	return (
 		<div>
 			{mensaje && mostrarMensaje()}
+            {formik.touched.nombre,
+             formik.touched.apellido,
+             formik.touched.email,
+             formik.touched.password &&
+             formik.errors.nombre,
+             formik.errors.apellido,
+             formik.errors.email,
+             formik.errors.password ?
+            (
+				<div className="alerta p-1">
+					<p className="font-weight-bolder mb-0">Error</p>
+					<p className="mb-1">{formik.errors.nombre}</p>
+                    <p className="mb-1">{formik.errors.apellido}</p>
+                    <p className="mb-1">{formik.errors.email}</p>
+                    <p className="mb-1">{formik.errors.password}</p>
+				</div>
+			) : null}
 
 			<div className="mt-2">
 				<form className="bg-white rouded px-5 pb-2 mb-5" onSubmit={formik.handleSubmit}>
@@ -82,13 +99,6 @@ export default function Registro() {
 						/>
 					</div>
 
-					{formik.touched.nombre && formik.errors.nombre ? (
-						<div className="alerta p-1">
-							<p className="font-weight-bolder mb-0">Error</p>
-							<p className="mb-1">{formik.errors.nombre}</p>
-						</div>
-					) : null}
-
 					<div className="mb-4">
 						<label className="d-block font-weight-bolder mb-2" htmlFor="apellido">
 							Apellido
@@ -102,13 +112,6 @@ export default function Registro() {
 							onChange={formik.handleChange}
 						/>
 					</div>
-
-					{formik.touched.apellido && formik.errors.apellido ? (
-						<div className="alerta p-1">
-							<p className="font-weight-bolder mb-0">Error</p>
-							<p className="mb-1">{formik.errors.apellido}</p>
-						</div>
-					) : null}
 
 					<div className="mb-4">
 						<label className="d-block font-weight-bolder mb-2" htmlFor="email">
@@ -124,13 +127,6 @@ export default function Registro() {
 						/>
 					</div>
 
-					{formik.touched.email && formik.errors.email ? (
-						<div className="alerta p-1">
-							<p className="font-weight-bolder mb-0">Error</p>
-							<p className="mb-1">{formik.errors.email}</p>
-						</div>
-					) : null}
-
 					<div className="mb-4">
 						<label className="d-block font-weight-bolder mb-2" htmlFor="password">
 							Password
@@ -144,13 +140,6 @@ export default function Registro() {
 							onChange={formik.handleChange}
 						/>
 					</div>
-
-					{formik.touched.password && formik.errors.password ? (
-						<div className="alerta p-1">
-							<p className="font-weight-bolder mb-0">Error</p>
-							<p className="mb-1">{formik.errors.password}</p>
-						</div>
-					) : null}
 
 					<input
 						type="submit"

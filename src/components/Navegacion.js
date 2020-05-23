@@ -23,7 +23,7 @@ const Navegacion = () => {
 						Productos<Link to="/productos" />
 					</Menu.Item>
                     <Menu.Item>
-						Ofertas<Link to="/anclaCarousel" />
+						Ofertas<Link to="/ofertas" />
 					</Menu.Item>
 					<Menu.Item>
 						Blog<Link to="/blog" />

@@ -1,28 +1,28 @@
 //layout
-import LayoutAdmin from '../components/LayoutAdmin';
-import LayoutBasic from '../components/Layout';
+import LayoutAdmin from '../components/LayoutAdmin'
+import LayoutBasic from '../components/Layout'
 
 //Admin pages
-import AdminHome from '../pages/admin';
-import RegistrarProductos from '../pages/admin/registrar_productos';
-import Pedidos from '../pages/admin/pedidos';
-import Promociones from '../pages/admin/promociones';
-import SistemaApartado from '../pages/admin/sistema_apartado';
-import Inventario from '../pages/admin/inventario';
-import BlogAdmin from '../pages/admin/blog';
+import AdminHome from '../pages/admin'
+import RegistrarProductos from '../pages/admin/registrar_productos'
+import Pedidos from '../pages/admin/pedidos'
+import Promociones from '../pages/admin/promociones'
+import SistemaApartado from '../pages/admin/sistema_apartado'
+import Inventario from '../pages/admin/inventario'
+import BlogAdmin from '../pages/admin/blog'
 
 //pages
-import Home from '../pages/home';
-import Entrar from '../pages/entrar';
-import QuienesSomos from '../pages/quienes_somos';
-import Registro from '../pages/registro';
-import ShoppingCart from '../pages/shopping_cart';
-import Productos from '../pages/productos';
-import Blog from '../pages/blog';
-import PedidosUsuario from '../pages/pedidos';
+import Home from '../pages/home'
+import Entrar from '../pages/entrar'
+import QuienesSomos from '../pages/quienes_somos'
+import ShoppingCart from '../pages/shopping_cart'
+import Productos from '../pages/productos'
+import Blog from '../pages/blog'
+import PedidosUsuario from '../pages/pedidos'
+import Ofertas from '../pages/ofertas'
 
 //other
-import Error404 from '../pages/error404';
+import Error404 from '../pages/error404'
 
 const routes = [
 	{
@@ -108,6 +108,11 @@ const routes = [
             {
 				path: '/pedidos',
 				component: PedidosUsuario,
+				exact: true
+			},
+			{
+				path: '/ofertas',
+				component: Ofertas,
 				exact: true
 			},
 			{

@@ -1,7 +1,13 @@
-import React from 'react'
+import React from 'react';
+import Ofertas from './ofertas'
+import Productos from './productos'
 
 export default function Home() {
-    return (
-        <h1>Estamos en home</h1>
-    )
+
+	return (
+		<div>
+			<Ofertas />
+			<Productos />
+		</div>
+	);
 }
