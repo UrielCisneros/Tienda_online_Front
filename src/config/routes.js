@@ -116,6 +116,11 @@ const routes = [
 				exact: true
 			},
 			{
+				path: '/productos?:user',
+				component: Productos,
+				exact: true
+			},
+			{
 				component: Error404
 			}
 		]

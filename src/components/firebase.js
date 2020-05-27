@@ -41,7 +41,7 @@ class Firebase extends Component {
             <h5>user id: {firebase.auth().currentUser.uid}</h5>
             <h5>token {firebase.auth().currentUser.refreshToken}</h5>
             <img
-              alt="profile picture"
+              alt="imagen"
               src={firebase.auth().currentUser.photoURL}
             />
           </span>

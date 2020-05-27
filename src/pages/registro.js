@@ -5,7 +5,7 @@ import './login.scss';
 
 export default function Registro() {
 	//State para mensaje
-	const [ mensaje, guardarMensaje ] = useState(null);
+	const [ mensaje /* guardarMensaje  */] = useState(null);
 	//Validacion del formulario
 	const formik = useFormik({
 		initialValues: {
@@ -65,20 +65,23 @@ export default function Registro() {
 	return (
 		<div>
 			{mensaje && mostrarMensaje()}
-            {formik.touched.nombre,
-             formik.touched.apellido,
-             formik.touched.email,
-             formik.touched.password &&
-             formik.errors.nombre,
-             formik.errors.apellido,
-             formik.errors.email,
-             formik.errors.password ?
-            (
+            {formik.touched.nombre && formik.errors.nombre ? (
 				<div className="alerta p-1">
-					<p className="font-weight-bolder mb-0">Error</p>
 					<p className="mb-1">{formik.errors.nombre}</p>
+				</div>
+			) : null}
+			{formik.touched.apellido && formik.errors.apellido ? (
+				<div className="alerta p-1">
                     <p className="mb-1">{formik.errors.apellido}</p>
+				</div>
+			) : null}
+			{formik.touched.email && formik.errors.email ? (
+				<div className="alerta p-1">
                     <p className="mb-1">{formik.errors.email}</p>
+				</div>
+			) : null}
+			{formik.touched.password && formik.errors.password ? (
+				<div className="alerta p-1">
                     <p className="mb-1">{formik.errors.password}</p>
 				</div>
 			) : null}

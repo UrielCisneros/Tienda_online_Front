@@ -24,7 +24,7 @@ export default function Entrar() {
                             <h5 className="">Inicia sesión con tu cuenta de Google o Facebook.</h5>
                             <Firebase />
                         </div>
-                        <h5 className="mt-5 border-bottom"></h5>
+                        <div className="mt-5 border-bottom"></div>
                         <div className="mt-3">
                             <h5>Inicia sesión con tu cuenta.</h5>
                             <Login />

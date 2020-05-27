@@ -1,93 +1,88 @@
 import React from 'react';
 import { Card, Col, Row, Pagination } from 'antd';
-import Ofertas from './ofertas';
 
 const { Meta } = Card;
+const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
-export default function Productos() {
-	return (
-		<div>
-            <h3 className="mt-4 mb-2">Algunos de nuestros productos...</h3>
-			<div className="d-flex justify-content-center align-items-center">
-                <div className="site-card-wrapper">
-                    <Row gutter={24}>
-                        <Col span={32}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={
-                                    <img
-                                        alt="example"
-                                        className="img-fluid"
-                                        src="https://res.cloudinary.com/walmart-labs/image/upload/w_960,dpr_auto,f_auto,q_auto:best/mg/gm/3pp/asr/db508dc5-5701-43b8-8579-4f522213584d_1.acc19e11e0cb8ef13757038ca2e30ed2.jpeg?odnHeight=2000&odnWidth=2000&odnBg=ffffff"
-                                    />
-                                }
-                            >
-                                <Meta title="Europe Street beat" description="www.instagram.com" />
-                            </Card>
-                        </Col>
-                        <Col span={32}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={
-                                    <img
-                                        alt="example"
-                                        src="https://res.cloudinary.com/walmart-labs/image/upload/w_960,dpr_auto,f_auto,q_auto:best/mg/gm/1p/images/product-images/img_large/00085369967893l.jpg"
-                                    />
-                                }
-                            >
-                                <Meta title="Europe Street beat" description="www.instagram.com" />
-                            </Card>
-                        </Col>
-                        <Col span={32}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={
-                                    <img
-                                        alt="example"
-                                        src="https://res.cloudinary.com/walmart-labs/image/upload/w_960,dpr_auto,f_auto,q_auto:best/mg/gm/3pp/asr/c9362d35-d6e1-43ba-97ea-f2fb668d5d4b_1.ee1922b090f811fc32adc8223e4454fd.jpeg?odnHeight=2000&odnWidth=2000&odnBg=ffffff"
-                                    />
-                                }
-                            >
-                                <Meta title="Europe Street beat" description="www.instagram.com" />
-                            </Card>
-                        </Col>
-                        <Col span={32}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={
-                                    <img
-                                        alt="example"
-                                        src="https://res.cloudinary.com/walmart-labs/image/upload/w_960,dpr_auto,f_auto,q_auto:best/mg/gm/3pp/asr/0519c732-977f-48d5-b8d5-08d27d41301d_1.9715121c2e9b6facb51307344dd0140d.jpeg?odnHeight=2000&odnWidth=2000&odnBg=ffffff"
-                                    />
-                                }
-                            >
-                                <Meta title="Europe Street beat" description="www.instagram.com" />
-                            </Card>
-                        </Col>
-                        <Col span={32}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={
-                                    <img
-                                        alt="example"
-                                        src="https://res.cloudinary.com/walmart-labs/image/upload/w_960,dpr_auto,f_auto,q_auto:best/mg/gm/3pp/asr/0519c732-977f-48d5-b8d5-08d27d41301d_1.9715121c2e9b6facb51307344dd0140d.jpeg?odnHeight=2000&odnWidth=2000&odnBg=ffffff"
-                                    />
-                                }
-                            >
-                                <Meta title="Europe Street beat" description="www.instagram.com" />
-                            </Card>
-                        </Col>
-                    </Row>
-                </div>
-            </div>
-            <div className="mt-5 mb-5 text-center">
-                <Pagination defaultCurrent={6} total={500} />
-            </div>
-		</div>
-	);
+function searchingFor(search) {
+	return function(x) {
+		return x.user.toLowerCase().includes(search.toLowerCase()) || !search;
+	};
 }
+
+/* export default function Productos() { */
+class Productos extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			search: '',
+			fotos: [],
+			isFetch: true
+		};
+
+		this.onchange = this.onchange.bind(this);
+	}
+
+	onchange = (e) => {
+		this.setState({ search: e.target.value });
+	};
+
+	componentDidMount() {
+		fetch('https://pixabay.com/api/?key=16739568-19a03185691a993c835c71d62&per_page=10')
+			.then((response) => response.json())
+			.then((fotosJson) => this.setState({ fotos: fotosJson.hits, isFetch: false }));
+	}
+
+	render() {
+		console.log(this.state.fotos);
+		const { search } = this.state;
+		if (this.state.isFetch) {
+			return 'loading...';
+		}
+
+		const render = this.state.fotos.filter(searchingFor(this.state.search)).map((foto) => (
+			<Col span={32} key={foto.id}>
+				<Card.Grid hoverable style={gridStyle}>
+					<Card
+						hoverable
+						style={{ width: 240, height: 250 }}
+						cover={<img alt="example" className="img-fluid" src={foto.webformatURL} />}
+					>
+						<Meta title={foto.user} description="www.instagram.com" />
+					</Card>
+				</Card.Grid>
+			</Col>
+		));
+
+		return (
+			<div>
+				<h3 className="ml-5 mt-4 mb-4">Algunos de nuestros productos...</h3>
+				<div className="container w-50 mb-5">
+					<h5>Busca un producto en específico</h5>
+					<form className="form-inline">
+						<input
+							className="form-control w-100"
+							type="search"
+							onChange={this.onchange}
+							value={search}
+							placeholder="buscar"
+						/>
+					</form>
+				</div>
+				<div className="d-flex justify-content-center align-items-center">
+					<div className="site-card-wrapper">
+						<Row gutter={24} style={{ maxWidth: '90vw' }}>
+							{render}
+						</Row>
+					</div>
+				</div>
+				<div className="mt-5 mb-5 text-center">
+					<Pagination defaultCurrent={1} total={500} />
+				</div>
+			</div>
+		);
+	}
+}
+
+export default Productos;

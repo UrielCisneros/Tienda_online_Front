@@ -5,7 +5,7 @@ import './login.scss'
 
 export default function Login() {
 	//State para mensaje
-	const [ mensaje, guardarMensaje ] = useState(null);
+	const [ mensaje /* guardarMensaje */ ] = useState(null);
 	//Validacion del formulario
 	const formik = useFormik({
 		initialValues: {
@@ -60,17 +60,19 @@ export default function Login() {
 	return (
 		<div>
 			{mensaje && mostrarMensaje()}
-            {formik.touched.email,
-             formik.touched.password && 
-             formik.errors.email,
-             formik.errors.password ? 
+            {formik.touched.email && formik.errors.email ? 
              (
 				<div className="alerta p-1">
-					<p className="font-weight-bolder mb-0">Error</p>
 					<p className="mb-1">{formik.errors.email}</p>
-                    <p className="mb-1">{formik.errors.password}</p>
 				</div>
 			) : null}
+
+			{formik.touched.password && formik.errors.password ? 
+             (
+				<div className="alerta p-1">
+                    <p className="mb-1">{formik.errors.password}</p>
+				</div>
+			) : null}		
 
 			<div className="mt-2">
 				<form className="bg-white rouded px-5 pt-2 pb-2 mb-2" onSubmit={formik.handleSubmit}>
