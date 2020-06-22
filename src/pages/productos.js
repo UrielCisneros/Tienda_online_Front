@@ -6,7 +6,7 @@ const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
 function searchingFor(search) {
 	return function(x) {
-		return x.user.toLowerCase().includes(search.toLowerCase()) || !search;
+		return x.nombre.toLowerCase().includes(search.toLowerCase()) || !search;
 	};
 }
 
@@ -29,9 +29,9 @@ class Productos extends React.Component {
 	};
 
 	componentDidMount() {
-		fetch('https://pixabay.com/api/?key=16739568-19a03185691a993c835c71d62&per_page=10')
+		fetch('http://localhost:4000/api/productos/')
 			.then((response) => response.json())
-			.then((fotosJson) => this.setState({ fotos: fotosJson.hits, isFetch: false }));
+			.then((fotosJson) => this.setState({ fotos: fotosJson, isFetch: false }));
 	}
 
 	render() {
@@ -46,10 +46,11 @@ class Productos extends React.Component {
 				<Card.Grid hoverable style={gridStyle}>
 					<Card
 						hoverable
-						style={{ width: 240, height: 250 }}
-						cover={<img alt="example" className="img-fluid" src={foto.webformatURL} />}
+						style={{ width: 240, maxHeight: 350 }}
+						cover={<img alt="example" className="img-fluid" src={foto.imagen} style={{ maxHeight: 200}} />}
 					>
-						<Meta title={foto.user} description="www.instagram.com" />
+						<Meta title={foto.nombre} description={foto.descripcion }/>
+		<h3>{foto.precio}</h3>
 					</Card>
 				</Card.Grid>
 			</Col>

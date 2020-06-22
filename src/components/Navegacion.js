@@ -1,48 +1,25 @@
-import React, { useState } from 'react';
-import { Layout, Menu } from 'antd';
+import React from 'react';
+import { Layout, Menu, Button, Input} from 'antd';
 import { Link } from 'react-router-dom';
+import firebase from 'firebase';
 
+const { Search } = Input;
 const { Header } = Layout;
 
 const Navegacion = () => {
-	const [ datos, setDatos ] = useState({
-		titulo: ''
-	});
 
-	const handleInputChange = (event) => {
-		console.log(event.target.value);
-		setDatos({
-			...datos,
-			[event.target.name]: event.target.value
-		});
-	};
-
-	const enviarDatos = (event) => {
-		console.log(datos.titulo);
-		return <Link to="productos" />;
-	};
+	const token = localStorage.getItem('token')
 
 	return (
 		<Layout className="layout">
 			<Header>
 				<Menu className="float-right" theme="dark" mode="horizontal" defaultSelectedKeys={[ '' ]}>
+					<Search
+						placeholder="input search text"
+						onSearch={value => console.log(value)}
+						style={{ width: 350 }}
+					/>
 					<Menu.Item>
-						<div>
-							<form className="form-inline" onSubmit={enviarDatos}>
-								<input
-									className="form-control"
-									name="titulo"
-									type="search"
-									placeholder="Search"
-									onChange={handleInputChange}
-								/>
-								<button className="btn btn-primary my-2 my-sm-0" type="submit">
-									Search
-								</button>
-							</form>
-						</div>
-					</Menu.Item>
-					<Menu.Item key="1">
 						Home<Link to="/" />
 					</Menu.Item>
 					<Menu.Item>
@@ -63,9 +40,21 @@ const Navegacion = () => {
 					<Menu.Item>
 						Carrito<Link to="/shopping_cart" />
 					</Menu.Item>
+
+					{ token === '' || token === null ?
+
 					<Menu.Item>
 						Entrar<Link to="/entrar" />
 					</Menu.Item>
+					:
+										
+					<Button type="primary" onClick={() =>{
+						localStorage.removeItem('token')
+						firebase.auth().signOut()
+						window.location.reload()
+						}
+					} danger>Cerrar Sesión</Button>
+					}
 				</Menu>
 			</Header>
 		</Layout>

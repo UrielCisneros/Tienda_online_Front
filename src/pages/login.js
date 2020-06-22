@@ -1,57 +1,60 @@
 import React, { useState } from 'react';
+import clienteAxios from '../config/axios';
+import { withRouter } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { notification } from 'antd';
 import * as Yup from 'yup';
-import './login.scss'
 
-export default function Login() {
+function Login(props) {
 	//State para mensaje
-	const [ mensaje /* guardarMensaje */ ] = useState(null);
+	const [ mensaje ] = useState(null);
 	//Validacion del formulario
 	const formik = useFormik({
 		initialValues: {
 			email: '',
-			password: ''
+			contrasena: ''
 		},
 		validationSchema: Yup.object({
-			email: Yup.string().email('El email no es valido').required('El email no puede ir vacio'),
-			password: Yup.string().required('El password es obligatorio')
-		})
-		/* onSubmit: async valores => {
-            const { email, password } = valores;
-
-            try {
-                const { data } = await autenticarUsuario({
-                    variables: {
-                        input: {
-                            email,
-                            password
-                        }
-                    }
-                })
-                console.log(data);
-                //Usuario creado correctamente
-                guardarMensaje('Autenticando...');
-                //guadar tolken en localStorage
-                const { token } = data.autenticarUsuario;
-                localStorage.setItem('token', token);
-                //redirigir usuario para iniciar sesion
-                setTimeout(() => {
-                    guardarMensaje(null);
-                    router.push('/')
-                }, 2000);
-            } catch (error) {
-                guardarMensaje(error.message.replace('GraphQL error:', ''));
-
-                setTimeout(() => {
-                    guardarMensaje(null);
-                }, 3000);
-            }
-        } */
+			email: Yup.string().email('*El email no es valido').required('*El email no puede ir vacio'),
+			contrasena: Yup.string().required('*La contraseña es obligatoria')
+		}),
+		onSubmit: async (valores) => {
+			try {
+				const respuesta = await clienteAxios.post('/cliente/auth', valores);
+				const token = respuesta.data;
+				//coloca en local storage del navegador
+				localStorage.setItem('token', token);
+				//redireccionar
+				props.history.push('/');
+			} catch (error) {
+				if(error.response.data.message === 'Este usuario no existe'){
+					try {
+						const respuesta = await clienteAxios.post('/admin/auth', valores);
+						const token = respuesta.data;
+						//coloca en local storage del navegador
+						localStorage.setItem('token', token);
+						//redireccionar
+						props.history.push('/admin');
+					} catch (error) {
+						openNotificationWithIcon('error', 'Error',error.response.data.message)
+					}
+				}else{
+					openNotificationWithIcon('error', 'Error',error.response.data.message)
+				}				
+			}
+		}
 	});
+
+	const openNotificationWithIcon = (type, titulo, mensaje) => {
+		notification[type]({
+		  message: titulo,
+		  description: mensaje
+		});
+	};
 
 	const mostrarMensaje = () => {
 		return (
-			<div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+			<div className="py-2 px-3 my-3 text-center mx-auto">
 				<p>{mensaje}</p>
 			</div>
 		);
@@ -60,19 +63,6 @@ export default function Login() {
 	return (
 		<div>
 			{mensaje && mostrarMensaje()}
-            {formik.touched.email && formik.errors.email ? 
-             (
-				<div className="alerta p-1">
-					<p className="mb-1">{formik.errors.email}</p>
-				</div>
-			) : null}
-
-			{formik.touched.password && formik.errors.password ? 
-             (
-				<div className="alerta p-1">
-                    <p className="mb-1">{formik.errors.password}</p>
-				</div>
-			) : null}		
 
 			<div className="mt-2">
 				<form className="bg-white rouded px-5 pt-2 pb-2 mb-2" onSubmit={formik.handleSubmit}>
@@ -80,6 +70,12 @@ export default function Login() {
 						<label className="d-block font-weight-bolder mb-2" htmlFor="email">
 							Email
 						</label>
+						{formik.touched.email && formik.errors.email ? (
+							<div className="text-left">
+								<p className="margin-0 text-weight-bold text-danger">{formik.errors.email}</p>
+							</div>
+						) : null}
+
 						<input
 							className="form-control shadow border rounded font-weight-lighter py-2 px-3"
 							id="email"
@@ -91,26 +87,29 @@ export default function Login() {
 					</div>
 
 					<div className="mb-2">
-						<label className="d-block font-weight-bolder mb-2" htmlFor="password">
-							Password
+						<label className="d-block font-weight-bolder mb-2" htmlFor="contrasena">
+							Contraseña
 						</label>
+						{formik.touched.contrasena && formik.errors.contrasena ? (
+							<div className="text-left">
+								<p className="margin-0 text-weight-bold text-danger">{formik.errors.contrasena}</p>
+							</div>
+						) : null}
+
 						<input
 							className="form-control shadow border rounded font-weight-lighter py-2 px-3"
-							id="password"
+							id="contrasena"
 							type="password"
-							placeholder="Password de usuario"
+							placeholder="Contrasena"
 							onChange={formik.handleChange}
-							value={formik.values.password}
+							value={formik.values.contrasena}
 						/>
 					</div>
 
-					<input
-						type="submit"
-						className="btn btn-info mt-2 p-2 text-white"
-						value="Iniciar Sesión"
-					/>
+					<input type="submit" className="btn btn-info mt-2 p-2 text-white" value="Iniciar Sesión" />
 				</form>
 			</div>
 		</div>
 	);
 }
+export default withRouter(Login);

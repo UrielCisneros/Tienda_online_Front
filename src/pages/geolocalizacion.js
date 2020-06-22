@@ -6,12 +6,19 @@ export default function Geolocalizacion({height, width, center, titleLayer, zoom
         //api key
         window.L.mapquest.key = apikey;
 
+        var container = window.L.DomUtil.get('map');
+        if(container != null){
+        container._leaflet_id = null;
+        }
+
         //inicializar el map
         const map = window.L.mapquest.map('map', {
             center,
             layers: window.L.mapquest.tileLayer(titleLayer),
             zoom
           });
+
+        
 
           window.L.marker(center, {
             icon: window.L.mapquest.icons.marker(),

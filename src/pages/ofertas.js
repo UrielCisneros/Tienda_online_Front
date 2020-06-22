@@ -14,7 +14,7 @@ const handleSelect = (selectedIndex, e) => {
             <Carousel activeIndex={index} onSelect={handleSelect}>
 				<Carousel.Item>
 					<div className="d-block carousel-home d-flex justify-content-center align-items-center">
-                        <img className="img-fluid" src="https://res.cloudinary.com/walmart-labs/image/upload/w_960,dpr_auto,f_auto,q_auto:best/mg/gm/3pp/asr/db508dc5-5701-43b8-8579-4f522213584d_1.acc19e11e0cb8ef13757038ca2e30ed2.jpeg?odnHeight=2000&odnWidth=2000&odnBg=ffffff" alt="img" />
+                        <img className="img-fluid" src="https://i.redd.it/a0ez44uhhx911.jpg" alt="img" />
                     </div>
                     <Carousel.Caption>
 						<h3>Second slide label</h3>

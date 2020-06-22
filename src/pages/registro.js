@@ -1,62 +1,61 @@
 import React, { useState } from 'react';
+import clienteAxios from '../config/axios'
+import { notification } from 'antd';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import './login.scss';
 
-export default function Registro() {
+function Registro() {
 	//State para mensaje
-	const [ mensaje /* guardarMensaje  */] = useState(null);
+	const [ mensaje ] = useState(null);
 	//Validacion del formulario
 	const formik = useFormik({
 		initialValues: {
 			nombre: '',
 			apellido: '',
 			email: '',
-			password: ''
+			contrasena: '',
+			repeatContrasena: ''
 		},
 		validationSchema: Yup.object({
 			nombre: Yup.string().required('*El nombre es obligatorio'),
 			apellido: Yup.string().required('*El apellido es obligatorio'),
 			email: Yup.string().email('*Email no valido').required('*El email es obligatorio'),
-			password: Yup.string()
+			contrasena: Yup.string()
 				.required('*El password es obligatorio')
-				.min(6, '*El password deber tener un minimo de 6 caracteres')
-		})
-		/* onSubmit: async valores => {
-            const { nombre, apellido, email, password } = valores;
+				.min(6, '*El password deber tener un minimo de 6 caracteres'),
+			repeatContrasena: Yup.string().required('La Comfirmacion de la contraseña es requerida').oneOf([Yup.ref('contrasena'), null], 'Las contraseñas no coinciden')
+		}),
+		onSubmit: async (valores, {resetForm}) => {
 
             try {
-                const { data } = await nuevoUsuario({
-                    variables: {
-                        input: {
-                            nombre,
-                            apellido,
-                            email,
-                            password
-                        }
-                    }
-                })
-                console.log(data);
-                //Usuario creado correctamente
-                guardarMensaje(`Se creo correctamente el usuario`);
-                //redirigir usuario para iniciar sesion
-                setTimeout(() => {
-                    guardarMensaje(null);
-                    router.push('/login')
-                }, 3000);
-            } catch (error) {
-                guardarMensaje(error.message.replace('GraphQL error:', ''));
+				clienteAxios.post('/cliente', valores)
+					.then(res => {
+						if(!res.data.err){
+							//Usuario creado correctamente
+							openNotificationWithIcon('success', '¡Listo!','Usuario registrado.')
+							//reset al form
+							resetForm({})
 
-                setTimeout(() => {
-                    guardarMensaje(null);
-                }, 3000);
+						}else if(res.data.err.code === 11000){
+							openNotificationWithIcon('error', 'Ups...','Este correo ya esta registrado')
+						}
+					})  
+            } catch (error) {
+				openNotificationWithIcon('error', 'Ups...','Hubo un error')
             }
-        } */
+        }
 	});
+
+	const openNotificationWithIcon = (type, titulo, mensaje) => {
+		notification[type]({
+		  message: titulo,
+		  description: mensaje
+		});
+	  };
 
 	const mostrarMensaje = () => {
 		return (
-			<div className="bg-white py-2 px.3 w-full my-3 max-w-sm text-center mx-auto">
+			<div className="py-2 px-3 my-3 text-center mx-auto">
 				<p>{mensaje}</p>
 			</div>
 		);
@@ -65,26 +64,6 @@ export default function Registro() {
 	return (
 		<div>
 			{mensaje && mostrarMensaje()}
-            {formik.touched.nombre && formik.errors.nombre ? (
-				<div className="alerta p-1">
-					<p className="mb-1">{formik.errors.nombre}</p>
-				</div>
-			) : null}
-			{formik.touched.apellido && formik.errors.apellido ? (
-				<div className="alerta p-1">
-                    <p className="mb-1">{formik.errors.apellido}</p>
-				</div>
-			) : null}
-			{formik.touched.email && formik.errors.email ? (
-				<div className="alerta p-1">
-                    <p className="mb-1">{formik.errors.email}</p>
-				</div>
-			) : null}
-			{formik.touched.password && formik.errors.password ? (
-				<div className="alerta p-1">
-                    <p className="mb-1">{formik.errors.password}</p>
-				</div>
-			) : null}
 
 			<div className="mt-2">
 				<form className="bg-white rouded px-5 pb-2 mb-5" onSubmit={formik.handleSubmit}>
@@ -92,6 +71,11 @@ export default function Registro() {
 						<label className="d-block font-weight-bolder mb-2" htmlFor="nombre">
 							Nombre
 						</label>
+						{formik.touched.nombre && formik.errors.nombre ? (
+							<div className="text-left">
+								<p className="margin-0 text-weight-bold text-danger">{formik.errors.nombre}</p>
+							</div>
+						) : null}
 						<input
 							className="form-control shadow border rounded font-weight-lighter py-2 px-3"
 							id="nombre"
@@ -101,11 +85,17 @@ export default function Registro() {
 							onChange={formik.handleChange}
 						/>
 					</div>
-
+				
 					<div className="mb-4">
 						<label className="d-block font-weight-bolder mb-2" htmlFor="apellido">
 							Apellido
 						</label>
+						{formik.touched.apellido && formik.errors.apellido ? (
+							<div className="text-left">
+								<p className="margin-0 text-weight-bold text-danger">{formik.errors.apellido}</p>
+							</div>
+						) : null}
+
 						<input
 							className="form-control shadow border rounded font-weight-lighter py-2 px-3"
 							id="apellido"
@@ -120,6 +110,12 @@ export default function Registro() {
 						<label className="d-block font-weight-bolder mb-2" htmlFor="email">
 							Email
 						</label>
+						{formik.touched.email && formik.errors.email ? (
+							<div className="text-left">
+								<p className="margin-0 text-weight-bold text-danger">{formik.errors.email}</p>
+							</div>
+						) : null}
+
 						<input
 							className="form-control shadow border rounded font-weight-lighter py-2 px-3"
 							id="email"
@@ -131,15 +127,39 @@ export default function Registro() {
 					</div>
 
 					<div className="mb-4">
-						<label className="d-block font-weight-bolder mb-2" htmlFor="password">
-							Password
+						<label className="d-block font-weight-bolder mb-2" htmlFor="contrasena">
+							Contraseña
 						</label>
+						{formik.touched.contrasena && formik.errors.contrasena ? (
+							<div className="text-left">
+								<p className="margin-0 text-weight-bold text-danger">{formik.errors.contrasena}</p>
+							</div>
+						) : null}
 						<input
 							className="form-control shadow border rounded font-weight-lighter py-2 px-3"
-							id="password"
+							id="contrasena"
 							type="Password"
 							placeholder="Password de usuario"
-							value={formik.values.password}
+							value={formik.values.contrasena}
+							onChange={formik.handleChange}
+						/>
+					</div>
+
+					<div className="mb-4">
+						<label className="d-block font-weight-bolder mb-2" htmlFor="repeatContrasena">
+							Repite la contraseña
+						</label>
+						{formik.touched.repeatContrasena && formik.errors.repeatContrasena ? (
+							<div className="text-left">
+								<p className="margin-0 text-weight-bold text-danger">{formik.errors.repeatContrasena}</p>
+							</div>
+						) : null}
+						<input
+							className="form-control shadow border rounded font-weight-lighter py-2 px-3"
+							id="repeatContrasena"
+							type="Password"
+							placeholder="Password de usuario"
+							value={formik.values.repeatContrasena}
 							onChange={formik.handleChange}
 						/>
 					</div>
@@ -154,3 +174,4 @@ export default function Registro() {
 		</div>
 	);
 }
+export default Registro
