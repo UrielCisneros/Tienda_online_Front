@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import firebase from 'firebase';
+/* import firebase from 'firebase'; */
 import { notification } from 'antd';
 import firebaseConfig from '../config/firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import clienteAxios from '../config/axios';
+import * as firebase from 'firebase/app';
+import 'firebase/auth'
+import 'firebase/firestore'
 
 firebase.initializeApp(firebaseConfig);
 
@@ -34,7 +37,7 @@ function Firebase() {
 		});
 	};
 
-	const onAuthStateChange = async (callback) => {
+	async function onAuthStateChange(callback){
 		return firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
 				const displayname = user.displayName.split(' ');

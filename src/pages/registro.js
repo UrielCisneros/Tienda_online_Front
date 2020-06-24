@@ -4,6 +4,7 @@ import { notification } from 'antd';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+
 function Registro() {
 	//State para mensaje
 	const [ mensaje ] = useState(null);
@@ -26,7 +27,6 @@ function Registro() {
 			repeatContrasena: Yup.string().required('La Comfirmacion de la contraseña es requerida').oneOf([Yup.ref('contrasena'), null], 'Las contraseñas no coinciden')
 		}),
 		onSubmit: async (valores, {resetForm}) => {
-
             try {
 				clienteAxios.post('/cliente', valores)
 					.then(res => {

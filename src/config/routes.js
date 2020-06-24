@@ -4,7 +4,7 @@ import LayoutBasic from '../components/Layout'
 
 //Admin pages
 import AdminHome from '../pages/admin'
-import RegistrarProductos from '../pages/admin/registrar_productos'
+import RegistrarProductos from '../pages/admin/productos'
 import Pedidos from '../pages/admin/pedidos'
 import Promociones from '../pages/admin/promociones'
 import SistemaApartado from '../pages/admin/sistema_apartado'
@@ -20,6 +20,7 @@ import Productos from '../pages/productos'
 import Blog from '../pages/blog'
 import PedidosUsuario from '../pages/pedidos'
 import Ofertas from '../pages/ofertas'
+import Articulo from '../pages/articulo'
 
 //other
 import Error404 from '../pages/error404'
@@ -36,7 +37,7 @@ const routes = [
 				exact: true,
 			},
 			{
-				path: '/admin/registrar_productos',
+				path: '/admin/productos',
 				component: RegistrarProductos,
 				exact: true
 			},
@@ -118,6 +119,11 @@ const routes = [
 			{
 				path: '/productos?:user',
 				component: Productos,
+				exact: true
+			},
+			{
+				path: '/articulo',
+				component: Articulo,
 				exact: true
 			},
 			{

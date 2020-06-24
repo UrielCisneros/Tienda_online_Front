@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { withRouter } from 'react-router-dom';
 
-function Inventario(props) {
+function ActualizarProducto(props) {
     const token = localStorage.getItem('token')
     const rol = parseJwt(token)
 
@@ -22,8 +22,8 @@ function Inventario(props) {
     })
     return (
         <div>
-            <h1>Estamos en inventario</h1>
+            <h2>Estamos en Actualizar Producto</h2>
         </div>
     )
 }
-export default withRouter(Inventario)
+export default withRouter(ActualizarProducto);
