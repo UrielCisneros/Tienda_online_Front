@@ -1,7 +1,7 @@
 /* For demo */
 .carousel-home {
   text-align: center;
-  height: 60vh;
+  height: 72vh;
   line-height: 160px;
   background: #00357a;
   overflow: hidden;
@@ -9,4 +9,13 @@
 
 .carousel-home h3 {
   color: #fff;
+}
+@media(max-width: 768px){
+  .carousel-home {
+    text-align: center;
+    height: 30vh;
+    line-height: 160px;
+    background: #00357a;
+    overflow: hidden;
+  }
 }

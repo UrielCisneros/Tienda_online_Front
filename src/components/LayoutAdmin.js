@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { Layout, Breadcrumb } from 'antd';
+import './layoutAdmin.scss'
 
 export default function LayoutAdmin(props) {
 	const { routes } = props;
@@ -13,7 +14,7 @@ export default function LayoutAdmin(props) {
 			<Layout>
 				<Sidebar />
 				<Layout className="site-layout">
-					<Header className="site-layout-background bg-white" style={{ padding: 0 }}>
+					<Header className="breadcrumb-head site-layout-background bg-white" style={{ padding: 0 }}>
 						<Breadcrumb style={{ margin: '16px 16px' }}>
 							<Breadcrumb.Item>{path[1]}</Breadcrumb.Item>
 							<Breadcrumb.Item>{path[2]}</Breadcrumb.Item>

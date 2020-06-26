@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Carousel from 'react-bootstrap/Carousel';
 import './ofertas.scss'
 
+import imagen from './promocion.jpeg'
 export default function Ofertas () {
     
 const [index, setIndex] = useState(0);
@@ -14,7 +15,7 @@ const handleSelect = (selectedIndex, e) => {
             <Carousel activeIndex={index} onSelect={handleSelect}>
 				<Carousel.Item>
 					<div className="d-block carousel-home d-flex justify-content-center align-items-center">
-                        <img className="img-fluid" src="https://i.redd.it/a0ez44uhhx911.jpg" alt="img" />
+                        <img className="img-fluid" src={imagen} alt="img" />
                     </div>
                     <Carousel.Caption>
 						<h3>Second slide label</h3>
@@ -23,7 +24,7 @@ const handleSelect = (selectedIndex, e) => {
 				</Carousel.Item>
 				<Carousel.Item>
                     <div className="d-block w-100 carousel-home">
-                            <img className="img-fluid" src="https://res.cloudinary.com/walmart-labs/image/upload/w_960,dpr_auto,f_auto,q_auto:best/mg/gm/1p/images/product-images/img_large/00085369967893l.jpg" alt="img2"/>
+                            <img className="img-fluid" src="https://i.redd.it/a0ez44uhhx911.jpg" alt="img2"/>
                     </div>  
 					<Carousel.Caption>
 						<h3>Second slide label</h3>

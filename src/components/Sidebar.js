@@ -1,35 +1,35 @@
 import React from 'react';
 import { Layout, Menu, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import './sidebar.scss';
 import {
-    FundOutlined,
-    AppstoreAddOutlined,
-    FormOutlined,
-    PoweroffOutlined,
-    TagOutlined,
-    ShoppingCartOutlined,
-    NotificationOutlined ,
+	FundOutlined,
+	AppstoreAddOutlined,
+	FormOutlined,
+	PoweroffOutlined,
+	TagOutlined,
+	ShoppingCartOutlined,
+	NotificationOutlined,
 	EditOutlined,
 	HomeOutlined
 } from '@ant-design/icons';
 
-const { Sider} = Layout;
-const token = localStorage.getItem('token')
-const rol = parseJwt(token)
+const { Sider } = Layout;
+const token = localStorage.getItem('token');
+const rol = parseJwt(token);
 
 function parseJwt(token) {
 	try {
-	  return JSON.parse(atob(token.split('.')[1]));
+		return JSON.parse(atob(token.split('.')[1]));
 	} catch (e) {
-	  return null;
+		return null;
 	}
-};
+}
 
 const Sidebar = () => {
-
 	return (
-        <Sider 
-            style={{height: "100vh"}} 
+		<Sider
+			style={{ height: '100vh' }}
 			breakpoint="lg"
 			collapsedWidth="0"
 			onBreakpoint={(broken) => {
@@ -40,19 +40,14 @@ const Sidebar = () => {
 			}}
 		>
 			<div>
-                <div className="ml-1">
-                    <h6 className="text-white">Bienvenido</h6>
-					{token ? 
-						<h5 className="text-white">{rol['nombre']}</h5>
-						:
-						<div></div>
-					}
-                    
-                </div>
-            </div>
-			<Menu theme="dark" mode="inline" defaultSelectedKeys={[window.location.pathname]}>
+				<div className="ml-1">
+					<h6 className="text-white">Bienvenido</h6>
+					{token ? <h5 className="text-white">{rol['nombre']}</h5> : <div />}
+				</div>
+			</div>
+			<Menu theme="dark" mode="inline" defaultSelectedKeys={[ window.location.pathname ]}>
 				<Menu.Item key="/admin" icon={<FundOutlined />}>
-                    Panel principal<Link to="/admin" />
+					Panel principal<Link to="/admin" />
 				</Menu.Item>
 				<Menu.Item key="/admin/productos" icon={<AppstoreAddOutlined />}>
 					Productos<Link to="/admin/productos" />
@@ -63,24 +58,29 @@ const Sidebar = () => {
 				<Menu.Item key="/admin/sistema_apartado" icon={<TagOutlined />}>
 					Sistema de Apartado<Link to="/admin/sistema_apartado" />
 				</Menu.Item>
-                <Menu.Item key="/admin/pedidos" icon={<ShoppingCartOutlined />}>
+				<Menu.Item key="/admin/pedidos" icon={<ShoppingCartOutlined />}>
 					Pedidos Pendientes<Link to="/admin/pedidos" />
 				</Menu.Item>
-                <Menu.Item key="/admin/promociones" icon={<NotificationOutlined />}>
+				<Menu.Item key="/admin/promociones" icon={<NotificationOutlined />}>
 					Promociones y sugerencias de compra<Link to="/admin/promociones" />
 				</Menu.Item>
-                <Menu.Item key="/admin/blog" icon={<EditOutlined />}>
+				<Menu.Item key="/admin/blog" icon={<EditOutlined />}>
 					Blog<Link to="/admin/blog" />
 				</Menu.Item>
 				<Menu.Item icon={<HomeOutlined />}>
 					Pagina principal<Link to="/" />
 				</Menu.Item>
-                <Menu.Item icon={<PoweroffOutlined/>}>
-					<Button type="primary" onClick={() =>{
-						localStorage.removeItem('token')
-						window.location.reload()
-						}
-					} danger>Cerrar Sesión</Button>
+				<Menu.Item icon={<PoweroffOutlined />}>
+					<Button
+						type="primary"
+						onClick={() => {
+							localStorage.removeItem('token');
+							window.location.reload();
+						}}
+						danger
+					>
+						Cerrar Sesión
+					</Button>
 				</Menu.Item>
 			</Menu>
 		</Sider>

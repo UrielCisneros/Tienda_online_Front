@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import RegistrarProducto from './registrar_producto';
 import ActualizarProducto from './actualizar_producto';
 import { Card, Col, Row, Input, Spin, Button, Modal, Drawer } from 'antd';
 import {
 	ExclamationCircleOutlined,
-	EyeOutlined,
 	EditOutlined,
 	DeleteOutlined,
 	PlusCircleOutlined
@@ -106,20 +105,17 @@ function RegistrarProductos(props) {
 						<img
 							className="ml-4"
 							alt="producto"
-							src={productos.imagen}
+							src={`http://localhost:4000/${productos.imagen}`}
 							style={{ maxHeight: 200, maxWidth: 250 }}
 						/>
 					}
 					actions={[
-						<Link onClick={setActualizar} className="text-decoration-none">
+						<Button type="link" onClick={setActualizar} className="text-decoration-none">
 							<EditOutlined style={{ fontSize: 22 }} />Actualizar
-						</Link>,
-						<Link to="/articulo" className="text-decoration-none">
-							<EyeOutlined style={{ fontSize: 22 }} />Ver
-						</Link>,
-						<Link onClick={showDeleteConfirm} className="text-decoration-none">
+						</Button>,
+						<Button type="link" onClick={showDeleteConfirm} className="text-decoration-none">
 							<DeleteOutlined style={{ fontSize: 22 }} />Eliminar
-						</Link>
+						</Button>
 					]}
 				>
 					<div>
@@ -135,9 +131,9 @@ function RegistrarProductos(props) {
 	return (
 		<div>
 			<Drawer
-				title="Create a new account"
-                height={620}
-                placement={"top"}
+				title="Registra un nuevo producto"
+				width={window.screen.width > 768 ? 900 : window.screen.width}
+				placement={'right'}
 				onClose={drawnerClose}
 				visible={visible}
 				bodyStyle={{ paddingBottom: 80 }}
@@ -160,7 +156,7 @@ function RegistrarProductos(props) {
 					<Search
 						placeholder="Busca un producto"
 						onChange={(e) => setSearch(e.target.value)}
-						style={{ width: 400, height: 40 }}
+						style={{ width: 300, height: 40, marginBottom: 10 }}
 					/>
 				</Col>
 				<Col>
