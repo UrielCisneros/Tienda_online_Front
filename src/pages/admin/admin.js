@@ -3,7 +3,6 @@ import {Helmet} from "react-helmet";
 import { withRouter } from 'react-router-dom';
 
 function Admin(props) {
-
     const token = localStorage.getItem('token')
     const rol = parseJwt(token)
 

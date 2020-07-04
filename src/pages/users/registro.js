@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import clienteAxios from '../config/axios'
+import clienteAxios from '../../config/axios'
 import { notification } from 'antd';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';

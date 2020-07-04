@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
-import RegistrarProducto from './registrar_producto';
-import ActualizarProducto from './actualizar_producto';
-import { Card, Col, Row, Input, Spin, Button, Modal, Drawer } from 'antd';
-import {
-	ExclamationCircleOutlined,
-	EditOutlined,
-	DeleteOutlined,
-	PlusCircleOutlined
-} from '@ant-design/icons';
+import RegistrarProducto from './services/producto/registrar_producto';
+import ActualizarProducto from './services/producto/actualizar_producto';
+import { Card, Col, Row, Input, Spin, Button, Modal, Drawer, message } from 'antd';
+import { StepsContext, StepsProvider } from '../admin/contexts/stepsContext';
+import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 const { confirm } = Modal;
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
 function RegistrarProductos(props) {
+	const [ disabled, setDisabled ] = useContext(StepsContext);
 	const [ productos, setProductos ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
 	const [ search, setSearch ] = useState('');
@@ -51,7 +48,7 @@ function RegistrarProductos(props) {
 		}
 	}
 
-	function showDeleteConfirm() {
+	function showDeleteConfirm(idproducto) {
 		confirm({
 			title: 'Estas seguro de eliminar este articulo?',
 			icon: <ExclamationCircleOutlined />,
@@ -59,26 +56,50 @@ function RegistrarProductos(props) {
 			okText: 'Yes',
 			okType: 'danger',
 			cancelText: 'No',
-			onOk() {
-				console.log('OK');
-			},
-			onCancel() {
-				console.log('Cancel');
+			async onOk() {
+				const respuesta = await clienteAxios.delete(`/productos/${idproducto}`, {
+					headers: {
+						Authorization: `bearer ${token}`
+					}
+				});
+				try {
+					if (!respuesta.data.err) {
+						obtenerProductos();
+						message.success({
+							content: respuesta.data.message,
+							duration: 3
+						});
+					} else {
+						message.error({
+							content: respuesta.data.message,
+							duration: 3
+						});
+					}
+				} catch (error) {
+					message.error({
+						content: 'Hubo un error',
+						duration: 3
+					});
+				}
 			}
 		});
 	}
 
-	useEffect(() => {
+	const obtenerProductos = async () => {
 		setLoading(true);
 		clienteAxios
 			.get('/productos')
 			.then((res) => {
-				setProductos(res.data);
+				setProductos(res.data.posts.docs);
 				setLoading(false);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	useEffect(() => {
+		obtenerProductos();
 	}, []);
 
 	useEffect(
@@ -113,7 +134,11 @@ function RegistrarProductos(props) {
 						<Button type="link" onClick={setActualizar} className="text-decoration-none">
 							<EditOutlined style={{ fontSize: 22 }} />Actualizar
 						</Button>,
-						<Button type="link" onClick={showDeleteConfirm} className="text-decoration-none">
+						<Button
+							type="link"
+							onClick={() => showDeleteConfirm(productos._id)}
+							className="text-decoration-none"
+						>
 							<DeleteOutlined style={{ fontSize: 22 }} />Eliminar
 						</Button>
 					]}
@@ -132,7 +157,7 @@ function RegistrarProductos(props) {
 		<div>
 			<Drawer
 				title="Registra un nuevo producto"
-				width={window.screen.width > 768 ? 900 : window.screen.width}
+				width={window.screen.width > 768 ? 1000 : window.screen.width}
 				placement={'right'}
 				onClose={drawnerClose}
 				visible={visible}
@@ -149,7 +174,13 @@ function RegistrarProductos(props) {
 					</div>
 				}
 			>
-				{accion === true ? <ActualizarProducto /> : <RegistrarProducto />}
+				{accion === true ? (
+					<ActualizarProducto />
+				) : (
+					<StepsProvider value={[ disabled, setDisabled ]}>
+						<RegistrarProducto />
+					</StepsProvider>
+				)}
 			</Drawer>
 			<Row justify="center">
 				<Col>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import clienteAxios from '../config/axios';
+import clienteAxios from '../../config/axios';
 import { withRouter } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { notification } from 'antd';
@@ -21,34 +21,44 @@ function Login(props) {
 		onSubmit: async (valores) => {
 			try {
 				const respuesta = await clienteAxios.post('/cliente/auth', valores);
-				const token = respuesta.data;
-				//coloca en local storage del navegador
-				localStorage.setItem('token', token);
-				//redireccionar
-				props.history.push('/');
-			} catch (error) {
-				if(error.response.data.message === 'Este usuario no existe'){
-					try {
-						const respuesta = await clienteAxios.post('/admin/auth', valores);
-						const token = respuesta.data;
-						//coloca en local storage del navegador
-						localStorage.setItem('token', token);
-						//redireccionar
-						props.history.push('/admin');
-					} catch (error) {
-						openNotificationWithIcon('error', 'Error',error.response.data.message)
+				console.log(respuesta)
+				if(!respuesta.data.token){
+					if (respuesta.data.message === 'Este usuario no existe') {
+						try {
+							const respuesta = await clienteAxios.post('/admin/auth', valores);
+							const token = respuesta.data;
+							console.log(respuesta)
+							//coloca en local storage del navegador
+							localStorage.setItem('token', token);
+							//redireccionar
+							props.history.push('/admin');
+						} catch (error) {
+							console.log(error.response.data.message)
+							openNotificationWithIcon('error', 'Error', error.response.data.message);
+						}
+					}else{
+						console.log(respuesta)
+						openNotificationWithIcon('error', 'Error', respuesta.data.message);
 					}
 				}else{
-					openNotificationWithIcon('error', 'Error',error.response.data.message)
-				}				
+					console.log(respuesta)
+					const token = respuesta.data.token;
+					//coloca en local storage del navegador
+					localStorage.setItem('token', token);
+					//redireccionar
+					props.history.push('/');
+				}
+			} catch (error) {
+				openNotificationWithIcon('error', 'Error', error.response.data.message);
+				console.log(error)
 			}
 		}
 	});
 
 	const openNotificationWithIcon = (type, titulo, mensaje) => {
 		notification[type]({
-		  message: titulo,
-		  description: mensaje
+			message: titulo,
+			description: mensaje
 		});
 	};
 

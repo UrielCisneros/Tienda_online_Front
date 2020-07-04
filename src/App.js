@@ -1,5 +1,6 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'antd/dist/antd.css'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import routes from './config/routes'
 import {Helmet} from "react-helmet";
