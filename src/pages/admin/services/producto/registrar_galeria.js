@@ -1,28 +1,22 @@
-import React, { useState, useContext, useReducer } from 'react';
+import React, { useState, useContext, useReducer, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Upload, Button, message } from 'antd';
 import { UploadOutlined, EyeOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons';
 import './registrar_galeria.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 
-const galeriaReducer = (state = [], action) => {
-	switch (action.type) {
-		case 'agregar':
-			return [ ...state, action.payload ];
-		default:
-			return state;
-	}
-};
-
 function RegistrarGaleria() {
 	const token = localStorage.getItem('token');
 
 	const productoContext = useContext(ProductoContext);
-	const [ state, dispatch ] = useReducer(galeriaReducer);
-	const [ idGaleria, setIdGaleria ] = useState('');
+	const [ galeria, setGaleria ] = useState();
+
+	useEffect(() => {
+        obtenerBD()
+    }, [productoContext])
 
 	const props = {
-		action: async (file) => {
+		beforeUpload: async (file) => {
 			const formData = new FormData();
 			formData.append('producto', productoContext);
 			formData.append('imagen', file);
@@ -39,7 +33,7 @@ function RegistrarGaleria() {
 		});
 		try {
 			if (!respuesta.data.err) {
-				obtenerBD(respuesta.data._id);
+				obtenerBD();
 			} else {
 				message.error({
 					content: respuesta.data.message,
@@ -48,22 +42,16 @@ function RegistrarGaleria() {
 			}
 		} catch (error) {
 			message.error({
-                content: 'Hubo un error',
-                duration: 3,
-            });
+				content: 'Hubo un error',
+				duration: 3
+			});
 		}
 	};
-	const obtenerBD = async (idgaleria) => {
-		const respuesta = await clienteAxios.get(`/galeria/${idgaleria}`);
+	const obtenerBD = async () => {
+		const respuesta = await clienteAxios.get(`/galeria/${productoContext}`);
 		try {
 			if (!respuesta.data.err) {
-				const newGaleria = respuesta.data.imagenes;
-				const action = {
-					type: 'agregar',
-					payload: newGaleria
-				};
-				dispatch(action);
-				setIdGaleria(idgaleria);
+				setGaleria(respuesta.data.imagenes);
 			} else {
 				message.error({
 					content: respuesta.data.message,
@@ -72,21 +60,21 @@ function RegistrarGaleria() {
 			}
 		} catch (error) {
 			message.error({
-                content: 'Hubo un error',
-                duration: 3,
-            });
+				content: 'Hubo un error',
+				duration: 3
+			});
 		}
 	};
 	const eliminarBD = async (idimagen) => {
-		const respuesta = await clienteAxios.delete(`/galeria/${idGaleria}/imagen/${idimagen}`, {
+		const respuesta = await clienteAxios.delete(`/galeria/${productoContext}/imagen/${idimagen}`, {
 			headers: {
 				Authorization: `bearer ${token}`
 			}
 		});
 		try {
 			if (!respuesta.data.err) {
-                obtenerBD(idGaleria);
-                message.success({
+				obtenerBD();
+				message.success({
 					content: respuesta.data.message,
 					duration: 3
 				});
@@ -98,25 +86,18 @@ function RegistrarGaleria() {
 			}
 		} catch (error) {
 			message.error({
-                content: 'Hubo un error',
-                duration: 3,
-            });
+				content: 'Hubo un error',
+				duration: 3
+			});
 		}
 	};
 
 	const [ prev, setPrev ] = useState('');
-	if (state !== undefined) {
-		var imagenes = state[state.length - 1];
-		var render = imagenes.map((imagenes) => (
+	if (galeria !== undefined) {
+		var render = galeria.map((imagenes) => (
 			<div className="shadow rounded imgStyle d-inline-block">
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
-					<img
-						className="img"
-						height="86"
-						width="86"
-						src={`http://localhost:4000/${imagenes.url}`}
-						alt="preview-imagen"
-					/>
+					<img className="img" src={`http://localhost:4000/${imagenes.url}`} alt="preview-imagen" />
 					<div className="iconos rounded">
 						<span
 							onClick={function() {
@@ -150,10 +131,10 @@ function RegistrarGaleria() {
 			</div>
 			<div className="col-sm-4 col-lg-6">
 				<div className="shadow rounded imgPreview d-flex justify-content-center align-items-center">
-					{prev === '' || imagenes.length === 0 ? (
+					{prev === '' || galeria.length === 0 ? (
 						<PictureOutlined style={{ fontSize: 80 }} />
 					) : (
-						<img height="300" width="400" src={`http://localhost:4000/${prev}`} alt="preview-imagen" />
+						<img className="imagen" src={`http://localhost:4000/${prev}`} alt="preview-imagen" />
 					)}
 				</div>
 			</div>

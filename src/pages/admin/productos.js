@@ -5,6 +5,7 @@ import RegistrarProducto from './services/producto/registrar_producto';
 import ActualizarProducto from './services/producto/actualizar_producto';
 import { Card, Col, Row, Input, Spin, Button, Modal, Drawer, message } from 'antd';
 import { StepsContext, StepsProvider } from '../admin/contexts/stepsContext';
+import { IdProductoContext } from './contexts/ProductoContext'
 import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
@@ -12,6 +13,7 @@ const { confirm } = Modal;
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
 function RegistrarProductos(props) {
+	const [ productoID, setProductoID ] = useState('');
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	const [ productos, setProductos ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
@@ -121,17 +123,23 @@ function RegistrarProductos(props) {
 		<Col span={32} key={productos.id}>
 			<Card.Grid hoverable style={gridStyle}>
 				<Card
-					style={{ width: 300 }}
+					style={{ width: 300, maxHeight: 400 }}
 					cover={
-						<img
-							className="ml-4"
-							alt="producto"
-							src={`http://localhost:4000/${productos.imagen}`}
-							style={{ maxHeight: 200, maxWidth: 250 }}
-						/>
+						<div className="d-flex justify-content-center align-items-center" style={{height: 250}}>
+							<img
+								className="img-fluid"
+								alt="producto"
+								src={`http://localhost:4000/${productos.imagen}`}
+								style={{ maxHeight: '99%', width: '99%' }}
+							/>
+						</div>
 					}
 					actions={[
-						<Button type="link" onClick={setActualizar} className="text-decoration-none">
+						<Button type="link" onClick={() => {
+							setActualizar()
+							console.log(productos)
+							setProductoID(productos._id)
+						}} className="text-decoration-none">
 							<EditOutlined style={{ fontSize: 22 }} />Actualizar
 						</Button>,
 						<Button
@@ -143,9 +151,8 @@ function RegistrarProductos(props) {
 						</Button>
 					]}
 				>
-					<div>
+					<div style={{height: 100}}>
 						<h1 className="h4">{productos.nombre}</h1>
-						<p>{productos.descripcion}</p>
 						<h2 className="h5">{productos.precio}</h2>
 					</div>
 				</Card>
@@ -156,7 +163,7 @@ function RegistrarProductos(props) {
 	return (
 		<div>
 			<Drawer
-				title="Registra un nuevo producto"
+				title={accion === true ? "Actualizar un producto" : "Registra un nuevo producto"}
 				width={window.screen.width > 768 ? 1000 : window.screen.width}
 				placement={'right'}
 				onClose={drawnerClose}
@@ -175,7 +182,9 @@ function RegistrarProductos(props) {
 				}
 			>
 				{accion === true ? (
-					<ActualizarProducto />
+					<IdProductoContext.Provider value={productoID}>
+						<ActualizarProducto />
+					</IdProductoContext.Provider>
 				) : (
 					<StepsProvider value={[ disabled, setDisabled ]}>
 						<RegistrarProducto />
@@ -203,7 +212,7 @@ function RegistrarProductos(props) {
 				</Col>
 			</Row>
 
-			<Row gutter={24} style={{ maxWidth: '90vw' }} className="mt-5">
+			<Row gutter={24} style={{ maxWidth: '90vw' }} className="mt-4">
 				{render}
 			</Row>
 		</div>

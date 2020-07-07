@@ -113,8 +113,8 @@ function RegistrarNumero() {
 		var render = productos.map((numero) => (
 			<div className="m-2">
 				<Badge count={numero.cantidad} style={{ backgroundColor: '#52c41a' }}>
-					<div className="hover-delete">
-						<p className="rounded p-2" style={{ backgroundColor: '#EEEEEE', fontSize: 40 }}>
+					<div className="hover-delete d-flex text-center">
+						<p className="rounded p-2" style={{ backgroundColor: '#EEEEEE', fontSize: 40, width: '60px', height: '56px' }}>
 							{numero.numero}
 						</p>
 						<div className="icono rounded">

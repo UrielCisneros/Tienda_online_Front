@@ -9,6 +9,7 @@ import { StepsContext } from '../../contexts/stepsContext'
 import RegistrarGaleria from './registrar_galeria'
 import RegistrarTalla from './registrar_talla'
 import RegistrarNumero from './registrar_numero'
+import { Editor } from '@tinymce/tinymce-react';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -27,7 +28,7 @@ function RegistrarProducto(props) {
     
     ////Activar y desactivar los botones Next y Prev
     
-    /* const [ disabled, setDisabled ] = useState(true) */
+    const [ editor, setEditor ] = useState();
     const [ disabledPrev, setDisabledPrev ] = useState(false)
     const [ disabledform, setDisabledForm ] = useState(true)
     const [ disabledformProductos, setDisabledFormProductos ] = useState(false)
@@ -65,10 +66,10 @@ function RegistrarProducto(props) {
     
     ///capturar datos maualmente}
     const [datos, setDatos] = useState({
+        codigo: '',
         nombre: '',
         cantidad: '',
         precio: '',
-        descripcion: '',
         imagen: ''
     })
     //// Capturar valores del select
@@ -82,23 +83,27 @@ function RegistrarProducto(props) {
             setDisabled(true)
         }
     };
+    const obtenerEditor = (value) => {
+        setEditor(value)
+    }
     const datosForm = (e) => {
         setDatos({
             ...datos,
         [e.target.name] : e.target.value    
         })
     }
-    /// Guardar y almacenar en la api REST
-    
+
+    /// Guardar y almacenar en la api REST 
     const [ productoID, setProductoID ] = useState('');
     
     async function onFinish(){
         const formData = new FormData();
+        formData.append('codigo',datos.codigo);
         formData.append('nombre',datos.nombre);
         formData.append('categoria',select);
         formData.append('cantidad',datos.cantidad);
         formData.append('precio',datos.precio);
-        formData.append('descripcion',datos.descripcion);
+        formData.append('descripcion',editor);
         formData.append('imagen',files);
 
         message.loading({ content: 'En proceso...', key });
@@ -159,42 +164,55 @@ function RegistrarProducto(props) {
 			title: 'Producto',
             content: 
                 <div className="d-flex justify-content-center align-items-center mt-4 mb-2">
-                    <div style={{width: 700}}>
+                    <div style={{width: 900}}>
                         <h2 className="mb-5 text-center">Registrar el producto</h2>
                         <div>
                             <Form {...layout} 
                                 name="nest-messages" 
                                 onFinish={onFinish} 
                                 initialValues={{categoria: select, precio: 0}}>
+                                <Form.Item label="Codigo de barras" onChange={datosForm}>
+                                    <Input name='codigo' disabled={disabledformProductos} placeholder="Campo opcional"/>
+                                </Form.Item>
                                 <Form.Item label="Nombre del producto" onChange={datosForm}>
                                     <Input name='nombre' disabled={disabledformProductos}/>
                                 </Form.Item>
                                 {select === 'otros' ?
                                 <Form.Item label="Cantidad" onChange={datosForm}>
                                     <InputNumber min={1} name='cantidad' disabled={disabledformProductos} />
-                                </Form.Item> : <></>}
+                                </Form.Item> : <div></div>}
                                 <Form.Item label="Precio del producto" onChange={datosForm}>
-                                    <InputNumber
-                                        disabled={disabledformProductos}
-                                        min={1}
-                                        name='precio'
-                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                    />
+                                    <InputNumber disabled={disabledformProductos} name='precio' />
                                 </Form.Item>
-                                <Form.Item label="Descripcion del producto" onChange={datosForm}>
-                                    <Input.TextArea name='descripcion' disabled={disabledformProductos} />
+                                <Form.Item label="Descripcion del producto">
+                                    <Editor
+                                        disabled={disabledformProductos}
+                                        init={{
+                                        height: 200,
+                                        menubar: false,
+                                        plugins: [
+                                            'advlist autolink lists link image charmap print preview anchor',
+                                            'searchreplace visualblocks code fullscreen',
+                                            'insertdatetime media table paste code help wordcount'
+                                        ],
+                                        toolbar:
+                                            'undo redo | formatselect | bold italic backcolor | \
+                                            alignleft aligncenter alignright alignjustify | \
+                                            bullist numlist outdent indent | removeformat | help'
+                                        }}
+                                        onEditorChange={obtenerEditor}
+                                    />
                                 </Form.Item>
                                 <Form.Item label="Imagen principal">
                                     <Upload {...propss}>
                                         <Button disabled={disabledformProductos}>
-                                            <UploadOutlined /> Upload
+                                            <UploadOutlined /> Subir
                                         </Button>
                                     </Upload>
                                 </Form.Item>
                                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                                     <Button type="primary" htmlType="submit" disabled={disabledformProductos}>
-                                        Submit
+                                        Registrar
                                     </Button>
                                 </Form.Item>
                             </Form>
@@ -203,14 +221,14 @@ function RegistrarProducto(props) {
                                 <ProductoContext.Provider value={[productoID, disabledform]}>
                                     <RegistrarTalla />
                                 </ProductoContext.Provider>
-                            </div> : <></>
+                            </div> : <div></div>
                             }
                             {select === 'calzado' ?
                             <div>
                                 <ProductoContext.Provider value={productoID}>
                                     <RegistrarNumero />
                                 </ProductoContext.Provider>
-                            </div> : <></>
+                            </div> : <div></div>
                             }
                         </div>
                     </div>
