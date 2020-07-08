@@ -137,7 +137,6 @@ function RegistrarProductos(props) {
 					actions={[
 						<Button type="link" onClick={() => {
 							setActualizar()
-							console.log(productos)
 							setProductoID(productos._id)
 						}} className="text-decoration-none">
 							<EditOutlined style={{ fontSize: 22 }} />Actualizar

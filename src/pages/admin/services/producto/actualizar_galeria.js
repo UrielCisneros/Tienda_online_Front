@@ -1,4 +1,4 @@
-import React, { useState, useContext, useReducer, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Upload, Button, message } from 'antd';
 import { UploadOutlined, EyeOutlined, DeleteOutlined, PictureOutlined, EditOutlined } from '@ant-design/icons';
@@ -6,16 +6,19 @@ import { IdProductoContext } from '../../contexts/ProductoContext';
 import './actualizar_galeria.scss';
 
 function RegistrarGaleria() {
-    const token = localStorage.getItem('token');
-    const productoID = useContext(IdProductoContext);
-    const [ galeria, setGaleria ] = useState();
-    const [ idImagen, setIdImagen ] = useState();
-    
-    useEffect(() => {
-        obtenerBD()
-    }, [productoID])
+	const token = localStorage.getItem('token');
+	const productoID = useContext(IdProductoContext);
+	const [ galeria, setGaleria ] = useState();
+	const [ idImagen, setIdImagen ] = useState();
 
-    console.log("algo")
+	useEffect(
+		() => {
+			obtenerBD();
+		},
+		[ productoID ]
+	);
+
+	console.log('algo');
 
 	const props = {
 		beforeUpload: async (file) => {
@@ -24,26 +27,26 @@ function RegistrarGaleria() {
 			formData.append('imagen', file);
 			await subirBD(formData);
 		}
-    };
-    const propsActualizar = {
+	};
+	const propsActualizar = {
 		beforeUpload: async (file) => {
 			const formData = new FormData();
 			formData.append('imagen', file);
 			await actualizarBD(formData);
 		}
-    };
+	};
 
-    const actualizarBD = async (formdata) => {
-        const res = await clienteAxios.put(`/galeria/${productoID}/imagen/${idImagen}`, formdata, {
+	const actualizarBD = async (formdata) => {
+		const res = await clienteAxios.put(`/galeria/${productoID}/imagen/${idImagen}`, formdata, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 				Authorization: `bearer ${token}`
 			}
-        });
-        try {
-            if (!res.data.err) {
-                obtenerBD();
-                message.success({
+		});
+		try {
+			if (!res.data.err) {
+				obtenerBD();
+				message.success({
 					content: res.data.message,
 					duration: 1
 				});
@@ -53,13 +56,13 @@ function RegistrarGaleria() {
 					duration: 3
 				});
 			}
-        } catch (error) {
-            message.error({
+		} catch (error) {
+			message.error({
 				content: 'Hubo un error',
 				duration: 3
 			});
-        }
-    }
+		}
+	};
 
 	const subirBD = async (formData) => {
 		const res = await clienteAxios.post(`/galeria/nueva/${productoID}`, formData, {
@@ -136,9 +139,29 @@ function RegistrarGaleria() {
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
 					<img className="img" src={`http://localhost:4000/${imagenes.url}`} alt="preview-imagen" />
 					<div className="iconos rounded">
-						<EyeOutlined style={{ fontSize: 20 }} className="ver" onClick={ function() {setPrev(imagenes.url);} } />
-                        <Upload {...propsActualizar}><EditOutlined style={{ fontSize: 20 }} className="modificar" onClick={function() { setIdImagen(imagenes._id); } } /></Upload>
-                        <DeleteOutlined style={{ fontSize: 20 }} className="eliminar" onClick={function() { eliminarBD(imagenes._id); } }/>
+						<EyeOutlined
+							style={{ fontSize: 20 }}
+							className="ver"
+							onClick={function() {
+								setPrev(imagenes.url);
+							}}
+						/>
+						<Upload {...propsActualizar}>
+							<EditOutlined
+								style={{ fontSize: 20 }}
+								className="modificar"
+								onClick={function() {
+									setIdImagen(imagenes._id);
+								}}
+							/>
+						</Upload>
+						<DeleteOutlined
+							style={{ fontSize: 20 }}
+							className="eliminar"
+							onClick={function() {
+								eliminarBD(imagenes._id);
+							}}
+						/>
 					</div>
 				</div>
 			</div>

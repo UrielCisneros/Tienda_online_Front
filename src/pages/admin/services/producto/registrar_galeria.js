@@ -1,4 +1,4 @@
-import React, { useState, useContext, useReducer, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Upload, Button, message } from 'antd';
 import { UploadOutlined, EyeOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons';
@@ -11,9 +11,12 @@ function RegistrarGaleria() {
 	const productoContext = useContext(ProductoContext);
 	const [ galeria, setGaleria ] = useState();
 
-	useEffect(() => {
-        obtenerBD()
-    }, [productoContext])
+	useEffect(
+		() => {
+			obtenerBD();
+		},
+		[ productoContext ]
+	);
 
 	const props = {
 		beforeUpload: async (file) => {
