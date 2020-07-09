@@ -237,7 +237,7 @@ function RegistrarProducto(props) {
 							)}
 							{select === 'calzado' ? (
 								<div>
-									<ProductoContext.Provider value={productoID}>
+									<ProductoContext.Provider value={[productoID, disabledform]}>
 										<RegistrarNumero />
 									</ProductoContext.Provider>
 								</div>

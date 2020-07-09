@@ -8,20 +8,20 @@ const layout = {
 	wrapperCol: { span: 14 }
 };
 const tailLayout = {
-	wrapperCol: { offset: 7, span: 10}
+	wrapperCol: { offset: 7, span: 10 }
 };
 
 function Login(props) {
 	const onFinish = async (values) => {
 		const res = await clienteAxios.post('/cliente/auth', values);
 		try {
-			if(!res.data.token){
+			if (!res.data.token) {
 				notification['error']({
 					message: 'Error',
 					description: res.data.message,
 					duration: 2
 				});
-			}else{
+			} else {
 				const token = res.data.token;
 				localStorage.setItem('token', token);
 				props.history.push('/admin');
@@ -42,12 +42,7 @@ function Login(props) {
 
 	return (
 		<div>
-			<Form
-				{...layout}
-				name="basic"
-				initialValues={{ remember: true }}
-				onFinish={onFinish}
-			>
+			<Form {...layout} name="basic" initialValues={{ remember: true }} onFinish={onFinish}>
 				<Form.Item
 					label="Correo"
 					name="email"

@@ -100,7 +100,7 @@ function RegistrarGaleria() {
 		var render = galeria.map((imagenes) => (
 			<div className="shadow rounded imgStyle d-inline-block">
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
-					<img className="img" src={`http://localhost:4000/${imagenes.url}`} alt="preview-imagen" />
+					<img className="img" src={`https://tiendaab.herokuapp.com/${imagenes.url}`} alt="preview-imagen" />
 					<div className="iconos rounded">
 						<span
 							onClick={function() {
@@ -137,7 +137,7 @@ function RegistrarGaleria() {
 					{prev === '' || galeria.length === 0 ? (
 						<PictureOutlined style={{ fontSize: 80 }} />
 					) : (
-						<img className="imagen" src={`http://localhost:4000/${prev}`} alt="preview-imagen" />
+						<img className="imagen" src={`https://tiendaab.herokuapp.com/${prev}`} alt="preview-imagen" />
 					)}
 				</div>
 			</div>

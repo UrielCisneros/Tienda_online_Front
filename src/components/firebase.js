@@ -4,8 +4,8 @@ import firebaseConfig from '../config/firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import clienteAxios from '../config/axios';
 import * as firebase from 'firebase/app';
-import 'firebase/auth'
-import 'firebase/firestore'
+import 'firebase/auth';
+import 'firebase/firestore';
 
 firebase.initializeApp(firebaseConfig);
 
@@ -24,7 +24,7 @@ function Firebase() {
 		signInOptions: [ firebase.auth.GoogleAuthProvider.PROVIDER_ID, firebase.auth.FacebookAuthProvider.PROVIDER_ID ]
 	};
 
-	async function onAuthStateChange(callback){
+	async function onAuthStateChange(callback) {
 		return firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
 				const displayname = user.displayName.split(' ');
@@ -48,7 +48,7 @@ function Firebase() {
 							callback({ isSignedIn: true });
 							const token = res.data.token;
 							localStorage.setItem('token', token);
-							window.location.reload()
+							window.location.reload();
 							notification['success']({
 								message: 'Listo!',
 								duration: 2
@@ -56,7 +56,7 @@ function Firebase() {
 						}
 					});
 				} catch (error) {
-					console.log(error)
+					console.log(error);
 					notification['error']({
 						message: 'Error',
 						duration: 2
@@ -66,7 +66,7 @@ function Firebase() {
 				callback({ isSignedIn: false });
 			}
 		});
-	};
+	}
 
 	useEffect(() => {
 		onAuthStateChange(setUser);

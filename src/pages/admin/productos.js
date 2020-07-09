@@ -129,7 +129,7 @@ function RegistrarProductos(props) {
 							<img
 								className="img-fluid"
 								alt="producto"
-								src={`http://localhost:4000/${productos.imagen}`}
+								src={`https://tiendaab.herokuapp.com/${productos.imagen}`}
 								style={{ maxHeight: '99%', width: '99%' }}
 							/>
 						</div>
@@ -152,7 +152,7 @@ function RegistrarProductos(props) {
 				>
 					<div style={{height: 100}}>
 						<h1 className="h4">{productos.nombre}</h1>
-						<h2 className="h5">{productos.precio}</h2>
+						<h2 className="h5">{new Intl.NumberFormat().format(productos.precio)}</h2>
 					</div>
 				</Card>
 			</Card.Grid>

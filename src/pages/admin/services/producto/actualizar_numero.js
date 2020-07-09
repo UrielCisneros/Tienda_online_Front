@@ -154,7 +154,7 @@ function ActualizarNumero() {
 			<div className="mb-5 m-2">
 				<Badge count={numeros.cantidad} style={{ backgroundColor: '#52c41a' }}>
 					<div className="hover-delete d-flex text-center">
-						<p className="rounded p-2" style={{ backgroundColor: '#EEEEEE', fontSize: 40, width: '60px', height: '56px' }}>
+						<p className="rounded p-2" style={{ backgroundColor: '#EEEEEE', fontSize: 40, minWidth: '60px', height: '56px' }}>
 							{numeros.numero}
 						</p>
 						<div className="icono rounded d-flex justify-content-around">

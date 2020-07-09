@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import clienteAxios from '../../config/axios'
+import clienteAxios from '../../config/axios';
 import { notification, Form, Input, Button } from 'antd';
 import { withRouter } from 'react-router-dom';
 
@@ -8,21 +8,20 @@ const layout = {
 	wrapperCol: { span: 12 }
 };
 const tailLayout = {
-	wrapperCol: { offset: 7, span: 10}
+	wrapperCol: { offset: 7, span: 10 }
 };
 
 function Registro(props) {
-	
 	const onFinish = async (values) => {
 		const res = await clienteAxios.post('/cliente/', values);
 		try {
-			if(!res.data.user){
+			if (!res.data.user) {
 				notification['error']({
 					message: 'Error',
 					description: res.data.message,
 					duration: 2
 				});
-			}else{
+			} else {
 				const token = res.data.user;
 				localStorage.setItem('token', token);
 				props.history.push('/');
@@ -39,16 +38,11 @@ function Registro(props) {
 				duration: 2
 			});
 		}
-	}
+	};
 
 	return (
 		<div>
-			<Form
-				{...layout}
-				name="basic"
-				initialValues={{ remember: true }}
-				onFinish={onFinish}
-			>
+			<Form {...layout} name="basic" initialValues={{ remember: true }} onFinish={onFinish}>
 				<Form.Item
 					label="Nombre"
 					name="nombre"
@@ -57,10 +51,7 @@ function Registro(props) {
 					<Input />
 				</Form.Item>
 
-				<Form.Item
-					label="Apellido"
-					name="apellido"
-				>
+				<Form.Item label="Apellido" name="apellido">
 					<Input />
 				</Form.Item>
 
