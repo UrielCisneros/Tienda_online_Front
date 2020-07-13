@@ -9,7 +9,6 @@ const Ofertas = () => {
     const [ producto, setProducto ] = useState([]);
 	const token = localStorage.getItem('token');
 	const [ promocion, setPromocion ] = useState([]);
-	const [ precio, setPrecio ] = useState([]);
 	console.log("hola")
 
 	useEffect(() => {
@@ -22,7 +21,7 @@ const Ofertas = () => {
 			.then((res) => {
 				console.log(res)
 				setProducto(res.data);
-				setPromocion(res.data.promocion)
+				setPromocion(res.data.promocion);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -35,6 +34,7 @@ const Ofertas = () => {
 
 	var porcentaje= (promo / producto.precio ) * 100;
 	var intPorcentaje = Math.round( porcentaje );
+
 /* coment */
     return (
         <div>
