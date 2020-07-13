@@ -9,6 +9,7 @@ const Ofertas = () => {
 	const productoContext = useContext(IdProductoContext);
     const [ producto, setProducto ] = useState([]);
 	const token = localStorage.getItem('token');
+	const [ promocion, setPromocion ] = useState([]);
 	console.log("hola")
 
 	useEffect(() => {
@@ -21,16 +22,19 @@ const Ofertas = () => {
 			.then((res) => {
 				console.log(res)
 				setProducto(res.data);
+				setPromocion(res.data.promocion);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
 
-	var porcentaje= (175000 / producto.precio ) * 100;
-	var intPorcentaje = Math.round( porcentaje );
+	const promo = promocion.map((promo) => (
+		promo.precio
+	))
 
-	console.log(producto.promocion['0'])
+	var porcentaje= (promo / producto.precio ) * 100;
+	var intPorcentaje = Math.round( porcentaje );
 
     return (
         <div>
@@ -48,7 +52,7 @@ const Ofertas = () => {
 						</div>
 						<div className="precio-box"> 
 							<h3 className="precio-producto d-inline mr-2">${new Intl.NumberFormat().format(producto.precio)}</h3>
-							<h3 className="precio-rebaja d-inline mr-2">${new Intl.NumberFormat().format(producto.promocion)}</h3>
+							<h3 className="precio-rebaja d-inline mr-2">${new Intl.NumberFormat().format(promo)}</h3>
 						</div>
 					</div>
 				</div>
