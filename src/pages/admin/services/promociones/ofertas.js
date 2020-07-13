@@ -35,7 +35,7 @@ const Ofertas = () => {
 
 	var porcentaje= (promo / producto.precio ) * 100;
 	var intPorcentaje = Math.round( porcentaje );
-
+/* coment */
     return (
         <div>
 			<div>
