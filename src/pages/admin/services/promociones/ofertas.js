@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react'
 import clienteAxios from '../../../../config/axios';
 import { Button, Input, Space} from 'antd';
-import {IdProductoContext, ProductoContext} from '../../contexts/ProductoContext'
+import {IdProductoContext} from '../../contexts/ProductoContext'
 import './ofertas.scss';
-import productos from '../../productos';
 
 const Ofertas = () => {
 	const productoContext = useContext(IdProductoContext);
     const [ producto, setProducto ] = useState([]);
 	const token = localStorage.getItem('token');
+	const [ promocion, setPromocion ] = useState([]);
+	const [ precio, setPrecio ] = useState([]);
 	console.log("hola")
 
 	useEffect(() => {
@@ -21,16 +22,19 @@ const Ofertas = () => {
 			.then((res) => {
 				console.log(res)
 				setProducto(res.data);
+				setPromocion(res.data.promocion)
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
 
-	var porcentaje= (175000 / producto.precio ) * 100;
-	var intPorcentaje = Math.round( porcentaje );
+	const promo = promocion.map((promo) => (
+		promo.precio
+	))
 
-	console.log(producto.promocion['0'])
+	var porcentaje= (promo / producto.precio ) * 100;
+	var intPorcentaje = Math.round( porcentaje );
 
     return (
         <div>
@@ -41,14 +45,14 @@ const Ofertas = () => {
 				<div className="col-12 col-lg-6">
 					<div className="shadow">
 						<div className="imagen-box shadow-sm">
-							<img className="img-producto" alt="img-producto" src={producto.imagen} />
+							<img className="img-producto" alt="img-producto" src={`http://localhost:4000/${producto.imagen}`} />
 						</div>
 						<div className="titulo-box"> 
 							<h2>{producto.nombre}</h2>
 						</div>
 						<div className="precio-box"> 
 							<h3 className="precio-producto d-inline mr-2">${new Intl.NumberFormat().format(producto.precio)}</h3>
-							<h3 className="precio-rebaja d-inline mr-2">${new Intl.NumberFormat().format(producto.promocion)}</h3>
+							<h3 className="precio-rebaja d-inline mr-2">${new Intl.NumberFormat().format(promo)}</h3>
 						</div>
 					</div>
 				</div>

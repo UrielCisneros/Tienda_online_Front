@@ -87,7 +87,7 @@ function Promociones(props) {
 					<img
 						className="img-fluid"
 						alt="producto"
-						src={`https://tiendaab.herokuapp.com/${productos.imagen}`}
+						src={`http://localhost:4000/${productos.imagen}`}
 						style={{ width: '100%', maxHeight: '100%' }}
 					/>
 				</div>

@@ -53,7 +53,7 @@ function Productos() {
 						<img
 							className="ml-4"
 							alt="producto"
-							src={`https://tiendaab.herokuapp.com/${productos.imagen}`}
+							src={`http://localhost:4000/${productos.imagen}`}
 							style={{ maxHeight: 200, maxWidth: 250 }}
 						/>
 					}
