@@ -28,7 +28,7 @@ function Registro(props) {
 				notification['success']({
 					message: 'Hecho!',
 					description: 'Te has registrado correctamente',
-					duration: 2
+					duration: 3
 				});
 			}
 		} catch (error) {

@@ -1,26 +1,26 @@
 import React, { useEffect } from 'react'
 import {Helmet} from "react-helmet";
 import { withRouter } from 'react-router-dom';
+import jwt_decode from 'jwt-decode'
 
 function Admin(props) {
     const token = localStorage.getItem('token')
-    const rol = parseJwt(token)
+    var decoded = Jwt(token) 
+	
+	function Jwt(token) {
+		try {
+			return jwt_decode(token);
+		} catch (e) {
+			return null;
+		}
+	}
 
-    function parseJwt(token) {
-        try {
-          return JSON.parse(atob(token.split('.')[1]));
-        } catch (e) {
-          return null;
-        }
-      };
+    if(token === '' || token === null){
+        props.history.push('/entrar')
+    }else if(decoded['rol'] !== true){
+        props.history.push('/')
+    }
 
-    useEffect( () => {
-        if(token === '' || token === null){
-            props.history.push('/entrar')
-        }else if(rol['rol'] !== true){
-            props.history.push('/')
-        }
-    })
     return (
         <div>
             <Helmet>

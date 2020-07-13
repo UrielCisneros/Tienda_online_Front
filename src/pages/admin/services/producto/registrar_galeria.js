@@ -5,9 +5,10 @@ import { UploadOutlined, EyeOutlined, DeleteOutlined, PictureOutlined } from '@a
 import './registrar_galeria.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 
+const key = 'updatable';
+
 function RegistrarGaleria() {
 	const token = localStorage.getItem('token');
-
 	const productoContext = useContext(ProductoContext);
 	const [ galeria, setGaleria ] = useState();
 
@@ -28,6 +29,7 @@ function RegistrarGaleria() {
 	};
 
 	const subirBD = async (formData) => {
+		message.loading({ content: 'En proceso...', key });
 		const respuesta = await clienteAxios.post(`/galeria/nueva/${productoContext}`, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
@@ -37,15 +39,22 @@ function RegistrarGaleria() {
 		try {
 			if (!respuesta.data.err) {
 				obtenerBD();
+				message.success({
+					content: 'Listo!',
+					key,
+					duration: 1
+				});
 			} else {
 				message.error({
 					content: respuesta.data.message,
+					key,
 					duration: 3
 				});
 			}
 		} catch (error) {
 			message.error({
 				content: 'Hubo un error',
+				key,
 				duration: 3
 			});
 		}
