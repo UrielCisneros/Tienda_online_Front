@@ -1,0 +1,66 @@
+@media(max-width: 768px){
+    
+}
+.contenedor-imagen{
+    width: 250px;
+    height: 150px;
+}
+.contenedor-imagen:hover > .iconos-uploads-carousel{
+    display: flex;
+    transition: .2s;
+}
+.imagen{
+    width: 100%;
+}
+.iconos-uploads-carousel{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+.iconos-uploads-carousel:hover{
+    background: rgba(0, 0, 0, 0.50);
+}
+.icons-edit{
+    display: block;
+    margin-bottom: 25px;
+    
+}
+.icons-delete{
+    display: block;
+    margin-top: 25px;
+    cursor: pointer;
+}
+
+/* For upload antd */
+.ant-upload-list-item-info::before{
+    left: 0!important;
+}
+.ant-upload-list-text{
+    display: none;
+}
+
+/* For Carousel antd */
+.ant-carousel .slick-slide {
+    height: unset;
+    line-height: 160px;
+    background: #364d79;
+    overflow: hidden;
+  }
+  
+  .ant-carousel .slick-slide h3 {
+    color: #fff;
+  }
+  .img-carousel{
+      width: 100%;
+  }
+  .numero{
+      padding: 1rem;
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.100);
+      display: flex;
+      justify-content: center;
+      width: 100%;
+  }

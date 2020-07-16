@@ -7,23 +7,23 @@ import AdminHome from '../pages/admin'
 import RegistrarProductos from '../pages/admin/productos'
 import Pedidos from '../pages/admin/pedidos'
 import Promociones from '../pages/admin/promociones'
-import SistemaApartado from '../pages/admin/sistema_apartado'
+import SistemaApartado from '../pages/admin/apartado'
 import Inventario from '../pages/admin/inventario'
 import BlogAdmin from '../pages/admin/blog'
 
-//pages
-import Home from '../pages/home'
-import Entrar from '../pages/entrar'
-import QuienesSomos from '../pages/quienes_somos'
-import ShoppingCart from '../pages/shopping_cart'
-import Productos from '../pages/productos'
-import Blog from '../pages/blog'
-import PedidosUsuario from '../pages/pedidos'
-import Ofertas from '../pages/ofertas'
-import Articulo from '../pages/articulo'
+//Users pages
+import Home from '../pages/users/home'
+import Entrar from '../pages/users/entrar'
+import QuienesSomos from '../pages/users/quienes_somos'
+import ShoppingCart from '../pages/users/shopping_cart'
+import Productos from '../pages/users/productos'
+import Blog from '../pages/users/blog'
+import PedidosUsuario from '../pages/users/pedidos'
+import Ofertas from '../pages/users/ofertas'
+import Articulo from '../pages/users/articulo'
 
 //other
-import Error404 from '../pages/error404'
+import Error404 from '../pages/users/error404'
 
 const routes = [
 	{

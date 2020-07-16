@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Registro from './registro'
 import Login from './login'
-import Firebase from '../components/firebase'
+import Firebase from '../../components/firebase'
 import { Tabs } from 'antd'
 import './entrar.scss'
 import { withRouter } from 'react-router-dom'
