@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import { Button, Spin, Col, Row, Input, Tabs, Drawer, Space } from 'antd';
 import Ofertas from './services/promociones/ofertas';
 import CarouselImages from './services/promociones/carousel';
+import Sugerencia from './services/promociones/sugerencia'
 import { IdProductoContext } from './contexts/ProductoContext';
 import './promociones.scss';
 
@@ -83,11 +84,11 @@ function Promociones(props) {
 			}}
 		>
 			<Row className="contenedor shadow-sm mb-3">
-				<div className="d-flex justify-content-center align-items-center" style={{ width: 200, height: 200 }}>
+				<div className="d-flex justify-content-center align-items-center mr-2" style={{ width: 200, height: 200 }}>
 					<img
 						className="img-fluid"
 						alt="producto"
-						src={`http://localhost:4000/${productos.imagen}`}
+						src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
 						style={{ width: '100%', maxHeight: '100%' }}
 					/>
 				</div>
@@ -97,7 +98,7 @@ function Promociones(props) {
 					<h6 className="mt-4">*Este producto ya aparece en el carrucel principal</h6>
 				</div>
 				<div className="border sugerencia-box d-flex justify-content-center align-items-center p-5">
-					<div>Productos + producto</div>
+					<div className="shadow-sm">Sin sugerencias</div>
 				</div>
 			</Row>
 		</Col>
@@ -146,7 +147,7 @@ function Promociones(props) {
 				}
 			>
 				<IdProductoContext.Provider value={productoID}>
-					<Tabs defaultActiveKey="2">
+					<Tabs defaultActiveKey="3">
 						<TabPane tab="Promocion en Carousel" key="1">
 							<CarouselImages />
 						</TabPane>
@@ -154,7 +155,7 @@ function Promociones(props) {
 							<Ofertas />
 						</TabPane>
 						<TabPane tab="Sugerencias del producto" key="3">
-							Content of Tab Pane 3
+							<Sugerencia />
 						</TabPane>
 					</Tabs>
 				</IdProductoContext.Provider>

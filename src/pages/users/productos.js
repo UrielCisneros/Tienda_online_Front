@@ -53,7 +53,7 @@ function Productos() {
 						<img
 							className="ml-4"
 							alt="producto"
-							src={`http://localhost:4000/${productos.imagen}`}
+							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
 							style={{ maxHeight: 200, maxWidth: 250 }}
 						/>
 					}

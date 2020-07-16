@@ -131,7 +131,7 @@ function RegistrarProductos(props) {
 							<img
 								className="img-fluid"
 								alt="producto"
-								src={`http://localhost:4000/${productos.imagen}`}
+								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
 								style={{ maxHeight: '99%', width: '99%' }}
 							/>
 						</div>

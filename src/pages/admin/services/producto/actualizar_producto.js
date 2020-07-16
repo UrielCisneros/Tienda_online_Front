@@ -213,7 +213,7 @@ function ActualizarProducto() {
 							className="d-block img-fluid mt-2"
 							width="200"
 							alt="imagen de base"
-							src={`https://tiendaab.herokuapp.com/${files}`}
+							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${files}`}
 						/>
 					</Form.Item>
 					<Form.Item className="d-flex justify-content-center align-items-center text-center">
