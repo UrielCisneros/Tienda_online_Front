@@ -1,9 +1,4 @@
-.contenedor-producto-actual{
-    width: 200px;
-    height: 200px;
-    display: inline-block;
-    margin: 5px;
-}
+
 .contenedor-span{
     width: 80px;
     height: 200px;
@@ -11,18 +6,10 @@
     margin: 5px;
     font-size: 70px;
 }
-.contenedor-producto-sugerido{
-    width: 200px;
-    height: 200px;
-    display: inline-block;
-    margin: 5px;
-}
 h2{
     font-size: 16px;
 }
-.imagen-producto-actual{
-    width: 100%;
-}
-.imagen-producto-sugerido{
-    width: 100%;
+.imagen-producto-actual, .imagen-producto-sugerido{
+    max-width: 99%!important;
+    margin-left: 1px;
 }

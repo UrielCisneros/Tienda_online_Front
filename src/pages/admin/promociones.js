@@ -56,6 +56,32 @@ function Promociones(props) {
 			});
 	};
 
+	const obtenerSugerencia = async (idproducto) => {
+		const res = await clienteAxios.get(`/sugerencia/${idproducto}`);
+		console.log(res)
+
+		/* try {
+			if (!res.data.err) {
+				if (!res.data.message) {
+					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
+				} else {
+					setSugerencia('No hay sugerencia');
+				}
+			} else {
+				message.error({
+					content: res.data.message,
+					duration: 2
+				});
+			}
+		} catch (err) {
+			console.log(err);
+			message.error({
+				content: 'Hubo un error al obtener sugerencia',
+				duration: 2
+			});
+		} */
+	};
+
 	useEffect(() => {
 		obtenerProductos();
 	}, []);
@@ -77,6 +103,7 @@ function Promociones(props) {
 
 	const render = productosFiltrados.map((productos) => (
 		<Col
+			style={{width: '700px'}}
 			key={productos.id}
 			onClick={() => {
 				showDrawer();
@@ -84,7 +111,7 @@ function Promociones(props) {
 			}}
 		>
 			<Row className="contenedor shadow-sm mb-3">
-				<div className="d-flex justify-content-center align-items-center mr-2" style={{ width: 200, height: 200 }}>
+				<div className="d-flex justify-content-center align-items-center mr-2" style={{ width: 150, height: 150 }}>
 					<img
 						className="img-fluid"
 						alt="producto"
@@ -95,10 +122,6 @@ function Promociones(props) {
 				<div className="mt-4 titulo-producto">
 					<h1 className="h4">{productos.nombre}</h1>
 					<h2 className="h5">$ {new Intl.NumberFormat().format(productos.precio)}</h2>
-					<h6 className="mt-4">*Este producto ya aparece en el carrucel principal</h6>
-				</div>
-				<div className="border sugerencia-box d-flex justify-content-center align-items-center p-5">
-					<div className="shadow-sm">Sin sugerencias</div>
 				</div>
 			</Row>
 		</Col>
@@ -121,7 +144,12 @@ function Promociones(props) {
 					/>
 				</Col>
 			</Row>
-			{render}
+			<div className="d-flex justify-content-center">
+				<div>
+					{render}
+				</div>
+			</div>
+			
 			<Drawer
 				title="Sugerencias, Ofertas y Promociones"
 				width={window.screen.width > 768 ? 1000 : window.screen.width}
