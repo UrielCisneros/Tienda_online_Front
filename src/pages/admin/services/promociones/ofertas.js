@@ -26,12 +26,12 @@ const Ofertas = () => {
 	const obtenerCampo = e => {
 		setPrecioPromocion(e.target.value)
 	}
+/* 
+	const subirImagen = () => {} */
 
-	const subirImagen = () => {}
+/* 	const actualizarImagen = () => {} */
 
-	const actualizarImagen = () => {}
-
-	const eliminarImagen = () => {}
+/* 	const eliminarImagen = () => {} */
 
 	const subirPromocion = async () => {
 		formData.append('precio', precioPromocion)
@@ -49,7 +49,7 @@ const Ofertas = () => {
 		}
 	}
 
-	const eliminarPromocion = () => {}
+	/* const eliminarPromocion = () => {} */
 
     const obtenerProductos = async () => {
 		const res = await clienteAxios.get(`/productos/${productoContext}`)
@@ -65,9 +65,9 @@ const Ofertas = () => {
 	const precio_descuento = promocionActual.map((promo) => (
 		promo.precio
 	))
-	const imagen_promocion = promocionActual.map((promo) => (
+/* 	const imagen_promocion = promocionActual.map((promo) => (
 		promo.imagenPromocion
-	))
+	)) */
 
 	var porcentaje= (precio_descuento / producto.precio ) * 100;
 	var intPorcentaje = Math.round( porcentaje );

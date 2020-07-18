@@ -116,6 +116,7 @@ function RegistrarProducto(props) {
 		try {
 			if (!respuesta.data.err) {
 				setDisabledPrev(true);
+				setDisabled(false);
 				setDisabledFormProductos(true);
 				setDisabledForm(false);
 				setProductoID(respuesta.data.userStored._id);
@@ -200,15 +201,8 @@ function RegistrarProducto(props) {
 										init={{
 											height: 200,
 											menubar: false,
-											plugins: [
-												'advlist autolink lists link image charmap print preview anchor',
-												'searchreplace visualblocks code fullscreen',
-												'insertdatetime media table paste code help wordcount'
-											],
-											toolbar:
-												'undo redo | formatselect | bold italic backcolor | \
-                                            alignleft aligncenter alignright alignjustify | \
-                                            bullist numlist outdent indent | removeformat | help'
+											plugins: ['advlist autolink lists link image charmap print preview anchor','searchreplace visualblocks code fullscreen','insertdatetime media table paste code help wordcount'],
+											toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
 										}}
 										onEditorChange={obtenerEditor}
 									/>
@@ -237,7 +231,7 @@ function RegistrarProducto(props) {
 							)}
 							{select === 'calzado' ? (
 								<div>
-									<ProductoContext.Provider value={[productoID, disabledform]}>
+									<ProductoContext.Provider value={[ productoID, disabledform ]}>
 										<RegistrarNumero />
 									</ProductoContext.Provider>
 								</div>

@@ -56,32 +56,6 @@ function Promociones(props) {
 			});
 	};
 
-	const obtenerSugerencia = async (idproducto) => {
-		const res = await clienteAxios.get(`/sugerencia/${idproducto}`);
-		console.log(res)
-
-		/* try {
-			if (!res.data.err) {
-				if (!res.data.message) {
-					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
-				} else {
-					setSugerencia('No hay sugerencia');
-				}
-			} else {
-				message.error({
-					content: res.data.message,
-					duration: 2
-				});
-			}
-		} catch (err) {
-			console.log(err);
-			message.error({
-				content: 'Hubo un error al obtener sugerencia',
-				duration: 2
-			});
-		} */
-	};
-
 	useEffect(() => {
 		obtenerProductos();
 	}, []);
@@ -175,7 +149,7 @@ function Promociones(props) {
 				}
 			>
 				<IdProductoContext.Provider value={productoID}>
-					<Tabs defaultActiveKey="3">
+					<Tabs defaultActiveKey="1">
 						<TabPane tab="Promocion en Carousel" key="1">
 							<CarouselImages />
 						</TabPane>

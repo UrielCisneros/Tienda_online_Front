@@ -1,21 +1,43 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, message, Carousel, Badge } from 'antd';
-import { UploadOutlined, EyeOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Upload, Button, message, Space } from 'antd';
+import { UploadOutlined, PictureOutlined, DeleteOutlined } from '@ant-design/icons';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import './carousel.scss';
-import imagen from '../../../users/promocion.jpeg';
 
 const key = 'updatable';
 
 function CarouselImages() {
 	const token = localStorage.getItem('token');
 	const productoID = useContext(IdProductoContext);
-	const [ galeria, setGaleria ] = useState();
+	const [ imagen, setImagen ] = useState();
 	const [ idImagen, setIdImagen ] = useState();
 
 	useEffect(
 		() => {
+			const obtenerImagen = async () => {
+				const res = await clienteAxios.get(`/carousel/${productoID}`);
+				console.log(res);
+				try {
+					if (!res.data.err) {
+						if(res.data.message === "Este carousel no existe"){
+							setImagen(res.data.message);
+						}else{
+							setImagen(res.data.imagen);
+						}
+					} else {
+						message.error({
+							content: res.data.message,
+							duration: 2
+						});
+					}
+				} catch (error) {
+					message.error({
+						content: 'Hubo un error',
+						duration: 2
+					});
+				}
+			};
 			obtenerImagen();
 		},
 		[ productoID ]
@@ -37,19 +59,20 @@ function CarouselImages() {
 			formData.append('imagen', file);
 			await actualizarImagen(formData);
 		}
-    };
-    
-    const subirImagen = async (formData) => {
+	};
+
+	const subirImagen = async (formData) => {
 		message.loading({ content: 'En proceso...', key });
-		const res = await clienteAxios.post(`/galeria/nueva/${productoID}`, formData, {
+		const res = await clienteAxios.post(`/carousel/nuevo/${productoID}`, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 				Authorization: `bearer ${token}`
 			}
 		});
+		console.log(res)
 		try {
 			if (!res.data.err) {
-				obtenerImagen();
+				/* obtenerImagen(); */
 				message.success({
 					content: 'Listo!',
 					key,
@@ -71,7 +94,7 @@ function CarouselImages() {
 
 	const actualizarImagen = async (formdata) => {
 		message.loading({ content: 'En proceso...', key });
-		const res = await clienteAxios.put(`/galeria/${productoID}/imagen/${idImagen}`, formdata, {
+		const res = await clienteAxios.put(`/carousel/${productoID}/`, formdata, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 				Authorization: `bearer ${token}`
@@ -79,7 +102,7 @@ function CarouselImages() {
 		});
 		try {
 			if (!res.data.err) {
-				obtenerImagen();
+				/* obtenerImagen(); */
 				message.success({
 					content: res.data.message,
 					key,
@@ -99,33 +122,15 @@ function CarouselImages() {
 		}
 	};
 
-	const obtenerImagen = async () => {
-		const res = await clienteAxios.get(`/galeria/${productoID}`);
-		try {
-			if (!res.data.err) {
-				setGaleria(res.data.imagenes);
-			} else {
-				message.error({
-					content: res.data.message,
-					duration: 2
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
-			});
-		}
-	};
 	const eliminarImagen = async (idimagen) => {
-		const res = await clienteAxios.delete(`/galeria/${productoID}/imagen/${idimagen}`, {
+		const res = await clienteAxios.delete(`/carousel/${productoID}/`, {
 			headers: {
 				Authorization: `bearer ${token}`
 			}
 		});
 		try {
 			if (!res.data.err) {
-				obtenerImagen();
+				/* obtenerImagen(); */
 				message.success({
 					content: res.data.message,
 					duration: 1
@@ -144,90 +149,84 @@ function CarouselImages() {
 		}
 	};
 
-	const [ prev, setPrev ] = useState('');
+	/* const [ prev, setPrev ] = useState('');
 	if (galeria !== undefined) {
 		var render = galeria.map((imagenes) => (
-			<div className="shadow rounded imgStyle d-inline-block border">
-				<div className="padre-iconos d-flex justify-content-around align-items-center">
-					<img className="img" src={`https://tiendaab.herokuapp.com/${imagenes.url}`} alt="preview-imagen" />
-					<div className="iconos rounded">
-						<EyeOutlined
-							style={{ fontSize: 20 }}
-							className="ver"
-							onClick={function() {
-								setPrev(imagenes.url);
-							}}
-						/>
-						<Upload {...propsActualizar}>
-							<EditOutlined
-								style={{ fontSize: 20 }}
-								className="modificar"
+			<Badge>
+				<div className="contenedor-imagen d-flex shadow mr-1">
+					<img
+						className="imagen-carousel"
+						src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenes.url}`}
+						alt="preview-imagen"
+					/>
+					<div className="iconos-uploads-carousel">
+						<div className="contenedor-iconos">
+							<EyeOutlined
+								style={{ fontSize: 30, color: 'white' }}
 								onClick={function() {
-									setIdImagen(imagenes._id);
+									setPrev(imagenes.url);
 								}}
 							/>
-						</Upload>
-						<DeleteOutlined
-							style={{ fontSize: 20 }}
-							className="eliminar"
-							onClick={function() {
-								eliminarImagen(imagenes._id);
-							}}
-						/>
+							<Upload {...propsActualizar}>
+								<EditOutlined
+									style={{ fontSize: 30, color: 'white' }}
+									className="icons-edit"
+									onClick={function() {
+										setIdImagen(imagenes._id);
+									}}
+								/>
+							</Upload>
+							<DeleteOutlined
+								style={{ fontSize: 30, color: 'white' }}
+								className="icons-delete"
+								onClick={function() {
+									eliminarImagen(imagenes._id);
+								}}
+							/>
+						</div>
 					</div>
 				</div>
-			</div>
+			</Badge>
 		));
-	}
+	} */
 
 	return (
 		<div>
 			<div>
-				<Upload {...props}>
-					<Button>
-						<UploadOutlined /> Subir
-					</Button>
-				</Upload>
-				<div className="padre">
-					<Badge>
-						<div className="contenedor-imagen d-flex shadow mr-1">
-							<img className="imagen" src={imagen} alt="preview-imagen" />
-							<div className="iconos-uploads-carousel justify-content-around">
-                                <div style={{ fontSize: 80, color: 'white' }}>1</div>
-                                <div>
-                                    <Upload {...propsActualizar} className="icons-edit">
-                                        <EditOutlined style={{ fontSize: 30, color: 'white' }} />
-                                    </Upload>
-                                    <DeleteOutlined className="icons-delete" style={{ fontSize: 30, color: 'white' }} />
-                                </div>
-							</div>
-						</div>
-					</Badge>
-                    <Badge>
-						<div className="contenedor-imagen d-flex shadow mr-1">
-							<img className="imagen" src={imagen} alt="preview-imagen" />
-							<div className="iconos-uploads-carousel justify-content-around">
-                                <div style={{ fontSize: 80, color: 'white' }}>2</div>
-                                <div>
-                                    <Upload {...propsActualizar} className="icons-edit">
-                                        <EditOutlined style={{ fontSize: 30, color: 'white' }} />
-                                    </Upload>
-                                    <DeleteOutlined className="icons-delete" style={{ fontSize: 30, color: 'white' }} />
-                                </div>
-							</div>
-						</div>
-					</Badge>
+				<div>
+					<p>
+						En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso de que no existan
+						promociones, si no existen promociones apareceran esta imagen
+					</p>
+				</div>
+				<div className="d-flex justify-content-center align-items-center mt-3">
+					{imagen === "Este carousel no existe" ? (
+						<Upload {...props} className="d-inline">
+							<Button>
+								<UploadOutlined />Subir
+							</Button>
+						</Upload>
+					) : (
+						<Space>
+							<Upload {...props} className="d-inline">
+								<Button>
+									<UploadOutlined />Actualizar
+								</Button>
+							</Upload>
+							<Button onClick={() => {eliminarImagen()}}>
+								<DeleteOutlined />Eliminar
+							</Button>
+						</Space>
+					)}
+				</div>
+				<div className="shadow imagen-preview-carousel d-flex justify-content-center align-items-center">
+					{imagen === "Este carousel no existe" ? (
+						<PictureOutlined style={{ fontSize: 80 }} />
+					) : (
+						<img className="imagen" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagen}`} alt="preview-imagen" />
+					)}
 				</div>
 			</div>
-			<Carousel autoplay>
-				<div className="d-flex justify-content-center">
-					<h3 className="numero">1</h3>
-					<img className="img-carousel" src={imagen} alt="preview-imagen" />
-				</div>
-				<div className="d-flex justify-content-center">
-					<h3 className="numero">2</h3>
-				</div>
-			</Carousel>
 		</div>
 	);
 }

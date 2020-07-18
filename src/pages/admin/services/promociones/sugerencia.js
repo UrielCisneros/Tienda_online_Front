@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Button, Input, Space, message, Modal, List, Avatar, Card } from 'antd';
-import { IdProductoContext, ProductoContext } from '../../contexts/ProductoContext';
+import { Button, Input, Space, message, Modal, List, Avatar, Card, Spin } from 'antd';
+import { IdProductoContext } from '../../contexts/ProductoContext';
 import InfiniteScroll from 'react-infinite-scroller';
 import './sugerencia.scss';
 
@@ -9,6 +9,7 @@ const { Search } = Input;
 const { Meta } = Card;
 
 const Sugerencia = () => {
+    const [ loadingPrincipal, setLoadingPrincipal ] = useState(false);
 	const productoContext = useContext(IdProductoContext);
 	//states de obtener producto y obtener todos los productos
 	const [ producto, setProducto ] = useState([]);
@@ -80,14 +81,16 @@ const Sugerencia = () => {
 	};
 
 	const obtenerSugerencia = async () => {
+        setLoadingPrincipal(true)
 		const res = await clienteAxios.get(`/sugerencia/${productoContext}`);
-
 		try {
 			if (!res.data.err) {
 				if (!res.data.message) {
-					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
+                    res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
+                    setLoadingPrincipal(false)
 				} else {
-					setSugerencia('No hay sugerencia');
+                    setSugerencia('No hay sugerencia');
+                    setLoadingPrincipal(false)
 				}
 			} else {
 				message.error({
@@ -177,34 +180,38 @@ const Sugerencia = () => {
 		} catch (err) {
             console.log(err);
             setLoading(false);
+            message.error({
+				content: 'Hubo un error',
+				duration: 2
+			});
 		}
     };
     
     const eliminarSugerencia = async () => {
-        console.log(productoContext)
 		const res = await clienteAxios.delete(`/sugerencia/${productoContext}`, {
 			headers: {
 				Authorization: `bearer ${token}`
 			}
 		});
 		try {
-            console.log(res)
-            /* if(!res.data.err){
+            if(res.data.message === 'Sugerencia de compra eliminada'){
                 message.success({
-                    content: 'Hecho! Sugerencia actualizada',
+                    content: res.data.message,
                     duration: 2
                 });
-                setModalVisible(false);
-                obtenerSugerencia();
-                setLoading(false);
+                obtenerSugerencia()
             }else{
                 message.error({
                     content: res.data.message,
                     duration: 2
                 });
-            } */
+            }
 		} catch (err) {
             console.log(err);
+            message.error({
+				content: 'Hubo un error',
+				duration: 2
+			});
 		}
     }
 
@@ -240,7 +247,14 @@ const Sugerencia = () => {
 				title={productos.nombre}
 			/>
 		</List.Item>
-	));
+    ));
+    
+    if (loadingPrincipal) {
+		return(
+            <div className="d-flex justify-content-center align-items-center">
+                <Spin size="large" />
+            </div>);
+	}
 
 	return (
 		<div>

@@ -1,7 +1,18 @@
 @media(max-width: 768px){
-    
+    .padre{
+        overflow-x: scroll;
+    }
+    .contenedor-imagen:visited > .iconos-uploads-carousel{
+        display: flex;
+        transition: .2s;
+    }
+}
+p{
+    font-size: 20px;
 }
 .contenedor-imagen{
+    display: flex;
+    justify-content: center;
     width: 250px;
     height: 150px;
 }
@@ -9,8 +20,9 @@
     display: flex;
     transition: .2s;
 }
-.imagen{
-    width: 100%;
+.imagen-carousel{
+    max-width: 100%;
+    max-height: 100%;
 }
 .iconos-uploads-carousel{
     position: absolute;
@@ -23,15 +35,10 @@
 .iconos-uploads-carousel:hover{
     background: rgba(0, 0, 0, 0.50);
 }
-.icons-edit{
-    display: block;
-    margin-bottom: 25px;
-    
-}
-.icons-delete{
-    display: block;
-    margin-top: 25px;
-    cursor: pointer;
+.contenedor-iconos{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }
 
 /* For upload antd */
@@ -41,26 +48,11 @@
 .ant-upload-list-text{
     display: none;
 }
-
-/* For Carousel antd */
-.ant-carousel .slick-slide {
-    height: unset;
-    line-height: 160px;
-    background: #364d79;
-    overflow: hidden;
-  }
-  
-  .ant-carousel .slick-slide h3 {
-    color: #fff;
-  }
-  .img-carousel{
-      width: 100%;
-  }
-  .numero{
-      padding: 1rem;
-      position: absolute;
-      background-color: rgba(0, 0, 0, 0.100);
-      display: flex;
-      justify-content: center;
-      width: 100%;
-  }
+.imagen-preview-carousel{
+    height: 400px;
+}
+.boton-subir-imagen-carousel{
+    margin-top: 13px;
+    width: 150px;
+    height: 150px;
+}
