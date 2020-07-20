@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import { Card, Col, Row, Pagination, Spin, Input } from 'antd';
 
@@ -47,6 +48,8 @@ function Productos() {
 	const render = productosFiltrados.map((productos) => (
 		<Col span={32} key={productos.id}>
 			<Card.Grid hoverable style={gridStyle}>
+				{/* Verificacion de prueba */}
+			<Link to="/vistaproductos"> 
 				<Card
 					style={{ width: 300 }}
 					cover={
@@ -64,6 +67,7 @@ function Productos() {
 						<h2 className="h5">{new Intl.NumberFormat().format(productos.precio)}</h2>
 					</div>
 				</Card>
+				</Link>
 			</Card.Grid>
 		</Col>
 	));
