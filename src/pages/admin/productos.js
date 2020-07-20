@@ -5,8 +5,9 @@ import RegistrarProducto from './services/producto/registrar_producto';
 import ActualizarProducto from './services/producto/actualizar_producto';
 import { Card, Col, Row, Input, Spin, Button, Modal, Drawer, message } from 'antd';
 import { StepsContext, StepsProvider } from '../admin/contexts/stepsContext';
-import { IdProductoContext } from './contexts/ProductoContext'
+import { IdProductoContext } from './contexts/ProductoContext';
 import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import jwt_decode from 'jwt-decode';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -22,11 +23,20 @@ function RegistrarProductos(props) {
 	const [ visible, setVisible ] = useState(false);
 	const [ accion, setAccion ] = useState(false);
 	const token = localStorage.getItem('token');
-	const rol = parseJwt(token);
+
+	var decoded = Jwt(token) 
+	
+	function Jwt(token) {
+		try {
+			return jwt_decode(token);
+		} catch (e) {
+			return null;
+		}
+	}
 
 	if (token === '' || token === null) {
 		props.history.push('/entrar');
-	} else if (rol['rol'] !== true) {
+	} else if (decoded['rol'] !== true) {
 		props.history.push('/');
 	}
 
@@ -40,15 +50,7 @@ function RegistrarProductos(props) {
 	function setRegistrar() {
 		setAccion(false);
 		setVisible(true);
-	}
-
-	function parseJwt(token) {
-		try {
-			return JSON.parse(atob(token.split('.')[1]));
-		} catch (e) {
-			return null;
-		}
-	}
+	}           
 
 	function showDeleteConfirm(idproducto) {
 		confirm({
@@ -125,21 +127,24 @@ function RegistrarProductos(props) {
 				<Card
 					style={{ width: 300, maxHeight: 400 }}
 					cover={
-						<div className="d-flex justify-content-center align-items-center" style={{height: 250}}>
+						<div className="d-flex justify-content-center align-items-center" style={{ height: 250 }}>
 							<img
 								className="img-fluid"
 								alt="producto"
-								src={`http://localhost:4000/${productos.imagen}`}
+								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
 								style={{ maxHeight: '99%', width: '99%' }}
 							/>
 						</div>
 					}
 					actions={[
-						<Button type="link" onClick={() => {
-							setActualizar()
-							console.log(productos)
-							setProductoID(productos._id)
-						}} className="text-decoration-none">
+						<Button
+							type="link"
+							onClick={() => {
+								setActualizar();
+								setProductoID(productos._id);
+							}}
+							className="text-decoration-none"
+						>
 							<EditOutlined style={{ fontSize: 22 }} />Actualizar
 						</Button>,
 						<Button
@@ -151,9 +156,9 @@ function RegistrarProductos(props) {
 						</Button>
 					]}
 				>
-					<div style={{height: 100}}>
+					<div style={{ height: 100 }}>
 						<h1 className="h4">{productos.nombre}</h1>
-						<h2 className="h5">{productos.precio}</h2>
+						<h2 className="h5">{new Intl.NumberFormat().format(productos.precio)}</h2>
 					</div>
 				</Card>
 			</Card.Grid>
@@ -163,7 +168,7 @@ function RegistrarProductos(props) {
 	return (
 		<div>
 			<Drawer
-				title={accion === true ? "Actualizar un producto" : "Registra un nuevo producto"}
+				title={accion === true ? 'Actualizar un producto' : 'Registra un nuevo producto'}
 				width={window.screen.width > 768 ? 1000 : window.screen.width}
 				placement={'right'}
 				onClose={drawnerClose}

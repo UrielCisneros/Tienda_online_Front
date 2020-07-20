@@ -1,19 +1,23 @@
-import React, { useState, useContext, useReducer, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Upload, Button, message } from 'antd';
 import { UploadOutlined, EyeOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons';
 import './registrar_galeria.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 
+const key = 'updatable';
+
 function RegistrarGaleria() {
 	const token = localStorage.getItem('token');
-
 	const productoContext = useContext(ProductoContext);
 	const [ galeria, setGaleria ] = useState();
 
-	useEffect(() => {
-        obtenerBD()
-    }, [productoContext])
+	useEffect(
+		() => {
+			obtenerBD();
+		},
+		[ productoContext ]
+	);
 
 	const props = {
 		beforeUpload: async (file) => {
@@ -25,6 +29,7 @@ function RegistrarGaleria() {
 	};
 
 	const subirBD = async (formData) => {
+		message.loading({ content: 'En proceso...', key });
 		const respuesta = await clienteAxios.post(`/galeria/nueva/${productoContext}`, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
@@ -34,15 +39,22 @@ function RegistrarGaleria() {
 		try {
 			if (!respuesta.data.err) {
 				obtenerBD();
+				message.success({
+					content: 'Listo!',
+					key,
+					duration: 1
+				});
 			} else {
 				message.error({
 					content: respuesta.data.message,
+					key,
 					duration: 3
 				});
 			}
 		} catch (error) {
 			message.error({
 				content: 'Hubo un error',
+				key,
 				duration: 3
 			});
 		}
@@ -97,7 +109,7 @@ function RegistrarGaleria() {
 		var render = galeria.map((imagenes) => (
 			<div className="shadow rounded imgStyle d-inline-block">
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
-					<img className="img" src={`http://localhost:4000/${imagenes.url}`} alt="preview-imagen" />
+					<img className="img" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenes.url}`} alt="preview-imagen" />
 					<div className="iconos rounded">
 						<span
 							onClick={function() {
@@ -134,7 +146,8 @@ function RegistrarGaleria() {
 					{prev === '' || galeria.length === 0 ? (
 						<PictureOutlined style={{ fontSize: 80 }} />
 					) : (
-						<img className="imagen" src={`http://localhost:4000/${prev}`} alt="preview-imagen" />
+						<img className="imagen" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/
+						${prev}`} alt="preview-imagen" />
 					)}
 				</div>
 			</div>

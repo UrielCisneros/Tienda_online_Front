@@ -22,8 +22,8 @@ function ActualizarProducto() {
 	const token = localStorage.getItem('token');
 	const productoID = useContext(IdProductoContext);
 	const [ files, setFiles ] = useState([]);
-    const [ select, setSelect ] = useState('');
-    const [ editor, setEditor ] = useState();
+	const [ select, setSelect ] = useState('');
+	const [ editor, setEditor ] = useState();
 
 	const [ productos, setProductos ] = useState([
 		{
@@ -61,12 +61,15 @@ function ActualizarProducto() {
 		try {
 			if (!res.data.err) {
 				form.setFieldsValue({
+					codigo: res.data.codigo,
 					nombre: res.data.nombre,
 					categoria: res.data.categoria,
 					precio: res.data.precio,
 					cantidad: res.data.cantidad,
 					descripcion: res.data.descripcion
 				});
+				setSelect(res.data.categoria);
+				setEditor(res.data.descripcion);
 				setFiles(res.data.imagen);
 				setProductos(res.data);
 			} else {
@@ -85,10 +88,10 @@ function ActualizarProducto() {
 
 	const obtenerSelect = (value) => {
 		setSelect(value);
-    };
-    const obtenerEditor = (value) => {
-        setEditor(value)
-    }
+	};
+	const obtenerEditor = (value) => {
+		setEditor(value);
+	};
 	const obtenerValores = (e) => {
 		setProductos({
 			...productos,
@@ -151,7 +154,7 @@ function ActualizarProducto() {
 		<Tabs defaultActiveKey="1">
 			<TabPane tab="Actualizar datos del producto" key="1">
 				<Form {...layout} name="nest-messages" onFinish={subirDatos} form={form}>
-					<Form.Item label="Codigo de barras" onChange={obtenerValores}>
+					<Form.Item name="codigo" label="Codigo de barras" onChange={obtenerValores}>
 						<Input name="codigo" placeholder="Campo opcional" />
 					</Form.Item>
 					<Form.Item name="nombre" label="Nombre del producto" onChange={obtenerValores}>
@@ -210,7 +213,7 @@ function ActualizarProducto() {
 							className="d-block img-fluid mt-2"
 							width="200"
 							alt="imagen de base"
-							src={`http://localhost:4000/${files}`}
+							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${files}`}
 						/>
 					</Form.Item>
 					<Form.Item className="d-flex justify-content-center align-items-center text-center">
