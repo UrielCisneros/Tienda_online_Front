@@ -169,13 +169,13 @@ function ActualizarProducto() {
 					</Form.Item>
 					{productos.categoria === 'otros' ? (
 						<Form.Item name="cantidad" label="Cantidad" onChange={obtenerValores}>
-							<Input name="cantidad" />
+							<Input type="number" name="cantidad" />
 						</Form.Item>
 					) : (
 						<div />
 					)}
 					<Form.Item name="precio" label="Precio del producto" onChange={obtenerValores}>
-						<Input name="precio" />
+						<Input type="number" name="precio" />
 					</Form.Item>
 					<Form.Item name="descripcion" label="Descripcion del producto">
 						<Editor

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, InputNumber, Select, Steps, message, Upload } from 'antd';
+import { Form, Button, Input, Select, Steps, message, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import './registrar_producto.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
@@ -187,13 +187,13 @@ function RegistrarProducto(props) {
 								</Form.Item>
 								{select === 'otros' ? (
 									<Form.Item label="Cantidad" onChange={datosForm}>
-										<InputNumber min={1} name="cantidad" disabled={disabledformProductos} />
+										<Input type="number" name="cantidad" disabled={disabledformProductos} />
 									</Form.Item>
 								) : (
 									<div />
 								)}
 								<Form.Item label="Precio del producto" onChange={datosForm}>
-									<InputNumber disabled={disabledformProductos} name="precio" />
+									<Input type="number" disabled={disabledformProductos} name="precio" />
 								</Form.Item>
 								<Form.Item label="Descripcion del producto">
 									<Editor
