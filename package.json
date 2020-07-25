@@ -22,6 +22,7 @@
     "react-google-maps": "^9.4.5",
     "react-helmet": "^6.0.0",
     "react-image-gallery": "^1.0.7",
+    "react-image-scroller": "^0.3.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-search-field": "^1.0.0"
