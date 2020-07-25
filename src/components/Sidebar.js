@@ -10,6 +10,8 @@ import {
 	TagOutlined,
 	ShoppingCartOutlined,
 	NotificationOutlined,
+	PercentageOutlined,
+	PictureOutlined,
 	EditOutlined,
 	HomeOutlined
 } from '@ant-design/icons';
@@ -61,8 +63,14 @@ const Sidebar = () => {
 				<Menu.Item key="/admin/pedidos" icon={<ShoppingCartOutlined />}>
 					Pedidos Pendientes<Link to="/admin/pedidos" />
 				</Menu.Item>
-				<Menu.Item key="/admin/promociones" icon={<NotificationOutlined />}>
-					Promociones y sugerencias de compra<Link to="/admin/promociones" />
+				<Menu.Item key="/admin/promociones" icon={<PercentageOutlined />}>
+					Promociones<Link to="/admin/promociones" />
+				</Menu.Item>
+				<Menu.Item key="/admin/sugerencias" icon={<NotificationOutlined />}>
+					Sugerencias de compra<Link to="/admin/sugerencias" />
+				</Menu.Item>
+				<Menu.Item key="/admin/carousel" icon={<PictureOutlined />}>
+					Galeria principal de Productos<Link to="/admin/carousel" />
 				</Menu.Item>
 				<Menu.Item key="/admin/blog" icon={<EditOutlined />}>
 					Blog<Link to="/admin/blog" />

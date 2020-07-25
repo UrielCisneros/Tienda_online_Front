@@ -10,6 +10,8 @@ import Promociones from '../pages/admin/promociones'
 import SistemaApartado from '../pages/admin/apartado'
 import Inventario from '../pages/admin/inventario'
 import BlogAdmin from '../pages/admin/blog'
+import Sugerencias from '../pages/admin/sugerencias'
+import Carousel from '../pages/admin/carousel'
 
 //Users pages
 import Home from '../pages/users/home'
@@ -67,6 +69,16 @@ const routes = [
 				exact: true
 			},
 			{
+				path: '/admin/sugerencias',
+				component: Sugerencias,
+				exact: true
+			},
+			{
+				path: '/admin/carousel',
+				component: Carousel,
+				exact: true
+			},
+			{
 				component: Error404
 			}
 		]
@@ -117,7 +129,7 @@ const routes = [
 				exact: true
 			},
 			{
-				path: '/productos?:user',
+				path: '/productos',
 				component: Productos,
 				exact: true
 			},

@@ -169,28 +169,21 @@ function ActualizarProducto() {
 					</Form.Item>
 					{productos.categoria === 'otros' ? (
 						<Form.Item name="cantidad" label="Cantidad" onChange={obtenerValores}>
-							<Input name="cantidad" />
+							<Input type="number" name="cantidad" />
 						</Form.Item>
 					) : (
 						<div />
 					)}
 					<Form.Item name="precio" label="Precio del producto" onChange={obtenerValores}>
-						<Input name="precio" />
+						<Input type="number" name="precio" />
 					</Form.Item>
 					<Form.Item name="descripcion" label="Descripcion del producto">
 						<Editor
 							init={{
 								height: 200,
 								menubar: false,
-								plugins: [
-									'advlist autolink lists link image charmap print preview anchor',
-									'searchreplace visualblocks code fullscreen',
-									'insertdatetime media table paste code help wordcount'
-								],
-								toolbar:
-									'undo redo | formatselect | bold italic backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist outdent indent | removeformat | help'
+								plugins: [ 'advlist autolink lists link image charmap print preview anchor','searchreplace visualblocks code fullscreen','insertdatetime media table paste code help wordcount' ],
+								toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
 							}}
 							onEditorChange={obtenerEditor}
 						/>

@@ -94,11 +94,22 @@ function RegistrarProductos(props) {
 		clienteAxios
 			.get('/productos')
 			.then((res) => {
-				setProductos(res.data.posts.docs);
-				setLoading(false);
+				if(!res.data.err){
+					setProductos(res.data.posts.docs);
+					 setLoading(false); 
+				 }else{
+					 message.error({
+						 content: res.data.message,
+						 duration: 2
+					 });
+				 }
 			})
 			.catch((err) => {
 				console.log(err);
+				message.error({
+					content: 'hubo un error',
+					duration: 2
+				});
 			});
 	};
 
@@ -132,7 +143,7 @@ function RegistrarProductos(props) {
 								className="img-fluid"
 								alt="producto"
 								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
-								style={{ maxHeight: '99%', width: '99%' }}
+								style={{ maxHeight: '99%', maxWidth: '99%' }}
 							/>
 						</div>
 					}
