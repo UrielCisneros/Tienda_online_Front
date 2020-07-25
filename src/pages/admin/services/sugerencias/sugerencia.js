@@ -9,7 +9,7 @@ const { Search } = Input;
 const { Meta } = Card;
 
 const Sugerencia = () => {
-    const [ loadingPrincipal, setLoadingPrincipal ] = useState(false);
+	const [ loadingPrincipal, setLoadingPrincipal ] = useState(false);
 	const productoContext = useContext(IdProductoContext);
 	//states de obtener producto y obtener todos los productos
 	const [ producto, setProducto ] = useState([]);
@@ -31,7 +31,6 @@ const Sugerencia = () => {
 	const [ actualizar, setActualizar ] = useState(false);
 	//token
 	const token = localStorage.getItem('token');
-	console.log('hola');
 
 	useEffect(
 		() => {
@@ -59,8 +58,8 @@ const Sugerencia = () => {
 		try {
 			setProductos(res.data.posts.docs);
 		} catch (err) {
-            console.log(err);
-            message.error({
+			console.log(err);
+			message.error({
 				content: 'Hubo un error al obtener productos',
 				duration: 2
 			});
@@ -72,8 +71,8 @@ const Sugerencia = () => {
 		try {
 			setProducto(res.data);
 		} catch (err) {
-            console.log(err);
-            message.error({
+			console.log(err);
+			message.error({
 				content: 'Hubo un error al obtener producto',
 				duration: 2
 			});
@@ -81,16 +80,16 @@ const Sugerencia = () => {
 	};
 
 	const obtenerSugerencia = async () => {
-        setLoadingPrincipal(true)
+		setLoadingPrincipal(true);
 		const res = await clienteAxios.get(`/sugerencia/${productoContext}`);
 		try {
 			if (!res.data.err) {
 				if (!res.data.message) {
-                    res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
-                    setLoadingPrincipal(false)
+					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
+					setLoadingPrincipal(false);
 				} else {
-                    setSugerencia('No hay sugerencia');
-                    setLoadingPrincipal(false)
+					setSugerencia('No hay sugerencia');
+					setLoadingPrincipal(false);
 				}
 			} else {
 				message.error({
@@ -99,7 +98,6 @@ const Sugerencia = () => {
 				});
 			}
 		} catch (err) {
-			console.log(err);
 			message.error({
 				content: 'Hubo un error al obtener sugerencia',
 				duration: 2
@@ -121,26 +119,25 @@ const Sugerencia = () => {
 			headers: {
 				Authorization: `bearer ${token}`
 			}
-        });
+		});
 		try {
-            if(!res.data.err){
-                message.success({
-                    content: 'Hecho!',
-                    duration: 2
-                });
-                setModalVisible(false);
-                obtenerSugerencia();
-                setLoading(false);
-            }else{
-                message.error({
-                    content: res.data.message,
-                    duration: 2
-                });
-            }	
+			if (!res.data.err) {
+				message.success({
+					content: 'Hecho!',
+					duration: 2
+				});
+				setModalVisible(false);
+				obtenerSugerencia();
+				setLoading(false);
+			} else {
+				message.error({
+					content: res.data.message,
+					duration: 2
+				});
+			}
 		} catch (err) {
-            console.log(err);
-            setLoading(false);
-            message.error({
+			setLoading(false);
+			message.error({
 				content: 'Hubo un error',
 				duration: 2
 			});
@@ -163,57 +160,56 @@ const Sugerencia = () => {
 			}
 		});
 		try {
-            if(!res.data.err){
-                message.success({
-                    content: 'Hecho! Sugerencia actualizada',
-                    duration: 2
-                });
-                setModalVisible(false);
-                obtenerSugerencia();
-                setLoading(false);
-            }else{
-                message.error({
-                    content: res.data.message,
-                    duration: 2
-                });
-            }
+			if (!res.data.err) {
+				message.success({
+					content: 'Hecho! Sugerencia actualizada',
+					duration: 2
+				});
+				setModalVisible(false);
+				obtenerSugerencia();
+				setLoading(false);
+			} else {
+				message.error({
+					content: res.data.message,
+					duration: 2
+				});
+			}
 		} catch (err) {
-            console.log(err);
-            setLoading(false);
-            message.error({
+			setLoading(false);
+			message.error({
 				content: 'Hubo un error',
 				duration: 2
 			});
 		}
-    };
-    
-    const eliminarSugerencia = async () => {
+	};
+
+	const eliminarSugerencia = async () => {
 		const res = await clienteAxios.delete(`/sugerencia/${productoContext}`, {
 			headers: {
 				Authorization: `bearer ${token}`
 			}
 		});
 		try {
-            if(res.data.message === 'Sugerencia de compra eliminada'){
-                message.success({
-                    content: res.data.message,
-                    duration: 2
-                });
-                obtenerSugerencia()
-            }else{
-                message.error({
-                    content: res.data.message,
-                    duration: 2
-                });
-            }
+			if (res.data.message === 'Sugerencia de compra eliminada') {
+				message.success({
+					content: res.data.message,
+					duration: 2
+				});
+				obtenerSugerencia();
+			} else {
+				message.error({
+					content: res.data.message,
+					duration: 2
+				});
+			}
 		} catch (err) {
-            console.log(err);
-            message.error({
+			console.log(err);
+			message.error({
 				content: 'Hubo un error',
 				duration: 2
 			});
 		}
-    }
+	};
 
 	/////MODAL
 	const showModal = (accion) => {
@@ -247,13 +243,14 @@ const Sugerencia = () => {
 				title={productos.nombre}
 			/>
 		</List.Item>
-    ));
-    
-    if (loadingPrincipal) {
-		return(
-            <div className="d-flex justify-content-center align-items-center">
-                <Spin size="large" />
-            </div>);
+	));
+
+	if (loadingPrincipal) {
+		return (
+			<div className="d-flex justify-content-center align-items-center">
+				<Spin size="large" />
+			</div>
+		);
 	}
 
 	return (
@@ -328,11 +325,13 @@ const Sugerencia = () => {
 					className="shadow"
 					style={{ width: 300 }}
 					cover={
-						<img
-							className="imagen-producto-actual"
-							alt="producto actual"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
-						/>
+						<div class="contenedor-imagen-sugerencia">
+							<img
+								className="imagen-producto-sugerencia"
+								alt="producto actual"
+								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
+							/>
+						</div>
 					}
 				>
 					<Meta title={producto.nombre} />
@@ -347,11 +346,13 @@ const Sugerencia = () => {
 						className="shadow"
 						style={{ width: 300 }}
 						cover={
-							<img
-								className="imagen-producto-actual"
-								alt="producto sugerido"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${sugerencia.imagen}`}
-							/>
+							<div class="contenedor-imagen-sugerencia">
+								<img
+									className="imagen-producto-sugerencia"
+									alt="producto sugerido"
+									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${sugerencia.imagen}`}
+								/>
+							</div>
 						}
 					>
 						<Meta title={sugerencia.nombre} />

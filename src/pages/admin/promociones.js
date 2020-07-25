@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import jwt_decode from 'jwt-decode';
-import { Button, Spin, Col, Row, Input, Drawer, Space, Tooltip, Popconfirm, message } from 'antd';
+import { Button, Spin, Col, Row, Input, Drawer, Space, Tooltip, Popconfirm, message, List } from 'antd';
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import RegistrarPromocion from './services/promociones/registrar_promocion';
 import ActualizarPromocion from './services/promociones/actualizar_promocion';
@@ -119,57 +119,72 @@ function Promociones(props) {
 	}
 
 	const render = productosFiltrados.map((productos) => (
-		<Col style={{ width: '700px' }} key={productos._id}>
-			<Row className="contenedor shadow-sm mb-1">
-				<div
-					className="d-flex justify-content-center align-items-center mr-2"
-					style={{ width: 150, height: 150 }}
-				>
-					<img
-						className="imagen-promocion-principal"
-						alt="producto"
-						src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.productoPromocion
-							.imagen}`}
-					/>
-				</div>
-				<div className="mt-4 titulo-producto">
-					<h1 className="h4">{productos.productoPromocion.nombre}</h1>
-					<h2 className="h4 precio-producto d-inline mr-2">
-						$ {new Intl.NumberFormat().format(productos.productoPromocion.precio)}
-					</h2>
-					<h2 className="h4 precio-rebaja d-inline mr-2">
-						$ {new Intl.NumberFormat().format(productos.precioPromocion)}
-					</h2>
-				</div>
+		<List.Item
+			actions={[
 				<Space size="large">
-					<div className="d-flex justify-content-center align-items-center">
-						<Tooltip title="Actualizar" key={productos._id}>
-							<EditOutlined
-								style={{ color: '#8c898b', fontSize: 40 }}
-								onClick={() => {
-									setActualizar();
-									setProductoID(productos._id);
-								}}
-							/>
-						</Tooltip>
-					</div>
-					<div className="d-flex justify-content-center align-items-center">
-						<Tooltip title="Eliminar" key={productos._id}>
-							<Popconfirm
-								title="Estas seguro de eliminar?"
-								onConfirm={() => {
-									eliminarPromocion(productos._id);
-								}}
-								okText="Si"
-								cancelText="No"
+					<Tooltip title="Actualizar" key={productos._id}>
+						<Button
+							className="d-flex justify-content-center align-items-center"
+							style={{ fontSize: 16}}
+							type="primary"
+							onClick={() => {
+								setActualizar();
+								setProductoID(productos._id);
+							}}
+						>
+							<EditOutlined />
+							Actualizar Promoción
+						</Button>
+					</Tooltip>
+					<Tooltip title="Eliminar" key={productos._id}>
+						<Popconfirm
+							title="Estas seguro de eliminar?"
+							onConfirm={() => {
+								eliminarPromocion(productos._id);
+							}}
+							okText="Si"
+							cancelText="No"
+						>
+							<Button
+								className="d-flex justify-content-center align-items-center"
+								danger
+								style={{ fontSize: 16 }}
 							>
-								<DeleteOutlined style={{ color: '#d9534f', fontSize: 40 }} />
-							</Popconfirm>
-						</Tooltip>
-					</div>
+								<DeleteOutlined />
+								Eliminar Promoción
+							</Button>
+						</Popconfirm>
+					</Tooltip>
 				</Space>
-			</Row>
-		</Col>
+			]}
+		>
+			<List.Item.Meta
+				avatar={
+					<div
+						className="d-flex justify-content-center align-items-center mr-2"
+						style={{ width: 100, height: 100 }}
+					>
+						<img
+							className="imagen-promocion-principal"
+							alt="producto"
+							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos
+								.productoPromocion.imagen}`}
+						/>
+					</div>
+				}
+				title={
+					<div className="mt-4 titulo-producto">
+						<h1 className="h5">{productos.productoPromocion.nombre}</h1>
+						<h2 className="h4 precio-producto d-inline mr-2">
+							$ {new Intl.NumberFormat().format(productos.productoPromocion.precio)}
+						</h2>
+						<h2 className="h4 precio-rebaja d-inline mr-2">
+							$ {new Intl.NumberFormat().format(productos.precioPromocion)}
+						</h2>
+					</div>
+				}
+			/>
+		</List.Item>
 	));
 	return (
 		<div>
@@ -188,7 +203,7 @@ function Promociones(props) {
 					<Button
 						type="primary"
 						size="large"
-						className="ml-3 d-flex justify-content-center align-items-center"
+						className="ml-3 mb-3 d-flex justify-content-center align-items-center"
 						onClick={setRegistrar}
 						icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
 					>
@@ -196,8 +211,8 @@ function Promociones(props) {
 					</Button>
 				</Col>
 			</Row>
-			<div className="d-flex justify-content-center">
-				<div>{render}</div>
+			<div>
+				<List>{render}</List>
 			</div>
 
 			<Drawer
@@ -214,10 +229,13 @@ function Promociones(props) {
 						}}
 					>
 						<Space>
-							<Button onClick={drawnerClose}>
-								Cancelar
-							</Button>
-							<Button onClick={() => {window.location.reload()}} type="primary">
+							<Button onClick={drawnerClose}>Cancelar</Button>
+							<Button
+								onClick={() => {
+									window.location.reload();
+								}}
+								type="primary"
+							>
 								Listo
 							</Button>
 						</Space>

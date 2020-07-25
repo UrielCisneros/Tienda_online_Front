@@ -9,7 +9,14 @@
 h2{
     font-size: 16px;
 }
-.imagen-producto-actual, .imagen-producto-sugerido{
-    max-width: 99%!important;
+.contenedor-imagen-sugerencia{
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.imagen-producto-sugerencia{
+    max-width: 100%!important;
+    max-height: 100%;
     margin-left: 1px;
 }

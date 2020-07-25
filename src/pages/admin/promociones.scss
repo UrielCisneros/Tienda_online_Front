@@ -1,3 +1,12 @@
+@media(max-width: 768px){
+    .botones-accion{
+        box-shadow: 0px -2px 3px -1px rgba(0,0,0,0.09);
+        padding: 10px 0 10px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+}
 .contenedor:hover{
     transition: .2s;
     box-shadow: 0px 0px 40px -16px rgba(0,0,0,0.3)!important;
@@ -17,4 +26,7 @@
 .imagen-promocion-principal{
     max-width: 100%;
     max-height: 100%;
+}
+.col-contenedor{
+    max-width: 800px;
 }

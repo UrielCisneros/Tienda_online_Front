@@ -94,11 +94,22 @@ function RegistrarProductos(props) {
 		clienteAxios
 			.get('/productos')
 			.then((res) => {
-				setProductos(res.data.posts.docs);
-				setLoading(false);
+				if(!res.data.err){
+					setProductos(res.data.posts.docs);
+					 setLoading(false); 
+				 }else{
+					 message.error({
+						 content: res.data.message,
+						 duration: 2
+					 });
+				 }
 			})
 			.catch((err) => {
 				console.log(err);
+				message.error({
+					content: 'hubo un error',
+					duration: 2
+				});
 			});
 	};
 
