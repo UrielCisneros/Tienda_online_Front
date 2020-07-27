@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
-import { Button, Input, Space, message, Modal, List, Spin, Row, Col, Upload } from 'antd';
-import { EyeOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Input, Space, message, Modal, List, Spin, Row, Col, Upload, Result } from 'antd';
+import {
+	EyeOutlined,
+	EditOutlined,
+	DeleteOutlined,
+	PlusCircleOutlined,
+	ExclamationCircleOutlined
+} from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import CarouselImages from './services/carousel/carousel';
 
 const { Search } = Input;
+const { confirm } = Modal;
 
 function Carousel(props) {
 	const token = localStorage.getItem('token');
@@ -94,21 +101,21 @@ function Carousel(props) {
 						duration: 2
 					});
 				} else {
-                    setLoadButton(false);
+					setLoadButton(false);
 					message.error({
 						content: res.data.message,
 						duration: 2
 					});
 				}
 			} else {
-                setLoadButton(false);
+				setLoadButton(false);
 				message.error({
 					content: res.data.message,
 					duration: 3
 				});
 			}
 		} catch (error) {
-            setLoadButton(false);
+			setLoadButton(false);
 			message.error({
 				content: 'Hubo un error',
 				duration: 3
@@ -158,6 +165,22 @@ function Carousel(props) {
 		setModalCrearVisible(true);
 	}
 
+	function showDeleteConfirm(productoID) {
+		confirm({
+			title: 'estas seguro de eliminar esto?',
+			icon: <ExclamationCircleOutlined />,
+			okText: 'Si',
+			okType: 'danger',
+			cancelText: 'No',
+			onOk() {
+				eliminarImagen(productoID);
+			},
+			onCancel() {
+				console.log('Cancel');
+			}
+		});
+	}
+
 	const render = productosFiltrados.map((productos) => (
 		<List.Item
 			actions={[
@@ -185,7 +208,7 @@ function Carousel(props) {
 							}}
 						>
 							<EditOutlined />
-							Actualizar Imagen
+							Actualizar
 						</Button>
 					</Upload>
 					<Button
@@ -193,7 +216,7 @@ function Carousel(props) {
 						style={{ fontSize: 16 }}
 						danger
 						onClick={() => {
-							eliminarImagen(productos.producto._id);
+							showDeleteConfirm(productos.producto._id);
 						}}
 					>
 						<DeleteOutlined />
@@ -224,26 +247,20 @@ function Carousel(props) {
 		</List.Item>
 	));
 
-	if (loading) {
-		return (
-			<div className="d-flex justify-content-center align-items-center">
-				<Spin size="large" />
-			</div>
-		);
-	}
-
 	return (
 		<div>
 			<p>
-				En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso
-				de que no existan promociones, si no existen promociones apareceran esta imagen
+				En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso de que
+				no existan promociones, si no existen promociones apareceran esta imagen
 			</p>
 			<Row justify="center mt-5">
 				<Col>
 					<Search
 						placeholder="Busca un producto"
 						onChange={(e) => setSearch(e.target.value)}
-						style={{ width: 300, height: 40, marginBottom: 10 }}
+						style={{ width: 350, height: 40, marginBottom: 10 }}
+						size="large"
+						enterButton="Buscar"
 					/>
 				</Col>
 				<Col>
@@ -258,8 +275,19 @@ function Carousel(props) {
 					</Button>
 				</Col>
 			</Row>
-			<List>{render}</List>
-
+			{loading ? (
+				<Spin size="large" />
+			) : productosFiltrados.length === 0 ? (
+				<div className="w-100 d-flex justify-content-center align-items-center">
+					<Result
+						status="404"
+						title="Articulo no encontrado"
+						subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+					/>
+				</div>
+			) : (
+				<List>{render}</List>
+			)}
 			<Modal
 				title={prodcutoCarousel.nombre}
 				visible={modalVisible}
@@ -275,12 +303,12 @@ function Carousel(props) {
 				/>
 			</Modal>
 
-            <Modal
+			<Modal
 				title="Crear nueva promocion para el Carousel"
 				visible={modalCrearVisible}
 				onCancel={closeModalCrear}
-                footer={false}
-                centered
+				footer={false}
+				centered
 				width={800}
 				style={{ top: 20 }}
 			>

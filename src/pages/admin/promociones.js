@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import jwt_decode from 'jwt-decode';
-import { Button, Spin, Col, Row, Input, Drawer, Space, Tooltip, Popconfirm, message, List } from 'antd';
-import { PlusCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Spin, Col, Row, Input, Drawer, Space, Tooltip, Modal, message, List, Result } from 'antd';
+import { PlusCircleOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import RegistrarPromocion from './services/promociones/registrar_promocion';
 import ActualizarPromocion from './services/promociones/actualizar_promocion';
 import { IdProductoContext } from './contexts/ProductoContext';
 import './promociones.scss';
 
 const { Search } = Input;
+const { confirm } = Modal;
 
 function Promociones(props) {
 	const token = localStorage.getItem('token');
@@ -36,6 +37,21 @@ function Promociones(props) {
 		props.history.push('/');
 	}
 
+	useEffect(() => {
+		obtenerProductos();
+	}, []);
+
+	useEffect(
+		() => {
+			setProductosFiltrados(
+				productos.filter((producto) => {
+					return producto.productoPromocion.nombre.toLowerCase().includes(search.toLowerCase());
+				})
+			);
+		},
+		[ search, productos ]
+	);
+
 	function drawnerClose() {
 		setVisible(false);
 	}
@@ -58,6 +74,7 @@ function Promociones(props) {
 					setProductos(res.data);
 					setLoading(false);
 				} else {
+					setLoading(false);
 					message.error({
 						content: res.data.message,
 						duration: 2
@@ -65,6 +82,7 @@ function Promociones(props) {
 				}
 			})
 			.catch((err) => {
+				setLoading(false);
 				message.error({
 					content: 'Hubo un error',
 					duration: 2
@@ -99,33 +117,28 @@ function Promociones(props) {
 		}
 	}
 
-	useEffect(() => {
-		obtenerProductos();
-	}, []);
-
-	useEffect(
-		() => {
-			setProductosFiltrados(
-				productos.filter((producto) => {
-					return producto.productoPromocion.nombre.toLowerCase().includes(search.toLowerCase());
-				})
-			);
-		},
-		[ search, productos ]
-	);
-
-	if (loading) {
-		return <Spin size="large" />;
+	function showDeleteConfirm(productoID) {
+		confirm({
+			title: 'estas seguro de eliminar esto?',
+			icon: <ExclamationCircleOutlined />,
+			okText: 'Si',
+			okType: 'danger',
+			cancelText: 'No',
+			onOk() {
+				eliminarPromocion(productoID);
+			}
+		});
 	}
 
 	const render = productosFiltrados.map((productos) => (
 		<List.Item
+			className="d-flex justify-content-center align-items-center"
 			actions={[
-				<Space size="large">
+				<Space>
 					<Tooltip title="Actualizar" key={productos._id}>
 						<Button
 							className="d-flex justify-content-center align-items-center"
-							style={{ fontSize: 16}}
+							style={{ fontSize: 16 }}
 							type="primary"
 							onClick={() => {
 								setActualizar();
@@ -133,27 +146,21 @@ function Promociones(props) {
 							}}
 						>
 							<EditOutlined />
-							Actualizar Promoción
+							Actualizar
 						</Button>
 					</Tooltip>
 					<Tooltip title="Eliminar" key={productos._id}>
-						<Popconfirm
-							title="Estas seguro de eliminar?"
-							onConfirm={() => {
-								eliminarPromocion(productos._id);
+						<Button
+							className="d-flex justify-content-center align-items-center"
+							danger
+							style={{ fontSize: 16 }}
+							onClick={() => {
+								showDeleteConfirm(productos._id);
 							}}
-							okText="Si"
-							cancelText="No"
 						>
-							<Button
-								className="d-flex justify-content-center align-items-center"
-								danger
-								style={{ fontSize: 16 }}
-							>
-								<DeleteOutlined />
-								Eliminar Promoción
-							</Button>
-						</Popconfirm>
+							<DeleteOutlined />
+							Eliminar
+						</Button>
 					</Tooltip>
 				</Space>
 			]}
@@ -197,6 +204,8 @@ function Promociones(props) {
 						placeholder="Busca un producto"
 						onChange={(e) => setSearch(e.target.value)}
 						style={{ width: 350, height: 40, marginBottom: 10 }}
+						size="large"
+						enterButton="Buscar"
 					/>
 				</Col>
 				<Col>
@@ -212,7 +221,19 @@ function Promociones(props) {
 				</Col>
 			</Row>
 			<div>
-				<List>{render}</List>
+				{loading ? (
+					<Spin size="large" />
+				) : productosFiltrados.length === 0 ? (
+					<div className="w-100 d-flex justify-content-center align-items-center">
+						<Result
+							status="404"
+							title="Articulo no encontrado"
+							subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+						/>
+					</div>
+				) : (
+					<List>{render}</List>
+				)}
 			</div>
 
 			<Drawer

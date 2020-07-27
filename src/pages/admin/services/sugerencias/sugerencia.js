@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Button, Input, Space, message, Modal, List, Avatar, Card, Spin } from 'antd';
 import { IdProductoContext } from '../../contexts/ProductoContext';
-import InfiniteScroll from 'react-infinite-scroller';
 import './sugerencia.scss';
 
 const { Search } = Input;
@@ -22,10 +21,6 @@ const Sugerencia = () => {
 	const [ search, setSearch ] = useState('');
 	const [ loading, setLoading ] = useState(false);
 	const [ productosFiltrados, setProductosFiltrados ] = useState([]);
-
-	//infinite scroll
-	const [ loadingScroll, setLoadingScroll ] = useState(false);
-	const [ hasMore, setHasMore ] = useState(true);
 
 	///state para saber si va a actualizar o registrar
 	const [ actualizar, setActualizar ] = useState(false);
@@ -92,12 +87,14 @@ const Sugerencia = () => {
 					setLoadingPrincipal(false);
 				}
 			} else {
+				setLoadingPrincipal(false);
 				message.error({
 					content: res.data.message,
 					duration: 2
 				});
 			}
 		} catch (err) {
+			setLoadingPrincipal(false);
 			message.error({
 				content: 'Hubo un error al obtener sugerencia',
 				duration: 2
@@ -203,7 +200,6 @@ const Sugerencia = () => {
 				});
 			}
 		} catch (err) {
-			console.log(err);
 			message.error({
 				content: 'Hubo un error',
 				duration: 2
@@ -279,15 +275,7 @@ const Sugerencia = () => {
 					onChange={(e) => setSearch(e.target.value)}
 					style={{ width: 300, height: 40, marginBottom: 10 }}
 				/>
-				<InfiniteScroll
-					initialLoad={false}
-					pageStart={0}
-					loadMore={obtenerTodosProductos}
-					hasMore={!loading && hasMore}
-					useWindow={false}
-				>
-					<List>{render}</List>
-				</InfiniteScroll>
+				<List>{render}</List>
 			</Modal>
 			<div>
 				<p className="text-center" style={{ fontSize: 20 }}>

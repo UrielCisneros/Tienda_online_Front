@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
-import { Col, Row, Input, Spin, Button, Drawer, message, Space, List } from 'antd';
+import { Col, Row, Input, Spin, Button, Drawer, message, Space, List, Result } from 'antd';
 import { IdProductoContext } from './contexts/ProductoContext';
 import jwt_decode from 'jwt-decode';
 import Sugerencia from './services/sugerencias/sugerencia';
@@ -15,8 +15,6 @@ function Sugerencias(props) {
 	const [ productoID, setProductoID ] = useState('');
 	const [ productos, setProductos ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
-	const [ search, setSearch ] = useState('');
-	const [ productosFiltrados, setProductosFiltrados ] = useState([]);
 	const [ visible, setVisible ] = useState(false);
 
 	function Jwt(token) {
@@ -40,13 +38,13 @@ function Sugerencias(props) {
 		setVisible(true);
 	}
 
-	const obtenerProductos = async () => {
+	const obtenerProductosFiltrados = async (busqueda) => {
 		setLoading(true);
 		clienteAxios
-			.get('/productos')
+			.get(`/productos/search/${busqueda}`)
 			.then((res) => {
 				if (!res.data.err) {
-					setProductos(res.data.posts.docs);
+					setProductos(res.data.posts);
 					setLoading(false);
 				} else {
 					message.error({
@@ -58,6 +56,31 @@ function Sugerencias(props) {
 			.catch((err) => {
 				console.log(err);
 				message.error({
+					content: 'hubo un error',
+					duration: 2
+				});
+			});
+	};
+
+	const obtenerProductos = async () => {
+		setLoading(true);
+		clienteAxios
+			.get('/productos')
+			.then((res) => {
+				if (!res.data.err) {
+					setProductos(res.data.posts.docs);
+					setLoading(false);
+				} else {
+					setLoading(false);
+					message.error({
+						content: res.data.message,
+						duration: 2
+					});
+				}
+			})
+			.catch((err) => {
+				setLoading(false);
+				message.error({
 					content: 'Hubo un error',
 					duration: 2
 				});
@@ -68,27 +91,14 @@ function Sugerencias(props) {
 		obtenerProductos();
 	}, []);
 
-	useEffect(
-		() => {
-			setProductosFiltrados(
-				productos.filter((producto) => {
-					return producto.nombre.toLowerCase().includes(search.toLowerCase());
-				})
-			);
-		},
-		[ search, productos ]
-	);
-
-	if (loading) {
-		return <Spin size="large" />;
-	}
-
-	const render = productosFiltrados.map((productos) => (
+	const render = productos.map((productos) => (
 		<List.Item
+			className="d-flex justify-content-center align-items-center mt-3"
 			actions={[
 				<Space>
 					<Button
-						style={{ fontSize: 16}}
+						className="mt-3"
+						style={{ fontSize: 16 }}
 						type="primary"
 						onClick={() => {
 							drawnerOpen();
@@ -129,16 +139,26 @@ function Sugerencias(props) {
 				<Col>
 					<Search
 						placeholder="Busca un producto"
-						onChange={(e) => setSearch(e.target.value)}
-						style={{ minWidth: 300, width: 400, height: 40, marginBottom: 10 }}
+						onSearch={(value) => obtenerProductosFiltrados(value)}
+						style={{ width: 300, height: 40, marginBottom: 10 }}
+						enterButton="Buscar"
+						size="large"
 					/>
 				</Col>
 			</Row>
-
-			<div className="">
+			{loading ? (
+				<Spin size="large" />
+			) : productos.length === 0 ? (
+				<div className="w-100 d-flex justify-content-center align-items-center">
+					<Result
+						status="404"
+						title="Articulo no encontrado"
+						subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+					/>
+				</div>
+			) : (
 				<List>{render}</List>
-			</div>
-
+			)}
 			<Drawer
 				title={'Sugerencias'}
 				width={window.screen.width > 768 ? 1000 : window.screen.width}

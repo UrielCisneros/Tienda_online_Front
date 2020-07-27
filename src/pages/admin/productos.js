@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import RegistrarProducto from './services/producto/registrar_producto';
 import ActualizarProducto from './services/producto/actualizar_producto';
-import { Card, Col, Row, Input, Spin, Button, Modal, Drawer, message } from 'antd';
+import { Card, Col, Row, Input, Spin, Button, Modal, Drawer, message, Result } from 'antd';
 import { StepsContext, StepsProvider } from '../admin/contexts/stepsContext';
 import { IdProductoContext } from './contexts/ProductoContext';
 import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
@@ -18,14 +18,12 @@ function RegistrarProductos(props) {
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	const [ productos, setProductos ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
-	const [ search, setSearch ] = useState('');
-	const [ productosFiltrados, setProductosFiltrados ] = useState([]);
 	const [ visible, setVisible ] = useState(false);
 	const [ accion, setAccion ] = useState(false);
 	const token = localStorage.getItem('token');
 
-	var decoded = Jwt(token) 
-	
+	var decoded = Jwt(token);
+
 	function Jwt(token) {
 		try {
 			return jwt_decode(token);
@@ -50,7 +48,7 @@ function RegistrarProductos(props) {
 	function setRegistrar() {
 		setAccion(false);
 		setVisible(true);
-	}           
+	}
 
 	function showDeleteConfirm(idproducto) {
 		confirm({
@@ -89,23 +87,49 @@ function RegistrarProductos(props) {
 		});
 	}
 
+	const obtenerProductosFiltrados = async (busqueda) => {
+		setLoading(true);
+		clienteAxios
+			.get(`/productos/search/${busqueda}`)
+			.then((res) => {
+				if (!res.data.err) {
+					setProductos(res.data.posts);
+					setLoading(false);
+				} else {
+					setLoading(false);
+					message.error({
+						content: res.data.message,
+						duration: 2
+					});
+				}
+			})
+			.catch((err) => {
+				setLoading(false);
+				message.error({
+					content: 'hubo un error',
+					duration: 2
+				});
+			});
+	};
+
 	const obtenerProductos = async () => {
 		setLoading(true);
 		clienteAxios
 			.get('/productos')
 			.then((res) => {
-				if(!res.data.err){
+				if (!res.data.err) {
 					setProductos(res.data.posts.docs);
-					 setLoading(false); 
-				 }else{
-					 message.error({
-						 content: res.data.message,
-						 duration: 2
-					 });
-				 }
+					setLoading(false);
+				} else {
+					setLoading(false);
+					message.error({
+						content: res.data.message,
+						duration: 2
+					});
+				}
 			})
 			.catch((err) => {
-				console.log(err);
+				setLoading(false);
 				message.error({
 					content: 'hubo un error',
 					duration: 2
@@ -117,22 +141,7 @@ function RegistrarProductos(props) {
 		obtenerProductos();
 	}, []);
 
-	useEffect(
-		() => {
-			setProductosFiltrados(
-				productos.filter((producto) => {
-					return producto.nombre.toLowerCase().includes(search.toLowerCase());
-				})
-			);
-		},
-		[ search, productos ]
-	);
-
-	if (loading) {
-		return <Spin size="large" />;
-	}
-
-	const render = productosFiltrados.map((productos) => (
+	const render = productos.map((productos) => (
 		<Col span={32} key={productos.id}>
 			<Card.Grid hoverable style={gridStyle}>
 				<Card
@@ -211,8 +220,10 @@ function RegistrarProductos(props) {
 				<Col>
 					<Search
 						placeholder="Busca un producto"
-						onChange={(e) => setSearch(e.target.value)}
-						style={{ width: 300, height: 40, marginBottom: 10 }}
+						onSearch={(value) => obtenerProductosFiltrados(value)}
+						style={{ width: 350, height: 40, marginBottom: 10 }}
+						enterButton="Buscar"
+						size="large"
 					/>
 				</Col>
 				<Col>
@@ -228,8 +239,21 @@ function RegistrarProductos(props) {
 				</Col>
 			</Row>
 
-			<Row gutter={24} style={{ maxWidth: '90vw' }} className="mt-4">
-				{render}
+			<Row gutter={8} style={{ maxWidth: '90vw' }} className="mt-4">
+				{loading ?  <Spin size="large" /> : 
+				productos.length === 0 ? (
+					<div className="w-100 d-flex justify-content-center align-items-center">
+						<Result
+						status="404"
+						title="Articulo no encontrado"
+						subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+					/>
+					</div>
+				) : (
+					loading ? <Spin size="large" /> : render
+				)
+				}
+
 			</Row>
 		</div>
 	);
