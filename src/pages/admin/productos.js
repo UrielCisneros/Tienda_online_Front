@@ -147,6 +147,7 @@ function RegistrarProductos(props) {
 						>
 							<EditOutlined style={{ fontSize: 22 }} />Actualizar
 						</Button>,
+						
 						<Button
 							type="link"
 							onClick={() => showDeleteConfirm(productos._id)}
