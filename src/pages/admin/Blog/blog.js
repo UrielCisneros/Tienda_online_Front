@@ -118,13 +118,13 @@ function BlogAdmin(props) {
                     {console.log(infoBlog)}
                     { accion === true ? (
                         <BlogContext.Provider value={infoBlog}>
-                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} setInfoBlog={setInfoBlog} />
+                            <ActualizarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible}  />
                         </BlogContext.Provider>
                         
                     ):(
-                        <BlogContext.Provider value={{}}>
-                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} setInfoBlog={setInfoBlog} />
-                        </BlogContext.Provider>
+
+                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} />
+
                     )}
                 </Drawer>
                 
@@ -135,7 +135,7 @@ function BlogAdmin(props) {
                         onClick={() => {
                             setAccion(false);
                             showDrawer()
-                            setInfoBlog(null);
+                            setInfoBlog({});
                         }}
                         className="ml-3"
                         icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}>

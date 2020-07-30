@@ -1,81 +1,167 @@
-import React,{ useContext, useState } from 'react'
+import React,{ useContext,useState,useEffect } from 'react'
 import { BlogContext } from '../../contexts/BlogContext';
-import Form from 'antd/lib/form/Form';
-import { Input, Upload, Button } from 'antd';
+import {Form,Input,Button,notification,Upload,message} from 'antd'
 import { Editor } from '@tinymce/tinymce-react';
 import { UploadOutlined } from '@ant-design/icons';
+import clienteAxios from '../../../../config/axios';
 
-export default function ActualizarBlog() {
+export default function ActualizarBlog(props) {
+
+    const {setReloadBlog,token,setVisible} = props;
 
     const blogContext = useContext(BlogContext); 
+    const [ form ] = Form.useForm();
+    var urlGuion = "";
 
-    const layout = {
-        labelCol: { span: 6 },
-        wrapperCol: { span: 16 }
-    };
 
-        //Variables donde se guardan la informacion de los input (nombre - administrador)
-        const [ datos, setDatos ] = useState({
-            nombre: '',
-            administrador: '',
-            url: ''
-        });
-        
-        //Funcion que captura los datos de los input
-        const datosForm = (e) => {
+     //Variables que guardan las imagenes
+     const [ files, setFiles ] = useState([]);
+     const [ upload, setUpload ] = useState(false);
+     	///capturar datos maualmente}
+	const [ datos, setDatos ] = useState({
+        nombre: blogContext.nombre,
+        administrador: blogContext.administrador,
+        url: blogContext.url,
+        descripcion: blogContext.descripcion
+    });
+
+     const monstrarInformacionBlog = () => {
+        form.setFieldsValue({
+            nombre: blogContext.nombre,
+            administrador: blogContext.administrador,
+            url: blogContext.url,
+            descripcion: blogContext.descripcion
+        })
+     }
+
+     useEffect(() => {
+        monstrarInformacionBlog();
+     }, [blogContext])
+
+        //Layout para formulario(columnas)
+        const layout = {
+            labelCol: { span: 6 },
+            wrapperCol: { span: 16 }
+        };
+
+        const propss = {
+            listType: 'picture',
+            beforeUpload: (file) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    file.thumbUrl = e.target.result;
+                    setFiles(file);
+                    console.log('que hizo ?')
+                };
+                setUpload(true)
+                return false;
+            },
+            onRemove: (file) => {
+                setUpload(false)
+                setFiles([]);
+            }
+        };
+
+        function obtenerUrl(text){
+            const datos = text.split(" ");
+            for(var i = 0; i < datos.length; i++ ){
+                if(datos.length - 1 === i){
+                    urlGuion += datos[i];
+                }else{
+                    urlGuion += datos[i]+"-";
+                }
+                
+            }
+            return urlGuion;
+            /* setUrl(urlSinGion); */
+        }
+
+        const enviarDatos = async () => {
+            console.log(datos)
+            if(datos.nombre === "" || datos.administrador === "" || datos.url === "" || datos.descripcion === ""){
+                notification.info({
+                    message: 'Ups, algo salio mal',
+                    description: 'Todos los datos son obligatorios',
+                  })
+            }else{
+                const formData = new FormData();
+
+                if(files.length === 0){
+                    formData.append('nombre', datos.nombre);
+                    formData.append('administrador', datos.administrador);
+                    formData.append('url',obtenerUrl(datos.url));
+                    formData.append('descripcion', datos.descripcion);
+                }else{
+                    formData.append('nombre', datos.nombre);
+                    formData.append('administrador', datos.administrador);
+                    formData.append('url',obtenerUrl(datos.url));
+                    formData.append('descripcion', datos.descripcion);
+                    formData.append('imagen', files);
+                }
+                
+                await clienteAxios.put(`/blog/${blogContext._id}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `bearer ${token}`
+                    }
+                }).then((res) => {
+                    if(res.status === 200){
+                        notification.success({
+                            message: 'Actualizacion exitosa',
+                            description: res.data.message,
+                          })
+                          setReloadBlog(true);
+                          setVisible(false);
+                    }else{
+                        notification.error({
+                            message: 'Error',
+                            description: res.data.message,
+                          })
+                    }                    
+                })
+                .catch((err) => {
+                    notification.error({
+                        message: 'Error',
+                        description: "Error de conexion",
+                      })
+                    console.log(err);
+                });
+            }
+        }
+
+        const obtenerValores = (e) => {
             setDatos({
                 ...datos,
                 [e.target.name]: e.target.value
             });
         };
 
-            //Variable que guarda el contenido del editor
-    const [ editor, setEditor ] = useState();
+        const capturarInfoEditor = (content, editor) => {
+            setDatos({...datos, descripcion: content})
+          }
 
-    const [ upload, setUpload ] = useState(false);
-    //Variables que guardan las imagenes
-    const [ files, setFiles ] = useState([]);
 
-            //Funcion que captura la imagen seleccionada por el usuario
-	const propss = {
-		listType: 'picture',
-		beforeUpload: (file) => {
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onload = (e) => {
-				file.thumbUrl = e.target.result;
-                setFiles(file);
-                console.log('que hizo ?')
-            };
-            setUpload(true)
-			return false;
-        },
-        onRemove: (file) => {
-            setUpload(false)
-            setFiles([]);
-        }
-    };
-    
     return (
-        <div>
-                <Form 
+        <div className="formulario-blog">
+            <Form 
                 name="nest-messages"
                 {...layout}
-                /* onFinish={EnviarBlog} */
+                form={form}
+                onFinish={enviarDatos}
             >
-                <Form.Item label="Titulo del blog: "  onChange={datosForm}>
-                    <Form.Item rules={[{ required: true, message: 'Titulo obligatorio' }]} noStyle name="nombre" >
-                        <Input name="nombre" placeholder="Titulo del Blog" />
+                <Form.Item label="Titulo del blog:" onChange={ obtenerValores} >
+                    <Form.Item  noStyle name="nombre">
+                        <Input   name="nombre" placeholder="Titulo del Blog" />
                     </Form.Item>
                 </Form.Item>
-
-                <Form.Item label="Autor: " onChange={datosForm}>
-                    <Form.Item rules={[{ required: true, message: 'Autor obligatorio' }]} noStyle name="administrador">
+                <Form.Item label="Autor: " onChange={ obtenerValores} >
+                    <Form.Item noStyle name="administrador">
                         <Input name="administrador" placeholder="Nombre del Autor" />
                     </Form.Item>
                 </Form.Item>
-                <Form.Item label="Url (Campo unico) " onChange={datosForm}>
-                    <Form.Item rules={[{ required: true, message: 'La url es obligatoria' }]} noStyle name="url">
+                <Form.Item label="Url (Campo unico) " onChange={ obtenerValores} >
+                    <Form.Item noStyle name="url">
                         <Input name="url" placeholder="Url del blog" />
                     </Form.Item>
                 </Form.Item>
@@ -83,9 +169,10 @@ export default function ActualizarBlog() {
                 
                 <Form.Item name="descripcion" label="Contenido del blog">
                     <Editor
+                    
                         disabled={false}
                         init={{
-                            height: 500,
+                            height: 450,
                             menubar: true,
                             plugins: [
                                 'advlist autolink lists link image charmap print preview anchor',
@@ -97,7 +184,7 @@ export default function ActualizarBlog() {
                             alignleft aligncenter alignright alignjustify | \
                             bullist numlist outdent indent | removeformat | help'
                         }}
-                        /* onEditorChange={obtenerEditor} */
+                        onEditorChange={capturarInfoEditor}
                     />
                 </Form.Item>
                 <Form.Item label="Imagen principal del Blog:">
@@ -107,9 +194,17 @@ export default function ActualizarBlog() {
                         </Button>
                     </Upload>
                 </Form.Item>
+                <Form.Item label="Imagen Actual">
+                    <img
+                        className="d-block img-fluid mt-2"
+                        width="200"
+                        alt="imagen de base"
+                        src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${blogContext.imagen}`}
+                    />
+                </Form.Item>
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                     <Button type="primary" htmlType="submit">
-                        Registrar Blog
+                        Actualizar blog
                     </Button>
                 </Form.Item>
             </Form>

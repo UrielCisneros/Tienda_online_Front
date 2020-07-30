@@ -3,21 +3,19 @@ import {Form,Input,Button,notification,Upload,message} from 'antd'
 import {Editor} from '@tinymce/tinymce-react';
 import { UploadOutlined } from '@ant-design/icons';
 import clienteAxios from '../../../../config/axios';
-import { BlogContext } from '../../contexts/BlogContext';
 
 export default function RegistrarBlog(props) {
 
     const {setReloadBlog,token,setVisible} = props;
-    const blog = useContext(BlogContext);
-    console.log(blog)
 
     //Variablo que trae la informacion del post
     const [blogData,setBlogData] = useState({});
-    const [imagenUrl,setImagenUrl] = useState(null);
 
     const [ upload, setUpload ] = useState(false);
     //Variables que guardan las imagenes
     const [ files, setFiles ] = useState([]);
+
+    var urlGuion = "";
 
     //Layout para formulario(columnas)
     const layout = {
@@ -26,7 +24,6 @@ export default function RegistrarBlog(props) {
     };
 
     const processPost = async e => {
-        if(!blog){
             console.log("Creando Blog")
             if(blogData.descripcion === undefined){
                 notification.info({
@@ -42,18 +39,11 @@ export default function RegistrarBlog(props) {
                 const hide = message.loading('Accion en proceso....', 0);
                 setTimeout(hide, 2000);
                 const formData = new FormData();
-                console.log(blogData.nombre);
-                console.log(blogData.administrador);
-                console.log(blogData.url);
-                console.log(blogData.descripcion);
-                console.log(files);
                 formData.append('nombre', blogData.nombre);
                 formData.append('administrador', blogData.administrador);
                 formData.append('url',obtenerUrl(blogData.url));
                 formData.append('descripcion', blogData.descripcion);
                 formData.append('imagen', files);
-
-                console.log(token);
                
                 await clienteAxios.post('/blog/', formData, {
                     headers: {
@@ -61,7 +51,7 @@ export default function RegistrarBlog(props) {
                         Authorization: `bearer ${token}`
                     }
                 }).then((res) => {
-                    if(!res.data.err){
+                    if(res.status === 200){
                         notification.success({
                             message: 'Registro exitoso',
                             description: res.data.message,
@@ -69,27 +59,33 @@ export default function RegistrarBlog(props) {
                           setReloadBlog(true);
                           setVisible(false);
                     }else{
-                        console.log(res)
                         notification.error({
                             message: 'Error',
                             description: res.data.message,
                           })
-                    }
+                    }   
                 })
                 .catch((err) => {
+                    notification.error({
+                        message: 'Error',
+                        description: "Error de conexion",
+                      })
                     console.log(err);
                 });
             }
-        }else{
-            console.log("Editando blog")
-            console.log(blogData)
-        }
     }
     //Funcion que quita los espacios y los remplasa por guiones
     function obtenerUrl(text){
-        const urlSinGion = text.replace(" ","-") ;
-        return urlSinGion.toLowerCase();
-        /* setUrl(urlSinGion); */
+        const datos = text.split(" ");
+        for(var i = 0; i < datos.length; i++ ){
+            if(datos.length - 1 === i){
+                urlGuion += datos[i];
+            }else{
+                urlGuion += datos[i]+"-";
+            }
+            
+        }
+        return urlGuion;
     }
 
     //Funcion que captura la imagen seleccionada por el usuario
@@ -101,7 +97,6 @@ export default function RegistrarBlog(props) {
 			reader.onload = (e) => {
 				file.thumbUrl = e.target.result;
                 setFiles(file);
-                console.log('que hizo ?')
             };
             setUpload(true)
 			return false;
@@ -113,20 +108,11 @@ export default function RegistrarBlog(props) {
     };
 
     //Funcion que escucha la variable que trae la informacion del blog
-    useEffect(() => {
-        if(blog){
-            setBlogData(blog);
-            console.log(blogData)
-            setImagenUrl(blogData.imagen)
-        }else{
-            setBlogData({});
-        }
-    }, [blogData])
 
     const capturarInfoEditor = (content, editor) => {
-        console.log('Content was updated:', content);
         setBlogData({...blogData, descripcion: content})
       }
+      
 
     return (
         <div className="formulario-blog">
@@ -180,19 +166,9 @@ export default function RegistrarBlog(props) {
                         </Button>
                     </Upload>
                 </Form.Item>
-                {blog ? (                
-                <Form.Item label="Imagen Actual">
-                    <img
-                        className="d-block img-fluid mt-2"
-                        width="200"
-                        alt="imagen de base"
-                        src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenUrl}`}
-                    />
-                </Form.Item>): ""}
-
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                     <Button type="primary" htmlType="submit">
-                       {blog ? "Actualizar Blog" : "Registrar Blog"} 
+                        Registrar Blog
                     </Button>
                 </Form.Item>
             </Form>
