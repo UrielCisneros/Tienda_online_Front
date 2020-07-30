@@ -118,12 +118,12 @@ function BlogAdmin(props) {
                     {console.log(infoBlog)}
                     { accion === true ? (
                         <BlogContext.Provider value={infoBlog}>
-                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} />
+                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} setInfoBlog={setInfoBlog} />
                         </BlogContext.Provider>
                         
                     ):(
-                        <BlogContext.Provider value={infoBlog}>
-                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} />
+                        <BlogContext.Provider value={{}}>
+                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} setInfoBlog={setInfoBlog} />
                         </BlogContext.Provider>
                     )}
                 </Drawer>
