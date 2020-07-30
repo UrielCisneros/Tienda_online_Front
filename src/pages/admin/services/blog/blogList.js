@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import {List,Button,Modal,notification,Avatar } from 'antd';
 import { EyeOutlined,EditOutlined,DeleteOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
 import {Link} from 'react-router-dom';
-import clienteAxios from '../../config/axios';
+import clienteAxios from '../../../../config/axios';
 import './blogList.scss'
 
 
@@ -17,7 +17,7 @@ export default function blogList(props) {
         confirm({
             title:"Eliminando Blog",
             icon: <ExclamationCircleOutlined />,
-            content: `Estas seguro que deseas eliminar el blog ${blog.nombre}`,
+            content: `Estas seguro que deseas eliminar el blog: ${blog.nombre}`,
             okText: "Eliminar Blog",
             okType:"danger",
             cancelText:"Cancelar",
@@ -29,10 +29,11 @@ export default function blogList(props) {
                     }
                 })
                 .then((res) => {
+                    console.log(res);
                     notification.success({
                         message: 'Blog Eliminado',
                         description:
-                        'El blog elegido fue eliminado',
+                        res.data.message,
                     });
                     setReloadBlog(true);
                 })
@@ -43,7 +44,6 @@ export default function blogList(props) {
                         description:
                         'Paso algo en el servidor, al parecer la conexion esta fallando.',
                     });
-                    console.log(err);
                 });
             }
         })
@@ -73,7 +73,7 @@ function Blog(props){
                     </Button>
                 </Link>,
                 <Button type="dashed" onClick={() => {
-                    console.log(blog);
+                    
                     setInfoBlog(blog);
                     setAccion(true);
                     showDrawer();
