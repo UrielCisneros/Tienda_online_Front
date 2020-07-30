@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import jwt_decode from 'jwt-decode';
-import { Button, Spin, Col, Row, Input, Drawer, Space, Tooltip, Modal, message, List, Result } from 'antd';
+import { Button, Col, Row, Input, Drawer, Space, Tooltip, Modal, notification, List, Result } from 'antd';
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import RegistrarPromocion from './services/promociones/registrar_promocion';
 import ActualizarPromocion from './services/promociones/actualizar_promocion';
 import { IdProductoContext } from './contexts/ProductoContext';
+import Spin from '../../components/Spin';
 import './promociones.scss';
 
 const { Search } = Input;
@@ -67,54 +68,61 @@ function Promociones(props) {
 
 	const obtenerProductos = async () => {
 		setLoading(true);
-		clienteAxios
+		await clienteAxios
 			.get('/productos/promocion')
 			.then((res) => {
-				if (!res.data.err) {
-					setProductos(res.data);
+				setProductos(res.data);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
 				} else {
 					setLoading(false);
-					message.error({
-						content: res.data.message,
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
 						duration: 2
 					});
 				}
-			})
-			.catch((err) => {
-				setLoading(false);
-				message.error({
-					content: 'Hubo un error',
-					duration: 2
-				});
 			});
 	};
 
 	async function eliminarPromocion(idProducto) {
-		const res = await clienteAxios.delete(`/productos/promocion/${idProducto}`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				message.success({
-					content: res.data.message,
-					duration: 2
-				});
+		await clienteAxios
+			.delete(`/productos/promocion/${idProducto}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerProductos();
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (err) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	}
 
 	function showDeleteConfirm(productoID) {
@@ -222,7 +230,7 @@ function Promociones(props) {
 			</Row>
 			<div>
 				{loading ? (
-					<Spin size="large" />
+					<Spin />
 				) : productosFiltrados.length === 0 ? (
 					<div className="w-100 d-flex justify-content-center align-items-center">
 						<Result

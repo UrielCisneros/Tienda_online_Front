@@ -1,11 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, message } from 'antd';
+import { Upload, Button, notification } from 'antd';
 import { UploadOutlined, EyeOutlined, DeleteOutlined, PictureOutlined, EditOutlined } from '@ant-design/icons';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import './actualizar_galeria.scss';
-
-const key = 'updatable';
 
 function RegistrarGaleria() {
 	const token = localStorage.getItem('token');
@@ -19,8 +17,6 @@ function RegistrarGaleria() {
 		},
 		[ productoID ]
 	);
-
-	console.log('algo');
 
 	const props = {
 		beforeUpload: async (file) => {
@@ -39,107 +35,122 @@ function RegistrarGaleria() {
 	};
 
 	const actualizarBD = async (formdata) => {
-		message.loading({ content: 'En proceso...', key });
-		const res = await clienteAxios.put(`/galeria/${productoID}/imagen/${idImagen}`, formdata, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.put(`/galeria/${productoID}/imagen/${idImagen}`, formdata, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerBD();
-				message.success({
-					content: res.data.message,
-					key,
-					duration: 1
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: res.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 3
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const subirBD = async (formData) => {
-		message.loading({ content: 'En proceso...', key });
-		const res = await clienteAxios.post(`/galeria/nueva/${productoID}`, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.post(`/galeria/nueva/${productoID}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerBD();
-				message.success({
-					content: 'Listo!',
-					key,
-					duration: 1
-				});
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 	const obtenerBD = async () => {
-		const res = await clienteAxios.get(`/galeria/${productoID}`);
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.get(`/galeria/${productoID}`)
+			.then((res) => {
 				setGaleria(res.data.imagenes);
-			} else {
-				message.error({
-					content: res.data.message,
-					duration: 2
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 	const eliminarBD = async (idimagen) => {
-		const res = await clienteAxios.delete(`/galeria/${productoID}/imagen/${idimagen}`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.delete(`/galeria/${productoID}/imagen/${idimagen}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerBD();
-				message.success({
-					content: res.data.message,
-					duration: 1
-				});
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const [ prev, setPrev ] = useState('');
@@ -147,7 +158,11 @@ function RegistrarGaleria() {
 		var render = galeria.map((imagenes) => (
 			<div className="shadow rounded imgStyle d-inline-block">
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
-					<img className="img" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenes.url}`} alt="preview-imagen" />
+					<img
+						className="img"
+						src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenes.url}`}
+						alt="preview-imagen"
+					/>
 					<div className="iconos rounded">
 						<EyeOutlined
 							style={{ fontSize: 20 }}
@@ -193,7 +208,11 @@ function RegistrarGaleria() {
 					{prev === '' || galeria.length === 0 ? (
 						<PictureOutlined style={{ fontSize: 80 }} />
 					) : (
-						<img className="imagen" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${prev}`} alt="preview-imagen" />
+						<img
+							className="imagen"
+							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${prev}`}
+							alt="preview-imagen"
+						/>
 					)}
 				</div>
 			</div>

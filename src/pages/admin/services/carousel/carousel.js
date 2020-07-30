@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, message, Spin, List, Avatar, Input, Space, Result } from 'antd';
+import { Upload, Button, List, Avatar, Input, Space, Result, notification } from 'antd';
+import Spin from '../../../../components/Spin';
 import { UploadOutlined, PictureOutlined } from '@ant-design/icons';
 import './carousel.scss';
 
@@ -28,41 +29,54 @@ function CarouselImages() {
 		clienteAxios
 			.get(`/productos/search/${busqueda}`)
 			.then((res) => {
-				if (!res.data.err) {
-					setProductos(res.data.posts);
+				setProductos(res.data.posts);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
 				} else {
 					setLoading(false);
-					message.error({
-						content: res.data.message,
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
 						duration: 2
 					});
 				}
-			})
-			.catch((err) => {
-				setLoading(false);
-				message.error({
-					content: 'hubo un error',
-					duration: 2
-				});
 			});
 	};
 
 	/// OBTENER DATOS DE LA BASE DE DATOS
 	const obtenerTodosProductos = async () => {
 		setLoading(true);
-		const res = await clienteAxios.get(`/productos/`);
-		try {
-			setLoading(false);
-			setProductos(res.data.posts.docs);
-		} catch (err) {
-			console.log(err);
-			setLoading(false);
-			message.error({
-				content: 'Hubo un error al obtener productos',
-				duration: 2
+		await clienteAxios
+			.get(`/productos/`)
+			.then((res) => {
+				setLoading(false);
+				setProductos(res.data.posts.docs);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const props = {
@@ -80,34 +94,39 @@ function CarouselImages() {
 		setLoadButton(true);
 		formData.append('producto', producto._id);
 		formData.append('imagen', imagen);
-		const res = await clienteAxios.post(`/carousel/nuevo/${producto._id}`, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.post(`/carousel/nuevo/${producto._id}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				setLoadButton(false);
-				message.success({
-					content: 'Listo!',
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
 				window.location.reload();
-			} else {
-				setLoadButton(false);
-				message.error({
-					content: res.data.message,
-					duration: 2
-				});
-			}
-		} catch (error) {
-			setLoadButton(false);
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoadButton(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoadButton(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const render = productos.map((productos) => (
@@ -145,7 +164,7 @@ function CarouselImages() {
 					/>
 					<div className="contenedor-lista">
 						{loading ? (
-							<Spin size="large" />
+							<Spin />
 						) : productos.length === 0 ? (
 							<div className="w-100 d-flex justify-content-center align-items-center">
 								<Result

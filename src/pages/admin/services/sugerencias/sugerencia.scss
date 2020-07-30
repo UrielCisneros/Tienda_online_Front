@@ -10,13 +10,16 @@ h2{
     font-size: 16px;
 }
 .contenedor-imagen-sugerencia{
-    height: 250px;
-    display: flex;
-    justify-content: center;
-    align-content: center;
+    height: 250px!important;
+    display: flex!important;
+    justify-content: center!important;
+    align-content: center!important;
 }
 .imagen-producto-sugerencia{
     max-width: 100%!important;
-    max-height: 100%;
-    margin-left: 1px;
+    max-height: 100%!important;
+}
+.contenedor-lista{
+    height: 250px;
+    overflow-y: scroll;
 }

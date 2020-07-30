@@ -24,8 +24,8 @@ function Firebase() {
 		signInOptions: [ firebase.auth.GoogleAuthProvider.PROVIDER_ID, firebase.auth.FacebookAuthProvider.PROVIDER_ID ]
 	};
 
-	async function onAuthStateChange(callback) {
-		return firebase.auth().onAuthStateChanged((user) => {
+	function onAuthStateChange(callback) {
+		return firebase.auth().onAuthStateChanged(async (user) => {
 			if (user) {
 				const displayname = user.displayName.split(' ');
 				valores = {
@@ -35,33 +35,35 @@ function Firebase() {
 					uid: user.uid,
 					imagen: user.photoURL
 				};
-				try {
-					clienteAxios.post('/cliente/auth/firebase/', valores).then((res) => {
-						if (!res.data.token) {
+
+				await clienteAxios
+					.post('/cliente/auth/firebase/', valores)
+					.then((res) => {
+						//Usuario creado correctamente
+						callback({ isSignedIn: true });
+						const token = res.data.token;
+						localStorage.setItem('token', token);
+						window.location.reload();
+						notification['success']({
+							message: 'Listo!',
+							duration: 2
+						});
+					})
+					.catch((res) => {
+						if (res.response.status === 404 || res.response.status === 500) {
 							notification['error']({
 								message: 'Error',
-								description: res.data.message,
+								description: res.response.data.message,
 								duration: 2
 							});
 						} else {
-							//Usuario creado correctamente
-							callback({ isSignedIn: true });
-							const token = res.data.token;
-							localStorage.setItem('token', token);
-							window.location.reload();
-							notification['success']({
-								message: 'Listo!',
+							notification['error']({
+								message: 'Error',
+								description: 'Hubo un error',
 								duration: 2
 							});
 						}
 					});
-				} catch (error) {
-					console.log(error);
-					notification['error']({
-						message: 'Error',
-						duration: 2
-					});
-				}
 			} else {
 				callback({ isSignedIn: false });
 			}

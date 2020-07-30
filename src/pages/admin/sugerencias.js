@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
-import { Col, Row, Input, Spin, Button, Drawer, message, Space, List, Result } from 'antd';
+import { Col, Row, Input, Button, Drawer, notification, Space, List, Result } from 'antd';
+import Spin from '../../components/Spin';
 import { IdProductoContext } from './contexts/ProductoContext';
 import jwt_decode from 'jwt-decode';
 import Sugerencia from './services/sugerencias/sugerencia';
@@ -40,50 +41,55 @@ function Sugerencias(props) {
 
 	const obtenerProductosFiltrados = async (busqueda) => {
 		setLoading(true);
-		clienteAxios
+		await clienteAxios
 			.get(`/productos/search/${busqueda}`)
 			.then((res) => {
-				if (!res.data.err) {
-					setProductos(res.data.posts);
+				setProductos(res.data.posts);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
 				} else {
-					message.error({
-						content: res.data.message,
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
 						duration: 2
 					});
 				}
-			})
-			.catch((err) => {
-				console.log(err);
-				message.error({
-					content: 'hubo un error',
-					duration: 2
-				});
 			});
 	};
 
 	const obtenerProductos = async () => {
 		setLoading(true);
-		clienteAxios
+		await clienteAxios
 			.get('/productos')
 			.then((res) => {
-				if (!res.data.err) {
-					setProductos(res.data.posts.docs);
+				setProductos(res.data.posts.docs);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
 				} else {
 					setLoading(false);
-					message.error({
-						content: res.data.message,
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
 						duration: 2
 					});
 				}
-			})
-			.catch((err) => {
-				setLoading(false);
-				message.error({
-					content: 'Hubo un error',
-					duration: 2
-				});
 			});
 	};
 
@@ -147,7 +153,7 @@ function Sugerencias(props) {
 				</Col>
 			</Row>
 			{loading ? (
-				<Spin size="large" />
+				<Spin />
 			) : productos.length === 0 ? (
 				<div className="w-100 d-flex justify-content-center align-items-center">
 					<Result

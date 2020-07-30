@@ -1,12 +1,10 @@
 import React, { useState, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Row, Col, Badge, message } from 'antd';
+import { Form, Button, Input, Row, Col, Badge, notification } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import './registrar_talla.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 import { StepsContext } from '../../contexts/stepsContext';
-
-const key = 'updatable';
 
 function RegistrarNumero() {
 	const [ form ] = Form.useForm();
@@ -28,85 +26,91 @@ function RegistrarNumero() {
 	};
 
 	const subirNumero = async () => {
-		message.loading({ content: 'En proceso...', key });
-		const respuesta = await clienteAxios.post(`/productos/addNumero/${productoContext}`, datos, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!respuesta.data.err) {
+		await clienteAxios
+			.post(`/productos/addNumero/${productoContext}`, datos, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				setDisabled(false);
 				obtenerNumero();
 				form.resetFields();
-				message.success({
-					content: respuesta.data.message,
-					key,
-					duration: 1
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				key,
-				duration: 3,
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const eliminarNumero = async (idnumero) => {
-		message.loading({ content: 'En proceso...', key });
-		const respuesta = await clienteAxios.delete(`/productos/action/${productoContext}/numero/${idnumero}`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!respuesta.data.err) {
+		await clienteAxios
+			.delete(`/productos/action/${productoContext}/numero/${idnumero}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerNumero();
-				message.success({
-					content: respuesta.data.message,
-					key,
-					duration: 1
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				key,
-				duration: 3,
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 	const obtenerNumero = async () => {
-		const respuesta = await clienteAxios.get(`/productos/${productoContext}`);
-		try {
-			if (!respuesta.data.err) {
-				setProductos(respuesta.data.numeros);
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 3,
+		await clienteAxios
+			.get(`/productos/${productoContext}`)
+			.then((res) => {
+				setProductos(res.data.numeros);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	if (productos !== 0) {
@@ -114,7 +118,10 @@ function RegistrarNumero() {
 			<div className="m-2">
 				<Badge count={numero.cantidad} style={{ backgroundColor: '#52c41a' }}>
 					<div className="hover-delete d-flex text-center">
-						<p className="rounded p-2" style={{ backgroundColor: '#EEEEEE', fontSize: 40,  minWidth: '60px', height: '56px' }}>
+						<p
+							className="rounded p-2"
+							style={{ backgroundColor: '#EEEEEE', fontSize: 40, minWidth: '60px', height: '56px' }}
+						>
 							{numero.numero}
 						</p>
 						<div className="icono rounded">

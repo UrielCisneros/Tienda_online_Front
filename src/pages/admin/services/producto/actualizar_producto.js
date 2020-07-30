@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Tabs, Form, Input, Upload, Button, message, Select } from 'antd';
+import { Tabs, Form, Input, Upload, Button, notification, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import ActualizarGaleria from './actualizar_galeria';
@@ -10,7 +10,6 @@ import { Editor } from '@tinymce/tinymce-react';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
-const key = 'updatable';
 
 const layout = {
 	labelCol: { span: 6 },
@@ -57,9 +56,9 @@ function ActualizarProducto() {
 	};
 
 	const obtenerDatos = async () => {
-		const res = await clienteAxios.get(`/productos/${productoID}`);
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.get(`/productos/${productoID}`)
+			.then((res) => {
 				form.setFieldsValue({
 					codigo: res.data.codigo,
 					nombre: res.data.nombre,
@@ -72,18 +71,22 @@ function ActualizarProducto() {
 				setEditor(res.data.descripcion);
 				setFiles(res.data.imagen);
 				setProductos(res.data);
-			} else {
-				message.error({
-					content: res.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 3
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const obtenerSelect = (value) => {
@@ -118,36 +121,36 @@ function ActualizarProducto() {
 			formData.append('imagen', files);
 		}
 
-		message.loading({ content: 'En proceso...', key });
-		const res = await clienteAxios.put(`/productos/${productoID}`, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.put(`/productos/${productoID}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerDatos();
-				message.success({
-					content: res.data.message,
-					key,
-					duration: 3
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: res.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			console.log(error);
-			message.error({
-				content: 'Hubo un error',
-				key,
-				duration: 3
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	return (
@@ -182,8 +185,13 @@ function ActualizarProducto() {
 							init={{
 								height: 300,
 								menubar: false,
-								plugins: [ 'advlist autolink lists link image charmap print preview anchor','searchreplace visualblocks code fullscreen','insertdatetime media table paste code help wordcount' ],
-								toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+								plugins: [
+									'advlist autolink lists link image charmap print preview anchor',
+									'searchreplace visualblocks code fullscreen',
+									'insertdatetime media table paste code help wordcount'
+								],
+								toolbar:
+									'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
 							}}
 							onEditorChange={obtenerEditor}
 						/>

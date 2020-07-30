@@ -13,31 +13,32 @@ const tailLayout = {
 
 function Login(props) {
 	const onFinish = async (values) => {
-		const res = await clienteAxios.post('/cliente/auth', values);
-		try {
-			if (!res.data.token) {
-				notification['error']({
-					message: 'Error',
-					description: res.data.message,
-					duration: 2
-				});
-			} else {
+		await clienteAxios
+			.post('/cliente/auth', values)
+			.then((res) => {
 				const token = res.data.token;
 				localStorage.setItem('token', token);
 				props.history.push('/admin');
-				notification['success']({
-					message: 'Hecho!',
+				notification.success({
+					message: 'Bienvenido!',
 					duration: 2
 				});
-			}
-		} catch (error) {
-			console.log(error);
-			notification['error']({
-				message: 'Error',
-				description: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	return (

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
-import { Button, Input, Space, message, Modal, List, Spin, Row, Col, Upload, Result } from 'antd';
+import { Button, Input, Space, Modal, List, Row, Col, Upload, Result, notification } from 'antd';
+import Spin from '../../components/Spin';
 import {
 	EyeOutlined,
 	EditOutlined,
@@ -60,18 +61,30 @@ function Carousel(props) {
 
 	///*** OBTENER DATOS DE LA BASE DE DATOS
 	const obtenerCarouseles = async () => {
-		const res = await clienteAxios.get(`/carousel/`);
-		try {
-			res.data.forEach((item) => setProductoCarousel(item.producto));
-			setProductos(res.data);
-			setLoading(false);
-		} catch (err) {
-			setLoading(false);
-			message.error({
-				content: 'Hubo un error al obtener productos',
-				duration: 2
+		await clienteAxios
+			.get(`/carousel/`)
+			.then((res) => {
+				res.data.forEach((item) => setProductoCarousel(item.producto));
+				setProductos(res.data);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	///ACTUALIZAR IMAGEN
@@ -85,70 +98,72 @@ function Carousel(props) {
 
 	const actualizarImagen = async (formdata) => {
 		setLoadButton(true);
-		const res = await clienteAxios.put(`/carousel/${producto}/`, formdata, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				if (!res.data.message) {
-					obtenerCarouseles();
+		await clienteAxios
+			.put(`/carousel/${producto}/`, formdata, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				obtenerCarouseles();
+				setLoadButton(false);
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
+				});
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoadButton(false);
-					message.success({
-						content: 'Imagen actualizada!',
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
 					setLoadButton(false);
-					message.error({
-						content: res.data.message,
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
 						duration: 2
 					});
 				}
-			} else {
-				setLoadButton(false);
-				message.error({
-					content: res.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			setLoadButton(false);
-			message.error({
-				content: 'Hubo un error',
-				duration: 3
 			});
-		}
 	};
 
 	///ELIMINAR IMAGEN
 	const eliminarImagen = async (productoID) => {
-		const res = await clienteAxios.delete(`/carousel/${productoID}/`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.delete(`/carousel/${productoID}/`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerCarouseles();
-				message.success({
-					content: res.data.message,
-					duration: 1
-				});
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const showModal = () => {
@@ -276,7 +291,7 @@ function Carousel(props) {
 				</Col>
 			</Row>
 			{loading ? (
-				<Spin size="large" />
+				<Spin />
 			) : productosFiltrados.length === 0 ? (
 				<div className="w-100 d-flex justify-content-center align-items-center">
 					<Result

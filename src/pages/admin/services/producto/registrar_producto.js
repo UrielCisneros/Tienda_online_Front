@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Select, Steps, message, Upload } from 'antd';
+import { Form, Button, Input, Select, Steps, notification, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import './registrar_producto.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
@@ -13,7 +13,6 @@ import { Editor } from '@tinymce/tinymce-react';
 
 const { Option } = Select;
 const { Step } = Steps;
-const key = 'updatable';
 
 ///Layout para formulario(columnas)
 const layout = {
@@ -27,7 +26,6 @@ function RegistrarProducto(props) {
 	const token = localStorage.getItem('token');
 
 	////Activar y desactivar los botones Next y Prev
-
 	const [ editor, setEditor ] = useState();
 	const [ disabledPrev, setDisabledPrev ] = useState(false);
 	const [ disabledform, setDisabledForm ] = useState(true);
@@ -35,7 +33,6 @@ function RegistrarProducto(props) {
 
 	const next = () => {
 		setCurrent(current + 1);
-		console.log(current);
 		if (current === 0) {
 			setDisabled(true);
 		} else if (current >= 1) {
@@ -106,40 +103,40 @@ function RegistrarProducto(props) {
 		formData.append('descripcion', editor);
 		formData.append('imagen', files);
 
-		message.loading({ content: 'En proceso...', key });
-		const respuesta = await clienteAxios.post('/productos/', formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!respuesta.data.err) {
+		await clienteAxios
+			.post('/productos/', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				setDisabledPrev(true);
 				setDisabled(false);
 				setDisabledFormProductos(true);
 				setDisabledForm(false);
-				setProductoID(respuesta.data.userStored._id);
-				message.success({
-					content: respuesta.data.message,
-					key,
-					duration: 3
+				setProductoID(res.data.userStored._id);
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			console.log(error);
-			message.error({
-				content: 'Hubo un error',
-				key,
-				duration: 3
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	}
 
 	/// Declaracion de variables para los pasos
@@ -201,8 +198,13 @@ function RegistrarProducto(props) {
 										init={{
 											height: 200,
 											menubar: false,
-											plugins: ['advlist autolink lists link image charmap print preview anchor','searchreplace visualblocks code fullscreen','insertdatetime media table paste code help wordcount'],
-											toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+											plugins: [
+												'advlist autolink lists link image charmap print preview anchor',
+												'searchreplace visualblocks code fullscreen',
+												'insertdatetime media table paste code help wordcount'
+											],
+											toolbar:
+												'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
 										}}
 										onEditorChange={obtenerEditor}
 									/>
@@ -277,7 +279,10 @@ function RegistrarProducto(props) {
 					<Button
 						type="primary"
 						onClick={() => {
-							message.success('Producto Creado!');
+							notification.success({
+								message: 'su producto ha sido creado!',
+								duration: 2
+							});
 							setTimeout(() => {
 								window.location.reload();
 							}, 3000);

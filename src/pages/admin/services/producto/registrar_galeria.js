@@ -1,11 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, message } from 'antd';
+import { Upload, Button, notification } from 'antd';
 import { UploadOutlined, EyeOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons';
 import './registrar_galeria.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
-
-const key = 'updatable';
 
 function RegistrarGaleria() {
 	const token = localStorage.getItem('token');
@@ -29,79 +27,89 @@ function RegistrarGaleria() {
 	};
 
 	const subirBD = async (formData) => {
-		message.loading({ content: 'En proceso...', key });
-		const respuesta = await clienteAxios.post(`/galeria/nueva/${productoContext}`, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!respuesta.data.err) {
+		await clienteAxios
+			.post(`/galeria/nueva/${productoContext}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerBD();
-				message.success({
-					content: 'Listo!',
-					key,
-					duration: 1
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				key,
-				duration: 3
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 	const obtenerBD = async () => {
-		const respuesta = await clienteAxios.get(`/galeria/${productoContext}`);
-		try {
-			if (!respuesta.data.err) {
-				setGaleria(respuesta.data.imagenes);
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 3
+		await clienteAxios
+			.get(`/galeria/${productoContext}`)
+			.then((res) => {
+				setGaleria(res.data.imagenes);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 	const eliminarBD = async (idimagen) => {
-		const respuesta = await clienteAxios.delete(`/galeria/${productoContext}/imagen/${idimagen}`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!respuesta.data.err) {
+		await clienteAxios
+			.delete(`/galeria/${productoContext}/imagen/${idimagen}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerBD();
-				message.success({
-					content: respuesta.data.message,
-					duration: 3
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 3
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const [ prev, setPrev ] = useState('');
@@ -109,7 +117,11 @@ function RegistrarGaleria() {
 		var render = galeria.map((imagenes) => (
 			<div className="shadow rounded imgStyle d-inline-block">
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
-					<img className="img" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenes.url}`} alt="preview-imagen" />
+					<img
+						className="img"
+						src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenes.url}`}
+						alt="preview-imagen"
+					/>
 					<div className="iconos rounded">
 						<span
 							onClick={function() {
@@ -146,8 +158,12 @@ function RegistrarGaleria() {
 					{prev === '' || galeria.length === 0 ? (
 						<PictureOutlined style={{ fontSize: 80 }} />
 					) : (
-						<img className="imagen" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/
-						${prev}`} alt="preview-imagen" />
+						<img
+							className="imagen"
+							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/
+						${prev}`}
+							alt="preview-imagen"
+						/>
 					)}
 				</div>
 			</div>

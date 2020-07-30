@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Button, Input, Space, Upload, List, Spin, Avatar, message, Result } from 'antd';
+import { Button, Input, Space, Upload, List, Avatar, notification, Result, Spin } from 'antd';
+
 import './registrar_promocion.scss';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const { Search } = Input;
+const demo = { height: '500px', overflow: 'auto' };
 
 const RegistrarPromocion = () => {
 	const token = localStorage.getItem('token');
 	const [ content, setContent ] = useState(false);
 	const [ loadingButton, setLoadingButton ] = useState(false);
 
-	const [ productos, setProductos ] = useState([]);
-	const [ loading, setLoading ] = useState(false);
+	const [ data, setData ] = useState([]);
+	const [ hasMore, setHasMore ] = useState(true);
+	const [ page, setPage ] = useState(1);
+	const [ totalDocs, setTotalDocs ] = useState();
 
+	const [ loading, setLoading ] = useState(false);
 	const [ disabled, setDisabled ] = useState(true);
 	const [ imagen, setImagen ] = useState([]);
 	const [ producto, setProducto ] = useState([]);
@@ -20,10 +26,33 @@ const RegistrarPromocion = () => {
 	const [ precioPromocion, setPrecioPromocion ] = useState();
 
 	useEffect(() => {
-		obtenerProductos();
+		fetchData((res) => {
+			setData(res.data.posts.docs);
+			setTotalDocs(res.data.posts.totalDocs);
+			setPage(res.data.posts.page + 1);
+		});
 	}, []);
 
-	const props = {
+	const fetchData = (callback) => {
+		clienteAxios.get(`/productos?limit=${8}&page=${page}`).then((res) => {
+			callback(res);
+		});
+	};
+
+	const handleInfiniteOnLoad = () => {
+		setLoading(true);
+		if (data.length === totalDocs) {
+			setLoading(false);
+			setHasMore(false);
+			return;
+		}
+		fetchData((res) => {
+			setData(data.concat(res.data.posts.docs));
+			setLoading(false);
+		});
+	};
+
+	const propsUpload = {
 		beforeUpload: async (file) => {
 			const formDataImagen = new FormData();
 			formDataImagen.append('imagen', file);
@@ -37,132 +66,98 @@ const RegistrarPromocion = () => {
 
 	const subirImagen = async (formDataImagen) => {
 		setLoadingButton(true);
-		const res = await clienteAxios.put(`/productos/promocion/${promocion._id}`, formDataImagen, {
+		await clienteAxios.put(`/productos/promocion/${promocion._id}`, formDataImagen, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 				Authorization: `bearer ${token}`
 			}
-		});
-		try {
-			if (!res.data.err) {
-				message.success({
-					content: 'imagen guardada',
+		}).then((res) => {
+			setImagen(res.data.promocionBase.imagenPromocion);
+			setLoadingButton(false);
+			notification.success({
+				message: 'Hecho!',
+				description: res.data.message,
+				duration: 2
+			});
+		}).catch((res) => {
+			if (res.response.status === 404 || res.response.status === 500) {
+				setLoadingButton(false);
+				notification.error({
+					message: 'Error',
+					description: res.response.data.message,
 					duration: 2
 				});
-				setImagen(res.data.promocionBase.imagenPromocion);
-				setLoadingButton(false);
 			} else {
-				message.error({
-					content: res.data.message,
+				setLoadingButton(false);
+				notification.error({
+					message: 'Error',
+					description: 'Hubo un error',
 					duration: 2
 				});
 			}
-		} catch (err) {
-			message.error({
-				content: 'hubo un error',
-				duration: 2
-			});
-		}
+		});
 	};
 
 	const subirPromocion = async () => {
 		const formData = new FormData();
 		formData.append('productoPromocion', producto._id);
 		formData.append('precioPromocion', precioPromocion);
-		const res = await clienteAxios.post(`/productos/promocion/`, formData, {
+		await clienteAxios.post(`/productos/promocion/`, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 				Authorization: `bearer ${token}`
 			}
-		});
-		try {
-			if (!res.data.err) {
-				message.success({
-					content: res.data.message,
+		}).then((res) => {
+			setPromocion(res.data.userStored);
+			setDisabled(false);
+			notification.success({
+				message: 'Hecho!',
+				description: res.data.message,
+				duration: 2
+			});
+		}).catch((res) => {
+			if (res.response.status === 404 || res.response.status === 500) {
+				notification.error({
+					message: 'Error',
+					description: res.response.data.message,
 					duration: 2
 				});
-				setPromocion(res.data.userStored);
-				setDisabled(false);
 			} else {
-				message.error({
-					content: res.data.message,
+				notification.error({
+					message: 'Error',
+					description: 'Hubo un error',
 					duration: 2
 				});
 			}
-		} catch (err) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
-			});
-		}
+		});
 	};
 
 	const obtenerProductosFiltrados = async (busqueda) => {
 		setLoading(true);
-		clienteAxios
+		await clienteAxios
 			.get(`/productos/search/${busqueda}`)
 			.then((res) => {
-				if (!res.data.err) {
-					setProductos(res.data.posts);
+				setData(res.data.posts);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
 				} else {
 					setLoading(false);
-					message.error({
-						content: res.data.message,
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
 						duration: 2
 					});
 				}
-			})
-			.catch((err) => {
-				setLoading(false);
-				message.error({
-					content: 'hubo un error',
-					duration: 2
-				});
 			});
 	};
-
-	const obtenerProductos = async () => {
-		setLoading(true);
-		clienteAxios
-			.get('/productos')
-			.then((res) => {
-				setProductos(res.data.posts.docs);
-				setLoading(false);
-			})
-			.catch((err) => {
-				setLoading(false);
-				message.error({
-					content: 'Hubo un error al obtener productos',
-					duration: 2
-				});
-			});
-	};
-
-	const render = productos.map((productos) => (
-		<List.Item
-			actions={[
-				<Button
-					onClick={() => {
-						setProducto(productos);
-						setContent(true);
-					}}
-				>
-					Seleccionar
-				</Button>
-			]}
-		>
-			<List.Item.Meta
-				avatar={
-					<Avatar
-						size={40}
-						src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
-					/>
-				}
-				title={productos.nombre}
-			/>
-		</List.Item>
-	));
 
 	return (
 		<div>
@@ -176,8 +171,8 @@ const RegistrarPromocion = () => {
 						size="large"
 					/>
 					{loading ? (
-						<Spin size="large" />
-					) : productos.length === 0 ? (
+						<div />
+					) : data.length === 0 ? (
 						<div className="w-100 d-flex justify-content-center align-items-center">
 							<Result
 								status="404"
@@ -186,7 +181,46 @@ const RegistrarPromocion = () => {
 							/>
 						</div>
 					) : (
-						<List>{render}</List>
+						<div style={demo}>
+							<InfiniteScroll
+								initialLoad={false}
+								pageStart={0}
+								loadMore={handleInfiniteOnLoad}
+								hasMore={!loading && hasMore}
+								useWindow={false}
+								threshold
+								loader={<div className="d-flex justify-content-center" key={0}><Spin size="large" />Cargando...</div>}
+							>
+								<List
+									dataSource={data}
+									renderItem={(productos) => (
+										<List.Item key={productos._id}
+											actions={[
+												<Button
+													onClick={() => {
+														setProducto(productos);
+														setContent(true);
+													}}
+												>
+													Seleccionar
+												</Button>
+											]}
+										>
+											<List.Item.Meta
+												avatar={
+													<Avatar
+														size={40}
+														src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+													/>
+												}
+												title={productos.nombre}
+											/>
+										</List.Item>
+									)}
+								>
+								</List>
+							</InfiniteScroll>
+						</div>
 					)}
 				</div>
 				{content === false ? (
@@ -235,7 +269,7 @@ const RegistrarPromocion = () => {
 									Sube una imagen para la promocion, esta imagen aparecera en el carrucel de
 									promociones
 								</p>
-								<Upload {...props} className="d-flex justify-content-center mt-3 mr-3">
+								<Upload {...propsUpload} className="d-flex justify-content-center mt-3 mr-3">
 									<Button loading={loadingButton} disabled={disabled}>
 										Subir
 									</Button>

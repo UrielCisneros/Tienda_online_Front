@@ -3,20 +3,28 @@ import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import RegistrarProducto from './services/producto/registrar_producto';
 import ActualizarProducto from './services/producto/actualizar_producto';
-import { Card, Col, Row, Input, Spin, Button, Modal, Drawer, message, Result } from 'antd';
+import { Card, Col, Row, Input, Button, Modal, Drawer, Result, notification } from 'antd';
+import Spin from '../../components/Spin';
+import Pagination from '../../components/Pagination/pagination';
 import { StepsContext, StepsProvider } from '../admin/contexts/stepsContext';
 import { IdProductoContext } from './contexts/ProductoContext';
 import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
+import queryString from 'query-string';
 
 const { Search } = Input;
 const { confirm } = Modal;
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
 function RegistrarProductos(props) {
+	//Tomar la paginacion actual
+	const { location, history } = props;
+	const { page = 1 } = queryString.parse(location.search);
+
 	const [ productoID, setProductoID ] = useState('');
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	const [ productos, setProductos ] = useState([]);
+	const [ productosRender, setProductosRender ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
 	const [ visible, setVisible ] = useState(false);
 	const [ accion, setAccion ] = useState(false);
@@ -59,89 +67,101 @@ function RegistrarProductos(props) {
 			okType: 'danger',
 			cancelText: 'No',
 			async onOk() {
-				const respuesta = await clienteAxios.delete(`/productos/${idproducto}`, {
-					headers: {
-						Authorization: `bearer ${token}`
-					}
-				});
-				try {
-					if (!respuesta.data.err) {
-						obtenerProductos();
-						message.success({
-							content: respuesta.data.message,
-							duration: 3
+				await clienteAxios
+					.delete(`/productos/${idproducto}`, {
+						headers: {
+							Authorization: `bearer ${token}`
+						}
+					})
+					.then((res) => {
+						obtenerProductos(8, page);
+						notification.success({
+							message: res.data.message,
+							duration: 2
 						});
-					} else {
-						message.error({
-							content: respuesta.data.message,
-							duration: 3
-						});
-					}
-				} catch (error) {
-					message.error({
-						content: 'Hubo un error',
-						duration: 3
+					})
+					.catch((res) => {
+						if (res.response.status === 404 || res.response.status === 500) {
+							notification.error({
+								message: 'Error',
+								description: res.response.data.message,
+								duration: 2
+							});
+						} else {
+							notification.error({
+								message: 'Error',
+								description: 'Hubo un error',
+								duration: 2
+							});
+						}
 					});
-				}
 			}
 		});
 	}
 
 	const obtenerProductosFiltrados = async (busqueda) => {
 		setLoading(true);
-		clienteAxios
+		await clienteAxios
 			.get(`/productos/search/${busqueda}`)
 			.then((res) => {
-				if (!res.data.err) {
-					setProductos(res.data.posts);
+				setProductos(res.data.posts);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
 				} else {
 					setLoading(false);
-					message.error({
-						content: res.data.message,
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
 						duration: 2
 					});
 				}
-			})
-			.catch((err) => {
-				setLoading(false);
-				message.error({
-					content: 'hubo un error',
-					duration: 2
-				});
 			});
 	};
 
-	const obtenerProductos = async () => {
+	const obtenerProductos = async (limit, page) => {
 		setLoading(true);
-		clienteAxios
-			.get('/productos')
+		await clienteAxios
+			.get(`/productos?limit=${limit}&page=${page}`)
 			.then((res) => {
-				if (!res.data.err) {
-					setProductos(res.data.posts.docs);
+				setProductosRender(res.data.posts.docs);
+				setProductos(res.data.posts);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
 				} else {
 					setLoading(false);
-					message.error({
-						content: res.data.message,
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
 						duration: 2
 					});
 				}
-			})
-			.catch((err) => {
-				setLoading(false);
-				message.error({
-					content: 'hubo un error',
-					duration: 2
-				});
 			});
 	};
 
-	useEffect(() => {
-		obtenerProductos();
-	}, []);
-
-	const render = productos.map((productos) => (
+	useEffect(
+		() => {
+			obtenerProductos(8, page);
+		},
+		[ page ]
+	);
+	console.log(productos);
+	const render = productosRender.map((productos) => (
 		<Col span={32} key={productos.id}>
 			<Card.Grid hoverable style={gridStyle}>
 				<Card
@@ -167,7 +187,7 @@ function RegistrarProductos(props) {
 						>
 							<EditOutlined style={{ fontSize: 22 }} />Actualizar
 						</Button>,
-						
+
 						<Button
 							type="link"
 							onClick={() => showDeleteConfirm(productos._id)}
@@ -240,22 +260,24 @@ function RegistrarProductos(props) {
 				</Col>
 			</Row>
 
-			<Row gutter={8} style={{ maxWidth: '90vw' }} className="mt-4">
-				{loading ?  <Spin size="large" /> : 
-				productos.length === 0 ? (
+			<Row gutter={8} style={{ maxWidth: '90vw' }} className="mt-4 d-flex justify-content-center">
+				{loading ? (
+					<Spin />
+				) : productos.length === 0 ? (
 					<div className="w-100 d-flex justify-content-center align-items-center">
 						<Result
-						status="404"
-						title="Articulo no encontrado"
-						subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
-					/>
+							status="404"
+							title="Articulo no encontrado"
+							subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+						/>
 					</div>
+				) : loading ? (
+					<Spin size="large" />
 				) : (
-					loading ? <Spin size="large" /> : render
-				)
-				}
-
+					render
+				)}
 			</Row>
+			<Pagination blogs={productos} location={location} history={history} />
 		</div>
 	);
 }
