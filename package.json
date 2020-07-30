@@ -25,7 +25,8 @@
     "react-image-scroller": "^0.3.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "react-search-field": "^1.0.0"
+    "react-search-field": "^1.0.0",
+    "read-more-react": "^1.0.10"
   },
   "scripts": {
     "start": "react-scripts start",
