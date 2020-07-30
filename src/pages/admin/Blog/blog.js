@@ -82,6 +82,7 @@ function BlogAdmin(props) {
     };
     const drawnerClose = () => {
         setVisible(false);
+        setInfoBlog({});
       };
 
     //Mostrar el Spin
@@ -114,11 +115,16 @@ function BlogAdmin(props) {
                         </div>
                     }
                 >
+                    {console.log(infoBlog)}
                     { accion === true ? (
-                        <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} blog={infoBlog} setVisible={setVisible} />
-                    
+                        <BlogContext.Provider value={infoBlog}>
+                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} />
+                        </BlogContext.Provider>
+                        
                     ):(
-                        <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} blog={null} setVisible={setVisible} />
+                        <BlogContext.Provider value={infoBlog}>
+                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} />
+                        </BlogContext.Provider>
                     )}
                 </Drawer>
                 
@@ -129,6 +135,7 @@ function BlogAdmin(props) {
                         onClick={() => {
                             setAccion(false);
                             showDrawer()
+                            setInfoBlog(null);
                         }}
                         className="ml-3"
                         icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}>

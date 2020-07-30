@@ -73,11 +73,9 @@ function Blog(props){
                     </Button>
                 </Link>,
                 <Button type="dashed" onClick={() => {
-                    
                     setInfoBlog(blog);
                     setAccion(true);
                     showDrawer();
-                    
                 }}>
                     <EditOutlined /> Editar
                 </Button>,

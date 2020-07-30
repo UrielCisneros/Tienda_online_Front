@@ -1,12 +1,15 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useContext} from 'react'
 import {Form,Input,Button,notification,Upload,message} from 'antd'
 import {Editor} from '@tinymce/tinymce-react';
 import { UploadOutlined } from '@ant-design/icons';
 import clienteAxios from '../../../../config/axios';
+import { BlogContext } from '../../contexts/BlogContext';
 
 export default function RegistrarBlog(props) {
 
-    const {setReloadBlog,token,blog,setVisible} = props;
+    const {setReloadBlog,token,setVisible} = props;
+    const blog = useContext(BlogContext);
+    console.log(blog)
 
     //Variablo que trae la informacion del post
     const [blogData,setBlogData] = useState({});
