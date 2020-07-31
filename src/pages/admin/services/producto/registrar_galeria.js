@@ -1,21 +1,25 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, notification } from 'antd';
-import { UploadOutlined, EyeOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons';
+import { Upload, Button, notification, Spin, Modal } from 'antd';
+import {
+	UploadOutlined,
+	EyeOutlined,
+	DeleteOutlined,
+	PictureOutlined,
+	LoadingOutlined,
+	ExclamationCircleOutlined
+} from '@ant-design/icons';
 import './registrar_galeria.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
+const { confirm } = Modal;
 
 function RegistrarGaleria() {
 	const token = localStorage.getItem('token');
 	const productoContext = useContext(ProductoContext);
 	const [ galeria, setGaleria ] = useState();
-
-	useEffect(
-		() => {
-			obtenerBD();
-		},
-		[ productoContext ]
-	);
+	const [ loading, setLoading ] = useState(false);
 
 	const props = {
 		beforeUpload: async (file) => {
@@ -27,6 +31,7 @@ function RegistrarGaleria() {
 	};
 
 	const subirBD = async (formData) => {
+		setLoading(true);
 		await clienteAxios
 			.post(`/galeria/nueva/${productoContext}`, formData, {
 				headers: {
@@ -36,6 +41,7 @@ function RegistrarGaleria() {
 			})
 			.then((res) => {
 				obtenerBD();
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
@@ -44,12 +50,14 @@ function RegistrarGaleria() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -81,6 +89,7 @@ function RegistrarGaleria() {
 			});
 	};
 	const eliminarBD = async (idimagen) => {
+		setLoading(true);
 		await clienteAxios
 			.delete(`/galeria/${productoContext}/imagen/${idimagen}`, {
 				headers: {
@@ -89,6 +98,7 @@ function RegistrarGaleria() {
 			})
 			.then((res) => {
 				obtenerBD();
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
@@ -97,12 +107,14 @@ function RegistrarGaleria() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -111,6 +123,19 @@ function RegistrarGaleria() {
 				}
 			});
 	};
+
+	function showDeleteConfirm(idimagen) {
+		confirm({
+			title: 'Estás seguro de borrar esto?',
+			icon: <ExclamationCircleOutlined />,
+			okText: 'Si',
+			okType: 'danger',
+			cancelText: 'No',
+			onOk() {
+				eliminarBD(idimagen);
+			}
+		});
+	}
 
 	const [ prev, setPrev ] = useState('');
 	if (galeria !== undefined) {
@@ -132,7 +157,7 @@ function RegistrarGaleria() {
 						</span>
 						<span
 							onClick={function() {
-								eliminarBD(imagenes._id);
+								showDeleteConfirm(imagenes._id);
 							}}
 						>
 							<DeleteOutlined style={{ fontSize: 20 }} className="eliminar" />
@@ -150,16 +175,17 @@ function RegistrarGaleria() {
 					<Button>
 						<UploadOutlined /> Upload
 					</Button>
+					{loading ? <Spin indicator={antIcon} /> : <div />}
 				</Upload>
 				<div className="padre">{render}</div>
 			</div>
 			<div className="col-sm-4 col-lg-6">
-				<div className="shadow rounded imgPreview d-flex justify-content-center align-items-center">
+				<div className="shadow rounded imgPreview-registrar-galeria d-flex justify-content-center align-items-center">
 					{prev === '' || galeria.length === 0 ? (
 						<PictureOutlined style={{ fontSize: 80 }} />
 					) : (
 						<img
-							className="imagen"
+							className="imagen-registrar-galeria"
 							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/
 						${prev}`}
 							alt="preview-imagen"

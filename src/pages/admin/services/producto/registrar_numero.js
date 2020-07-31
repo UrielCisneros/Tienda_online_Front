@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Row, Col, Badge, notification } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Form, Button, Input, Row, Col, Badge, notification, Spin } from 'antd';
+import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
 import './registrar_talla.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 import { StepsContext } from '../../contexts/stepsContext';
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 function RegistrarNumero() {
 	const [ form ] = Form.useForm();
@@ -12,6 +14,7 @@ function RegistrarNumero() {
 	const [ productoContext, disabledForm ] = useContext(ProductoContext);
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	const [ productos, setProductos ] = useState([]);
+	const [ loading, setLoading ] = useState(false);
 
 	const [ datos, setDatos ] = useState({
 		numero: '',
@@ -26,6 +29,7 @@ function RegistrarNumero() {
 	};
 
 	const subirNumero = async () => {
+		setLoading(true);
 		await clienteAxios
 			.post(`/productos/addNumero/${productoContext}`, datos, {
 				headers: {
@@ -33,6 +37,7 @@ function RegistrarNumero() {
 				}
 			})
 			.then((res) => {
+				setLoading(false);
 				setDisabled(false);
 				obtenerNumero();
 				form.resetFields();
@@ -44,12 +49,14 @@ function RegistrarNumero() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -60,6 +67,7 @@ function RegistrarNumero() {
 	};
 
 	const eliminarNumero = async (idnumero) => {
+		setLoading(true);
 		await clienteAxios
 			.delete(`/productos/action/${productoContext}/numero/${idnumero}`, {
 				headers: {
@@ -68,6 +76,7 @@ function RegistrarNumero() {
 			})
 			.then((res) => {
 				obtenerNumero();
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
@@ -76,12 +85,14 @@ function RegistrarNumero() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -158,9 +169,10 @@ function RegistrarNumero() {
 								</Form.Item>
 							</Col>
 							<Col>
-								<Button type="dafault" htmlType="submit" disabled={disabledForm}>
+								<Button type="dafault" htmlType="submit" disabled={disabledForm} loading={loading}>
 									Agregar
 								</Button>
+								{loading ? <Spin indicator={antIcon} /> : <div />}
 							</Col>
 						</Row>
 					</Input.Group>

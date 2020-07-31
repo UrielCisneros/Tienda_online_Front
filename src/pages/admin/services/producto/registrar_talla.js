@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Row, Col, Badge, notification } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Form, Button, Input, Row, Col, Badge, notification, Spin } from 'antd';
+import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
 import './registrar_talla.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 import { StepsContext } from '../../contexts/stepsContext';
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 function RegistrarTalla() {
 	const [ form ] = Form.useForm();
@@ -12,6 +14,7 @@ function RegistrarTalla() {
 	const [ productoContext, disabledForm ] = useContext(ProductoContext);
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	const [ productos, setProductos ] = useState([]);
+	const [ loading, setLoading ] = useState(false);
 
 	const [ datos, setDatos ] = useState({
 		talla: '',
@@ -26,6 +29,7 @@ function RegistrarTalla() {
 	};
 
 	const subirTalla = async () => {
+		setLoading(true);
 		await clienteAxios
 			.post(`/productos/addTalla/${productoContext}`, datos, {
 				headers: {
@@ -33,6 +37,7 @@ function RegistrarTalla() {
 				}
 			})
 			.then((res) => {
+				setLoading(false);
 				setDisabled(false);
 				obtenerTalla();
 				form.resetFields();
@@ -44,12 +49,14 @@ function RegistrarTalla() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -60,6 +67,7 @@ function RegistrarTalla() {
 	};
 
 	const eliminarTalla = async (idtalla) => {
+		setLoading(true);
 		await clienteAxios
 			.delete(`/productos/action/${productoContext}/talla/${idtalla}`, {
 				headers: {
@@ -67,6 +75,7 @@ function RegistrarTalla() {
 				}
 			})
 			.then((res) => {
+				setLoading(false);
 				obtenerTalla();
 				notification.success({
 					message: 'Hecho!',
@@ -76,12 +85,14 @@ function RegistrarTalla() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -156,9 +167,10 @@ function RegistrarTalla() {
 								</Form.Item>
 							</Col>
 							<Col>
-								<Button disabled={disabledForm} type="dafault" htmlType="submit">
+								<Button disabled={disabledForm} type="dafault" htmlType="submit" loading={loading}>
 									Agregar
 								</Button>
+								{loading ? <Spin indicator={antIcon} /> : <div />}
 							</Col>
 						</Row>
 					</Input.Group>

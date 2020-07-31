@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Select, Steps, notification, Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Button, Input, Select, Steps, notification, Upload, Spin } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import './registrar_producto.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 import { StepsContext } from '../../contexts/stepsContext';
@@ -13,6 +13,7 @@ import { Editor } from '@tinymce/tinymce-react';
 
 const { Option } = Select;
 const { Step } = Steps;
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 ///Layout para formulario(columnas)
 const layout = {
@@ -21,15 +22,30 @@ const layout = {
 };
 
 function RegistrarProducto(props) {
+	const [ form ] = Form.useForm();
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	///Autorizacion a la pagina con Token
 	const token = localStorage.getItem('token');
+	/// Declaracion de variables para los pasos
+	const [ current, setCurrent ] = useState(0);
 
 	////Activar y desactivar los botones Next y Prev
 	const [ editor, setEditor ] = useState();
 	const [ disabledPrev, setDisabledPrev ] = useState(false);
 	const [ disabledform, setDisabledForm ] = useState(true);
 	const [ disabledformProductos, setDisabledFormProductos ] = useState(false);
+	const [ loading, setLoading ] = useState(false);
+	const [ reload, setReload ] = props.reloadProductos;
+
+	if (reload) {
+		form.resetFields();
+	}
+	useEffect(
+		() => {
+			setCurrent(0);
+		},
+		[ reload ]
+	);
 
 	const next = () => {
 		setCurrent(current + 1);
@@ -94,6 +110,7 @@ function RegistrarProducto(props) {
 	const [ productoID, setProductoID ] = useState('');
 
 	async function onFinish() {
+		setLoading(true);
 		const formData = new FormData();
 		formData.append('codigo', datos.codigo);
 		formData.append('nombre', datos.nombre);
@@ -111,6 +128,8 @@ function RegistrarProducto(props) {
 				}
 			})
 			.then((res) => {
+				setReload(true);
+				setLoading(false);
 				setDisabledPrev(true);
 				setDisabled(false);
 				setDisabledFormProductos(true);
@@ -124,12 +143,14 @@ function RegistrarProducto(props) {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -138,9 +159,6 @@ function RegistrarProducto(props) {
 				}
 			});
 	}
-
-	/// Declaracion de variables para los pasos
-	const [ current, setCurrent ] = useState(0);
 
 	////CONTENIDO DE LOS PASOS
 	const steps = [
@@ -170,7 +188,8 @@ function RegistrarProducto(props) {
 								{...layout}
 								name="nest-messages"
 								onFinish={onFinish}
-								initialValues={{ categoria: select, precio: 0 }}
+								initialValues={{ categoria: select }}
+								form={form}
 							>
 								<Form.Item label="Codigo de barras" onChange={datosForm}>
 									<Input
@@ -179,25 +198,44 @@ function RegistrarProducto(props) {
 										placeholder="Campo opcional"
 									/>
 								</Form.Item>
-								<Form.Item label="Nombre del producto" onChange={datosForm}>
+								<Form.Item
+									label="Nombre del producto"
+									name="nombre"
+									onChange={datosForm}
+									rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								>
 									<Input name="nombre" disabled={disabledformProductos} />
 								</Form.Item>
 								{select === 'otros' ? (
-									<Form.Item label="Cantidad" onChange={datosForm}>
+									<Form.Item
+										label="Cantidad"
+										name="cantidad"
+										onChange={datosForm}
+										rules={[ { required: true, message: 'Este campo es requerido' } ]}
+									>
 										<Input type="number" name="cantidad" disabled={disabledformProductos} />
 									</Form.Item>
 								) : (
 									<div />
 								)}
-								<Form.Item label="Precio del producto" onChange={datosForm}>
+								<Form.Item
+									label="Precio del producto"
+									name="precio"
+									onChange={datosForm}
+									rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								>
 									<Input type="number" disabled={disabledformProductos} name="precio" />
 								</Form.Item>
-								<Form.Item label="Descripcion del producto">
+								<Form.Item
+									label="Descripcion del producto"
+									name="descripcion"
+									rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								>
 									<Editor
 										disabled={disabledformProductos}
 										init={{
 											height: 200,
-											menubar: false,
+											menubar: true,
 											plugins: [
 												'advlist autolink lists link image charmap print preview anchor',
 												'searchreplace visualblocks code fullscreen',
@@ -209,7 +247,11 @@ function RegistrarProducto(props) {
 										onEditorChange={obtenerEditor}
 									/>
 								</Form.Item>
-								<Form.Item label="Imagen principal">
+								<Form.Item
+									label="Imagen principal"
+									name="imagen"
+									rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								>
 									<Upload {...propss}>
 										<Button disabled={disabledformProductos}>
 											<UploadOutlined /> Subir
@@ -220,6 +262,7 @@ function RegistrarProducto(props) {
 									<Button type="primary" htmlType="submit" disabled={disabledformProductos}>
 										Registrar
 									</Button>
+									{loading ? <Spin indicator={antIcon} /> : <div />}
 								</Form.Item>
 							</Form>
 							{select === 'ropa' ? (

@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Row, Col, Badge, notification } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Form, Button, Input, Row, Col, Badge, notification, Spin, Space } from 'antd';
+import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import './actualizar_tallas.scss';
 import { IdProductoContext } from '../../contexts/ProductoContext';
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 function ActualizarTalla() {
 	const [ form ] = Form.useForm();
@@ -11,14 +13,18 @@ function ActualizarTalla() {
 	const productoID = useContext(IdProductoContext);
 	const [ productos, setProductos ] = useState([]);
 	const [ idTalla, setIdTalla ] = useState('');
+	const [ loading, setLoading ] = useState(false);
 	const [ datos, setDatos ] = useState({
 		talla: '',
 		cantidad: ''
 	});
 
-	useEffect(() => {
-		obtenerTalla();
-	}, []);
+	useEffect(
+		() => {
+			obtenerTalla();
+		},
+		[ productoID ]
+	);
 
 	const datosForm = (e) => {
 		setDatos({
@@ -28,6 +34,7 @@ function ActualizarTalla() {
 	};
 
 	async function actualizarTalla() {
+		setLoading(true);
 		await clienteAxios
 			.put(`/productos/action/${productoID}/talla/${idTalla}`, datos, {
 				headers: {
@@ -36,6 +43,7 @@ function ActualizarTalla() {
 			})
 			.then((res) => {
 				obtenerTalla();
+				setLoading(false);
 				form.resetFields();
 				notification.success({
 					message: 'Hecho!',
@@ -45,12 +53,14 @@ function ActualizarTalla() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -60,6 +70,7 @@ function ActualizarTalla() {
 			});
 	}
 	async function nuevaTalla() {
+		setLoading(true);
 		await clienteAxios
 			.post(`/productos/addTalla/${productoID}`, datos, {
 				headers: {
@@ -67,6 +78,8 @@ function ActualizarTalla() {
 				}
 			})
 			.then((res) => {
+				setIdTalla('');
+				setLoading(false);
 				obtenerTalla();
 				form.resetFields();
 				notification.success({
@@ -77,12 +90,16 @@ function ActualizarTalla() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					setIdTalla('');
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
+					setIdTalla('');
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -92,6 +109,7 @@ function ActualizarTalla() {
 			});
 	}
 	async function eliminarTalla(idTalla) {
+		setLoading(true);
 		await clienteAxios
 			.delete(`/productos/action/${productoID}/talla/${idTalla}`, {
 				headers: {
@@ -100,6 +118,7 @@ function ActualizarTalla() {
 			})
 			.then((res) => {
 				obtenerTalla();
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
@@ -108,12 +127,14 @@ function ActualizarTalla() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -202,14 +223,29 @@ function ActualizarTalla() {
 								</Form.Item>
 							</Col>
 							<Col>
-								<Button type="dafault" htmlType="submit">
-									Actualizar
-								</Button>
-							</Col>
-							<Col>
-								<Button type="dafault" onClick={nuevaTalla}>
-									Agregar
-								</Button>
+								{idTalla ? (
+									<div>
+										<Space>
+											<Button type="dafault" htmlType="submit">
+												Actualizar
+											</Button>
+											<Button
+												type="dafault"
+												onClick={() => {
+													setIdTalla('');
+													form.resetFields();
+												}}
+											>
+												Cancelar
+											</Button>
+										</Space>
+									</div>
+								) : (
+									<Button type="dafault" onClick={nuevaTalla}>
+										Agregar
+									</Button>
+								)}
+								{loading ? <Spin indicator={antIcon} /> : <div />}
 							</Col>
 						</Row>
 					</Input.Group>

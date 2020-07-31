@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Row, Col, Badge, notification } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Form, Button, Input, Row, Col, Badge, notification, Spin, Space } from 'antd';
+import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import './actualizar_tallas.scss';
 import { IdProductoContext } from '../../contexts/ProductoContext';
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 function ActualizarNumero() {
 	const [ form ] = Form.useForm();
@@ -11,14 +13,18 @@ function ActualizarNumero() {
 	const productoID = useContext(IdProductoContext);
 	const [ productos, setProductos ] = useState([]);
 	const [ idNumero, setIdNumero ] = useState('');
+	const [ loading, setLoading ] = useState(false);
 	const [ datos, setDatos ] = useState({
 		numero: '',
 		cantidad: ''
 	});
 
-	useEffect(() => {
-		obtenerNumero();
-	}, []);
+	useEffect(
+		() => {
+			obtenerNumero();
+		},
+		[ productoID ]
+	);
 
 	const datosForm = (e) => {
 		setDatos({
@@ -28,6 +34,7 @@ function ActualizarNumero() {
 	};
 
 	async function actualizarNumero() {
+		setLoading(true);
 		await clienteAxios
 			.put(`/productos/action/${productoID}/numero/${idNumero}`, datos, {
 				headers: {
@@ -35,6 +42,7 @@ function ActualizarNumero() {
 				}
 			})
 			.then((res) => {
+				setLoading(false);
 				obtenerNumero();
 				form.resetFields();
 				notification.success({
@@ -45,12 +53,14 @@ function ActualizarNumero() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -60,6 +70,7 @@ function ActualizarNumero() {
 			});
 	}
 	async function nuevoNumero() {
+		setLoading(true);
 		await clienteAxios
 			.post(`/productos/addNumero/${productoID}`, datos, {
 				headers: {
@@ -68,6 +79,7 @@ function ActualizarNumero() {
 			})
 			.then((res) => {
 				obtenerNumero();
+				setLoading(false);
 				form.resetFields();
 				notification.success({
 					message: 'Hecho!',
@@ -77,12 +89,14 @@ function ActualizarNumero() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -92,6 +106,7 @@ function ActualizarNumero() {
 			});
 	}
 	async function eliminarNumero(idNumero) {
+		setLoading(true);
 		await clienteAxios
 			.delete(`/productos/action/${productoID}/numero/${idNumero}`, {
 				headers: {
@@ -99,6 +114,7 @@ function ActualizarNumero() {
 				}
 			})
 			.then((res) => {
+				setLoading(false);
 				obtenerNumero();
 				notification.success({
 					message: 'Hecho!',
@@ -108,12 +124,14 @@ function ActualizarNumero() {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -202,14 +220,29 @@ function ActualizarNumero() {
 								</Form.Item>
 							</Col>
 							<Col>
-								<Button type="dafault" htmlType="submit">
-									Actualizar
-								</Button>
-							</Col>
-							<Col>
-								<Button type="dafault" onClick={nuevoNumero}>
-									Agregar
-								</Button>
+								{idNumero ? (
+									<div>
+										<Space>
+											<Button type="dafault" htmlType="submit">
+												Actualizar
+											</Button>
+											<Button
+												type="dafault"
+												onClick={() => {
+													setIdNumero('');
+													form.resetFields();
+												}}
+											>
+												Cancelar
+											</Button>
+										</Space>
+									</div>
+								) : (
+									<Button type="dafault" onClick={nuevoNumero}>
+										Agregar
+									</Button>
+								)}
+								{loading ? <Spin indicator={antIcon} /> : <div />}
 							</Col>
 						</Row>
 					</Input.Group>

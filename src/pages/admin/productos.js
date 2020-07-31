@@ -28,6 +28,7 @@ function RegistrarProductos(props) {
 	const [ loading, setLoading ] = useState(false);
 	const [ visible, setVisible ] = useState(false);
 	const [ accion, setAccion ] = useState(false);
+	const [ reload, setReload ] = useState(false);
 	const token = localStorage.getItem('token');
 
 	var decoded = Jwt(token);
@@ -48,6 +49,7 @@ function RegistrarProductos(props) {
 
 	function drawnerClose() {
 		setVisible(false);
+		setReload(true);
 	}
 	function setActualizar() {
 		setAccion(true);
@@ -56,6 +58,19 @@ function RegistrarProductos(props) {
 	function setRegistrar() {
 		setAccion(false);
 		setVisible(true);
+	}
+
+	function closeConfirm() {
+		confirm({
+			title: 'Estás seguro de cerrar esta ventana?',
+			icon: <ExclamationCircleOutlined />,
+			okText: 'Si',
+			okType: 'danger',
+			cancelText: 'No',
+			onOk() {
+				drawnerClose();
+			}
+		});
 	}
 
 	function showDeleteConfirm(idproducto) {
@@ -104,6 +119,7 @@ function RegistrarProductos(props) {
 		await clienteAxios
 			.get(`/productos/search/${busqueda}`)
 			.then((res) => {
+				setProductosRender(res.data.posts);
 				setProductos(res.data.posts);
 				setLoading(false);
 			})
@@ -157,10 +173,11 @@ function RegistrarProductos(props) {
 	useEffect(
 		() => {
 			obtenerProductos(8, page);
+			setReload(false);
 		},
-		[ page ]
+		[ page, reload ]
 	);
-	console.log(productos);
+
 	const render = productosRender.map((productos) => (
 		<Col span={32} key={productos.id}>
 			<Card.Grid hoverable style={gridStyle}>
@@ -199,7 +216,7 @@ function RegistrarProductos(props) {
 				>
 					<div style={{ height: 100 }}>
 						<h1 className="h4">{productos.nombre}</h1>
-						<h2 className="h5">{new Intl.NumberFormat().format(productos.precio)}</h2>
+						<h2 className="h5">{new Intl.NumberFormat('es-MX').format(productos.precio)}</h2>
 					</div>
 				</Card>
 			</Card.Grid>
@@ -212,7 +229,7 @@ function RegistrarProductos(props) {
 				title={accion === true ? 'Actualizar un producto' : 'Registra un nuevo producto'}
 				width={window.screen.width > 768 ? 1000 : window.screen.width}
 				placement={'right'}
-				onClose={drawnerClose}
+				onClose={closeConfirm}
 				visible={visible}
 				bodyStyle={{ paddingBottom: 80 }}
 				footer={
@@ -221,7 +238,7 @@ function RegistrarProductos(props) {
 							textAlign: 'right'
 						}}
 					>
-						<Button onClick={drawnerClose} type="primary">
+						<Button onClick={closeConfirm} type="primary">
 							Cerrar
 						</Button>
 					</div>
@@ -229,11 +246,11 @@ function RegistrarProductos(props) {
 			>
 				{accion === true ? (
 					<IdProductoContext.Provider value={productoID}>
-						<ActualizarProducto />
+						<ActualizarProducto reloadProductos={[ reload, setReload ]} />
 					</IdProductoContext.Provider>
 				) : (
 					<StepsProvider value={[ disabled, setDisabled ]}>
-						<RegistrarProducto />
+						<RegistrarProducto reloadProductos={[ reload, setReload ]} />
 					</StepsProvider>
 				)}
 			</Drawer>

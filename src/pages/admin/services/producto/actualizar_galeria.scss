@@ -71,9 +71,9 @@
     cursor: pointer;
     color: white;
 }
-.imgPreview {
-    width: 100%!important;
-    height: 100%!important;
+.imgPreview-actualizar-galeria {
+    width: 100%;
+    height: 400px;
 }
 .imgUploads {
     width: 150px;
@@ -85,8 +85,8 @@
 .ant-upload-list-text{
     display: none;
 }
-.imagen{
-    height: 100%;
+.imagen-actualizar-galeria{
+    max-height: 100%;
     max-width: 100%;
 }
 .padre-iconos{
