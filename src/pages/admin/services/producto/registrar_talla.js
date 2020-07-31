@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Row, Col, Badge, message } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Form, Button, Input, Row, Col, Badge, notification, Spin } from 'antd';
+import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
 import './registrar_talla.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 import { StepsContext } from '../../contexts/stepsContext';
 
-const key = 'updatable';
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 function RegistrarTalla() {
 	const [ form ] = Form.useForm();
@@ -14,6 +14,7 @@ function RegistrarTalla() {
 	const [ productoContext, disabledForm ] = useContext(ProductoContext);
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	const [ productos, setProductos ] = useState([]);
+	const [ loading, setLoading ] = useState(false);
 
 	const [ datos, setDatos ] = useState({
 		talla: '',
@@ -28,85 +29,99 @@ function RegistrarTalla() {
 	};
 
 	const subirTalla = async () => {
-		message.loading({ content: 'En proceso...', key });
-		const respuesta = await clienteAxios.post(`/productos/addTalla/${productoContext}`, datos, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!respuesta.data.err) {
+		setLoading(true);
+		await clienteAxios
+			.post(`/productos/addTalla/${productoContext}`, datos, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setLoading(false);
 				setDisabled(false);
 				obtenerTalla();
-                form.resetFields();
-				message.success({
-					content: respuesta.data.message,
-					key,
-					duration: 1
+				form.resetFields();
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-                content: 'Hubo un error',
-                key,
-                duration: 3,
-            });
-		}
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
 	};
 
 	const eliminarTalla = async (idtalla) => {
-		message.loading({ content: 'En proceso...', key });
-		const respuesta = await clienteAxios.delete(`/productos/action/${productoContext}/talla/${idtalla}`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!respuesta.data.err) {
+		setLoading(true);
+		await clienteAxios
+			.delete(`/productos/action/${productoContext}/talla/${idtalla}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setLoading(false);
 				obtenerTalla();
-				message.success({
-					content: respuesta.data.message,
-					key,
-					duration: 1
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-                content: 'Hubo un error',
-                key,
-                duration: 3,
-            });
-		}
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
 	};
 	const obtenerTalla = async () => {
-		const respuesta = await clienteAxios.get(`/productos/${productoContext}`);
-		try {
-			if (!respuesta.data.err) {
-				setProductos(respuesta.data.tallas);
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-                content: 'Hubo un error',
-                duration: 3,
-            });
-		}
+		await clienteAxios
+			.get(`/productos/${productoContext}`)
+			.then((res) => {
+				setProductos(res.data.tallas);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
 	};
 
 	if (productos !== 0) {
@@ -114,7 +129,10 @@ function RegistrarTalla() {
 			<div className="m-2">
 				<Badge count={tallas.cantidad} style={{ backgroundColor: '#52c41a' }}>
 					<div className="hover-delete d-flex text-center">
-						<p className="rounded p-2" style={{ backgroundColor: '#EEEEEE', fontSize: 40, minWidth: '60px', height: '56px'  }}>
+						<p
+							className="rounded p-2"
+							style={{ backgroundColor: '#EEEEEE', fontSize: 40, minWidth: '60px', height: '56px' }}
+						>
 							{tallas.talla}
 						</p>
 						<div className="icono rounded">
@@ -149,15 +167,16 @@ function RegistrarTalla() {
 								</Form.Item>
 							</Col>
 							<Col>
-								<Button disabled={disabledForm} type="dafault" htmlType="submit">
+								<Button disabled={disabledForm} type="dafault" htmlType="submit" loading={loading}>
 									Agregar
 								</Button>
+								{loading ? <Spin indicator={antIcon} /> : <div />}
 							</Col>
 						</Row>
 					</Input.Group>
 				</Form>
 			</div>
-            <h6 className="mensaje">Para eliminar manten presionado</h6>
+			<h6 className="mensaje">Para eliminar manten presionado</h6>
 			<div className="row">{render}</div>
 		</div>
 	);

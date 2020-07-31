@@ -1,23 +1,25 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, message } from 'antd';
-import { UploadOutlined, EyeOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons';
+import { Upload, Button, notification, Spin, Modal } from 'antd';
+import {
+	UploadOutlined,
+	EyeOutlined,
+	DeleteOutlined,
+	PictureOutlined,
+	LoadingOutlined,
+	ExclamationCircleOutlined
+} from '@ant-design/icons';
 import './registrar_galeria.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 
-const key = 'updatable';
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
+const { confirm } = Modal;
 
 function RegistrarGaleria() {
 	const token = localStorage.getItem('token');
 	const productoContext = useContext(ProductoContext);
 	const [ galeria, setGaleria ] = useState();
-
-	useEffect(
-		() => {
-			obtenerBD();
-		},
-		[ productoContext ]
-	);
+	const [ loading, setLoading ] = useState(false);
 
 	const props = {
 		beforeUpload: async (file) => {
@@ -29,87 +31,122 @@ function RegistrarGaleria() {
 	};
 
 	const subirBD = async (formData) => {
-		message.loading({ content: 'En proceso...', key });
-		const respuesta = await clienteAxios.post(`/galeria/nueva/${productoContext}`, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!respuesta.data.err) {
+		setLoading(true);
+		await clienteAxios
+			.post(`/galeria/nueva/${productoContext}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerBD();
-				message.success({
-					content: 'Listo!',
-					key,
-					duration: 1
+				setLoading(false);
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				key,
-				duration: 3
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 	const obtenerBD = async () => {
-		const respuesta = await clienteAxios.get(`/galeria/${productoContext}`);
-		try {
-			if (!respuesta.data.err) {
-				setGaleria(respuesta.data.imagenes);
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 3
+		await clienteAxios
+			.get(`/galeria/${productoContext}`)
+			.then((res) => {
+				setGaleria(res.data.imagenes);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 	const eliminarBD = async (idimagen) => {
-		const respuesta = await clienteAxios.delete(`/galeria/${productoContext}/imagen/${idimagen}`, {
-			headers: {
-				Authorization: `bearer ${token}`
+		setLoading(true);
+		await clienteAxios
+			.delete(`/galeria/${productoContext}/imagen/${idimagen}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				obtenerBD();
+				setLoading(false);
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
+				});
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	};
+
+	function showDeleteConfirm(idimagen) {
+		confirm({
+			title: 'Estás seguro de borrar esto?',
+			icon: <ExclamationCircleOutlined />,
+			okText: 'Si',
+			okType: 'danger',
+			cancelText: 'No',
+			onOk() {
+				eliminarBD(idimagen);
 			}
 		});
-		try {
-			if (!respuesta.data.err) {
-				obtenerBD();
-				message.success({
-					content: respuesta.data.message,
-					duration: 3
-				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 3
-			});
-		}
-	};
+	}
 
 	const [ prev, setPrev ] = useState('');
 	if (galeria !== undefined) {
 		var render = galeria.map((imagenes) => (
 			<div className="shadow rounded imgStyle d-inline-block">
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
-					<img className="img" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenes.url}`} alt="preview-imagen" />
+					<img
+						className="img"
+						src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenes.url}`}
+						alt="preview-imagen"
+					/>
 					<div className="iconos rounded">
 						<span
 							onClick={function() {
@@ -120,7 +157,7 @@ function RegistrarGaleria() {
 						</span>
 						<span
 							onClick={function() {
-								eliminarBD(imagenes._id);
+								showDeleteConfirm(imagenes._id);
 							}}
 						>
 							<DeleteOutlined style={{ fontSize: 20 }} className="eliminar" />
@@ -138,16 +175,21 @@ function RegistrarGaleria() {
 					<Button>
 						<UploadOutlined /> Upload
 					</Button>
+					{loading ? <Spin indicator={antIcon} /> : <div />}
 				</Upload>
 				<div className="padre">{render}</div>
 			</div>
 			<div className="col-sm-4 col-lg-6">
-				<div className="shadow rounded imgPreview d-flex justify-content-center align-items-center">
+				<div className="shadow rounded imgPreview-registrar-galeria d-flex justify-content-center align-items-center">
 					{prev === '' || galeria.length === 0 ? (
 						<PictureOutlined style={{ fontSize: 80 }} />
 					) : (
-						<img className="imagen" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/
-						${prev}`} alt="preview-imagen" />
+						<img
+							className="imagen-registrar-galeria"
+							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/
+						${prev}`}
+							alt="preview-imagen"
+						/>
 					)}
 				</div>
 			</div>

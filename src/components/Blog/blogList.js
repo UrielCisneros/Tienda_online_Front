@@ -5,10 +5,11 @@ import {Link} from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import './blogList.scss'
 
+
 const {confirm} = Modal;
 
 export default function blogList(props) {
-    const {blogs,setReloadBlog} = props;
+    const {blogs,setReloadBlog,showDrawer,setAccion,setInfoBlog} = props;
     const token = localStorage.getItem('token');
 
     const deleteBlog = blog => {
@@ -53,7 +54,7 @@ export default function blogList(props) {
             <List
                 itemLayout="horizontal"
                 dataSource={blogs.docs}
-                renderItem={blog => <Blog blog={blog} deleteBlog={deleteBlog}/>}
+                renderItem={blog => <Blog blog={blog} deleteBlog={deleteBlog} showDrawer={showDrawer} setAccion={setAccion} setInfoBlog={setInfoBlog} />}
             />
         </div>
     )
@@ -61,7 +62,7 @@ export default function blogList(props) {
 
 
 function Blog(props){
-    const {blog,deleteBlog} = props;
+    const {blog,deleteBlog,showDrawer,setAccion,setInfoBlog} = props;
 
     return(
         <List.Item
@@ -71,7 +72,13 @@ function Blog(props){
                         <EyeOutlined /> Ver
                     </Button>
                 </Link>,
-                <Button type="dashed">
+                <Button type="dashed" onClick={() => {
+                    console.log(blog);
+                    setInfoBlog(blog);
+                    setAccion(true);
+                    showDrawer();
+                    
+                }}>
                     <EditOutlined /> Editar
                 </Button>,
                 <Button type="dashed" danger onClick={() => deleteBlog(blog)}>

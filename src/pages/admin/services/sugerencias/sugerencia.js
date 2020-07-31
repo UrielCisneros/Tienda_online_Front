@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Button, Input, Space, message, Modal, List, Avatar, Card, Spin } from 'antd';
+import { Button, Input, Space, notification, Modal, List, Avatar, Card, Result } from 'antd';
+import Spin from '../../../../components/Spin';
 import { IdProductoContext } from '../../contexts/ProductoContext';
-import InfiniteScroll from 'react-infinite-scroller';
 import './sugerencia.scss';
 
 const { Search } = Input;
@@ -19,13 +19,7 @@ const Sugerencia = () => {
 	const [ productoSugerido, setProductoSugerido ] = useState([]);
 	//modal para crear un producto sugerido
 	const [ modalVisible, setModalVisible ] = useState(false);
-	const [ search, setSearch ] = useState('');
 	const [ loading, setLoading ] = useState(false);
-	const [ productosFiltrados, setProductosFiltrados ] = useState([]);
-
-	//infinite scroll
-	const [ loadingScroll, setLoadingScroll ] = useState(false);
-	const [ hasMore, setHasMore ] = useState(true);
 
 	///state para saber si va a actualizar o registrar
 	const [ actualizar, setActualizar ] = useState(false);
@@ -41,68 +35,112 @@ const Sugerencia = () => {
 		[ productoContext ]
 	);
 
-	useEffect(
-		() => {
-			setProductosFiltrados(
-				productos.filter((producto) => {
-					return producto.nombre.toLowerCase().includes(search.toLowerCase());
-				})
-			);
-		},
-		[ search, productos ]
-	);
-
+	const obtenerProductosFiltrados = async (busqueda) => {
+		setLoadingPrincipal(true);
+		await clienteAxios
+			.get(`/productos/search/${busqueda}`)
+			.then((res) => {
+				setProductos(res.data.posts);
+				setLoadingPrincipal(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoadingPrincipal(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoadingPrincipal(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	};
 	///*** OBTENER DATOS DE LA BASE DE DATOS
 	const obtenerTodosProductos = async () => {
-		const res = await clienteAxios.get(`/productos/`);
-		try {
-			setProductos(res.data.posts.docs);
-		} catch (err) {
-			console.log(err);
-			message.error({
-				content: 'Hubo un error al obtener productos',
-				duration: 2
+		setLoadingPrincipal(true);
+		await clienteAxios
+			.get(`/productos/`)
+			.then((res) => {
+				setProductos(res.data.posts.docs);
+				setLoadingPrincipal(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoadingPrincipal(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoadingPrincipal(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const obtenerProducto = async () => {
-		const res = await clienteAxios.get(`/productos/${productoContext}`);
-		try {
-			setProducto(res.data);
-		} catch (err) {
-			console.log(err);
-			message.error({
-				content: 'Hubo un error al obtener producto',
-				duration: 2
+		await clienteAxios
+			.get(`/productos/${productoContext}`)
+			.then((res) => {
+				setProducto(res.data);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const obtenerSugerencia = async () => {
 		setLoadingPrincipal(true);
-		const res = await clienteAxios.get(`/sugerencia/${productoContext}`);
-		try {
-			if (!res.data.err) {
-				if (!res.data.message) {
-					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
+		await clienteAxios
+			.get(`/sugerencia/${productoContext}`)
+			.then((res) => {
+				res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
+				setLoadingPrincipal(false);
+				console.log(res)
+			})
+			.catch((res) => {
+				if (res.response.status === 404) {
 					setLoadingPrincipal(false);
+					setSugerencia('No hay sugerencia')
+				} else if (res.response.status === 500) {
+					setLoadingPrincipal(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
 				} else {
-					setSugerencia('No hay sugerencia');
 					setLoadingPrincipal(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
 				}
-			} else {
-				message.error({
-					content: res.data.message,
-					duration: 2
-				});
-			}
-		} catch (err) {
-			message.error({
-				content: 'Hubo un error al obtener sugerencia',
-				duration: 2
 			});
-		}
 	};
 	///// CREAR, ACTUALIZAR Y ELIMINAR SUGERENCIAS DE LA BASE DE DATOS
 	const crearSugerencia = async () => {
@@ -115,33 +153,39 @@ const Sugerencia = () => {
 				}
 			]
 		};
-		const res = await clienteAxios.post(`/sugerencia/nueva/${productoContext}`, datos, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				message.success({
-					content: 'Hecho!',
-					duration: 2
-				});
+		await clienteAxios
+			.post(`/sugerencia/nueva/${productoContext}`, datos, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				setModalVisible(false);
 				obtenerSugerencia();
 				setLoading(false);
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (err) {
-			setLoading(false);
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const actualizarSugerencia = async () => {
@@ -154,61 +198,71 @@ const Sugerencia = () => {
 				}
 			]
 		};
-		const res = await clienteAxios.put(`/sugerencia/${productoContext}`, datos, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				message.success({
-					content: 'Hecho! Sugerencia actualizada',
-					duration: 2
-				});
+		await clienteAxios
+			.put(`/sugerencia/${productoContext}`, datos, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				setModalVisible(false);
 				obtenerSugerencia();
 				setLoading(false);
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (err) {
-			setLoading(false);
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const eliminarSugerencia = async () => {
-		const res = await clienteAxios.delete(`/sugerencia/${productoContext}`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (res.data.message === 'Sugerencia de compra eliminada') {
-				message.success({
-					content: res.data.message,
-					duration: 2
-				});
+		await clienteAxios
+			.delete(`/sugerencia/${productoContext}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerSugerencia();
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (err) {
-			console.log(err);
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	/////MODAL
@@ -224,7 +278,7 @@ const Sugerencia = () => {
 		setModalVisible(false);
 	};
 
-	const render = productosFiltrados.map((productos) => (
+	const render = productos.map((productos) => (
 		<List.Item
 			actions={[
 				<Button
@@ -246,11 +300,7 @@ const Sugerencia = () => {
 	));
 
 	if (loadingPrincipal) {
-		return (
-			<div className="d-flex justify-content-center align-items-center">
-				<Spin size="large" />
-			</div>
-		);
+		return <Spin />;
 	}
 
 	return (
@@ -276,18 +326,26 @@ const Sugerencia = () => {
 				<p>Elige un producto que quieres sugerir</p>
 				<Search
 					placeholder="Busca un producto"
-					onChange={(e) => setSearch(e.target.value)}
-					style={{ width: 300, height: 40, marginBottom: 10 }}
+					onSearch={(value) => obtenerProductosFiltrados(value)}
+					style={{ width: 350, height: 40, marginBottom: 10 }}
+					enterButton="Buscar"
+					size="large"
 				/>
-				<InfiniteScroll
-					initialLoad={false}
-					pageStart={0}
-					loadMore={obtenerTodosProductos}
-					hasMore={!loading && hasMore}
-					useWindow={false}
-				>
-					<List>{render}</List>
-				</InfiniteScroll>
+				{loadingPrincipal ? (
+					<Spin />
+				) : productos.length === 0 ? (
+					<div className="w-100 d-flex justify-content-center align-items-center">
+						<Result
+							status="404"
+							title="Articulo no encontrado"
+							subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+						/>
+					</div>
+				) : loadingPrincipal ? (
+					<Spin size="large" />
+				) : (
+					<List className="contenedor-lista">{render}</List>
+				)}
 			</Modal>
 			<div>
 				<p className="text-center" style={{ fontSize: 20 }}>

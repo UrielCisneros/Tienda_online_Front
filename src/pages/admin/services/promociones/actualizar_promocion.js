@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Button, Input, Space, Upload, Spin, message } from 'antd';
+import { Button, Input, Space, Upload, Spin, notification } from 'antd';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import './registrar_promocion.scss';
 
@@ -42,136 +42,167 @@ const ActualizarPromocion = () => {
 	};
 
 	const obtenerPromocion = async () => {
-		const res = await clienteAxios.get(`/productos/promocion/${productoContext}`);
-		try {
-			setProducto(res.data.productoPromocion);
-			setPromocion(res.data);
-			setLoading(false);
-		} catch (err) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+		await clienteAxios
+			.get(`/productos/promocion/${productoContext}`)
+			.then((res) => {
+				setProducto(res.data.productoPromocion);
+				setPromocion(res.data);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const subirImagen = async (formDataImagen) => {
 		setLoadingButton(true);
-		const res = await clienteAxios.put(`/productos/promocion/${productoContext}`, formDataImagen, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				message.success({
-					content: 'imagen guardada',
-					duration: 2
-				});
+		await clienteAxios
+			.put(`/productos/promocion/${productoContext}`, formDataImagen, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerPromocion();
 				setLoadingButton(false);
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (err) {
-			message.error({
-				content: 'hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const actualizarImagen = async (formDataImagen) => {
 		setLoadingButton(true);
-		const res = await clienteAxios.put(`/productos/promocion/${productoContext}`, formDataImagen, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				message.success({
-					content: res.data.message,
-					duration: 2
-				});
+		await clienteAxios
+			.put(`/productos/promocion/${productoContext}`, formDataImagen, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerPromocion();
 				setLoadingButton(false);
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (err) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const eliminarImagen = async () => {
 		setLoadingButton(true);
-		const res = await clienteAxios.delete(`/productos/promocion/EliminarImagen/${productoContext}`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				message.success({
-					content: res.data.message,
-					duration: 2
-				});
+		await clienteAxios
+			.delete(`/productos/promocion/EliminarImagen/${productoContext}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerPromocion();
 				setLoadingButton(false);
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (err) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const actualizarPromocion = async () => {
 		const formData = new FormData();
 		formData.append('precioPromocion', precioPromocion);
-		const res = await clienteAxios.put(`/productos/promocion/${productoContext}`, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				message.success({
-					content: res.data.message,
-					duration: 2
-				});
+		await clienteAxios
+			.put(`/productos/promocion/${productoContext}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerPromocion();
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (err) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	if (loading) {

@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
-import { Button, Input, Space, message, Modal, List, Spin, Row, Col, Upload } from 'antd';
-import { EyeOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Input, Space, Modal, List, Row, Col, Upload, Result, notification } from 'antd';
+import Spin from '../../components/Spin';
+import {
+	EyeOutlined,
+	EditOutlined,
+	DeleteOutlined,
+	PlusCircleOutlined,
+	ExclamationCircleOutlined
+} from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import CarouselImages from './services/carousel/carousel';
 
 const { Search } = Input;
+const { confirm } = Modal;
 
 function Carousel(props) {
 	const token = localStorage.getItem('token');
@@ -53,18 +61,30 @@ function Carousel(props) {
 
 	///*** OBTENER DATOS DE LA BASE DE DATOS
 	const obtenerCarouseles = async () => {
-		const res = await clienteAxios.get(`/carousel/`);
-		try {
-			res.data.forEach((item) => setProductoCarousel(item.producto));
-			setProductos(res.data);
-			setLoading(false);
-		} catch (err) {
-			setLoading(false);
-			message.error({
-				content: 'Hubo un error al obtener productos',
-				duration: 2
+		await clienteAxios
+			.get(`/carousel/`)
+			.then((res) => {
+				res.data.forEach((item) => setProductoCarousel(item.producto));
+				setProductos(res.data);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	///ACTUALIZAR IMAGEN
@@ -78,70 +98,72 @@ function Carousel(props) {
 
 	const actualizarImagen = async (formdata) => {
 		setLoadButton(true);
-		const res = await clienteAxios.put(`/carousel/${producto}/`, formdata, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				if (!res.data.message) {
-					obtenerCarouseles();
+		await clienteAxios
+			.put(`/carousel/${producto}/`, formdata, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				obtenerCarouseles();
+				setLoadButton(false);
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
+				});
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoadButton(false);
-					message.success({
-						content: 'Imagen actualizada!',
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
-                    setLoadButton(false);
-					message.error({
-						content: res.data.message,
+					setLoadButton(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
 						duration: 2
 					});
 				}
-			} else {
-                setLoadButton(false);
-				message.error({
-					content: res.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-            setLoadButton(false);
-			message.error({
-				content: 'Hubo un error',
-				duration: 3
 			});
-		}
 	};
 
 	///ELIMINAR IMAGEN
 	const eliminarImagen = async (productoID) => {
-		const res = await clienteAxios.delete(`/carousel/${productoID}/`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.delete(`/carousel/${productoID}/`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerCarouseles();
-				message.success({
-					content: res.data.message,
-					duration: 1
-				});
-			} else {
-				message.error({
-					content: res.data.message,
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
 					duration: 2
 				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	const showModal = () => {
@@ -156,6 +178,22 @@ function Carousel(props) {
 	}
 	function showModalCrear() {
 		setModalCrearVisible(true);
+	}
+
+	function showDeleteConfirm(productoID) {
+		confirm({
+			title: 'estas seguro de eliminar esto?',
+			icon: <ExclamationCircleOutlined />,
+			okText: 'Si',
+			okType: 'danger',
+			cancelText: 'No',
+			onOk() {
+				eliminarImagen(productoID);
+			},
+			onCancel() {
+				console.log('Cancel');
+			}
+		});
 	}
 
 	const render = productosFiltrados.map((productos) => (
@@ -185,7 +223,7 @@ function Carousel(props) {
 							}}
 						>
 							<EditOutlined />
-							Actualizar Imagen
+							Actualizar
 						</Button>
 					</Upload>
 					<Button
@@ -193,7 +231,7 @@ function Carousel(props) {
 						style={{ fontSize: 16 }}
 						danger
 						onClick={() => {
-							eliminarImagen(productos.producto._id);
+							showDeleteConfirm(productos.producto._id);
 						}}
 					>
 						<DeleteOutlined />
@@ -224,26 +262,20 @@ function Carousel(props) {
 		</List.Item>
 	));
 
-	if (loading) {
-		return (
-			<div className="d-flex justify-content-center align-items-center">
-				<Spin size="large" />
-			</div>
-		);
-	}
-
 	return (
 		<div>
 			<p>
-				En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso
-				de que no existan promociones, si no existen promociones apareceran esta imagen
+				En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso de que
+				no existan promociones, si no existen promociones apareceran esta imagen
 			</p>
 			<Row justify="center mt-5">
 				<Col>
 					<Search
 						placeholder="Busca un producto"
 						onChange={(e) => setSearch(e.target.value)}
-						style={{ width: 300, height: 40, marginBottom: 10 }}
+						style={{ width: 350, height: 40, marginBottom: 10 }}
+						size="large"
+						enterButton="Buscar"
 					/>
 				</Col>
 				<Col>
@@ -258,8 +290,19 @@ function Carousel(props) {
 					</Button>
 				</Col>
 			</Row>
-			<List>{render}</List>
-
+			{loading ? (
+				<Spin />
+			) : productosFiltrados.length === 0 ? (
+				<div className="w-100 d-flex justify-content-center align-items-center">
+					<Result
+						status="404"
+						title="Articulo no encontrado"
+						subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+					/>
+				</div>
+			) : (
+				<List>{render}</List>
+			)}
 			<Modal
 				title={prodcutoCarousel.nombre}
 				visible={modalVisible}
@@ -275,12 +318,12 @@ function Carousel(props) {
 				/>
 			</Modal>
 
-            <Modal
+			<Modal
 				title="Crear nueva promocion para el Carousel"
 				visible={modalCrearVisible}
 				onCancel={closeModalCrear}
-                footer={false}
-                centered
+				footer={false}
+				centered
 				width={800}
 				style={{ top: 20 }}
 			>

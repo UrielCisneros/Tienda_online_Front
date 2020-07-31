@@ -49,10 +49,14 @@ p{
     display: none;
 }
 .imagen-preview-carousel{
-    height: 400px;
+    height: 200px;
 }
 .boton-subir-imagen-carousel{
     margin-top: 13px;
     width: 150px;
     height: 150px;
+}
+.contenedor-lista{
+    height: 250px;
+    overflow-y: scroll;
 }

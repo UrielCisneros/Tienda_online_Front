@@ -13,31 +13,33 @@ const tailLayout = {
 
 function Registro(props) {
 	const onFinish = async (values) => {
-		const res = await clienteAxios.post('/cliente/', values);
-		try {
-			if (!res.data.user) {
-				notification['error']({
-					message: 'Error',
-					description: res.data.message,
-					duration: 2
-				});
-			} else {
-				const token = res.data.user;
+		await clienteAxios
+			.post('/cliente/', values)
+			.then((res) => {
+				const token = res.data.token;
 				localStorage.setItem('token', token);
 				props.history.push('/');
 				notification['success']({
-					message: 'Hecho!',
+					message: 'Bienvenido!',
 					description: 'Te has registrado correctamente',
-					duration: 3
+					duration: 2
 				});
-			}
-		} catch (error) {
-			notification['error']({
-				message: 'Error',
-				description: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification['error']({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification['error']({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	return (

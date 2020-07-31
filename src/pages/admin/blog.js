@@ -9,6 +9,11 @@ import clienteAxios from '../../config/axios';
 import Spin from '../../components/Spin';
 import BlogsList from '../../components/Blog/blogList';
 import Pagination from '../../components/Pagination/pagination';
+import { BlogContext } from './contexts/BlogContext';
+import ActualizarBlog from './services/blog/ActualizarBlog';
+import RegistrarBlog from './services/blog/RegistrarBlog';
+
+
 
 
 function BlogAdmin(props) {
@@ -18,10 +23,14 @@ function BlogAdmin(props) {
     const {page = 1} = queryString.parse(location.search);
     
     //Uses
+    const [ accion, setAccion ] = useState(false);
     const [ loading, setLoading ] = useState(false);
     const [visible, setVisible] = useState(false);
     const [blogs,setBlogs] = useState([]);
     const [reloadBlog, setReloadBlog] = useState(false);
+
+    const [infoBlog,setInfoBlog] = useState([]);
+    
 
     //Obtener token de localStorage
     const token = localStorage.getItem('token')
@@ -85,41 +94,61 @@ function BlogAdmin(props) {
     }
 
     return (
-        <div className="blog">
-            <Drawer
-				title={'This drawer'}
-				width={window.screen.width > 768 ? 1000 : window.screen.width}
-				placement={'right'}
-				onClose={drawnerClose}
-				visible={visible}
-				bodyStyle={{ paddingBottom: 80 }}
-				footer={
-					<div
-						style={{
-							textAlign: 'right'
-						}}
-					>
-						<Button onClick={drawnerClose} type="primary">
-							Cerrar
-						</Button>
-					</div>
-				}
-			>
-            </Drawer>
-            
-            <div className="blog__add-post">
-                <Button 
-                    type="primary"
-                    size="large"
-                    onClick={showDrawer}
-                    className="ml-3"
-                    icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}>
-                        Agregar Blog
-                </Button>
+            <div className="blog">
+                <Drawer
+                    title={accion === true ? 'Actualizar Blog' : 'Registra nuevo Blog'}
+                    width={window.screen.width > 768 ? 1000 : window.screen.width}
+                    placement={'right'}
+                    onClose={drawnerClose}
+                    visible={visible}
+                    bodyStyle={{ paddingBottom: 80 }}
+                    footer={
+                        <div
+                            style={{
+                                textAlign: 'right'
+                            }}
+                        >
+                            <Button onClick={drawnerClose} type="primary">
+                                Cerrar
+                            </Button>
+                        </div>
+                    }
+                >
+                    { accion === true ? (
+                        <BlogContext.Provider value={infoBlog}>
+                            <ActualizarBlog/>
+                        </BlogContext.Provider>
+                    
+                    ):(<RegistrarBlog setReloadBlog={setReloadBlog} />)}
+                </Drawer>
+                
+                <div className="blog__add-post">
+                    <Button 
+                        type="primary"
+                        size="large"
+                        onClick={() => {
+                            setAccion(false);
+                            showDrawer()
+                        }}
+                        className="ml-3"
+                        icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}>
+                            Agregar Blog
+                    </Button>
+                </div>
+                <BlogsList 
+                    blogs={blogs} 
+                    setReloadBlog={setReloadBlog} 
+                    showDrawer={showDrawer} 
+                    setAccion={setAccion} 
+                    setInfoBlog={setInfoBlog} 
+                />
+
+                <Pagination 
+                    blogs={blogs} 
+                    location={location}  
+                    history={history}
+                />
             </div>
-            <BlogsList blogs={blogs} setReloadBlog={setReloadBlog}/>
-            <Pagination blogs={blogs} location={location}  history={history}/>
-        </div>
     )
 }
 export default withRouter(BlogAdmin);

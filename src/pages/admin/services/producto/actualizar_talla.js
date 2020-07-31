@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Row, Col, Badge, message } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Form, Button, Input, Row, Col, Badge, notification, Spin, Space } from 'antd';
+import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import './actualizar_tallas.scss';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 
-const key = 'updatable';
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 function ActualizarTalla() {
 	const [ form ] = Form.useForm();
@@ -13,14 +13,18 @@ function ActualizarTalla() {
 	const productoID = useContext(IdProductoContext);
 	const [ productos, setProductos ] = useState([]);
 	const [ idTalla, setIdTalla ] = useState('');
+	const [ loading, setLoading ] = useState(false);
 	const [ datos, setDatos ] = useState({
 		talla: '',
 		cantidad: ''
 	});
 
-	useEffect(() => {
-		obtenerTalla();
-	}, []);
+	useEffect(
+		() => {
+			obtenerTalla();
+		},
+		[ productoID ]
+	);
 
 	const datosForm = (e) => {
 		setDatos({
@@ -29,137 +33,172 @@ function ActualizarTalla() {
 		});
 	};
 
-	async function actualizarTalla(){
-		message.loading({ content: 'En proceso...', key });
-		const res = await clienteAxios.put(`/productos/action/${productoID}/talla/${idTalla}`, datos, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
+	async function actualizarTalla() {
+		setLoading(true);
+		await clienteAxios
+			.put(`/productos/action/${productoID}/talla/${idTalla}`, datos, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				obtenerTalla();
+				setLoading(false);
+				form.resetFields();
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
+				});
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	}
+	async function nuevaTalla() {
+		setLoading(true);
+		await clienteAxios
+			.post(`/productos/addTalla/${productoID}`, datos, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setIdTalla('');
+				setLoading(false);
 				obtenerTalla();
 				form.resetFields();
-				message.success({
-					content: res.data.message,
-					key,
-					duration: 1
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: res.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				key,
-				duration: 3,
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					setIdTalla('');
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					setIdTalla('');
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	}
-	async function nuevaTalla(){
-		message.loading({ content: 'En proceso...', key });
-		const res = await clienteAxios.post(`/productos/addTalla/${productoID}`, datos, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
+	async function eliminarTalla(idTalla) {
+		setLoading(true);
+		await clienteAxios
+			.delete(`/productos/action/${productoID}/talla/${idTalla}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
 				obtenerTalla();
-                form.resetFields();
-				message.success({
-					content: res.data.message,
-					key,
-					duration: 1
+				setLoading(false);
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: res.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-                content: 'Hubo un error',
-                key,
-                duration: 3,
-            });
-		}
-	}
-	async function eliminarTalla(idTalla){
-		message.loading({ content: 'En proceso...', key });
-		const res = await clienteAxios.delete(`/productos/action/${productoID}/talla/${idTalla}`, {
-			headers: {
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!res.data.err) {
-				obtenerTalla();
-				message.success({
-					content: res.data.message,
-					key,
-					duration: 1
-				});
-			} else {
-				message.error({
-					content: res.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-                content: 'Hubo un error',
-                key,
-                duration: 3,
-            });
-		}
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
 	}
 	async function obtenerTalla() {
-		const res = await clienteAxios.get(`/productos/${productoID}`);
-		try {
-			if (!res.data.err) {
+		await clienteAxios
+			.get(`/productos/${productoID}`)
+			.then((res) => {
 				setProductos(res.data.tallas);
-			} else {
-				message.error({
-					content: res.data.message,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			message.error({
-				content: 'Hubo un error',
-				duration: 3
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	}
 
 	const rellenarCampos = (talla, cantidad, idTallas) => {
 		setIdTalla(idTallas);
-		setDatos({...datos, talla, cantidad })
+		setDatos({ ...datos, talla, cantidad });
 		form.setFieldsValue({
 			talla,
 			cantidad
-		})
-	}
+		});
+	};
 
 	if (productos !== 0) {
 		var render = productos.map((tallas) => (
 			<div className="mb-5 m-2">
 				<Badge count={tallas.cantidad} style={{ backgroundColor: '#52c41a' }}>
 					<div className="hover-delete d-flex text-center">
-						<p className="rounded p-2" style={{ backgroundColor: '#EEEEEE', fontSize: 40, minWidth: '60px', height: '56px' }}>
+						<p
+							className="rounded p-2"
+							style={{ backgroundColor: '#EEEEEE', fontSize: 40, minWidth: '60px', height: '56px' }}
+						>
 							{tallas.talla}
 						</p>
 						<div className="icono rounded d-flex justify-content-around">
-							<EditOutlined onClick={function() {rellenarCampos(tallas.talla, tallas.cantidad, tallas._id)}} style={{ fontSize: 20, color: 'white' }} />
-							<DeleteOutlined onClick={function() {eliminarTalla(tallas._id)}} style={{ fontSize: 20, color: 'white' }} />
+							<EditOutlined
+								onClick={function() {
+									rellenarCampos(tallas.talla, tallas.cantidad, tallas._id);
+								}}
+								style={{ fontSize: 20, color: 'white' }}
+							/>
+							<DeleteOutlined
+								onClick={function() {
+									eliminarTalla(tallas._id);
+								}}
+								style={{ fontSize: 20, color: 'white' }}
+							/>
 						</div>
 					</div>
 				</Badge>
@@ -184,14 +223,29 @@ function ActualizarTalla() {
 								</Form.Item>
 							</Col>
 							<Col>
-								<Button type="dafault" htmlType="submit">
-									Actualizar
-								</Button>
-							</Col>
-							<Col>
-								<Button type="dafault" onClick={nuevaTalla}>
-									Agregar
-								</Button>
+								{idTalla ? (
+									<div>
+										<Space>
+											<Button type="dafault" htmlType="submit">
+												Actualizar
+											</Button>
+											<Button
+												type="dafault"
+												onClick={() => {
+													setIdTalla('');
+													form.resetFields();
+												}}
+											>
+												Cancelar
+											</Button>
+										</Space>
+									</div>
+								) : (
+									<Button type="dafault" onClick={nuevaTalla}>
+										Agregar
+									</Button>
+								)}
+								{loading ? <Spin indicator={antIcon} /> : <div />}
 							</Col>
 						</Row>
 					</Input.Group>

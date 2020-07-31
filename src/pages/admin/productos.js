@@ -3,29 +3,36 @@ import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import RegistrarProducto from './services/producto/registrar_producto';
 import ActualizarProducto from './services/producto/actualizar_producto';
-import { Card, Col, Row, Input, Spin, Button, Modal, Drawer, message } from 'antd';
+import { Card, Col, Row, Input, Button, Modal, Drawer, Result, notification } from 'antd';
+import Spin from '../../components/Spin';
+import Pagination from '../../components/Pagination/pagination';
 import { StepsContext, StepsProvider } from '../admin/contexts/stepsContext';
 import { IdProductoContext } from './contexts/ProductoContext';
 import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
+import queryString from 'query-string';
 
 const { Search } = Input;
 const { confirm } = Modal;
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
 function RegistrarProductos(props) {
+	//Tomar la paginacion actual
+	const { location, history } = props;
+	const { page = 1 } = queryString.parse(location.search);
+
 	const [ productoID, setProductoID ] = useState('');
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	const [ productos, setProductos ] = useState([]);
+	const [ productosRender, setProductosRender ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
-	const [ search, setSearch ] = useState('');
-	const [ productosFiltrados, setProductosFiltrados ] = useState([]);
 	const [ visible, setVisible ] = useState(false);
 	const [ accion, setAccion ] = useState(false);
+	const [ reload, setReload ] = useState(false);
 	const token = localStorage.getItem('token');
 
-	var decoded = Jwt(token) 
-	
+	var decoded = Jwt(token);
+
 	function Jwt(token) {
 		try {
 			return jwt_decode(token);
@@ -42,6 +49,7 @@ function RegistrarProductos(props) {
 
 	function drawnerClose() {
 		setVisible(false);
+		setReload(true);
 	}
 	function setActualizar() {
 		setAccion(true);
@@ -50,7 +58,20 @@ function RegistrarProductos(props) {
 	function setRegistrar() {
 		setAccion(false);
 		setVisible(true);
-	}           
+	}
+
+	function closeConfirm() {
+		confirm({
+			title: 'Estás seguro de cerrar esta ventana?',
+			icon: <ExclamationCircleOutlined />,
+			okText: 'Si',
+			okType: 'danger',
+			cancelText: 'No',
+			onOk() {
+				drawnerClose();
+			}
+		});
+	}
 
 	function showDeleteConfirm(idproducto) {
 		confirm({
@@ -61,78 +82,103 @@ function RegistrarProductos(props) {
 			okType: 'danger',
 			cancelText: 'No',
 			async onOk() {
-				const respuesta = await clienteAxios.delete(`/productos/${idproducto}`, {
-					headers: {
-						Authorization: `bearer ${token}`
-					}
-				});
-				try {
-					if (!respuesta.data.err) {
-						obtenerProductos();
-						message.success({
-							content: respuesta.data.message,
-							duration: 3
+				await clienteAxios
+					.delete(`/productos/${idproducto}`, {
+						headers: {
+							Authorization: `bearer ${token}`
+						}
+					})
+					.then((res) => {
+						obtenerProductos(8, page);
+						notification.success({
+							message: res.data.message,
+							duration: 2
 						});
-					} else {
-						message.error({
-							content: respuesta.data.message,
-							duration: 3
-						});
-					}
-				} catch (error) {
-					message.error({
-						content: 'Hubo un error',
-						duration: 3
+					})
+					.catch((res) => {
+						if (res.response.status === 404 || res.response.status === 500) {
+							notification.error({
+								message: 'Error',
+								description: res.response.data.message,
+								duration: 2
+							});
+						} else {
+							notification.error({
+								message: 'Error',
+								description: 'Hubo un error',
+								duration: 2
+							});
+						}
 					});
-				}
 			}
 		});
 	}
 
-	const obtenerProductos = async () => {
+	const obtenerProductosFiltrados = async (busqueda) => {
 		setLoading(true);
-		clienteAxios
-			.get('/productos')
+		await clienteAxios
+			.get(`/productos/search/${busqueda}`)
 			.then((res) => {
-				if(!res.data.err){
-					setProductos(res.data.posts.docs);
-					 setLoading(false); 
-				 }else{
-					 message.error({
-						 content: res.data.message,
-						 duration: 2
-					 });
-				 }
+				setProductosRender(res.data.posts);
+				setProductos(res.data.posts);
+				setLoading(false);
 			})
-			.catch((err) => {
-				console.log(err);
-				message.error({
-					content: 'hubo un error',
-					duration: 2
-				});
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
 	};
 
-	useEffect(() => {
-		obtenerProductos();
-	}, []);
+	const obtenerProductos = async (limit, page) => {
+		setLoading(true);
+		await clienteAxios
+			.get(`/productos?limit=${limit}&page=${page}`)
+			.then((res) => {
+				setProductosRender(res.data.posts.docs);
+				setProductos(res.data.posts);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	};
 
 	useEffect(
 		() => {
-			setProductosFiltrados(
-				productos.filter((producto) => {
-					return producto.nombre.toLowerCase().includes(search.toLowerCase());
-				})
-			);
+			obtenerProductos(8, page);
+			setReload(false);
 		},
-		[ search, productos ]
+		[ page, reload ]
 	);
 
-	if (loading) {
-		return <Spin size="large" />;
-	}
-
-	const render = productosFiltrados.map((productos) => (
+	const render = productosRender.map((productos) => (
 		<Col span={32} key={productos.id}>
 			<Card.Grid hoverable style={gridStyle}>
 				<Card
@@ -158,6 +204,7 @@ function RegistrarProductos(props) {
 						>
 							<EditOutlined style={{ fontSize: 22 }} />Actualizar
 						</Button>,
+
 						<Button
 							type="link"
 							onClick={() => showDeleteConfirm(productos._id)}
@@ -169,7 +216,7 @@ function RegistrarProductos(props) {
 				>
 					<div style={{ height: 100 }}>
 						<h1 className="h4">{productos.nombre}</h1>
-						<h2 className="h5">{new Intl.NumberFormat().format(productos.precio)}</h2>
+						<h2 className="h5">{new Intl.NumberFormat('es-MX').format(productos.precio)}</h2>
 					</div>
 				</Card>
 			</Card.Grid>
@@ -182,7 +229,7 @@ function RegistrarProductos(props) {
 				title={accion === true ? 'Actualizar un producto' : 'Registra un nuevo producto'}
 				width={window.screen.width > 768 ? 1000 : window.screen.width}
 				placement={'right'}
-				onClose={drawnerClose}
+				onClose={closeConfirm}
 				visible={visible}
 				bodyStyle={{ paddingBottom: 80 }}
 				footer={
@@ -191,7 +238,7 @@ function RegistrarProductos(props) {
 							textAlign: 'right'
 						}}
 					>
-						<Button onClick={drawnerClose} type="primary">
+						<Button onClick={closeConfirm} type="primary">
 							Cerrar
 						</Button>
 					</div>
@@ -199,11 +246,11 @@ function RegistrarProductos(props) {
 			>
 				{accion === true ? (
 					<IdProductoContext.Provider value={productoID}>
-						<ActualizarProducto />
+						<ActualizarProducto reloadProductos={[ reload, setReload ]} />
 					</IdProductoContext.Provider>
 				) : (
 					<StepsProvider value={[ disabled, setDisabled ]}>
-						<RegistrarProducto />
+						<RegistrarProducto reloadProductos={[ reload, setReload ]} />
 					</StepsProvider>
 				)}
 			</Drawer>
@@ -211,8 +258,10 @@ function RegistrarProductos(props) {
 				<Col>
 					<Search
 						placeholder="Busca un producto"
-						onChange={(e) => setSearch(e.target.value)}
-						style={{ width: 300, height: 40, marginBottom: 10 }}
+						onSearch={(value) => obtenerProductosFiltrados(value)}
+						style={{ width: 350, height: 40, marginBottom: 10 }}
+						enterButton="Buscar"
+						size="large"
 					/>
 				</Col>
 				<Col>
@@ -228,9 +277,24 @@ function RegistrarProductos(props) {
 				</Col>
 			</Row>
 
-			<Row gutter={24} style={{ maxWidth: '90vw' }} className="mt-4">
-				{render}
+			<Row gutter={8} style={{ maxWidth: '90vw' }} className="mt-4 d-flex justify-content-center">
+				{loading ? (
+					<Spin />
+				) : productos.length === 0 ? (
+					<div className="w-100 d-flex justify-content-center align-items-center">
+						<Result
+							status="404"
+							title="Articulo no encontrado"
+							subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+						/>
+					</div>
+				) : loading ? (
+					<Spin size="large" />
+				) : (
+					render
+				)}
 			</Row>
+			<Pagination blogs={productos} location={location} history={history} />
 		</div>
 	);
 }
