@@ -2,6 +2,12 @@ import React, { useEffect } from 'react'
 import {Helmet} from "react-helmet";
 import { withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode'
+import RegistroTienda from '../services/paginaTienda/RegistroTienda/RegistroTienda';
+import RegistroImagenCorporativa from '../services/paginaTienda/RegistroImagenCorporativa/RegistroImagenCorporativa';
+import RegistroPoliticas from '../services/paginaTienda/RegistroPoliticas/RegistroPoliticas';
+import MostrarRegistroTienda from '../services/paginaTienda/RegistroTienda/MostrarRegistroTienda';
+
+import './admin.scss';
 
 function Admin(props) {
     const token = localStorage.getItem('token')
@@ -28,7 +34,15 @@ function Admin(props) {
                 <title>Panel Principal</title>
             </Helmet>
             <div>
-                <h1>Registra la informacion de tu Empresa</h1>
+                <div>
+                    <MostrarRegistroTienda />
+                </div>
+                <div>
+                    <RegistroImagenCorporativa />
+                </div>
+                <div>
+                    <RegistroPoliticas />
+                </div>
             </div>
         </div>
     )
