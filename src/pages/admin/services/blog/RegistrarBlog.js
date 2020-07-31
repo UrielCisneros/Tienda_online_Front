@@ -14,6 +14,7 @@ export default function RegistrarBlog(props) {
     const [ upload, setUpload ] = useState(false);
     //Variables que guardan las imagenes
     const [ files, setFiles ] = useState([]);
+    const [ accion, setAccion ] = useState(false);
 
     var urlGuion = "";
 
@@ -36,54 +37,59 @@ export default function RegistrarBlog(props) {
                     description: 'La imagen es obligatoria',
                   })
             }else{
+                if(!accion){
+                    obtenerUrl(blogData.url)
+                }
                 const hide = message.loading('Accion en proceso....', 0);
                 setTimeout(hide, 2000);
                 const formData = new FormData();
-                formData.append('nombre', blogData.nombre);
-                formData.append('administrador', blogData.administrador);
-                formData.append('url',obtenerUrl(blogData.url));
-                formData.append('descripcion', blogData.descripcion);
-                formData.append('imagen', files);
-               
+                    formData.append('nombre', blogData.nombre);
+                    formData.append('administrador', blogData.administrador);
+                    formData.append('url',urlGuion);
+                    formData.append('descripcion', blogData.descripcion);
+                    formData.append('imagen', files);
+                
                 await clienteAxios.post('/blog/', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `bearer ${token}`
                     }
                 }).then((res) => {
-                    if(res.status === 200){
+                    console.log(res);
                         notification.success({
                             message: 'Registro exitoso',
                             description: res.data.message,
                           })
                           setReloadBlog(true);
-                          setVisible(false);
+                          setVisible(false);  
+                })
+                .catch((err) => {   
+                    console.log(err.response);                 
+                    setAccion(true);
+                    if(err.response.status === 500 || err.response.status === 404){
+                        notification.error({
+                            message: 'Error de conexion',
+                            description: err.response.data.message,
+                          })
                     }else{
                         notification.error({
-                            message: 'Error',
-                            description: res.data.message,
+                            message: 'Error de conexion',
+                            description: "Parece que algo salio mal, favor de intentarlo de nuevo",
                           })
-                    }   
-                })
-                .catch((err) => {
-                    notification.error({
-                        message: 'Error',
-                        description: "Error de conexion",
-                      })
-                    console.log(err);
+                    }
                 });
             }
     }
     //Funcion que quita los espacios y los remplasa por guiones
     function obtenerUrl(text){
         const datos = text.split(" ");
+        console.log(datos.length);
         for(var i = 0; i < datos.length; i++ ){
             if(datos.length - 1 === i){
                 urlGuion += datos[i];
             }else{
                 urlGuion += datos[i]+"-";
             }
-            
         }
         return urlGuion;
     }
@@ -132,7 +138,10 @@ export default function RegistrarBlog(props) {
                         <Input name="administrador" placeholder="Nombre del Autor" />
                     </Form.Item>
                 </Form.Item>
-                <Form.Item label="Url (Campo unico) " onChange={ e => setBlogData({ ...blogData, url: e.target.value })}>
+                <Form.Item label="Url (Campo unico) " onChange={ e => {
+                    setAccion(false);
+                    setBlogData({ ...blogData, url: e.target.value })
+                } }>
                     <Form.Item rules={[{ required: true, message: 'La url es obligatoria' }]} noStyle name="url">
                         <Input name="url" placeholder="Url del blog" />
                     </Form.Item>

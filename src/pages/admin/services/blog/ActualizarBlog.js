@@ -17,6 +17,8 @@ export default function ActualizarBlog(props) {
      //Variables que guardan las imagenes
      const [ files, setFiles ] = useState([]);
      const [ upload, setUpload ] = useState(false);
+
+     const [ accion, setAccion ] = useState(false);
      	///capturar datos maualmente}
 	const [ datos, setDatos ] = useState({
         nombre: blogContext.nombre,
@@ -85,17 +87,21 @@ export default function ActualizarBlog(props) {
                     description: 'Todos los datos son obligatorios',
                   })
             }else{
+                if(!accion){
+                    obtenerUrl(datos.url)
+                }else{
+                    urlGuion = blogContext.url;
+                }
                 const formData = new FormData();
-
                 if(files.length === 0){
                     formData.append('nombre', datos.nombre);
                     formData.append('administrador', datos.administrador);
-                    formData.append('url',obtenerUrl(datos.url));
+                    formData.append('url',urlGuion);
                     formData.append('descripcion', datos.descripcion);
                 }else{
                     formData.append('nombre', datos.nombre);
                     formData.append('administrador', datos.administrador);
-                    formData.append('url',obtenerUrl(datos.url));
+                    formData.append('url',urlGuion);
                     formData.append('descripcion', datos.descripcion);
                     formData.append('imagen', files);
                 }
@@ -106,31 +112,36 @@ export default function ActualizarBlog(props) {
                         Authorization: `bearer ${token}`
                     }
                 }).then((res) => {
-                    if(res.status === 200){
-                        notification.success({
-                            message: 'Actualizacion exitosa',
-                            description: res.data.message,
+                    notification.success({
+                        message: 'Actualizacion exitosa',
+                        description: res.data.message,
+                        })
+                        setReloadBlog(true);
+                        setVisible(false);
+                
+                })
+                .catch((err) => {
+                    setAccion(true);
+                    console.log(err.response);
+                    if(err.response.status === 500 || err.response.status === 400){
+                        notification.error({
+                            message: 'Error de conexion',
+                            description: err.response.data.message,
                           })
-                          setReloadBlog(true);
-                          setVisible(false);
                     }else{
                         notification.error({
                             message: 'Error',
-                            description: res.data.message,
+                            description: "Parece que algo salio mal, favor de intentaro de nuevo",
                           })
-                    }                    
-                })
-                .catch((err) => {
-                    notification.error({
-                        message: 'Error',
-                        description: "Error de conexion",
-                      })
-                    console.log(err);
+                    }
                 });
             }
         }
 
         const obtenerValores = (e) => {
+            if(e.target.name === "url"){
+                setAccion(false);
+            }
             setDatos({
                 ...datos,
                 [e.target.name]: e.target.value
