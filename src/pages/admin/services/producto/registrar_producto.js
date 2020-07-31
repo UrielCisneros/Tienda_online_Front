@@ -35,16 +35,18 @@ function RegistrarProducto(props) {
 	const [ disabledform, setDisabledForm ] = useState(true);
 	const [ disabledformProductos, setDisabledFormProductos ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
-	const [ reload, setReload ] = props.reloadProductos;
+	const  /* reload, setReload, */ closeDrawer = props.reloadProductos;
+	console.log(closeDrawer)
 
-	if (reload) {
+	if (closeDrawer) {
 		form.resetFields();
 	}
 	useEffect(
 		() => {
 			setCurrent(0);
+			setDisabledFormProductos(false)
 		},
-		[ reload ]
+		[ closeDrawer ]
 	);
 
 	const next = () => {
@@ -128,7 +130,7 @@ function RegistrarProducto(props) {
 				}
 			})
 			.then((res) => {
-				setReload(true);
+				/* setReload(true); */
 				setLoading(false);
 				setDisabledPrev(true);
 				setDisabled(false);

@@ -28,7 +28,8 @@ function RegistrarProductos(props) {
 	const [ loading, setLoading ] = useState(false);
 	const [ visible, setVisible ] = useState(false);
 	const [ accion, setAccion ] = useState(false);
-	const [ reload, setReload ] = useState(false);
+	const [	reload, setReload ] = useState(false);
+	const [	closeDrawer, setCloseDrawer ] = useState(false);
 	const token = localStorage.getItem('token');
 
 	var decoded = Jwt(token);
@@ -50,6 +51,7 @@ function RegistrarProductos(props) {
 	function drawnerClose() {
 		setVisible(false);
 		setReload(true);
+		setCloseDrawer(true);
 	}
 	function setActualizar() {
 		setAccion(true);
@@ -62,14 +64,14 @@ function RegistrarProductos(props) {
 
 	function closeConfirm() {
 		confirm({
-			title: 'Estás seguro de cerrar esta ventana?',
-			icon: <ExclamationCircleOutlined />,
-			okText: 'Si',
-			okType: 'danger',
-			cancelText: 'No',
-			onOk() {
-				drawnerClose();
-			}
+		  title: 'Estás seguro de cerrar esta ventana?',
+		  icon: <ExclamationCircleOutlined />,
+		  okText: 'Si',
+		  okType: 'danger',
+		  cancelText: 'No',
+		  onOk() {
+			drawnerClose();
+		  },
 		});
 	}
 
@@ -174,8 +176,9 @@ function RegistrarProductos(props) {
 		() => {
 			obtenerProductos(8, page);
 			setReload(false);
+			setCloseDrawer(false);
 		},
-		[ page, reload ]
+		[ page, reload, closeDrawer ]
 	);
 
 	const render = productosRender.map((productos) => (
@@ -216,7 +219,7 @@ function RegistrarProductos(props) {
 				>
 					<div style={{ height: 100 }}>
 						<h1 className="h4">{productos.nombre}</h1>
-						<h2 className="h5">{new Intl.NumberFormat('es-MX').format(productos.precio)}</h2>
+						<h2 className="h5">{new Intl.NumberFormat("es-MX").format(productos.precio)}</h2>
 					</div>
 				</Card>
 			</Card.Grid>
@@ -246,11 +249,11 @@ function RegistrarProductos(props) {
 			>
 				{accion === true ? (
 					<IdProductoContext.Provider value={productoID}>
-						<ActualizarProducto reloadProductos={[ reload, setReload ]} />
+						<ActualizarProducto reloadProductos={[reload, setReload]} />
 					</IdProductoContext.Provider>
 				) : (
 					<StepsProvider value={[ disabled, setDisabled ]}>
-						<RegistrarProducto reloadProductos={[ reload, setReload ]} />
+						<RegistrarProducto reloadProductos={/* reload, setReload, */ closeDrawer } />
 					</StepsProvider>
 				)}
 			</Drawer>
