@@ -27,7 +27,9 @@ function Admin(props) {
                 <meta charSet="utf-8" />
                 <title>Panel Principal</title>
             </Helmet>
-            <h1>Estamos en admin home</h1>
+            <div>
+                <h1>Registra la informacion de tu Empresa</h1>
+            </div>
         </div>
     )
 }
