@@ -1,0 +1,10 @@
+#foot{
+    background: #abbaab;
+    background: -webkit-linear-gradient(to right, #abbaab, #ffffff); 
+    background: linear-gradient(to right, #abbaab, #ffffff);
+   
+}
+ #is:hover{
+    -webkit-transform:scale(1.3);transform:scale(1.3);
+    overflow:hidden;
+}
