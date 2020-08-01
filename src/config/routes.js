@@ -9,9 +9,9 @@ import Pedidos from '../pages/admin/pedidos'
 import Promociones from '../pages/admin/promociones'
 import SistemaApartado from '../pages/admin/apartado'
 import Inventario from '../pages/admin/inventario'
-import BlogAdmin from '../pages/admin/blog'
 import Sugerencias from '../pages/admin/sugerencias'
 import Carousel from '../pages/admin/carousel'
+import BlogAdmin from '../pages/admin/Blog/blog'
 
 //Users pages
 import Home from '../pages/users/home'

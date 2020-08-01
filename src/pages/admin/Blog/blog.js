@@ -5,13 +5,13 @@ import jwt_decode from 'jwt-decode';
 import {PlusCircleOutlined } from '@ant-design/icons';
 import './blog.scss';
 import queryString from 'query-string';
-import clienteAxios from '../../config/axios';
-import Spin from '../../components/Spin';
-import BlogsList from '../../components/Blog/blogList';
-import Pagination from '../../components/Pagination/pagination';
-import { BlogContext } from './contexts/BlogContext';
-import ActualizarBlog from './services/blog/ActualizarBlog';
-import RegistrarBlog from './services/blog/RegistrarBlog';
+import clienteAxios from '../../../config/axios';
+import Spin from '../../../components/Spin';
+import BlogsList from '../services/blog/blogList';
+import Pagination from '../../../components/Pagination/pagination';
+import { BlogContext } from '../contexts/BlogContext';
+import ActualizarBlog from '../services/blog/ActualizarBlog';
+import RegistrarBlog from '../services/blog/RegistrarBlog';
 
 
 
@@ -29,7 +29,7 @@ function BlogAdmin(props) {
     const [blogs,setBlogs] = useState([]);
     const [reloadBlog, setReloadBlog] = useState(false);
 
-    const [infoBlog,setInfoBlog] = useState([]);
+    const [infoBlog,setInfoBlog] = useState({});
     
 
     //Obtener token de localStorage
@@ -49,8 +49,8 @@ function BlogAdmin(props) {
     function getBlogsApi(limit,page){
         setLoading(true);
         clienteAxios.get(`/blog?limit=${limit}&page=${page}`)
-            .then((res) => {
-                console.log(res.data.posts)
+        .then((res) => {
+            console.log(res)
                 setBlogs(res.data.posts);
                 setLoading(false);
         })
@@ -82,6 +82,7 @@ function BlogAdmin(props) {
     };
     const drawnerClose = () => {
         setVisible(false);
+        setInfoBlog({});
       };
 
     //Mostrar el Spin
@@ -114,12 +115,17 @@ function BlogAdmin(props) {
                         </div>
                     }
                 >
+                    {console.log(infoBlog)}
                     { accion === true ? (
                         <BlogContext.Provider value={infoBlog}>
-                            <ActualizarBlog/>
+                            <ActualizarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible}  />
                         </BlogContext.Provider>
-                    
-                    ):(<RegistrarBlog setReloadBlog={setReloadBlog} />)}
+                        
+                    ):(
+
+                            <RegistrarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible} />
+
+                    )}
                 </Drawer>
                 
                 <div className="blog__add-post">
@@ -129,6 +135,7 @@ function BlogAdmin(props) {
                         onClick={() => {
                             setAccion(false);
                             showDrawer()
+                            setInfoBlog({});
                         }}
                         className="ml-3"
                         icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}>
