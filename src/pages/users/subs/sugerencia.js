@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import clienteAxios from '../../../config/axios.js';
 
+import ImageScroller from 'react-image-scroller';
+import {PlusOutlined} from '@ant-design/icons';
 import { Card, Col, Row, Meta} from 'antd';
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
+
+
+const properties = {
+    hideScrollbar: false,
+    scrollOnClick: true,
+    scrollWithArrows: true,
+    
+}
 
 
 function Sugerencia() {
@@ -61,24 +71,24 @@ function Sugerencia() {
     ));
     
     return (
-		<div className="Container">
+		<div className="Container-fluid">
 			<div className="row">
+			<ImageScroller>
 			<Card
 				hoverable
 				style={{ width: 240 }}
-				cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-				>
+				cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}>
 				<Meta title="Europe Street beat" description="www.instagram.com" />
 			</Card>
-			<h1>+</h1>
+			<p style={{fontSize:120, alignItems: "center" , marginLeft:20 }}>+</p>
 			<Card
 				hoverable
 				style={{ width: 240 }}
-				cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-				>
+				cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}>
 				<Meta title="Europe Street beat" description="www.instagram.com" />
 			</Card>
-			<h1>=</h1>
+			<p style={{fontSize:120, alignItems: "center", marginLeft:20 }}>=</p>
+			</ImageScroller>
 			</div>
 		</div>
 	);
