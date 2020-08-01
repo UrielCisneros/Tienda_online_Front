@@ -36,7 +36,6 @@ function RegistrarProducto(props) {
 	const [ disabledformProductos, setDisabledFormProductos ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
 	const  /* reload, setReload, */ closeDrawer = props.reloadProductos;
-	console.log(closeDrawer)
 
 	if (closeDrawer) {
 		form.resetFields();
@@ -193,7 +192,7 @@ function RegistrarProducto(props) {
 								initialValues={{ categoria: select }}
 								form={form}
 							>
-								<Form.Item label="Codigo de barras" onChange={datosForm}>
+								<Form.Item label="Codigo de barras" onChange={datosForm} >
 									<Input
 										name="codigo"
 										disabled={disabledformProductos}

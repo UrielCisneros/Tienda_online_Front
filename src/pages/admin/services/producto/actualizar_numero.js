@@ -42,6 +42,7 @@ function ActualizarNumero() {
 				}
 			})
 			.then((res) => {
+				setIdNumero('');
 				setLoading(false);
 				obtenerNumero();
 				form.resetFields();

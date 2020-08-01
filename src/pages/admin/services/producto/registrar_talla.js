@@ -151,7 +151,12 @@ function RegistrarTalla() {
 
 	return (
 		<div>
-			<h4 className="text-center">Escribe la talla y la cantidad de productos disponibles de esa talla.</h4>
+			{disabledForm === false ? (
+				<p className="mensaje-tallas-success">Ya puedes registrar tallas.</p>
+			) : (
+				<p className="mensaje-tallas">Podrás registrar tallas despues de registrar tu producto</p>
+			)}
+			<p className="text-center mb-1">Escribe la talla y la cantidad de productos disponibles de esa talla.</p>
 			<div className="d-flex justify-content-center">
 				<Form onFinish={subirTalla} form={form}>
 					<Input.Group>

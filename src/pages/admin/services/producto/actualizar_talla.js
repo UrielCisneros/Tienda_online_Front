@@ -42,6 +42,7 @@ function ActualizarTalla() {
 				}
 			})
 			.then((res) => {
+				setIdTalla('');
 				obtenerTalla();
 				setLoading(false);
 				form.resetFields();
