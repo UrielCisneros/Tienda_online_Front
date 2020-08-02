@@ -18,7 +18,7 @@ const FooterPage = () => {
         //     <Footer  >
                 <div id="foot"  className="row">
                     
-                <div className="text-center text-lg-left col-lg-5">
+                <div className="col-lg-9 text-lg-left text-center ">
                     <div className="mt-4">
                     <Link  to="/quienes_somos" >
                     <Button id="is" type="link" style={Style} ><HomeOutlined  style={{fontSize: 17}} />
@@ -33,22 +33,19 @@ const FooterPage = () => {
                     Conocenos</Button>
                     </Link>
                     </div>
-                    <div className="mt-4">
+                    <div className="mt-2 p-3">
                     <h2 style={{fontSize: 18}} >A&B Soluciones</h2>
                     <p>Descubrimos lo mejor de tu empresa</p>
                     <p>Nuestra Ubicacion</p>
                     </div>
                 </div>
 
-               
+                {/* <div className="col-lg-4 text-center text-lg-left mt-4" style={{alignItems: "center"}}>
+                    Aqui estaria tu super logo, cambiar el col-lg, del div superior por 5               
+                </div> */}
 
-
-                <div className="col-lg-4 text-center text-lg-left mt-4" style={{alignItems: "center"}}>
-                    {/* Aqui estaria tu super logo                 */}
-                </div>
-
-                <div className="col-lg-3" style={{textAlign:"center"}}>
-                    <p style={{fontSize: 30, marginTop: 15}}>Buscanos en:</p>
+                <div className="col-lg-3 p-3" style={{textAlign:"center"}}>
+                    <p style={{fontSize: 30, }}>Buscanos en:</p>
                     <Link><FacebookFilled id="is" style={{fontSize: 45, color:"gray"}} /></Link>
                     <Link><InstagramFilled id="is" style={{fontSize:  45, marginLeft: 10,color:"gray"}} /></Link>
                     <Link><TwitterCircleFilled id="is"  style={{fontSize: 45, marginLeft: 10, color:"gray"}}/></Link>

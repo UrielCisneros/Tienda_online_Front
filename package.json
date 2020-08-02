@@ -28,11 +28,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-search-field": "^1.0.0",
-<<<<<<< HEAD
-    "read-more-react": "^1.0.10"
-=======
     "tinymce": "^5.4.1"
->>>>>>> df68d20c1bf481a901034f64bb28c0d111321810
   },
   "scripts": {
     "start": "react-scripts start",
