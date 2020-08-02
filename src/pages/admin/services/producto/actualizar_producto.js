@@ -180,7 +180,7 @@ function ActualizarProducto() {
 					<Form.Item name="descripcion" label="Descripcion del producto">
 						<Editor
 							init={{
-								height: 200,
+								height: 300,
 								menubar: false,
 								plugins: [
 									'advlist autolink lists link image charmap print preview anchor',

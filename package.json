@@ -14,7 +14,9 @@
     "firebase": "^7.14.5",
     "jwt-decode": "^2.2.0",
     "materialize-css": "^1.0.0-rc.2",
+    "moment": "^2.27.0",
     "node-sass": "^4.14.1",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
@@ -26,7 +28,11 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-search-field": "^1.0.0",
+<<<<<<< HEAD
     "read-more-react": "^1.0.10"
+=======
+    "tinymce": "^5.4.1"
+>>>>>>> df68d20c1bf481a901034f64bb28c0d111321810
   },
   "scripts": {
     "start": "react-scripts start",
