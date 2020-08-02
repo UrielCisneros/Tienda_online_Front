@@ -40,11 +40,12 @@ const FooterPage = () => {
                     </div>
                 </div>
 
-                {/* <div className="col-lg-4 text-center text-lg-left mt-4" style={{alignItems: "center"}}>
-                    Aqui estaria tu super logo, cambiar el col-lg, del div superior por 5               
+                {/* <div className="col-lg-4 d-none d-lg-block text-center text-lg-left mt-4" style={{alignItems: "center"}}>
+                    Aqui estaria tu super logo, cambiar las propiedades de col-lg-5, 
+                    en el div superior al agregar este div de logo              
                 </div> */}
 
-                <div className="col-lg-3 p-3" style={{textAlign:"center"}}>
+                <div className="col-lg-3 p-3 " style={{textAlign:"center"}}>
                     <p style={{fontSize: 30, }}>Buscanos en:</p>
                     <Link><FacebookFilled id="is" style={{fontSize: 45, color:"gray"}} /></Link>
                     <Link><InstagramFilled id="is" style={{fontSize:  45, marginLeft: 10,color:"gray"}} /></Link>
