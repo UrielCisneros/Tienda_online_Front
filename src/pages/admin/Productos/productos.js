@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
-import clienteAxios from '../../config/axios';
-import RegistrarProducto from './services/producto/registrar_producto';
-import ActualizarProducto from './services/producto/actualizar_producto';
+import clienteAxios from '../../../config/axios';
+import RegistrarProducto from './services/registrar_producto';
+import ActualizarProducto from './services/actualizar_producto';
 import { Card, Col, Row, Input, Button, Modal, Drawer, Result, notification } from 'antd';
-import Spin from '../../components/Spin';
-import Pagination from '../../components/Pagination/pagination';
-import { StepsContext, StepsProvider } from '../admin/contexts/stepsContext';
-import { IdProductoContext } from './contexts/ProductoContext';
+import Spin from '../../../components/Spin';
+import Pagination from '../../../components/Pagination/pagination';
+import { StepsContext, StepsProvider } from '../contexts/stepsContext';
+import { IdProductoContext } from '../contexts/ProductoContext';
 import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import queryString from 'query-string';
@@ -157,6 +157,7 @@ function RegistrarProductos(props) {
 		await clienteAxios
 			.get(`/productos?limit=${limit}&page=${page}`)
 			.then((res) => {
+				console.log(res)
 				setProductosRender(res.data.posts.docs);
 				setProductos(res.data.posts);
 				setLoading(false);

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import clienteAxios from '../../config/axios';
+import clienteAxios from '../../../config/axios';
 import jwt_decode from 'jwt-decode';
 import { Button, Col, Row, Input, Drawer, Space, Tooltip, Modal, notification, List, Result } from 'antd';
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import RegistrarPromocion from './services/promociones/registrar_promocion';
-import ActualizarPromocion from './services/promociones/actualizar_promocion';
-import { IdProductoContext } from './contexts/ProductoContext';
-import Spin from '../../components/Spin';
+import RegistrarPromocion from './services/registrar_promocion';
+import ActualizarPromocion from './services/actualizar_promocion';
+import { IdProductoContext } from '../contexts/ProductoContext';
+import Spin from '../../../components/Spin';
 import './promociones.scss';
 
 const { Search } = Input;
