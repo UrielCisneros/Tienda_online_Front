@@ -199,7 +199,7 @@ function RegistrarGaleria() {
 
 	if (galeria !== undefined) {
 		var render = galeria.map((imagenes) => (
-			<div className="shadow rounded imgStyle d-inline-block">
+			<div className="shadow rounded imgStyle d-inline-block" key={imagenes._id}>
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
 					<img
 						className="img"

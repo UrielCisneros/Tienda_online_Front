@@ -126,7 +126,7 @@ function RegistrarNumero() {
 
 	if (productos !== 0) {
 		var render = productos.map((numero) => (
-			<div className="m-2">
+			<div className="m-2" key={numero._id}>
 				<Badge count={numero.cantidad} style={{ backgroundColor: '#52c41a' }}>
 					<div className="hover-delete d-flex text-center">
 						<p

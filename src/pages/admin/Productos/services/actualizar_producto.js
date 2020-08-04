@@ -64,9 +64,9 @@ function ActualizarProducto(props) {
 			return false;
 		},
 		onRemove: (file) => {
-            setUpload(false)
-            setFiles([]);
-        }
+			setUpload(false);
+			setFiles([]);
+		}
 	};
 
 	const obtenerDatos = async () => {
@@ -180,17 +180,31 @@ function ActualizarProducto(props) {
 		<Tabs defaultActiveKey="1">
 			<TabPane tab="Actualizar datos del producto" key="1">
 				<Spin spinning={spinning}>
+					{productos.categoria === 'ropa' ? (
+						<div className="d-flex justify-content-center">{<ActualizarTalla />}</div>
+					) : (
+						<div />
+					)}
+					{productos.categoria === 'calzado' ? <div>{<ActualizarNumero />}</div> : <div />}
 					<Form {...layout} name="nest-messages" onFinish={subirDatos} form={form}>
 						<Form.Item name="codigo" label="Codigo de barras" onChange={obtenerValores}>
 							<Input name="codigo" placeholder="Campo opcional" />
 						</Form.Item>
-						<Form.Item label="Nombre del producto" onChange={obtenerValores} >
-							<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="nombre" >
+						<Form.Item label="Nombre del producto" onChange={obtenerValores}>
+							<Form.Item
+								rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								noStyle
+								name="nombre"
+							>
 								<Input name="nombre" />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Categoria" >
-							<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="categoria" >
+						<Form.Item label="Categoria">
+							<Form.Item
+								rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								noStyle
+								name="categoria"
+							>
 								<Select placeholder="Seleciona una categoria" onChange={obtenerSelect}>
 									<Option value="ropa">Ropa</Option>
 									<Option value="calzado">Calzado</Option>
@@ -199,21 +213,34 @@ function ActualizarProducto(props) {
 							</Form.Item>
 						</Form.Item>
 						{productos.categoria === 'otros' ? (
-							<Form.Item label="Cantidad" onChange={obtenerValores} >
-								<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="cantidad" >
+							<Form.Item label="Cantidad" onChange={obtenerValores}>
+								<Form.Item
+									rules={[ { required: true, message: 'Este campo es requerido' } ]}
+									noStyle
+									name="cantidad"
+								>
 									<Input type="number" name="cantidad" />
 								</Form.Item>
 							</Form.Item>
 						) : (
 							<div />
 						)}
-						<Form.Item label="Precio del producto" onChange={obtenerValores} >
-							<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="precio" >
+						<Form.Item label="Precio del producto" onChange={obtenerValores}>
+							<Form.Item
+								rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								noStyle
+								name="precio"
+							>
 								<Input type="number" name="precio" />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Descripcion del producto" >
-							<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="descripcion" >
+						<Form.Item label="Descripcion del producto">
+							<Form.Item
+								rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								noStyle
+								name="descripcion"
+								valuePropName="Editor"
+							>
 								<Editor
 									init={{
 										height: 300,
@@ -229,15 +256,8 @@ function ActualizarProducto(props) {
 									onEditorChange={obtenerEditor}
 								/>
 							</Form.Item>
-							
 						</Form.Item>
-						{productos.categoria === 'ropa' ? (
-							<div className="d-flex justify-content-center">{<ActualizarTalla />}</div>
-						) : (
-							<div />
-						)}
-						{productos.categoria === 'calzado' ? <div>{<ActualizarNumero />}</div> : <div />}
-						<Form.Item label="Imagen principal" name="imagen">
+						<Form.Item label="Imagen principal" name="imagen" valuePropName="filelist">
 							<Upload {...antprops} name="imagen">
 								<Button disabled={upload}>
 									<UploadOutlined /> Subir

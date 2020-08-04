@@ -1,7 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-import InfiniteListExample from '../testscroll'
 
 function Inventario(props) {
     const token = localStorage.getItem('token')
@@ -24,7 +23,6 @@ function Inventario(props) {
     return (
         <div>
             <h1>Estamos en inventario</h1>
-            <InfiniteListExample />
         </div>
     )
 }

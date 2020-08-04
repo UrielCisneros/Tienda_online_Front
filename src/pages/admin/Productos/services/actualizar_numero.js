@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Form, Button, Input, Row, Col, Badge, notification, Spin, Space } from 'antd';
 import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
@@ -8,6 +8,7 @@ import { IdProductoContext } from '../../contexts/ProductoContext';
 const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 function ActualizarNumero() {
+	const formRef = useRef(null);
 	const [ form ] = Form.useForm();
 	const token = localStorage.getItem('token');
 	const productoID = useContext(IdProductoContext);
@@ -175,7 +176,7 @@ function ActualizarNumero() {
 
 	if (productos !== 0) {
 		var render = productos.map((numeros) => (
-			<div className="mb-5 m-2">
+			<div className="mb-5 m-2" key={numeros._id}>
 				<Badge count={numeros.cantidad} style={{ backgroundColor: '#52c41a' }}>
 					<div className="hover-delete d-flex text-center">
 						<p
@@ -207,7 +208,7 @@ function ActualizarNumero() {
 	return (
 		<div className="ml-4">
 			<div className="d-flex justify-content-center">
-				<Form form={form} onFinish={actualizarNumero}>
+				<Form form={form} ref={formRef.current} onFinish={actualizarNumero}>
 					<Input.Group>
 						<Row gutter={8}>
 							<Col span={5}>

@@ -157,7 +157,6 @@ function RegistrarProductos(props) {
 		await clienteAxios
 			.get(`/productos?limit=${limit}&page=${page}`)
 			.then((res) => {
-				console.log(res)
 				setProductosRender(res.data.posts.docs);
 				setProductos(res.data.posts);
 				setLoading(false);
@@ -191,7 +190,7 @@ function RegistrarProductos(props) {
 	);
 
 	const render = productosRender.map((productos) => (
-		<Col span={32} key={productos.id}>
+		<Col span={32} key={productos._id}>
 			<Card.Grid hoverable style={gridStyle}>
 				<Card
 					style={{ width: 300, maxHeight: 400 }}
@@ -238,6 +237,7 @@ function RegistrarProductos(props) {
 	return (
 		<div>
 			<Drawer
+				forceRender
 				title={accion === true ? 'Actualizar un producto' : 'Registra un nuevo producto'}
 				width={window.screen.width > 768 ? 1000 : window.screen.width}
 				placement={'right'}

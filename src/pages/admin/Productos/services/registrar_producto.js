@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
 import { Form, Button, Input, Select, Steps, notification, Upload, Spin } from 'antd';
@@ -22,6 +22,7 @@ const layout = {
 };
 
 function RegistrarProducto(props) {
+	const formRef = useRef(null);
 	const [ form ] = Form.useForm();
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	///Autorizacion a la pagina con Token
@@ -198,6 +199,7 @@ function RegistrarProducto(props) {
 								onFinish={onFinish}
 								initialValues={{ categoria: select }}
 								form={form}
+								ref={formRef.current}
 							>
 								<Form.Item label="Codigo de barras" onChange={datosForm} >
 									<Input
@@ -226,7 +228,7 @@ function RegistrarProducto(props) {
 									</Form.Item>
 								</Form.Item>
 								<Form.Item label="Descripcion del producto" >
-									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="descripcion">
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="descripcion" valuePropName='Editor'>
 										<Editor
 											disabled={disabledformProductos}
 											init={{
@@ -245,7 +247,7 @@ function RegistrarProducto(props) {
 									</Form.Item>
 								</Form.Item>
 								<Form.Item label="Imagen principal" >
-									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="imagen" >
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="imagen" valuePropName='filelist'>
 										<Upload {...propss}>
 											<Button disabled={upload}>
 												<UploadOutlined /> Subir
