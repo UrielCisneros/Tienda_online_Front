@@ -118,11 +118,14 @@ class VistaProductos extends React.Component {
             </div>
           </div>
 
-          <Row className="px-5 mt-4" style={{left: 10}}>
-            <Col span={24} >
-            <h1 className="px-5 mt-3">Productos sugeridos</h1>
-            </Col>
-          </Row>
+          <div className="container"  >
+            <h1 className="px-5 mt-3 text-center">Productos sugeridos</h1>
+            
+            <div className="row" style={{justifyContent: "center"}}>
+            <Sugerencia />
+            </div>
+            
+          </div>
 
           <Row className="px-5 mt-4">
             <Col span={24}><Scroll/></Col>

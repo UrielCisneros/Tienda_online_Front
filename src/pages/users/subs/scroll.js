@@ -73,7 +73,7 @@ function  Scroll() {
     return (
 		<div>
 			<div >
-            <h1  className="mt-3">Tambien te pueden interesar:</h1>
+            <h1  className="mt-5">Tambien te pueden interesar:</h1>
                 <ImageScroller {...properties} >
                 {render}
                 </ImageScroller>
