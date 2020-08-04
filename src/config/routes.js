@@ -3,7 +3,7 @@ import LayoutAdmin from '../components/LayoutAdmin'
 import LayoutBasic from '../components/Layout'
 
 //Admin pages
-import AdminHome from '../pages/admin/paginaTienda/admin'
+import Admin from '../pages/admin/paginaTienda/admin';
 import RegistrarProductos from '../pages/admin/productos'
 import Pedidos from '../pages/admin/pedidos'
 import Promociones from '../pages/admin/promociones'
@@ -33,7 +33,7 @@ const routes = [
 		routes: [
 			{
 				path: '/admin',
-				component: AdminHome,
+				component: Admin,
 				exact: true,
 			},
 			{
