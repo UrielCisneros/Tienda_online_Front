@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 
-function SistemaApartado(props) {
-    const token = localStorage.getItem('token')
+function Pedidos(props) {
+    const token = localStorage.getItem('token')  
     var decoded = Jwt(token) 
 	
 	function Jwt(token) {
@@ -22,8 +22,8 @@ function SistemaApartado(props) {
 
     return (
         <div>
-            <h1>Estamos en sistema de apartado</h1>
+            <h1>Estamos en pedidos</h1>
         </div>
     )
 }
-export default withRouter(SistemaApartado);
+export default withRouter(Pedidos);

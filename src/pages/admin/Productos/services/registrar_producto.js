@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, InputNumber, Select, Steps, message, Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Button, Input, Select, Steps, notification, Upload, Spin } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import './registrar_producto.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 import { StepsContext } from '../../contexts/stepsContext';
@@ -13,7 +13,7 @@ import { Editor } from '@tinymce/tinymce-react';
 
 const { Option } = Select;
 const { Step } = Steps;
-const key = 'updatable';
+const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 ///Layout para formulario(columnas)
 const layout = {
@@ -22,20 +22,36 @@ const layout = {
 };
 
 function RegistrarProducto(props) {
+	const formRef = useRef(null);
+	const [ form ] = Form.useForm();
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	///Autorizacion a la pagina con Token
 	const token = localStorage.getItem('token');
+	/// Declaracion de variables para los pasos
+	const [ current, setCurrent ] = useState(0);
 
 	////Activar y desactivar los botones Next y Prev
-
 	const [ editor, setEditor ] = useState();
 	const [ disabledPrev, setDisabledPrev ] = useState(false);
 	const [ disabledform, setDisabledForm ] = useState(true);
 	const [ disabledformProductos, setDisabledFormProductos ] = useState(false);
+	const [ loading, setLoading ] = useState(false);
+	const  /* reload, setReload, */ closeDrawer = props.reloadProductos;
+	const [ upload, setUpload ] = useState(false);
+
+	if (closeDrawer) {
+		form.resetFields();
+	}
+	useEffect(
+		() => {
+			setCurrent(0);
+			setDisabledFormProductos(false)
+		},
+		[ closeDrawer ]
+	);
 
 	const next = () => {
 		setCurrent(current + 1);
-		console.log(current);
 		if (current === 0) {
 			setDisabled(true);
 		} else if (current >= 1) {
@@ -60,8 +76,13 @@ function RegistrarProducto(props) {
 				file.thumbUrl = e.target.result;
 				setFiles(file);
 			};
+			setUpload(true);
 			return false;
-		}
+		},
+		onRemove: (file) => {
+            setUpload(false)
+            setFiles([]);
+        }
 	};
 
 	///capturar datos maualmente}
@@ -98,6 +119,7 @@ function RegistrarProducto(props) {
 	const [ productoID, setProductoID ] = useState('');
 
 	async function onFinish() {
+		setLoading(true);
 		const formData = new FormData();
 		formData.append('codigo', datos.codigo);
 		formData.append('nombre', datos.nombre);
@@ -107,43 +129,45 @@ function RegistrarProducto(props) {
 		formData.append('descripcion', editor);
 		formData.append('imagen', files);
 
-		message.loading({ content: 'En proceso...', key });
-		const respuesta = await clienteAxios.post('/productos/', formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `bearer ${token}`
-			}
-		});
-		try {
-			if (!respuesta.data.err) {
+		await clienteAxios
+			.post('/productos/', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				/* setReload(true); */
+				setLoading(false);
 				setDisabledPrev(true);
+				setDisabled(false);
 				setDisabledFormProductos(true);
 				setDisabledForm(false);
-				setProductoID(respuesta.data.userStored._id);
-				message.success({
-					content: respuesta.data.message,
-					key,
-					duration: 3
+				setProductoID(res.data.userStored._id);
+				notification.success({
+					message: 'Hecho!',
+					description: res.data.message,
+					duration: 2
 				});
-			} else {
-				message.error({
-					content: respuesta.data.message,
-					key,
-					duration: 3
-				});
-			}
-		} catch (error) {
-			console.log(error);
-			message.error({
-				content: 'Hubo un error',
-				key,
-				duration: 3
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	}
-
-	/// Declaracion de variables para los pasos
-	const [ current, setCurrent ] = useState(0);
 
 	////CONTENIDO DE LOS PASOS
 	const steps = [
@@ -173,58 +197,69 @@ function RegistrarProducto(props) {
 								{...layout}
 								name="nest-messages"
 								onFinish={onFinish}
-								initialValues={{ categoria: select, precio: 0 }}
+								initialValues={{ categoria: select }}
+								form={form}
+								ref={formRef.current}
 							>
-								<Form.Item label="Codigo de barras" onChange={datosForm}>
+								<Form.Item label="Codigo de barras" onChange={datosForm} >
 									<Input
 										name="codigo"
 										disabled={disabledformProductos}
 										placeholder="Campo opcional"
 									/>
 								</Form.Item>
-								<Form.Item label="Nombre del producto" onChange={datosForm}>
-									<Input name="nombre" disabled={disabledformProductos} />
+								<Form.Item label="Nombre del producto" onChange={datosForm} >
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="nombre" >
+										<Input name="nombre" disabled={disabledformProductos} />
+									</Form.Item>
 								</Form.Item>
 								{select === 'otros' ? (
-									<Form.Item label="Cantidad" onChange={datosForm}>
-										<InputNumber min={1} name="cantidad" disabled={disabledformProductos} />
+									<Form.Item label="Cantidad" onChange={datosForm} >
+										<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="cantidad" >
+											<Input type="number" name="cantidad" disabled={disabledformProductos} />
+										</Form.Item>
 									</Form.Item>
 								) : (
 									<div />
 								)}
-								<Form.Item label="Precio del producto" onChange={datosForm}>
-									<InputNumber disabled={disabledformProductos} name="precio" />
+								<Form.Item label="Precio del producto" onChange={datosForm} >
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="precio" >
+										<Input type="number" disabled={disabledformProductos} name="precio" />
+									</Form.Item>
 								</Form.Item>
-								<Form.Item label="Descripcion del producto">
-									<Editor
-										disabled={disabledformProductos}
-										init={{
-											height: 200,
-											menubar: false,
-											plugins: [
-												'advlist autolink lists link image charmap print preview anchor',
-												'searchreplace visualblocks code fullscreen',
-												'insertdatetime media table paste code help wordcount'
-											],
-											toolbar:
-												'undo redo | formatselect | bold italic backcolor | \
-                                            alignleft aligncenter alignright alignjustify | \
-                                            bullist numlist outdent indent | removeformat | help'
-										}}
-										onEditorChange={obtenerEditor}
-									/>
+								<Form.Item label="Descripcion del producto" >
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="descripcion" valuePropName='Editor'>
+										<Editor
+											disabled={disabledformProductos}
+											init={{
+												height: 200,
+												menubar: true,
+												plugins: [
+													'advlist autolink lists link image charmap print preview anchor',
+													'searchreplace visualblocks code fullscreen',
+													'insertdatetime media table paste code help wordcount'
+												],
+												toolbar:
+													'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+											}}
+											onEditorChange={obtenerEditor}
+										/>
+									</Form.Item>
 								</Form.Item>
-								<Form.Item label="Imagen principal">
-									<Upload {...propss}>
-										<Button disabled={disabledformProductos}>
-											<UploadOutlined /> Subir
-										</Button>
-									</Upload>
+								<Form.Item label="Imagen principal" >
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="imagen" valuePropName='filelist'>
+										<Upload {...propss}>
+											<Button disabled={upload}>
+												<UploadOutlined /> Subir
+											</Button>
+										</Upload>
+									</Form.Item>
 								</Form.Item>
 								<Form.Item className="d-flex justify-content-center align-items-center text-center">
 									<Button type="primary" htmlType="submit" disabled={disabledformProductos}>
 										Registrar
 									</Button>
+									{loading ? <Spin indicator={antIcon} /> : <div />}
 								</Form.Item>
 							</Form>
 							{select === 'ropa' ? (
@@ -238,7 +273,7 @@ function RegistrarProducto(props) {
 							)}
 							{select === 'calzado' ? (
 								<div>
-									<ProductoContext.Provider value={[productoID, disabledform]}>
+									<ProductoContext.Provider value={[ productoID, disabledform ]}>
 										<RegistrarNumero />
 									</ProductoContext.Provider>
 								</div>
@@ -284,7 +319,10 @@ function RegistrarProducto(props) {
 					<Button
 						type="primary"
 						onClick={() => {
-							message.success('Producto Creado!');
+							notification.success({
+								message: 'su producto ha sido creado!',
+								duration: 2
+							});
 							setTimeout(() => {
 								window.location.reload();
 							}, 3000);

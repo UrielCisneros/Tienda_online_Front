@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 
-function Pedidos(props) {
-    const token = localStorage.getItem('token')  
+function Inventario(props) {
+    const token = localStorage.getItem('token')
     var decoded = Jwt(token) 
 	
 	function Jwt(token) {
@@ -22,8 +22,8 @@ function Pedidos(props) {
 
     return (
         <div>
-            <h1>Estamos en pedidos</h1>
+            <h1>Estamos en inventario</h1>
         </div>
     )
 }
-export default withRouter(Pedidos);
+export default withRouter(Inventario)

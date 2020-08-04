@@ -3,12 +3,14 @@ import LayoutAdmin from '../components/LayoutAdmin'
 import LayoutBasic from '../components/Layout'
 
 //Admin pages
-import Admin from '../pages/admin/paginaTienda/admin';
-import RegistrarProductos from '../pages/admin/productos'
-import Pedidos from '../pages/admin/pedidos'
-import Promociones from '../pages/admin/promociones'
-import SistemaApartado from '../pages/admin/apartado'
-import Inventario from '../pages/admin/inventario'
+import AdminHome from '../pages/admin/Principal/principal'
+import RegistrarProductos from '../pages/admin/Productos/productos'
+import Pedidos from '../pages/admin/Pedidos/pedidos'
+import Promociones from '../pages/admin/Promociones/promociones'
+import SistemaApartado from '../pages/admin/Apartado/apartado'
+import Inventario from '../pages/admin/Inventario/inventario'
+import Sugerencias from '../pages/admin/Sugerencias/sugerencias'
+import Carousel from '../pages/admin/Carousel/carousel'
 import BlogAdmin from '../pages/admin/Blog/blog'
 
 //Users pages
@@ -33,7 +35,7 @@ const routes = [
 		routes: [
 			{
 				path: '/admin',
-				component: Admin,
+				component: AdminHome,
 				exact: true,
 			},
 			{
@@ -64,6 +66,16 @@ const routes = [
 			{
 				path: '/admin/blog',
 				component: BlogAdmin,
+				exact: true
+			},
+			{
+				path: '/admin/sugerencias',
+				component: Sugerencias,
+				exact: true
+			},
+			{
+				path: '/admin/carousel',
+				component: Carousel,
 				exact: true
 			},
 			{
@@ -117,7 +129,7 @@ const routes = [
 				exact: true
 			},
 			{
-				path: '/productos?:user',
+				path: '/productos',
 				component: Productos,
 				exact: true
 			},

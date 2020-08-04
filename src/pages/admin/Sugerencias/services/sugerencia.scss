@@ -1,0 +1,25 @@
+
+.contenedor-span{
+    width: 80px;
+    height: 200px;
+    display: inline-block;
+    margin: 5px;
+    font-size: 70px;
+}
+h2{
+    font-size: 16px;
+}
+.contenedor-imagen-sugerencia{
+    height: 250px!important;
+    display: flex!important;
+    justify-content: center!important;
+    align-content: center!important;
+}
+.imagen-producto-sugerencia{
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+.contenedor-lista{
+    height: 250px;
+    overflow-y: scroll;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clienteAxios from '../../config/axios';
 import { withRouter } from 'react-router-dom';
 import { notification, Form, Input, Button } from 'antd';
@@ -13,52 +13,47 @@ const tailLayout = {
 
 function Login(props) {
 	const onFinish = async (values) => {
-		const res = await clienteAxios.post('/cliente/auth', values);
-		try {
-			if (!res.data.token) {
-				notification['error']({
-					message: 'Error',
-					description: res.data.message,
-					duration: 2
-				});
-			} else {
+		await clienteAxios
+			.post('/cliente/auth', values)
+			.then((res) => {
 				const token = res.data.token;
 				localStorage.setItem('token', token);
 				props.history.push('/admin');
-				notification['success']({
-					message: 'Hecho!',
+				notification.success({
+					message: 'Bienvenido!',
 					duration: 2
 				});
-			}
-		} catch (error) {
-			console.log(error);
-			notification['error']({
-				message: 'Error',
-				description: 'Hubo un error',
-				duration: 2
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
 			});
-		}
 	};
 
 	return (
 		<div>
 			<Form {...layout} name="basic" initialValues={{ remember: true }} onFinish={onFinish}>
-				<Form.Item
-					label="Correo"
-					name="email"
-					rules={[ { required: true, message: 'El email es obligatorio!' } ]}
-				>
-					<Input />
+				<Form.Item label="Correo" >
+					<Form.Item name="email" rules={[ { required: true, message: 'El email es obligatorio!' } ]} noStyle >
+						<Input />
+					</Form.Item>
 				</Form.Item>
-
-				<Form.Item
-					label="Contraseña"
-					name="contrasena"
-					rules={[ { required: true, message: 'La contraseña es obligatoria!' } ]}
-				>
-					<Input.Password />
+				<Form.Item label="Contraseña" >
+					<Form.Item name="contrasena" rules={[ { required: true, message: 'La contraseña es obligatoria!' } ]} noStyle >
+						<Input.Password />
+					</Form.Item>
 				</Form.Item>
-
 				<Form.Item {...tailLayout}>
 					<Button type="primary" htmlType="submit">
 						Acceder
