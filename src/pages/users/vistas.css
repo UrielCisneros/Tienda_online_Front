@@ -20,3 +20,13 @@ h5{
     margin-right: 15px;
     margin-top: 15px;
 }
+
+#blog{
+    background: #C9D6FF; 
+    background: -webkit-linear-gradient(to right, #E2E2E2, #C9D6FF); 
+    background: linear-gradient(to right, #E2E2E2, #C9D6FF); 
+}
+
+#cards{
+    background: white;
+}
