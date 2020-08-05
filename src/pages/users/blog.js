@@ -29,7 +29,7 @@ const IconText = ({ icon, text }) => (
 export default function Blog() {
     return (
         <div  id="blog">
-            <h1 className="text-center">Tu Blog!</h1>
+            <h1 className="text-center">Bienvenidos a nuestro Blog!</h1>
             <div className="container-fluid">
 
             <div id="cards">
