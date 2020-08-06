@@ -239,7 +239,7 @@ function ActualizarProducto(props) {
 							>
 								<Editor
 								value={editor}
-								name="descripcion"
+								
 									init={{
 										height: 300,
 										menubar: true,
