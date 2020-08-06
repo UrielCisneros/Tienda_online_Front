@@ -1,11 +1,11 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
 import { Form, Button, Input, Select, Steps, notification, Upload, Spin } from 'antd';
-import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import './registrar_producto.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
-import { StepsContext } from '../../contexts/stepsContext';
+/* import { StepsContext } from '../../contexts/stepsContext'; */
 import RegistrarGaleria from './registrar_galeria';
 import RegistrarTalla from './registrar_talla';
 import RegistrarNumero from './registrar_numero';
@@ -13,7 +13,6 @@ import { Editor } from '@tinymce/tinymce-react';
 
 const { Option } = Select;
 const { Step } = Steps;
-const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 ///Layout para formulario(columnas)
 const layout = {
@@ -24,7 +23,8 @@ const layout = {
 function RegistrarProducto(props) {
 	const formRef = useRef(null);
 	const [ form ] = Form.useForm();
-	const [ disabled, setDisabled ] = useContext(StepsContext);
+	/* const [ disabled, setDisabled ] = useContext(StepsContext); */
+	const [ disabled, setDisabled ] = props.disabledButtons;
 	///Autorizacion a la pagina con Token
 	const token = localStorage.getItem('token');
 	/// Declaracion de variables para los pasos
@@ -36,18 +36,20 @@ function RegistrarProducto(props) {
 	const [ disabledform, setDisabledForm ] = useState(true);
 	const [ disabledformProductos, setDisabledFormProductos ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
-	const  /* reload, setReload, */ closeDrawer = props.reloadProductos;
+	const reload = props.reloadProductos;
 	const [ upload, setUpload ] = useState(false);
 
-	if (closeDrawer) {
-		form.resetFields();
-	}
 	useEffect(
 		() => {
+			if (reload) {
+				form.resetFields();
+				setCurrent(0);
+				setDisabledFormProductos(false);
+			}
 			setCurrent(0);
-			setDisabledFormProductos(false)
+			setDisabledFormProductos(false);
 		},
-		[ closeDrawer ]
+		[ reload, form ]
 	);
 
 	const next = () => {
@@ -80,9 +82,9 @@ function RegistrarProducto(props) {
 			return false;
 		},
 		onRemove: (file) => {
-            setUpload(false)
-            setFiles([]);
-        }
+			setUpload(false);
+			setFiles([]);
+		}
 	};
 
 	///capturar datos maualmente}
@@ -107,7 +109,7 @@ function RegistrarProducto(props) {
 	const obtenerEditor = (value) => {
 		setEditor(value);
 	};
-	
+
 	const datosForm = (e) => {
 		setDatos({
 			...datos,
@@ -137,7 +139,6 @@ function RegistrarProducto(props) {
 				}
 			})
 			.then((res) => {
-				/* setReload(true); */
 				setLoading(false);
 				setDisabledPrev(true);
 				setDisabled(false);
@@ -201,34 +202,51 @@ function RegistrarProducto(props) {
 								form={form}
 								ref={formRef.current}
 							>
-								<Form.Item label="Codigo de barras" onChange={datosForm} >
+								<Form.Item label="Codigo de barras" onChange={datosForm}>
 									<Input
 										name="codigo"
 										disabled={disabledformProductos}
 										placeholder="Campo opcional"
 									/>
 								</Form.Item>
-								<Form.Item label="Nombre del producto" onChange={datosForm} >
-									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="nombre" >
+								<Form.Item label="Nombre del producto" onChange={datosForm}>
+									<Form.Item
+										rules={[ { required: true, message: 'Este campo es requerido' } ]}
+										noStyle
+										name="nombre"
+									>
 										<Input name="nombre" disabled={disabledformProductos} />
 									</Form.Item>
 								</Form.Item>
 								{select === 'otros' ? (
-									<Form.Item label="Cantidad" onChange={datosForm} >
-										<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="cantidad" >
+									<Form.Item label="Cantidad" onChange={datosForm}>
+										<Form.Item
+											rules={[ { required: true, message: 'Este campo es requerido' } ]}
+											noStyle
+											name="cantidad"
+										>
 											<Input type="number" name="cantidad" disabled={disabledformProductos} />
 										</Form.Item>
 									</Form.Item>
 								) : (
 									<div />
 								)}
-								<Form.Item label="Precio del producto" onChange={datosForm} >
-									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="precio" >
+								<Form.Item label="Precio del producto" onChange={datosForm}>
+									<Form.Item
+										rules={[ { required: true, message: 'Este campo es requerido' } ]}
+										noStyle
+										name="precio"
+									>
 										<Input type="number" disabled={disabledformProductos} name="precio" />
 									</Form.Item>
 								</Form.Item>
-								<Form.Item label="Descripcion del producto" >
-									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="descripcion" valuePropName='Editor'>
+								<Form.Item label="Descripcion del producto">
+									<Form.Item
+										rules={[ { required: true, message: 'Este campo es requerido' } ]}
+										noStyle
+										name="descripcion"
+										valuePropName="Editor"
+									>
 										<Editor
 											disabled={disabledformProductos}
 											init={{
@@ -246,8 +264,13 @@ function RegistrarProducto(props) {
 										/>
 									</Form.Item>
 								</Form.Item>
-								<Form.Item label="Imagen principal" >
-									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="imagen" valuePropName='filelist'>
+								<Form.Item label="Imagen principal">
+									<Form.Item
+										rules={[ { required: true, message: 'Este campo es requerido' } ]}
+										noStyle
+										name="imagen"
+										valuePropName="filelist"
+									>
 										<Upload {...propss}>
 											<Button disabled={upload}>
 												<UploadOutlined /> Subir
@@ -259,13 +282,12 @@ function RegistrarProducto(props) {
 									<Button type="primary" htmlType="submit" disabled={disabledformProductos}>
 										Registrar
 									</Button>
-									{loading ? <Spin indicator={antIcon} /> : <div />}
 								</Form.Item>
 							</Form>
 							{select === 'ropa' ? (
 								<div className="d-flex justify-content-center">
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
-										<RegistrarTalla />
+										<RegistrarTalla disabledButtons={setDisabled}/>
 									</ProductoContext.Provider>
 								</div>
 							) : (
@@ -274,7 +296,7 @@ function RegistrarProducto(props) {
 							{select === 'calzado' ? (
 								<div>
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
-										<RegistrarNumero />
+										<RegistrarNumero disabledButtons={setDisabled}/>
 									</ProductoContext.Provider>
 								</div>
 							) : (
@@ -286,7 +308,7 @@ function RegistrarProducto(props) {
 			)
 		},
 		{
-			title: 'Galeria',
+			title: 'Galeria(opcional)',
 			content: (
 				<div className="contenedor-galeria d-flex justify-content-center align-items-center mt-4 mb-5">
 					<div className="text-center" style={{ width: '90%' }}>
@@ -308,7 +330,11 @@ function RegistrarProducto(props) {
 					<Steps current={current}>{steps.map((item) => <Step key={item.title} title={item.title} />)}</Steps>
 				</div>
 			</div>
-			<div className="steps-content">{steps[current].content}</div>
+			<div className="steps-content">
+				<Spin size="large" spinning={loading}>
+					{steps[current].content}
+				</Spin>
+			</div>
 			<div className="steps-action d-flex justify-content-center align-items-center">
 				{current < steps.length - 1 && (
 					<Button type="primary" onClick={next} disabled={disabled}>
@@ -325,7 +351,7 @@ function RegistrarProducto(props) {
 							});
 							setTimeout(() => {
 								window.location.reload();
-							}, 3000);
+							}, 2000);
 						}}
 					>
 						Done

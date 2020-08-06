@@ -1,11 +1,9 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Form, Button, Input, Row, Col, Badge, notification, Spin, Space } from 'antd';
-import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import './actualizar_tallas.scss';
 import { IdProductoContext } from '../../contexts/ProductoContext';
-
-const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 function ActualizarNumero() {
 	const formRef = useRef(null);
@@ -206,53 +204,54 @@ function ActualizarNumero() {
 	}
 
 	return (
-		<div className="ml-4">
-			<div className="d-flex justify-content-center">
-				<Form form={form} ref={formRef.current} onFinish={actualizarNumero}>
-					<Input.Group>
-						<Row gutter={8}>
-							<Col span={5}>
-								<Form.Item name="numero" label="numero" onChange={datosForm}>
-									<Input name="numero" />
-								</Form.Item>
-							</Col>
-							<Col span={8}>
-								<Form.Item name="cantidad" label="Cantidad" onChange={datosForm}>
-									<Input name="cantidad" />
-								</Form.Item>
-							</Col>
-							<Col>
-								{idNumero ? (
-									<div>
-										<Space>
-											<Button type="dafault" htmlType="submit">
-												Actualizar
-											</Button>
-											<Button
-												type="dafault"
-												onClick={() => {
-													setIdNumero('');
-													form.resetFields();
-												}}
-											>
-												Cancelar
-											</Button>
-										</Space>
-									</div>
-								) : (
-									<Button type="dafault" onClick={nuevoNumero}>
-										Agregar
-									</Button>
-								)}
-								{loading ? <Spin indicator={antIcon} /> : <div />}
-							</Col>
-						</Row>
-					</Input.Group>
-				</Form>
+		<Spin size="large" spinning={loading}>
+			<div className="ml-4">
+				<div className="d-flex justify-content-center">
+					<Form form={form} ref={formRef.current} onFinish={actualizarNumero}>
+						<Input.Group>
+							<Row gutter={8}>
+								<Col span={5}>
+									<Form.Item name="numero" label="numero" onChange={datosForm}>
+										<Input name="numero" />
+									</Form.Item>
+								</Col>
+								<Col span={8}>
+									<Form.Item name="cantidad" label="Cantidad" onChange={datosForm}>
+										<Input name="cantidad" />
+									</Form.Item>
+								</Col>
+								<Col>
+									{idNumero ? (
+										<div>
+											<Space>
+												<Button type="dafault" htmlType="submit">
+													Actualizar
+												</Button>
+												<Button
+													type="dafault"
+													onClick={() => {
+														setIdNumero('');
+														form.resetFields();
+													}}
+												>
+													Cancelar
+												</Button>
+											</Space>
+										</div>
+									) : (
+										<Button type="dafault" onClick={nuevoNumero}>
+											Agregar
+										</Button>
+									)}
+								</Col>
+							</Row>
+						</Input.Group>
+					</Form>
+				</div>
+				<h6 className="mensaje">Para eliminar manten presionado</h6>
+				<div className="row">{render}</div>
 			</div>
-			<h6 className="mensaje">Para eliminar manten presionado</h6>
-			<div className="row">{render}</div>
-		</div>
+		</Spin>
 	);
 }
 export default ActualizarNumero;

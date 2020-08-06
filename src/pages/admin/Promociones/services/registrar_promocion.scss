@@ -1,6 +1,13 @@
-
+@media(max-width: 768px){
+   .contenedor-articulo-detalles{
+        margin-top: 3em;
+    }
+    .porcentaje-descuento{
+        display: block!important;
+    }
+}
 .imagen-box{
-    height: 250px;
+    height: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,16 +17,16 @@
     max-height: 100%;
 }
 .precio-producto{
-    color: rgb(124, 124, 124);
+    color: rgba(0, 0, 0, 0.281);
     text-decoration: line-through;
 }
 .precio-rebaja{
-    color: #22bb33;
+    color: #000000a9;
 }
 .texto-descuento{
     font-size: 20px;
 }
-.numero-descuento{
+.porcentaje-descuento{
     color: #22bb33;
 }
 .imagen-box-promocion{

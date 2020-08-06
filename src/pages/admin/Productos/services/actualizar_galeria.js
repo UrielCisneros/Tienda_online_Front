@@ -7,13 +7,11 @@ import {
 	DeleteOutlined,
 	PictureOutlined,
 	EditOutlined,
-	LoadingOutlined,
 	ExclamationCircleOutlined
 } from '@ant-design/icons';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import './actualizar_galeria.scss';
 
-const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 const { confirm } = Modal;
 
 function RegistrarGaleria() {
@@ -199,7 +197,7 @@ function RegistrarGaleria() {
 
 	if (galeria !== undefined) {
 		var render = galeria.map((imagenes) => (
-			<div className="shadow rounded imgStyle d-inline-block" key={imagenes._id}>
+			<div className="shadow rounded imgStyle d-inline-block " key={imagenes._id}>
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
 					<img
 						className="img"
@@ -237,37 +235,38 @@ function RegistrarGaleria() {
 	}
 
 	return (
-		<div className="responsive">
-			<div className="col-sm-4 col-lg-6 imgUploads">
-				<Upload {...antprops}>
-					<Button>
-						<UploadOutlined /> Upload
-					</Button>
-					{loading ? <Spin indicator={antIcon} /> : <div />}
-				</Upload>
-				{existeGaleria ? (
-					<div className="padre">{render}</div>
-				) : (
-					<div className="d-flex justify-content-center mt-5">
-						<p>No hay Galeria</p>
-					</div>
-				)}
-			</div>
-			<div className="col-sm-4 col-lg-6">
-				<p className="text-center">Visualización de la imagen</p>
-				<div className="shadow rounded imgPreview-actualizar-galeria d-flex justify-content-center align-items-center mb-5">
-					{existeGaleria === false || prev === '' || galeria.length === 0 ? (
-						<PictureOutlined style={{ fontSize: 80 }} />
+		<Spin size="large" spinning={loading}>
+			<div className="responsive">
+				<div className="col-sm-4 col-lg-6 imgUploads">
+					<Upload {...antprops}>
+						<Button>
+							<UploadOutlined /> Upload
+						</Button>
+					</Upload>
+					{existeGaleria ? (
+						<div className="padre">{render}</div>
 					) : (
-						<img
-							className="imagen-actualizar-galeria"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${prev}`}
-							alt="preview-imagen"
-						/>
+						<div className="d-flex justify-content-center mt-5">
+							<p>No hay Galeria</p>
+						</div>
 					)}
 				</div>
+				<div className="col-sm-4 col-lg-6">
+					<p className="text-center">Visualización de la imagen</p>
+					<div className="shadow rounded imgPreview-actualizar-galeria d-flex justify-content-center align-items-center mb-5">
+						{existeGaleria === false || prev === '' || galeria.length === 0 ? (
+							<PictureOutlined style={{ fontSize: 80 }} />
+						) : (
+							<img
+								className="imagen-actualizar-galeria"
+								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${prev}`}
+								alt="preview-imagen"
+							/>
+						)}
+					</div>
+				</div>
 			</div>
-		</div>
+		</Spin>
 	);
 }
 export default RegistrarGaleria;

@@ -1,11 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Form, Button, Input, Row, Col, Badge, notification, Spin, Space } from 'antd';
-import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import './actualizar_tallas.scss';
 import { IdProductoContext } from '../../contexts/ProductoContext';
-
-const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 function ActualizarTalla() {
 	const [ form ] = Form.useForm();
@@ -208,53 +206,54 @@ function ActualizarTalla() {
 	}
 
 	return (
-		<div className="ml-4">
-			<div className="d-flex justify-content-center">
-				<Form form={form} onFinish={actualizarTalla}>
-					<Input.Group>
-						<Row gutter={8}>
-							<Col span={5}>
-								<Form.Item name="talla" label="Talla" onChange={datosForm}>
-									<Input name="talla" />
-								</Form.Item>
-							</Col>
-							<Col span={8}>
-								<Form.Item name="cantidad" label="Cantidad" onChange={datosForm}>
-									<Input name="cantidad" />
-								</Form.Item>
-							</Col>
-							<Col>
-								{idTalla ? (
-									<div>
-										<Space>
-											<Button type="dafault" htmlType="submit">
-												Actualizar
-											</Button>
-											<Button
-												type="dafault"
-												onClick={() => {
-													setIdTalla('');
-													form.resetFields();
-												}}
-											>
-												Cancelar
-											</Button>
-										</Space>
-									</div>
-								) : (
-									<Button type="dafault" onClick={nuevaTalla}>
-										Agregar
-									</Button>
-								)}
-								{loading ? <Spin indicator={antIcon} /> : <div />}
-							</Col>
-						</Row>
-					</Input.Group>
-				</Form>
+		<Spin size="large" spinning={loading}>
+			<div className="ml-4">
+				<div className="d-flex justify-content-center">
+					<Form form={form} onFinish={actualizarTalla}>
+						<Input.Group>
+							<Row gutter={8}>
+								<Col span={5}>
+									<Form.Item name="talla" label="Talla" onChange={datosForm}>
+										<Input name="talla" />
+									</Form.Item>
+								</Col>
+								<Col span={8}>
+									<Form.Item name="cantidad" label="Cantidad" onChange={datosForm}>
+										<Input name="cantidad" />
+									</Form.Item>
+								</Col>
+								<Col>
+									{idTalla ? (
+										<div>
+											<Space>
+												<Button type="dafault" htmlType="submit">
+													Actualizar
+												</Button>
+												<Button
+													type="dafault"
+													onClick={() => {
+														setIdTalla('');
+														form.resetFields();
+													}}
+												>
+													Cancelar
+												</Button>
+											</Space>
+										</div>
+									) : (
+										<Button type="dafault" onClick={nuevaTalla}>
+											Agregar
+										</Button>
+									)}
+								</Col>
+							</Row>
+						</Input.Group>
+					</Form>
+				</div>
+				<h6 className="mensaje">Para eliminar manten presionado</h6>
+				<div className="row">{render}</div>
 			</div>
-			<h6 className="mensaje">Para eliminar manten presionado</h6>
-			<div className="row">{render}</div>
-		</div>
+		</Spin>
 	);
 }
 export default ActualizarTalla;
