@@ -42,6 +42,7 @@ function ActualizarTalla() {
 				}
 			})
 			.then((res) => {
+				setIdTalla('');
 				obtenerTalla();
 				setLoading(false);
 				form.resetFields();
@@ -177,7 +178,7 @@ function ActualizarTalla() {
 
 	if (productos !== 0) {
 		var render = productos.map((tallas) => (
-			<div className="mb-5 m-2">
+			<div className="mb-5 m-2" key={tallas._id}>
 				<Badge count={tallas.cantidad} style={{ backgroundColor: '#52c41a' }}>
 					<div className="hover-delete d-flex text-center">
 						<p

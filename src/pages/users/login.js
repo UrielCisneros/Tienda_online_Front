@@ -44,22 +44,16 @@ function Login(props) {
 	return (
 		<div>
 			<Form {...layout} name="basic" initialValues={{ remember: true }} onFinish={onFinish}>
-				<Form.Item
-					label="Correo"
-					name="email"
-					rules={[ { required: true, message: 'El email es obligatorio!' } ]}
-				>
-					<Input />
+				<Form.Item label="Correo" >
+					<Form.Item name="email" rules={[ { required: true, message: 'El email es obligatorio!' } ]} noStyle >
+						<Input />
+					</Form.Item>
 				</Form.Item>
-
-				<Form.Item
-					label="Contraseña"
-					name="contrasena"
-					rules={[ { required: true, message: 'La contraseña es obligatoria!' } ]}
-				>
-					<Input.Password />
+				<Form.Item label="Contraseña" >
+					<Form.Item name="contrasena" rules={[ { required: true, message: 'La contraseña es obligatoria!' } ]} noStyle >
+						<Input.Password />
+					</Form.Item>
 				</Form.Item>
-
 				<Form.Item {...tailLayout}>
 					<Button type="primary" htmlType="submit">
 						Acceder

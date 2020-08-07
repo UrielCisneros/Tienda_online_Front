@@ -45,40 +45,34 @@ function Registro(props) {
 	return (
 		<div>
 			<Form {...layout} name="basic" initialValues={{ remember: true }} onFinish={onFinish}>
-				<Form.Item
-					label="Nombre"
-					name="nombre"
-					rules={[ { required: true, message: 'El nombre es obligatorio!' } ]}
-				>
-					<Input />
+				<Form.Item label="Nombre" >
+					<Form.Item name="nombre" rules={[ { required: true, message: 'El nombre es obligatorio!' } ]} noStyle >
+						<Input />
+					</Form.Item>
 				</Form.Item>
 
-				<Form.Item label="Apellido" name="apellido">
-					<Input />
+				<Form.Item label="Apellido" >
+					<Form.Item name="apellido" noStyle >
+						<Input />
+					</Form.Item>
 				</Form.Item>
 
-				<Form.Item
-					label="Correo"
-					name="email"
-					rules={[ { required: true, message: 'El email es obligatorio!' } ]}
-				>
-					<Input />
+				<Form.Item label="Correo" >
+					<Form.Item name="email" rules={[ { required: true, message: 'El email es obligatorio!' } ]} noStyle >
+						<Input />
+					</Form.Item>
 				</Form.Item>
 
-				<Form.Item
-					label="Contraseña"
-					name="contrasena"
-					rules={[ { required: true, message: 'La contraseña es obligatoria!' } ]}
-				>
-					<Input.Password />
+				<Form.Item label="Contraseña" >
+					<Form.Item name="contrasena" rules={[ { required: true, message: 'La contraseña es obligatoria!' } ]} noStyle >
+						<Input.Password />
+					</Form.Item>
 				</Form.Item>
 
-				<Form.Item
-					label="Confirmar contraseña"
-					name="repeatContrasena"
-					rules={[ { required: true, message: 'La contraseña es obligatoria!' } ]}
-				>
-					<Input.Password />
+				<Form.Item label="Confirmar contraseña" >
+					<Form.Item name="repeatContrasena" rules={[ { required: true, message: 'La contraseña es obligatoria!' } ]} noStyle >
+						<Input.Password />
+					</Form.Item>
 				</Form.Item>
 
 				<Form.Item {...tailLayout}>

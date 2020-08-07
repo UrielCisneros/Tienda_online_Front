@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import clienteAxios from '../../config/axios';
+import clienteAxios from '../../../config/axios';
 import { Button, Input, Space, Modal, List, Row, Col, Upload, Result, notification } from 'antd';
-import Spin from '../../components/Spin';
+import Spin from '../../../components/Spin';
 import {
 	EyeOutlined,
 	EditOutlined,
@@ -11,7 +11,7 @@ import {
 	ExclamationCircleOutlined
 } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
-import CarouselImages from './services/carousel/carousel';
+import CarouselImages from './services/carousel';
 
 const { Search } = Input;
 const { confirm } = Modal;

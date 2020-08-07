@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import clienteAxios from '../../config/axios';
+import clienteAxios from '../../../config/axios';
 import { Col, Row, Input, Button, Drawer, notification, Space, List, Result } from 'antd';
-import Spin from '../../components/Spin';
-import { IdProductoContext } from './contexts/ProductoContext';
+import Spin from '../../../components/Spin';
+import { IdProductoContext } from '../contexts/ProductoContext';
 import jwt_decode from 'jwt-decode';
-import Sugerencia from './services/sugerencias/sugerencia';
+import Sugerencia from './services/sugerencia';
 
 const { Search } = Input;
 

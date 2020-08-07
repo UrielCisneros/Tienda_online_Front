@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
 import { Form, Button, Input, Select, Steps, notification, Upload, Spin } from 'antd';
@@ -22,6 +22,7 @@ const layout = {
 };
 
 function RegistrarProducto(props) {
+	const formRef = useRef(null);
 	const [ form ] = Form.useForm();
 	const [ disabled, setDisabled ] = useContext(StepsContext);
 	///Autorizacion a la pagina con Token
@@ -36,7 +37,7 @@ function RegistrarProducto(props) {
 	const [ disabledformProductos, setDisabledFormProductos ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
 	const  /* reload, setReload, */ closeDrawer = props.reloadProductos;
-	console.log(closeDrawer)
+	const [ upload, setUpload ] = useState(false);
 
 	if (closeDrawer) {
 		form.resetFields();
@@ -75,8 +76,13 @@ function RegistrarProducto(props) {
 				file.thumbUrl = e.target.result;
 				setFiles(file);
 			};
+			setUpload(true);
 			return false;
-		}
+		},
+		onRemove: (file) => {
+            setUpload(false)
+            setFiles([]);
+        }
 	};
 
 	///capturar datos maualmente}
@@ -101,6 +107,7 @@ function RegistrarProducto(props) {
 	const obtenerEditor = (value) => {
 		setEditor(value);
 	};
+	
 	const datosForm = (e) => {
 		setDatos({
 			...datos,
@@ -192,73 +199,61 @@ function RegistrarProducto(props) {
 								onFinish={onFinish}
 								initialValues={{ categoria: select }}
 								form={form}
+								ref={formRef.current}
 							>
-								<Form.Item label="Codigo de barras" onChange={datosForm}>
+								<Form.Item label="Codigo de barras" onChange={datosForm} >
 									<Input
 										name="codigo"
 										disabled={disabledformProductos}
 										placeholder="Campo opcional"
 									/>
 								</Form.Item>
-								<Form.Item
-									label="Nombre del producto"
-									name="nombre"
-									onChange={datosForm}
-									rules={[ { required: true, message: 'Este campo es requerido' } ]}
-								>
-									<Input name="nombre" disabled={disabledformProductos} />
+								<Form.Item label="Nombre del producto" onChange={datosForm} >
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="nombre" >
+										<Input name="nombre" disabled={disabledformProductos} />
+									</Form.Item>
 								</Form.Item>
 								{select === 'otros' ? (
-									<Form.Item
-										label="Cantidad"
-										name="cantidad"
-										onChange={datosForm}
-										rules={[ { required: true, message: 'Este campo es requerido' } ]}
-									>
-										<Input type="number" name="cantidad" disabled={disabledformProductos} />
+									<Form.Item label="Cantidad" onChange={datosForm} >
+										<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="cantidad" >
+											<Input type="number" name="cantidad" disabled={disabledformProductos} />
+										</Form.Item>
 									</Form.Item>
 								) : (
 									<div />
 								)}
-								<Form.Item
-									label="Precio del producto"
-									name="precio"
-									onChange={datosForm}
-									rules={[ { required: true, message: 'Este campo es requerido' } ]}
-								>
-									<Input type="number" disabled={disabledformProductos} name="precio" />
+								<Form.Item label="Precio del producto" onChange={datosForm} >
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="precio" >
+										<Input type="number" disabled={disabledformProductos} name="precio" />
+									</Form.Item>
 								</Form.Item>
-								<Form.Item
-									label="Descripcion del producto"
-									name="descripcion"
-									rules={[ { required: true, message: 'Este campo es requerido' } ]}
-								>
-									<Editor
-										disabled={disabledformProductos}
-										init={{
-											height: 200,
-											menubar: true,
-											plugins: [
-												'advlist autolink lists link image charmap print preview anchor',
-												'searchreplace visualblocks code fullscreen',
-												'insertdatetime media table paste code help wordcount'
-											],
-											toolbar:
-												'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
-										}}
-										onEditorChange={obtenerEditor}
-									/>
+								<Form.Item label="Descripcion del producto" >
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="descripcion" valuePropName='Editor'>
+										<Editor
+											disabled={disabledformProductos}
+											init={{
+												height: 200,
+												menubar: true,
+												plugins: [
+													'advlist autolink lists link image charmap print preview anchor',
+													'searchreplace visualblocks code fullscreen',
+													'insertdatetime media table paste code help wordcount'
+												],
+												toolbar:
+													'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+											}}
+											onEditorChange={obtenerEditor}
+										/>
+									</Form.Item>
 								</Form.Item>
-								<Form.Item
-									label="Imagen principal"
-									name="imagen"
-									rules={[ { required: true, message: 'Este campo es requerido' } ]}
-								>
-									<Upload {...propss}>
-										<Button disabled={disabledformProductos}>
-											<UploadOutlined /> Subir
-										</Button>
-									</Upload>
+								<Form.Item label="Imagen principal" >
+									<Form.Item rules={[ { required: true, message: 'Este campo es requerido' } ]}  noStyle name="imagen" valuePropName='filelist'>
+										<Upload {...propss}>
+											<Button disabled={upload}>
+												<UploadOutlined /> Subir
+											</Button>
+										</Upload>
+									</Form.Item>
 								</Form.Item>
 								<Form.Item className="d-flex justify-content-center align-items-center text-center">
 									<Button type="primary" htmlType="submit" disabled={disabledformProductos}>

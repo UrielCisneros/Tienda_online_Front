@@ -126,7 +126,7 @@ function RegistrarNumero() {
 
 	if (productos !== 0) {
 		var render = productos.map((numero) => (
-			<div className="m-2">
+			<div className="m-2" key={numero._id}>
 				<Badge count={numero.cantidad} style={{ backgroundColor: '#52c41a' }}>
 					<div className="hover-delete d-flex text-center">
 						<p
@@ -151,9 +151,14 @@ function RegistrarNumero() {
 
 	return (
 		<div>
-			<h4 className="text-center">
+			{disabledForm === false ? (
+				<p className="mensaje-tallas-success">Ya puedes registrar numero de calzado.</p>
+			) : (
+				<p className="mensaje-tallas">Podrás registrar el numero de calzado despues de registrar tu producto</p>
+			)}
+			<p className="text-center mb-1">
 				Escribe la talla del calzado y la cantidad de productos disponibles de esa talla.
-			</h4>
+			</p>
 			<div className="d-flex justify-content-center">
 				<Form onFinish={subirNumero} form={form}>
 					<Input.Group>

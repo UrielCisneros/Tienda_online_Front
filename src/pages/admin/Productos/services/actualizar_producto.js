@@ -27,6 +27,7 @@ function ActualizarProducto(props) {
 	const [ loading, setLoading ] = useState(false);
 	const [ spinning, setSpinning ] = useState(false);
 	const [ reload, setReload ] = props.reloadProductos;
+	const [ upload, setUpload ] = useState(false);
 
 	if (reload) {
 		form.resetFields();
@@ -59,7 +60,12 @@ function ActualizarProducto(props) {
 				file.thumbUrl = e.target.result;
 				setFiles(file);
 			};
+			setUpload(true);
 			return false;
+		},
+		onRemove: (file) => {
+			setUpload(false);
+			setFiles([]);
 		}
 	};
 
@@ -174,78 +180,87 @@ function ActualizarProducto(props) {
 		<Tabs defaultActiveKey="1">
 			<TabPane tab="Actualizar datos del producto" key="1">
 				<Spin spinning={spinning}>
+					{productos.categoria === 'ropa' ? (
+						<div className="d-flex justify-content-center">{<ActualizarTalla />}</div>
+					) : (
+						<div />
+					)}
+					{productos.categoria === 'calzado' ? <div>{<ActualizarNumero />}</div> : <div />}
 					<Form {...layout} name="nest-messages" onFinish={subirDatos} form={form}>
 						<Form.Item name="codigo" label="Codigo de barras" onChange={obtenerValores}>
 							<Input name="codigo" placeholder="Campo opcional" />
 						</Form.Item>
-						<Form.Item
-							name="nombre"
-							label="Nombre del producto"
-							onChange={obtenerValores}
-							rules={[ { required: true, message: 'Este campo es requerido' } ]}
-						>
-							<Input name="nombre" />
+						<Form.Item label="Nombre del producto" onChange={obtenerValores}>
+							<Form.Item
+								rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								noStyle
+								name="nombre"
+							>
+								<Input name="nombre" />
+							</Form.Item>
 						</Form.Item>
-						<Form.Item
-							name="categoria"
-							label="Categoria"
-							rules={[ { required: true, message: 'Este campo es requerido' } ]}
-						>
-							<Select placeholder="Seleciona una categoria" onChange={obtenerSelect}>
-								<Option value="ropa">Ropa</Option>
-								<Option value="calzado">Calzado</Option>
-								<Option value="otros">Otros</Option>
-							</Select>
+						<Form.Item label="Categoria">
+							<Form.Item
+								rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								noStyle
+								name="categoria"
+							>
+								<Select placeholder="Seleciona una categoria" onChange={obtenerSelect}>
+									<Option value="ropa">Ropa</Option>
+									<Option value="calzado">Calzado</Option>
+									<Option value="otros">Otros</Option>
+								</Select>
+							</Form.Item>
 						</Form.Item>
 						{productos.categoria === 'otros' ? (
-							<Form.Item
-								name="cantidad"
-								label="Cantidad"
-								onChange={obtenerValores}
-								rules={[ { required: true, message: 'Este campo es requerido' } ]}
-							>
-								<Input type="number" name="cantidad" />
+							<Form.Item label="Cantidad" onChange={obtenerValores}>
+								<Form.Item
+									rules={[ { required: true, message: 'Este campo es requerido' } ]}
+									noStyle
+									name="cantidad"
+								>
+									<Input type="number" name="cantidad" />
+								</Form.Item>
 							</Form.Item>
 						) : (
 							<div />
 						)}
-						<Form.Item
-							name="precio"
-							label="Precio del producto"
-							onChange={obtenerValores}
-							rules={[ { required: true, message: 'Este campo es requerido' } ]}
-						>
-							<Input type="number" name="precio" />
+						<Form.Item label="Precio del producto" onChange={obtenerValores}>
+							<Form.Item
+								rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								noStyle
+								name="precio"
+							>
+								<Input type="number" name="precio" />
+							</Form.Item>
 						</Form.Item>
-						<Form.Item
-							name="descripcion"
-							label="Descripcion del producto"
-							rules={[ { required: true, message: 'Este campo es requerido' } ]}
-						>
-							<Editor
-								init={{
-									height: 300,
-									menubar: true,
-									plugins: [
-										'advlist autolink lists link image charmap print preview anchor',
-										'searchreplace visualblocks code fullscreen',
-										'insertdatetime media table paste code help wordcount'
-									],
-									toolbar:
-										'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
-								}}
-								onEditorChange={obtenerEditor}
-							/>
+						<Form.Item label="Descripcion del producto">
+							<Form.Item
+								rules={[ { required: true, message: 'Este campo es requerido' } ]}
+								noStyle
+								name="descripcion"
+								valuePropName="Editor"
+							>
+								<Editor
+									value={editor}
+									init={{
+										height: 300,
+										menubar: true,
+										plugins: [
+											'advlist autolink lists link image charmap print preview anchor',
+											'searchreplace visualblocks code fullscreen',
+											'insertdatetime media table paste code help wordcount'
+										],
+										toolbar:
+											'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+									}}
+									onEditorChange={obtenerEditor}
+								/>
+							</Form.Item>
 						</Form.Item>
-						{productos.categoria === 'ropa' ? (
-							<div className="d-flex justify-content-center">{<ActualizarTalla />}</div>
-						) : (
-							<div />
-						)}
-						{productos.categoria === 'calzado' ? <div>{<ActualizarNumero />}</div> : <div />}
-						<Form.Item label="Imagen principal" name="imagen">
+						<Form.Item label="Imagen principal" name="imagen" valuePropName="filelist">
 							<Upload {...antprops} name="imagen">
-								<Button>
+								<Button disabled={upload}>
 									<UploadOutlined /> Subir
 								</Button>
 							</Upload>

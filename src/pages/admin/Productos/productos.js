@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
-import clienteAxios from '../../config/axios';
-import RegistrarProducto from './services/producto/registrar_producto';
-import ActualizarProducto from './services/producto/actualizar_producto';
+import clienteAxios from '../../../config/axios';
+import RegistrarProducto from './services/registrar_producto';
+import ActualizarProducto from './services/actualizar_producto';
 import { Card, Col, Row, Input, Button, Modal, Drawer, Result, notification } from 'antd';
-import Spin from '../../components/Spin';
-import Pagination from '../../components/Pagination/pagination';
-import { StepsContext, StepsProvider } from '../admin/contexts/stepsContext';
-import { IdProductoContext } from './contexts/ProductoContext';
+import Spin from '../../../components/Spin';
+import Pagination from '../../../components/Pagination/pagination';
+import { StepsContext, StepsProvider } from '../contexts/stepsContext';
+import { IdProductoContext } from '../contexts/ProductoContext';
 import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import queryString from 'query-string';
@@ -28,8 +28,8 @@ function RegistrarProductos(props) {
 	const [ loading, setLoading ] = useState(false);
 	const [ visible, setVisible ] = useState(false);
 	const [ accion, setAccion ] = useState(false);
-	const [	reload, setReload ] = useState(false);
-	const [	closeDrawer, setCloseDrawer ] = useState(false);
+	const [ reload, setReload ] = useState(false);
+	const [ closeDrawer, setCloseDrawer ] = useState(false);
 	const token = localStorage.getItem('token');
 
 	var decoded = Jwt(token);
@@ -48,6 +48,19 @@ function RegistrarProductos(props) {
 		props.history.push('/');
 	}
 
+	function closeConfirm() {
+		confirm({
+			title: 'Estás seguro de cerrar esta ventana?',
+			icon: <ExclamationCircleOutlined />,
+			okText: 'Si',
+			okType: 'danger',
+			cancelText: 'No',
+			onOk() {
+				drawnerClose();
+			}
+		});
+	}
+
 	function drawnerClose() {
 		setVisible(false);
 		setReload(true);
@@ -62,17 +75,12 @@ function RegistrarProductos(props) {
 		setVisible(true);
 	}
 
-	function closeConfirm() {
-		confirm({
-		  title: 'Estás seguro de cerrar esta ventana?',
-		  icon: <ExclamationCircleOutlined />,
-		  okText: 'Si',
-		  okType: 'danger',
-		  cancelText: 'No',
-		  onOk() {
+	const eventoCloseConfirm = () => {
+		if (accion) {
 			drawnerClose();
-		  },
-		});
+		} else {
+			closeConfirm();
+		}
 	}
 
 	function showDeleteConfirm(idproducto) {
@@ -182,7 +190,7 @@ function RegistrarProductos(props) {
 	);
 
 	const render = productosRender.map((productos) => (
-		<Col span={32} key={productos.id}>
+		<Col span={32} key={productos._id}>
 			<Card.Grid hoverable style={gridStyle}>
 				<Card
 					style={{ width: 300, maxHeight: 400 }}
@@ -219,7 +227,7 @@ function RegistrarProductos(props) {
 				>
 					<div style={{ height: 100 }}>
 						<h1 className="h4">{productos.nombre}</h1>
-						<h2 className="h5">{new Intl.NumberFormat("es-MX").format(productos.precio)}</h2>
+						<h2 className="h5">{new Intl.NumberFormat('es-MX').format(productos.precio)}</h2>
 					</div>
 				</Card>
 			</Card.Grid>
@@ -229,10 +237,11 @@ function RegistrarProductos(props) {
 	return (
 		<div>
 			<Drawer
+				forceRender
 				title={accion === true ? 'Actualizar un producto' : 'Registra un nuevo producto'}
 				width={window.screen.width > 768 ? 1000 : window.screen.width}
 				placement={'right'}
-				onClose={closeConfirm}
+				onClose={eventoCloseConfirm}
 				visible={visible}
 				bodyStyle={{ paddingBottom: 80 }}
 				footer={
@@ -241,7 +250,7 @@ function RegistrarProductos(props) {
 							textAlign: 'right'
 						}}
 					>
-						<Button onClick={closeConfirm} type="primary">
+						<Button onClick={eventoCloseConfirm} type="primary">
 							Cerrar
 						</Button>
 					</div>
@@ -249,11 +258,11 @@ function RegistrarProductos(props) {
 			>
 				{accion === true ? (
 					<IdProductoContext.Provider value={productoID}>
-						<ActualizarProducto reloadProductos={[reload, setReload]} />
+						<ActualizarProducto reloadProductos={[ reload, setReload ]} />
 					</IdProductoContext.Provider>
 				) : (
 					<StepsProvider value={[ disabled, setDisabled ]}>
-						<RegistrarProducto reloadProductos={/* reload, setReload, */ closeDrawer } />
+						<RegistrarProducto reloadProductos={/* reload, setReload, */ closeDrawer} />
 					</StepsProvider>
 				)}
 			</Drawer>

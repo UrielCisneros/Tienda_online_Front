@@ -199,7 +199,7 @@ function RegistrarGaleria() {
 
 	if (galeria !== undefined) {
 		var render = galeria.map((imagenes) => (
-			<div className="shadow rounded imgStyle d-inline-block">
+			<div className="shadow rounded imgStyle d-inline-block" key={imagenes._id}>
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
 					<img
 						className="img"
@@ -254,7 +254,8 @@ function RegistrarGaleria() {
 				)}
 			</div>
 			<div className="col-sm-4 col-lg-6">
-				<div className="shadow rounded imgPreview-actualizar-galeria d-flex justify-content-center align-items-center">
+				<p className="text-center">Visualización de la imagen</p>
+				<div className="shadow rounded imgPreview-actualizar-galeria d-flex justify-content-center align-items-center mb-5">
 					{existeGaleria === false || prev === '' || galeria.length === 0 ? (
 						<PictureOutlined style={{ fontSize: 80 }} />
 					) : (
