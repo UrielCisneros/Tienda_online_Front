@@ -1,7 +1,7 @@
-import React,{useState,useEffect,useContext} from 'react'
+import React,{useState} from 'react'
 import {Form,Input,Button,notification,Upload,message} from 'antd'
 import {Editor} from '@tinymce/tinymce-react';
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined,CheckOutlined } from '@ant-design/icons';
 import clienteAxios from '../../../../config/axios';
 
 export default function RegistrarBlog(props) {
@@ -176,7 +176,7 @@ export default function RegistrarBlog(props) {
                     </Upload>
                 </Form.Item>
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit" size="large" icon={<CheckOutlined />}>
                         Registrar Blog
                     </Button>
                 </Form.Item>
