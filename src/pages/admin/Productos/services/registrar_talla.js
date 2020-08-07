@@ -1,18 +1,17 @@
 import React, { useState, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Form, Button, Input, Row, Col, Badge, notification, Spin } from 'antd';
-import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import './registrar_talla.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
-import { StepsContext } from '../../contexts/stepsContext';
+/* import { StepsContext } from '../../contexts/stepsContext'; */
 
-const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
-
-function RegistrarTalla() {
+function RegistrarTalla(props) {
 	const [ form ] = Form.useForm();
 	const token = localStorage.getItem('token');
 	const [ productoContext, disabledForm ] = useContext(ProductoContext);
-	const [ disabled, setDisabled ] = useContext(StepsContext);
+	/* const [ disabled, setDisabled ] = useContext(StepsContext); */
+	const setDisabled = props.disabledButtons;
 	const [ productos, setProductos ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
 
@@ -150,7 +149,7 @@ function RegistrarTalla() {
 	}
 
 	return (
-		<div>
+		<Spin size="large" spinning={loading}>
 			{disabledForm === false ? (
 				<p className="mensaje-tallas-success">Ya puedes registrar tallas.</p>
 			) : (
@@ -175,7 +174,6 @@ function RegistrarTalla() {
 								<Button disabled={disabledForm} type="dafault" htmlType="submit" loading={loading}>
 									Agregar
 								</Button>
-								{loading ? <Spin indicator={antIcon} /> : <div />}
 							</Col>
 						</Row>
 					</Input.Group>
@@ -183,7 +181,7 @@ function RegistrarTalla() {
 			</div>
 			<h6 className="mensaje">Para eliminar manten presionado</h6>
 			<div className="row">{render}</div>
-		</div>
+		</Spin>
 	);
 }
 export default RegistrarTalla;

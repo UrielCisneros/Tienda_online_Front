@@ -1,35 +1,57 @@
 import React, { useState, useEffect, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Button, Input, Space, Upload, Spin, notification } from 'antd';
+import { Button, Input, Space, Upload, Spin, notification, Form, Col, Slider, List } from 'antd';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import './registrar_promocion.scss';
 
-const ActualizarPromocion = () => {
+const formatoMexico = (number) => {
+	if (!number) {
+		return null;
+	} else {
+		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
+		const rep = '$1,';
+		return number.toString().replace(exp, rep);
+	}
+};
+
+const ActualizarPromocion = (props) => {
 	const token = localStorage.getItem('token');
 	const productoContext = useContext(IdProductoContext);
-
-	const [ loading, setLoading ] = useState(true);
-	const [ loadingButton, setLoadingButton ] = useState(false);
+	const [ loading, setLoading ] = useState(false);
 
 	const [ producto, setProducto ] = useState([]);
 	const [ promocion, setPromocion ] = useState([]);
 	const [ precioPromocion, setPrecioPromocion ] = useState();
+	const [ disabledSumit, setDisabledSumit ] = useState(false);
+	const [ validateStatus, setValidateStatus ] = useState('validating');
+	const [ inputValue, setInputValue ] = useState(0);
+	const [ form ] = Form.useForm();
+	const reload = props.reload;
 
 	useEffect(
 		() => {
+			if(reload){
+				obtenerPromocion();
+			}
 			obtenerPromocion();
 		},
-		[ productoContext ]
+		[ productoContext, reload ]
+	);
+	useEffect(
+		() => {
+			obtenerCampo(promocion.precioPromocion);
+		},
+		[ promocion ]
 	);
 
-	const props = {
+	const antDprops = {
 		beforeUpload: async (file) => {
 			const formDataImagen = new FormData();
 			formDataImagen.append('imagen', file);
 			subirImagen(formDataImagen);
 		}
 	};
-	const propsActualizar = {
+	const antDpropsActualizar = {
 		beforeUpload: async (file) => {
 			const formDataImagen = new FormData();
 			formDataImagen.append('imagen', file);
@@ -37,26 +59,58 @@ const ActualizarPromocion = () => {
 		}
 	};
 
+	const formatter = (value) => `${value}%`;
+
+	const onChange = (value) => {
+		setInputValue(value);
+		var porcentaje = 100 - value;
+		var descuento = Math.round(producto.precio * porcentaje / 100);
+		if (descuento >= producto.precio || descuento <= 0) {
+			setValidateStatus('error');
+			setDisabledSumit(true);
+			form.setFieldsValue({ precio: descuento });
+		} else {
+			form.setFieldsValue({ precio: descuento });
+			setPrecioPromocion(descuento);
+			setValidateStatus('validating');
+			setDisabledSumit(false);
+		}
+	};
+
 	const obtenerCampo = (e) => {
-		setPrecioPromocion(e.target.value);
+		if (e >= producto.precio || e <= 0) {
+			setValidateStatus('error');
+			setDisabledSumit(true);
+		} else {
+			setPrecioPromocion(e);
+			setValidateStatus('validating');
+			setDisabledSumit(false);
+			var porcentaje = Math.round(e / producto.precio * 100);
+			var descuento = 100 - porcentaje;
+			setInputValue(descuento);
+		}
 	};
 
 	const obtenerPromocion = async () => {
+		setLoading(true);
 		await clienteAxios
 			.get(`/productos/promocion/${productoContext}`)
 			.then((res) => {
 				setProducto(res.data.productoPromocion);
 				setPromocion(res.data);
 				setLoading(false);
+				form.setFieldsValue({ precio: res.data.precioPromocion });
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -67,7 +121,7 @@ const ActualizarPromocion = () => {
 	};
 
 	const subirImagen = async (formDataImagen) => {
-		setLoadingButton(true);
+		setLoading(true);
 		await clienteAxios
 			.put(`/productos/promocion/${productoContext}`, formDataImagen, {
 				headers: {
@@ -77,7 +131,7 @@ const ActualizarPromocion = () => {
 			})
 			.then((res) => {
 				obtenerPromocion();
-				setLoadingButton(false);
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
@@ -86,12 +140,14 @@ const ActualizarPromocion = () => {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -102,7 +158,7 @@ const ActualizarPromocion = () => {
 	};
 
 	const actualizarImagen = async (formDataImagen) => {
-		setLoadingButton(true);
+		setLoading(true);
 		await clienteAxios
 			.put(`/productos/promocion/${productoContext}`, formDataImagen, {
 				headers: {
@@ -112,7 +168,7 @@ const ActualizarPromocion = () => {
 			})
 			.then((res) => {
 				obtenerPromocion();
-				setLoadingButton(false);
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
@@ -121,12 +177,14 @@ const ActualizarPromocion = () => {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -137,7 +195,7 @@ const ActualizarPromocion = () => {
 	};
 
 	const eliminarImagen = async () => {
-		setLoadingButton(true);
+		setLoading(true);
 		await clienteAxios
 			.delete(`/productos/promocion/EliminarImagen/${productoContext}`, {
 				headers: {
@@ -146,7 +204,7 @@ const ActualizarPromocion = () => {
 			})
 			.then((res) => {
 				obtenerPromocion();
-				setLoadingButton(false);
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
@@ -155,12 +213,14 @@ const ActualizarPromocion = () => {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -171,6 +231,7 @@ const ActualizarPromocion = () => {
 	};
 
 	const actualizarPromocion = async () => {
+		setLoading(true);
 		const formData = new FormData();
 		formData.append('precioPromocion', precioPromocion);
 		await clienteAxios
@@ -181,6 +242,7 @@ const ActualizarPromocion = () => {
 				}
 			})
 			.then((res) => {
+				setLoading(false);
 				obtenerPromocion();
 				notification.success({
 					message: 'Hecho!',
@@ -190,12 +252,14 @@ const ActualizarPromocion = () => {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -205,66 +269,94 @@ const ActualizarPromocion = () => {
 			});
 	};
 
-	if (loading) {
-		return (
-			<div className="d-flex justify-content-center align-items-center">
-				<Spin size="large" />
-			</div>
-		);
-	}
-
 	return (
-		<div>
-			<div className="d-lg-flex d-sm-block mt-4">
-				<div className="col-12 col-lg-6">
-					<div className="shadow">
-						<div className="imagen-box shadow-sm">
-							<img
-								className="img-producto"
-								alt="img-producto"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
+		<Spin size="large" spinning={loading}>
+			<div className="d-flex justify-content-center">
+				<div className="col-lg-8 col-12">
+					<List className="shadow">
+						<List.Item>
+							<List.Item.Meta
+								avatar={
+									<div
+										className="d-flex justify-content-center align-items-center mr-2"
+										style={{ width: 100, height: 100 }}
+									>
+										<img
+											className="imagen-promocion-principal"
+											alt="producto"
+											src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
+										/>
+									</div>
+								}
+								title={
+									<div className="precio-box">
+										<div className="titulo-box">
+											<h2>{producto.nombre}</h2>
+										</div>
+										{disabledSumit === false ? (
+											<div>
+												<p className="precio-producto d-inline mr-2">
+													${formatoMexico(producto.precio)}
+												</p>
+												<p className="precio-rebaja d-inline mr-2">
+													${formatoMexico(precioPromocion)}
+												</p>
+												<p className="porcentaje-descuento d-inline">{inputValue}%OFF</p>
+											</div>
+										) : (
+											<p className="precio-rebaja d-inline">${formatoMexico(producto.precio)}</p>
+										)}
+									</div>
+								}
 							/>
-						</div>
-						<div className="titulo-box">
-							<h2>{producto.nombre}</h2>
-						</div>
-						<div className="precio-box">
-							<h3 className="precio-producto d-inline mr-2">
-								${new Intl.NumberFormat().format(producto.precio)}
-							</h3>
-							<h3 className="precio-rebaja d-inline mr-2">
-								${new Intl.NumberFormat().format(promocion.precioPromocion)}
-							</h3>
-						</div>
-					</div>
-				</div>
-				<div className="col-12 col-lg-6">
-					<div className="mt-4">
+						</List.Item>
+					</List>
+					<div className="mt-5">
 						<div className="d-flex justify-content-center mb-2">
-							<Space>
-								<Input
-									type="number"
-									label="Precio"
-									placeholder={new Intl.NumberFormat().format(promocion.precioPromocion)}
-									onChange={obtenerCampo}
+							<Col>
+								<Slider
+									min={0}
+									max={100}
+									tipFormatter={formatter}
+									onChange={onChange}
+									value={typeof inputValue === 'number' ? inputValue : 0}
+									tooltipVisible
+									marks={{ 0: '0%', 50: '50%', 100: '100%' }}
 								/>
-								<Button onClick={actualizarPromocion}>Actualizar</Button>
-								<Button>Quitar</Button>
-							</Space>
+								<Form form={form}>
+									<Form.Item
+										name="precio"
+										label="Nuevo precio"
+										validateStatus={validateStatus}
+										help="La promocion no debe ser mayor al precio del producto"
+									>
+										<Input
+											prefix="$"
+											type="number"
+											onChange={(e) => obtenerCampo(e.target.value)}
+										/>
+									</Form.Item>
+									<Form.Item className="text-center">
+										<Button disabled={disabledSumit} onClick={actualizarPromocion}>
+											Actualizar
+										</Button>
+									</Form.Item>
+								</Form>
+							</Col>
 						</div>
-						<div className="mt-4">
+						<div>
 							<p className="mt-2 texto-imagen">
 								Actualizar imagen de promocion, recuerda que esta imagen aparecera en el carrucel de
 								promociones
 							</p>
 							<Space className="mt-3 d-flex justify-content-center">
 								{!promocion.imagenPromocion ? (
-									<Upload {...props}>
-										<Button loading={loadingButton}>Subir imagen</Button>
+									<Upload {...antDprops}>
+										<Button>Subir imagen</Button>
 									</Upload>
 								) : (
-									<Upload {...propsActualizar}>
-										<Button loading={loadingButton}>Actualizar imagen</Button>
+									<Upload {...antDpropsActualizar}>
+										<Button>Actualizar imagen</Button>
 									</Upload>
 								)}
 								<Button
@@ -290,7 +382,7 @@ const ActualizarPromocion = () => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</Spin>
 	);
 };
 
