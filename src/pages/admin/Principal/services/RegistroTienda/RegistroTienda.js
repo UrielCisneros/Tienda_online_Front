@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
-import {Form, Col, Row, Input,Divider, Button,Alert} from 'antd';
-import {PlusCircleOutlined,EditOutlined } from '@ant-design/icons';
+import {Form, Col, Row, Input,Divider, Button,Alert,Upload} from 'antd';
+import {PlusCircleOutlined,EditOutlined,UploadOutlined } from '@ant-design/icons';
+import {Editor} from '@tinymce/tinymce-react';
 
 export default function RegistroTienda(props) {
     const {datosNegocio} = props;
@@ -8,6 +9,10 @@ export default function RegistroTienda(props) {
     const [datos, setDatos] = useState({})
     const [control, setControl] = useState(false)
     const [ form ] = Form.useForm();
+
+    const [ upload, setUpload ] = useState(false);
+    //Variables que guardan las imagenes
+    const [ files, setFiles ] = useState([]);
 
     const monstrarInformacionBlog = (e) => {
         form.setFieldsValue(e)
@@ -23,6 +28,32 @@ export default function RegistroTienda(props) {
         }
     }, [datosNegocio])
 
+    const capturarPoliticasEditor = (content, editor) => {
+        setDatos({...datos, politicas: content})
+      }
+
+      const capturarImagenCorpEditor = (content, editor) => {
+        setDatos({...datos, imagenCorp: content})
+      }
+
+      const propss = {
+		listType: 'picture',
+		beforeUpload: (file) => {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = (e) => {
+				file.thumbUrl = e.target.result;
+                setFiles(file);
+            };
+            setUpload(true)
+			return false;
+        },
+        onRemove: (file) => {
+            setUpload(false)
+            setFiles([]);
+        }
+    };
+
     console.log(datos);
 
     const SendForm = () => {
@@ -37,6 +68,26 @@ export default function RegistroTienda(props) {
                 onFinish={SendForm}
             >
                 <div>
+                <Divider>Logo del negocio</Divider>
+                    <div className="m-auto">
+                        <Form.Item label="Logo" >
+                            <Upload {...propss} name="imagen">
+                                <Button disabled={upload}>
+                                    <UploadOutlined /> Subir
+                                </Button>
+                            </Upload>
+                        </Form.Item>  
+                        {control === false ? "" : (
+                            <Form.Item label="Imagen Actual">
+                                <img
+                                    className="d-block img-fluid mt-2"
+                                    width="200"
+                                    alt="imagen de base"
+                                    src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${datos.imagen}`}
+                                />
+                            </Form.Item>
+                        )}
+                    </div>
                 <Divider>Informacion de la tienda</Divider>
                     <Row>
                         <Col span={12}>
@@ -90,10 +141,13 @@ export default function RegistroTienda(props) {
                     </Row>
                     <Divider>Ubicacion</Divider>
                     <div className="w-50" style={{margin: "auto"}} >
-                        <Alert
-                            description="Es necesario que la ubicacion sea registrada ya que esta hara que se muestre en el mapa"
-                            type="info"
-                        />
+                        {control === false ? (                       
+                             <Alert
+                                description="Es necesario que la ubicacion sea registrada ya que esta hara que se muestre en el mapa"
+                                type="info"
+                            />)
+                        : ""}
+
                     </div>
 
                     <Row>
@@ -112,8 +166,75 @@ export default function RegistroTienda(props) {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Divider>Informacion de Piliticas de la empresa</Divider>
-                    
+                    <Divider>Informacion de Politicas de la empresa</Divider>
+                    <Row>
+                        <Col span={24}>
+                            <Form.Item className="m-2" >
+                                <Form.Item rules={[{ required: true, message: 'Politicas de privacidad obligatorias' }]}  noStyle name="politicas" >
+                                    <Editor
+                                        disabled={false}
+                                        init={{
+                                            height: 450,
+                                            menubar: true,
+                                            plugins: [
+                                                'advlist autolink lists link image charmap print preview anchor',
+                                                'searchreplace visualblocks code fullscreen',
+                                                'insertdatetime media table paste code help wordcount'
+                                            ],
+                                            toolbar:
+                                                'undo redo | formatselect | bold italic backcolor | \
+                                            alignleft aligncenter alignright alignjustify | \
+                                            bullist numlist outdent indent | removeformat | help'
+                                        }}
+                                        onEditorChange={capturarPoliticasEditor}
+                                    />
+                                </Form.Item>
+                            </Form.Item>
+                        </Col>
+{/*                         <div className="w-50" style={{margin: "auto"}} >
+                        {control === false ? (                       
+                             <Alert
+                                description="Recurda que en este apartado podras poner todas las politicas que sigue tu empresa, de manera legal"
+                                type="info"
+                            />)
+                        : ""}
+                    </div> */}
+                    </Row>
+
+                    <Divider>Imagen corporativa</Divider>
+                    <Row>
+                        <Col span={24}>
+                            <Form.Item className="m-2" >
+                                <Form.Item rules={[{ required: true, message: 'Imagen corporativa es obligatoria' }]}  noStyle name="imagenCorp" >
+                                    <Editor
+                                        disabled={false}
+                                        init={{
+                                            height: 450,
+                                            menubar: true,
+                                            plugins: [
+                                                'advlist autolink lists link image charmap print preview anchor',
+                                                'searchreplace visualblocks code fullscreen',
+                                                'insertdatetime media table paste code help wordcount'
+                                            ],
+                                            toolbar:
+                                                'undo redo | formatselect | bold italic backcolor | \
+                                            alignleft aligncenter alignright alignjustify | \
+                                            bullist numlist outdent indent | removeformat | help'
+                                        }}
+                                        onEditorChange={capturarImagenCorpEditor}
+                                    />
+                                </Form.Item>
+                            </Form.Item>
+                        </Col>
+{/*                         <div className="w-50" style={{margin: "auto"}} >
+                        {control === false ? (                       
+                             <Alert
+                                description="Recurda que en este apartado podras poner todas las politicas que sigue tu empresa, de manera legal"
+                                type="info"
+                            />)
+                        : ""}
+                    </div> */}
+                    </Row>
                 </div>
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                     <Button className="text-center" size="large" type="primary" htmlType="submit" icon={control === false ? (<PlusCircleOutlined style={{ fontSize: 24 }} />):(<EditOutlined style={{ fontSize: 24 }} />)}>
