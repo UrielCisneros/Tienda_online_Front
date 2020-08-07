@@ -1,0 +1,17 @@
+
+
+p{
+    font-weight: bold;
+}
+
+span{
+    margin-left: 10px;
+}
+
+.info-tienda{
+
+    &__button-registro{
+        text-align: right!important;
+        margin-bottom: 20px!important;
+    }
+}
