@@ -302,9 +302,7 @@ function RegistrarProductos(props) {
 			</Row>
 
 			<Row gutter={8} style={{ maxWidth: '90vw' }} className="mt-4 d-flex justify-content-center">
-				{loading ? (
-					<Spin />
-				) : productos.length === 0 ? (
+				{productos.length === 0 ? (
 					<div className="w-100 d-flex justify-content-center align-items-center">
 						<Result
 							status="404"
