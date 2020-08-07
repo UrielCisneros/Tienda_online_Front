@@ -37,9 +37,7 @@ export default function Blog() {
                 itemLayout="vertical"
                 size="large"
                 
-                pagination={{
-                pageSize: 3,
-                }}
+
                 dataSource={listData}
   
                 
