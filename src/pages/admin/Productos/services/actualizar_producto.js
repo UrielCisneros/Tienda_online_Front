@@ -242,6 +242,7 @@ function ActualizarProducto(props) {
 								valuePropName="Editor"
 							>
 								<Editor
+									value={editor}
 									init={{
 										height: 300,
 										menubar: true,
