@@ -24,8 +24,9 @@ import PedidosUsuario from '../pages/users/pedidos'
 import Ofertas from '../pages/users/ofertas'
 import Articulo from '../pages/users/articulo'
 
-//Secondary Component
+
 import VistaProducto from '../pages/users/VistaProductos'
+import Politicas from '../components/Politicas'
 
 //other
 import Error404 from '../pages/users/error404'
@@ -144,6 +145,11 @@ const routes = [
 			{
 				path: '/vistaproductos',
 				component: VistaProducto,
+				exact: true
+			},
+			{
+				path: '/politicas',
+				component: Politicas,
 				exact: true
 			},
 			{
