@@ -109,7 +109,7 @@ function RegistrarProductos(props) {
 					})
 					.then((res) => {
 						setLoading(false);
-						obtenerProductos(10, page);
+						obtenerProductos(20, page);
 						notification.success({
 							message: res.data.message,
 							duration: 2
@@ -194,7 +194,7 @@ function RegistrarProductos(props) {
 
 	useEffect(
 		() => {
-			obtenerProductos(10, page);
+			obtenerProductos(20, page);
 			setReload(false);
 		},
 		[ page, reload ]
