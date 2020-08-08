@@ -1,10 +1,11 @@
 import React,{useState,useEffect} from 'react'
-import {Form, Col, Row, Input,Divider, Button,Alert,Upload} from 'antd';
+import {Form, Col, Row, Input,Divider, Button,Alert,Upload,notification} from 'antd';
 import {PlusCircleOutlined,EditOutlined,UploadOutlined } from '@ant-design/icons';
 import {Editor} from '@tinymce/tinymce-react';
+import clienteAxios from '../../../../../config/axios';
 
 export default function RegistroTienda(props) {
-    const {datosNegocio} = props;
+    const {datosNegocio,token} = props;
 
     const [datos, setDatos] = useState({})
     const [control, setControl] = useState(false)
@@ -54,10 +55,72 @@ export default function RegistroTienda(props) {
         }
     };
 
-    console.log(datos);
+    const SendForm = async () => {
 
-    const SendForm = () => {
-        console.log(datos)
+            const datosEnvio = {
+                nombre: datos.nombre,
+                telefono:datos.telefono,
+                direccion:[{
+                        calle_numero: datos.calle_numero,
+                        cp:datos.cp,
+                        colonia:datos.colonia,
+                        ciudad:datos.ciudad
+                    }],
+                ubicacion:[{
+                        lat:datos.lat,
+                        lng:datos.lng
+                    }],
+                politicas:datos.politicas,
+                imagenCorp:datos.imagenCorp
+            }
+                
+
+            
+
+            const formData = new FormData();
+            formData.append('nombre', datosEnvio.nombre);
+            formData.append('telefono', datosEnvio.telefono);
+            formData.append('direccion',datosEnvio.direccion);
+            formData.append('ubicacion',datosEnvio.ubicacion);
+            formData.append('politicas', datos.politicas);
+            formData.append('imagenCorp', datos.imagenCorp);
+            formData.append('imagen', files);
+
+            if(control === false){
+                await clienteAxios.post('/tienda/', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `bearer ${token}`
+                    }
+                }).then((res) => {
+                    console.log(res);
+                        notification.success({
+                            message: 'Registro exitoso',
+                            description: res.data.message,
+                          })
+
+                })
+                .catch((err) => {   
+                    console.log(err.response);                 
+                    if(err.response.status === 500 || err.response.status === 404){
+                        notification.error({
+                            message: 'Error de conexion',
+                            description: err.response.data.message,
+                          })
+                    }else{
+                        notification.error({
+                            message: 'Error de conexion',
+                            description: "Parece que algo salio mal, favor de intentarlo de nuevo",
+                          })
+                    }
+                });        
+            }else{
+
+            }
+
+
+
+        
     }
 
     

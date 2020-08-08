@@ -98,7 +98,7 @@ import RegistroTienda from './RegistroTienda';
                         </div>
                     }
                 >
-                    <RegistroTienda datosNegocio={datosNegocio} />
+                    <RegistroTienda datosNegocio={datosNegocio} token={token} />
                 </Drawer>
             
             <div className="d-flex">
