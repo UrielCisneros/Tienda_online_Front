@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { Layout, Button, Input, Modal} from 'antd';
+import {  Button} from 'antd';
 
 import {FacebookFilled, InstagramFilled, TwitterCircleFilled, HomeOutlined, UserOutlined, KeyOutlined } from '@ant-design/icons';
 import './footer.scss';
 
-const { Footer } = Layout;
+// const { Footer } = Layout;
 const Style = {fontSize:15, color: "black"};
 
 
@@ -45,11 +45,11 @@ const FooterPage = () => {
                     en el div superior al agregar este div de logo              
                 </div> */}
 
-                <div className="col-lg-3 p-3 " style={{textAlign:"center"}}>
+                <div className="col-lg-3 p-3" style={{textAlign:"center"}}>
                     <p style={{fontSize: 30, }}>Buscanos en:</p>
-                    <Link><FacebookFilled id="is" style={{fontSize: 45, color:"gray"}} /></Link>
-                    <Link><InstagramFilled id="is" style={{fontSize:  45, marginLeft: 10,color:"gray"}} /></Link>
-                    <Link><TwitterCircleFilled id="is"  style={{fontSize: 45, marginLeft: 10, color:"gray"}}/></Link>
+                    <Link><FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} /></Link>
+                    <Link><InstagramFilled className="ml-3" id="is" style={{fontSize:  45 ,color:"gray"}} /></Link>
+                    <Link><TwitterCircleFilled className="mt-3 ml-3" id="is"  style={{fontSize: 45, color:"gray"}}/></Link>
                 </div>
                 </div>
         //     <p style={{textAlign:"center"}}>Ant Design ©2018 Created by Ant UED</p>
