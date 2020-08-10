@@ -9,7 +9,7 @@ import Pedidos from '../pages/admin/pedidos'
 import Promociones from '../pages/admin/promociones'
 import SistemaApartado from '../pages/admin/apartado'
 import Inventario from '../pages/admin/inventario'
-import BlogAdmin from '../pages/admin/blog'
+import BlogAdmin from '../pages/admin/Blog/blog'
 
 //Users pages
 import Home from '../pages/users/home'
@@ -22,7 +22,7 @@ import PedidosUsuario from '../pages/users/pedidos'
 import Ofertas from '../pages/users/ofertas'
 import Articulo from '../pages/users/articulo'
 
-//Secondary Component
+
 import VistaProducto from '../pages/users/VistaProductos'
 
 //other

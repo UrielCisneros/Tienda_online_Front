@@ -86,6 +86,7 @@ function RegistrarProducto(props) {
 	const obtenerEditor = (value) => {
 		setEditor(value);
 	};
+	
 	const datosForm = (e) => {
 		setDatos({
 			...datos,
