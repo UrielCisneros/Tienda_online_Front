@@ -1,47 +1,108 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, List, Avatar, Input, Space, Result, notification } from 'antd';
-import Spin from '../../../../components/Spin';
-import { UploadOutlined, PictureOutlined } from '@ant-design/icons';
+import { Upload, Button, List, Avatar, Input, Space, Result, notification, Spin } from 'antd';
+import { UploadOutlined, PictureOutlined, RollbackOutlined } from '@ant-design/icons';
+import InfiniteScroll from 'react-infinite-scroller';
 import './carousel.scss';
 
 const { Search } = Input;
 
-function CarouselImages() {
+function CarouselImages(props) {
 	const token = localStorage.getItem('token');
 	const [ imagen, setImagen ] = useState();
 	const [ imagenPreview, setImagenPreview ] = useState('');
-	const [ loadButton, setLoadButton ] = useState(false);
 	//states de obtener producto y obtener todos los productos
 	const [ producto, setProducto ] = useState([]);
-	const [ productos, setProductos ] = useState([]);
 	//modal para crear una imagen de carousel
 	const [ loading, setLoading ] = useState(false);
+	const [ visible, setVisible ] = useState('d-none');
+
+	//infiniteScroll
+	const [ data, setData ] = useState([]);
+	const [ hasMore, setHasMore ] = useState(true);
+	const [ page, setPage ] = useState(1);
+	const [ totalDocs, setTotalDocs ] = useState();
+	const [ loadingList, setLoadingList ] = useState(false);
+	const [ reloadData, setReloadData ] = useState(false);
+
+	const reload = props.reload;
 
 	const formData = new FormData();
 
-	useEffect(() => {
-		obtenerTodosProductos();
-	}, []);
+	useEffect(
+		() => {
+			if(reload){
+				setPage(1);
+				setHasMore(true);
+				setProducto([]);
+				setImagenPreview('');
+			}
+			obtenerTodosProductos((res) => {
+				setData(res.data.posts.docs);
+				setTotalDocs(res.data.posts.totalDocs);
+				setPage(res.data.posts.nextPage);
+			});
+		},
+		[ reloadData, reload ]
+	);
 
 	const obtenerProductosFiltrados = async (busqueda) => {
-		setLoading(true);
+		if (!busqueda) {
+			setVisible('d-none');
+			notification.info({
+				message: 'Escribe algo en el buscador',
+				duration: 4
+			});
+		} else {
+			setVisible('ml-1 d-flex justify-content-center align-items-center');
+			setLoading(true);
+			clienteAxios
+				.get(`/productos/search/${busqueda}`)
+				.then((res) => {
+					setData(res.data.posts);
+					setLoading(false);
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
+	};
+
+	///*** OBTENER DATOS DE LA BASE DE DATOS
+	const obtenerTodosProductos = (callback) => {
+		setReloadData(false);
+		setVisible('d-none');
+		setLoadingList(true);
 		clienteAxios
-			.get(`/productos/search/${busqueda}`)
+			.get(`/productos?limit=${10}&page=${page}`)
 			.then((res) => {
-				setProductos(res.data.posts);
-				setLoading(false);
+				callback(res);
+				setLoadingList(false);
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+					setLoadingList(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
+					setLoadingList(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -50,36 +111,19 @@ function CarouselImages() {
 				}
 			});
 	};
-
-	/// OBTENER DATOS DE LA BASE DE DATOS
-	const obtenerTodosProductos = async () => {
-		setLoading(true);
-		await clienteAxios
-			.get(`/productos/`)
-			.then((res) => {
-				setLoading(false);
-				setProductos(res.data.posts.docs);
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
-			});
+	const handleInfiniteOnLoad = () => {
+		setLoadingList(true);
+		if (data.length === totalDocs) {
+			setLoadingList(false);
+			setHasMore(false);
+			return;
+		}
+		obtenerTodosProductos((res) => {
+			setData(data.concat(res.data.posts.docs));
+		});
 	};
 
-	const props = {
+	const antdProps = {
 		beforeUpload: async (file) => {
 			setImagen(file);
 			let reader = new FileReader();
@@ -91,7 +135,7 @@ function CarouselImages() {
 	};
 
 	const crearCarousel = async () => {
-		setLoadButton(true);
+		setLoading(true);
 		formData.append('producto', producto._id);
 		formData.append('imagen', imagen);
 		await clienteAxios
@@ -102,24 +146,26 @@ function CarouselImages() {
 				}
 			})
 			.then((res) => {
-				setLoadButton(false);
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
-				window.location.reload();
+				setTimeout(() => {
+					window.location.reload();
+				}, 1500);
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
-					setLoadButton(false);
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoadButton(false);
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -129,8 +175,10 @@ function CarouselImages() {
 			});
 	};
 
-	const render = productos.map((productos) => (
+	const render = data.map((productos) => (
 		<List.Item
+			key={productos._id}
+			className={producto._id === productos._id ? 'list-item-carousel' : ''}
 			actions={[
 				<Button
 					onClick={() => {
@@ -151,30 +199,52 @@ function CarouselImages() {
 	));
 
 	return (
-		<div>
+		<Spin size="large" spinning={loading}>
 			<div className="row d-sm-block d-lg-flex">
 				<div className="col-12 col-lg-6">
 					<p>Elige un producto y despues una imagen</p>
-					<Search
-						placeholder="Busca un producto"
-						onSearch={(value) => obtenerProductosFiltrados(value)}
-						style={{ width: 350, height: 40, marginBottom: 10 }}
-						enterButton="Buscar"
-						size="large"
-					/>
-					<div className="contenedor-lista">
-						{loading ? (
-							<Spin />
-						) : productos.length === 0 ? (
+					<div className="row justify-content-center mt-1">
+						<Search
+							placeholder="Busca un producto"
+							onSearch={(value) => obtenerProductosFiltrados(value)}
+							style={{ width: 250, height: 40, marginBottom: 10 }}
+							enterButton="Buscar"
+							size="large"
+						/>
+						<Button
+							type="primary"
+							size="large"
+							className={visible}
+							onClick={() => {
+								setPage(1);
+								setHasMore(true);
+								setReloadData(true);
+							}}
+							icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+						>
+							Volver
+						</Button>
+					</div>
+					<div>
+						{data.length === 0 ? (
 							<div className="w-100 d-flex justify-content-center align-items-center">
-								<Result
-									status="404"
-									title="Articulo no encontrado"
-									subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
-								/>
+								<Result status="404" title="Articulo no encontrado" />
 							</div>
 						) : (
-							<List className="lista">{render}</List>
+							<Spin className="spin-sugerencia-list" size="large" spinning={loadingList}>
+								<div className="contenedor-lista">
+									<InfiniteScroll
+										initialLoad={false}
+										pageStart={0}
+										loadMore={handleInfiniteOnLoad}
+										hasMore={!loading && hasMore}
+										useWindow={false}
+										threshold={5}
+									>
+										<List className="m-1">{render}</List>
+									</InfiniteScroll>
+								</div>
+							</Spin>
 						)}
 					</div>
 				</div>
@@ -182,14 +252,13 @@ function CarouselImages() {
 					<h5>{producto.nombre}</h5>
 					<div className="d-flex justify-content-center align-items-center my-4">
 						<Space>
-							<Upload {...props}>
+							<Upload {...antdProps}>
 								<Button type="primary" disabled={producto.length !== 0 ? false : true}>
 									<UploadOutlined />Subir
 								</Button>
 							</Upload>
 							<Button
 								type="primary"
-								loading={loadButton}
 								onClick={() => {
 									crearCarousel();
 								}}
@@ -213,7 +282,7 @@ function CarouselImages() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</Spin>
 	);
 }
 export default CarouselImages;

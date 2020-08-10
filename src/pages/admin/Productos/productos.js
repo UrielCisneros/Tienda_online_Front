@@ -7,9 +7,16 @@ import { Card, Col, Row, Input, Button, Modal, Drawer, Result, notification, Spi
 import Pagination from '../../../components/Pagination/pagination';
 /* import { StepsContext, StepsProvider } from '../contexts/stepsContext'; */
 import { IdProductoContext } from '../contexts/ProductoContext';
-import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import {
+	ExclamationCircleOutlined,
+	EditOutlined,
+	DeleteOutlined,
+	PlusCircleOutlined,
+	RollbackOutlined
+} from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import queryString from 'query-string';
+import './productos.scss';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -40,6 +47,8 @@ function RegistrarProductos(props) {
 	const [ accion, setAccion ] = useState(false);
 	const [ reload, setReload ] = useState(false);
 	const token = localStorage.getItem('token');
+	const [ reloadData, setReloadData ] = useState(false);
+	const [ visibleButton, setVisibleButton ] = useState('d-none');
 
 	var decoded = Jwt(token);
 
@@ -89,7 +98,7 @@ function RegistrarProductos(props) {
 		} else {
 			closeConfirm();
 		}
-	}
+	};
 
 	function showDeleteConfirm(idproducto) {
 		confirm({
@@ -137,34 +146,45 @@ function RegistrarProductos(props) {
 	}
 
 	const obtenerProductosFiltrados = async (busqueda) => {
-		setLoading(true);
-		await clienteAxios
-			.get(`/productos/search/${busqueda}`)
-			.then((res) => {
-				setProductosRender(res.data.posts);
-				setProductos(res.data.posts);
-				setLoading(false);
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+		if (!busqueda) {
+			setVisibleButton('d-none');
+			notification.info({
+				message: 'Escribe algo en el buscador',
+				duration: 4
 			});
+		} else {
+			setVisibleButton('ml-3 d-flex justify-content-center align-items-center');
+			setLoading(true);
+			await clienteAxios
+				.get(`/productos/search/${busqueda}`)
+				.then((res) => {
+					setProductosRender(res.data.posts);
+					setProductos(res.data.posts);
+					setLoading(false);
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
 	};
 
 	const obtenerProductos = async (limit, page) => {
+		setReloadData(false);
+		setVisibleButton('d-none');
 		setLoading(true);
 		await clienteAxios
 			.get(`/productos?limit=${limit}&page=${page}`)
@@ -236,8 +256,8 @@ function RegistrarProductos(props) {
 						</Button>
 					]}
 				>
-					<div style={{ height: 100 }}>
-						<h1 className="h4">{productos.nombre}</h1>
+					<div class="contenedor-titulos-productos">
+						<h1 className="titulo-producto">{productos.nombre}</h1>
 						<h2 className="h5">{formatoMexico(productos.precio)}</h2>
 					</div>
 				</Card>
@@ -290,6 +310,19 @@ function RegistrarProductos(props) {
 				</Col>
 				<Col>
 					<Button
+							type="primary"
+							size="large"
+							className={visibleButton}
+							onClick={() => {
+								obtenerProductos(20, page);
+							}}
+							icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+						>
+						Volver
+					</Button>
+				</Col>
+				<Col>
+					<Button
 						type="primary"
 						size="large"
 						className="ml-3 d-flex justify-content-center align-items-center"
@@ -310,8 +343,6 @@ function RegistrarProductos(props) {
 							subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
 						/>
 					</div>
-				) : loading ? (
-					<Spin size="large" />
 				) : (
 					render
 				)}

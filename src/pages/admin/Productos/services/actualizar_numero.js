@@ -175,10 +175,14 @@ function ActualizarNumero() {
 	if (productos !== 0) {
 		var render = productos.map((numeros) => (
 			<div className="mb-5 m-2" key={numeros._id}>
-				<Badge count={numeros.cantidad} style={{ backgroundColor: '#52c41a' }}>
+				<Badge
+					showZero
+					count={numeros.cantidad}
+					style={numeros.cantidad !== 0 ? { backgroundColor: '#52c41a' } : { backgroundColor: '#FF4D4F' }}
+				>
 					<div className="hover-delete d-flex text-center">
 						<p
-							className="rounded p-2"
+							className="rounded p-2 contenido-talla"
 							style={{ backgroundColor: '#EEEEEE', fontSize: 40, minWidth: '60px', height: '56px' }}
 						>
 							{numeros.numero}

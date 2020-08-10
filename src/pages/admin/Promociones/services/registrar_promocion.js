@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Button, Input, Slider, Upload, List, Avatar, notification, Result, Spin, Form, Col } from 'antd';
-
+import { RollbackOutlined } from '@ant-design/icons';
 import './registrar_promocion.scss';
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -26,6 +26,8 @@ const RegistrarPromocion = (props) => {
 	const [ hasMore, setHasMore ] = useState(true);
 	const [ page, setPage ] = useState(1);
 	const [ totalDocs, setTotalDocs ] = useState();
+	const [ reloadData, setReloadData ] = useState(false);
+	const [ visible, setVisible ] = useState('d-none');
 
 	const [ loading, setLoading ] = useState(false);
 	const [ loadingList, setLoadingList ] = useState(true);
@@ -40,22 +42,31 @@ const RegistrarPromocion = (props) => {
 	const [ form ] = Form.useForm();
 	const reload = props.reload;
 
-	useEffect(() => {
-		if(reload){
+	useEffect(
+		() => {
+			if (reload) {
+				setPage(1);
+				setHasMore(true);
+				setProducto([]);
+				setContent(false);
+				setInputValue(0);
+				setPromocion([]);
+				setPrecioPromocion()
+				setDisabledSumit(true)
+				form.resetFields();
+			}
 			obtenerProductos((res) => {
-			setData(res.data.posts.docs);
-			setTotalDocs(res.data.posts.totalDocs);
-			setPage(res.data.posts.page + 1);
-		});
-		}
-		obtenerProductos((res) => {
-			setData(res.data.posts.docs);
-			setTotalDocs(res.data.posts.totalDocs);
-			setPage(res.data.posts.page + 1);
-		});
-	}, [reload]);
+				setData(res.data.posts.docs);
+				setTotalDocs(res.data.posts.totalDocs);
+				setPage(res.data.posts.nextPage);
+			});
+		},
+		[ reload, reloadData ]
+	);
 
 	const obtenerProductos = (callback) => {
+		setReloadData(false);
+		setVisible('d-none');
 		setLoadingList(true);
 		clienteAxios
 			.get(`/productos?limit=${10}&page=${page}`)
@@ -215,30 +226,39 @@ const RegistrarPromocion = (props) => {
 	};
 
 	const obtenerProductosFiltrados = async (busqueda) => {
-		setLoadingList(true);
-		await clienteAxios
-			.get(`/productos/search/${busqueda}`)
-			.then((res) => {
-				setData(res.data.posts);
-				setLoadingList(false);
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoadingList(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoadingList(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+		if (!busqueda) {
+			setVisible('d-none');
+			notification.info({
+				message: 'Escribe algo en el buscador',
+				duration: 4
 			});
+		} else {
+			setVisible('ml-1 d-flex justify-content-center align-items-center');
+			setLoadingList(true);
+			await clienteAxios
+				.get(`/productos/search/${busqueda}`)
+				.then((res) => {
+					setData(res.data.posts);
+					setLoadingList(false);
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoadingList(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoadingList(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
 	};
 
 	return (
@@ -246,13 +266,28 @@ const RegistrarPromocion = (props) => {
 			<div className="d-lg-flex d-sm-block mt-4">
 				<div className="col-12 col-lg-6  border-bottom">
 					<Spin size="large" spinning={loadingList}>
-						<Search
-							placeholder="Busca un producto"
-							onSearch={(value) => obtenerProductosFiltrados(value)}
-							style={{ width: 350, height: 40, marginBottom: 10 }}
-							enterButton="Buscar"
-							size="large"
-						/>
+						<div className="row justify-content-center">
+							<Search
+								placeholder="Busca un producto"
+								onSearch={(value) => obtenerProductosFiltrados(value)}
+								style={{ width: 350, height: 40, marginBottom: 10 }}
+								enterButton="Buscar"
+								size="large"
+							/>
+							<Button
+								type="primary"
+								size="large"
+								className={visible}
+								onClick={() => {
+									setPage(1);
+									setHasMore(true);
+									setReloadData(true);
+								}}
+								icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+							>
+								Volver
+							</Button>
+						</div>
 						{loading ? (
 							<div />
 						) : data.length === 0 ? (
@@ -272,12 +307,13 @@ const RegistrarPromocion = (props) => {
 									hasMore={!loading && hasMore}
 									useWindow={false}
 									threshold={5}
-									
 								>
 									<List
+										className="m-1"
 										dataSource={data}
 										renderItem={(productos) => (
 											<List.Item
+												className={producto._id === productos._id ? "list-item-promocion": ''}
 												key={productos._id}
 												actions={[
 													<Button
