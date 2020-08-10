@@ -7,7 +7,6 @@ import ImageScroller from 'react-image-scroller';
 
 import { Card, Col} from 'antd';
 
-const { Meta } = Card;
 
 const properties = {
     hideScrollbar: false,
