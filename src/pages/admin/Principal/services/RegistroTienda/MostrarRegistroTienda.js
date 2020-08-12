@@ -15,34 +15,17 @@ import {Link} from 'react-router-dom';
 
  function MostrarRegistroTienda(props) {
 
+    const {token} = props;
+
     const [action, setAction] = useState(false)
     const [visible, setVisible] = useState(false);
     const [ loading, setLoading ] = useState(false);
     const [datosNegocio, setDatosNegocio] = useState({})
 
+    const [ reloadInfo, setReloadInfo ] = useState(false);
+
     const [lat,setLat] = useState("")
     const [lng,setLng] = useState("")
-
-    const token = localStorage.getItem('token')
-    var decoded = Jwt(token) 
-
-        //Verificar el JWT
-    if(token === '' || token === null){
-        props.history.push('/entrar')
-    }else if(decoded['rol'] !== true){
-        props.history.push('/')
-    }
-    
-    //Decodificar el JWT
-	function Jwt(token) {
-		try {
-            return jwt_decode(token);
-		} catch (e) {
-			return null;
-		}
-    }
-
-
 
     const showDrawer = () => {
         setVisible(true);
@@ -100,7 +83,8 @@ import {Link} from 'react-router-dom';
 
     useEffect(() => {
         peticionDatosTienda();
-    }, [])
+        setReloadInfo(false)
+    }, [reloadInfo])
 
     if (loading) {
         return <Spin/>;
@@ -129,7 +113,7 @@ import {Link} from 'react-router-dom';
                         </div>
                     }
                 >
-                    <RegistroTienda datosNegocio={datosNegocio} token={token} setLoading={setLoading} />
+                    <RegistroTienda datosNegocio={datosNegocio} token={token} setLoading={setLoading} setReloadInfo={setReloadInfo} />
                 </Drawer>
             
             <div className="d-flex">

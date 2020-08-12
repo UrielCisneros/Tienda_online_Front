@@ -33,7 +33,7 @@ function Admin(props) {
             </Helmet>
             <div>
                 <div>
-                    <MostrarRegistroTienda />
+                    <MostrarRegistroTienda token={token} />
                 </div>
             </div>
         </div>

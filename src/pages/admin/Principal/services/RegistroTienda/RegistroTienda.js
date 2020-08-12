@@ -7,7 +7,7 @@ import clienteAxios from '../../../../../config/axios';
 
 export default function RegistroTienda(props) {
 
-    const {datosNegocio,token,setLoading} = props;
+    const {datosNegocio,token,setLoading,setReloadInfo} = props;
 
     const [datos, setDatos] = useState({})
     const [control, setControl] = useState(false)
@@ -137,6 +137,7 @@ export default function RegistroTienda(props) {
                         }
                     }).then((res) => {
                         setLoading(false)
+                        setReloadInfo(true)
                         console.log(res);
                             notification.success({
                                 message: 'Registro exitoso',
@@ -172,6 +173,7 @@ export default function RegistroTienda(props) {
                     }
                 }).then((res) => {
                     setLoading(false) 
+                    setReloadInfo(true)
                     console.log(res);
                         notification.success({
                             message: 'Registro exitoso',
