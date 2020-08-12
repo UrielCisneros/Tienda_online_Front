@@ -38,7 +38,7 @@ function Inventario(props) {
 
 	useEffect(
 		() => {
-			obtenerProductos(10, page);
+			obtenerProductos(20, page);
 		},
 		[ page ]
 	);
@@ -234,7 +234,7 @@ function Inventario(props) {
 						type="primary"
 						size="large"
 						className={visible}
-						onClick={() => obtenerProductos(10, page)}
+						onClick={() => obtenerProductos(20, page)}
 						icon={<RollbackOutlined style={{ fontSize: 24 }} />}
 					>
 						Volver

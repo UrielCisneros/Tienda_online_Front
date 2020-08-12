@@ -4,8 +4,7 @@ import { withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode'
 
 import MostrarRegistroTienda from './services/RegistroTienda/MostrarRegistroTienda';
-import RegistroImagenCorporativa from './services/RegistroImagenCorporativa/RegistroImagenCorporativa';
-import RegistroPoliticas from './services/RegistroPoliticas/RegistroPoliticas';
+
 
 
 function Admin(props) {
@@ -34,13 +33,7 @@ function Admin(props) {
             </Helmet>
             <div>
                 <div>
-                    <MostrarRegistroTienda />
-                </div>
-                <div>
-                    <RegistroImagenCorporativa />
-                </div>
-                <div>
-                    <RegistroPoliticas />
+                    <MostrarRegistroTienda token={token} />
                 </div>
             </div>
         </div>

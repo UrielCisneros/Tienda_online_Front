@@ -40,7 +40,10 @@ function ActualizarProducto(props) {
 	useEffect(
 		() => {
 			if(reload){
-				obtenerDatos();
+				/* obtenerDatos(); */
+				form.resetFields();
+				setFiles([])
+				setUpload(false);
 			}
 			obtenerDatos();
 		},

@@ -177,10 +177,14 @@ function ActualizarTalla() {
 	if (productos !== 0) {
 		var render = productos.map((tallas) => (
 			<div className="mb-5 m-2" key={tallas._id}>
-				<Badge count={tallas.cantidad} style={{ backgroundColor: '#52c41a' }}>
+				<Badge
+					showZero
+					count={tallas.cantidad}
+					style={tallas.cantidad !== 0 ? { backgroundColor: '#52c41a' } : { backgroundColor: '#FF4D4F' }}
+				>
 					<div className="hover-delete d-flex text-center">
 						<p
-							className="rounded p-2"
+							className="rounded p-2 contenido-talla"
 							style={{ backgroundColor: '#EEEEEE', fontSize: 40, minWidth: '60px', height: '56px' }}
 						>
 							{tallas.talla}
