@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../config/axios';
-import { Button, Input, Space, Modal, List, Row, Col, Upload, Result, notification } from 'antd';
-import Spin from '../../../components/Spin';
+import { Button, Input, Space, Modal, List, Row, Col, Upload, Result, notification, Spin } from 'antd';
 import {
 	EyeOutlined,
 	EditOutlined,
@@ -24,11 +23,12 @@ function Carousel(props) {
 	const [ producto, setProducto ] = useState([]);
 	const [ productos, setProductos ] = useState([]);
 	const [ search, setSearch ] = useState('');
-	const [ loading, setLoading ] = useState(true);
-	const [ loadButton, setLoadButton ] = useState(false);
+	const [ loading, setLoading ] = useState(false);
 	const [ productosFiltrados, setProductosFiltrados ] = useState([]);
 	const [ modalVisible, setModalVisible ] = useState(false);
 	const [ modalCrearVisible, setModalCrearVisible ] = useState(false);
+
+	const [ reload, setReload ] = useState(false);
 
 	function Jwt(token) {
 		try {
@@ -46,7 +46,8 @@ function Carousel(props) {
 
 	useEffect(() => {
 		obtenerCarouseles();
-	}, []);
+		setReload(false);
+	}, [ reload ]);
 
 	useEffect(
 		() => {
@@ -61,6 +62,7 @@ function Carousel(props) {
 
 	///*** OBTENER DATOS DE LA BASE DE DATOS
 	const obtenerCarouseles = async () => {
+		setLoading(true);
 		await clienteAxios
 			.get(`/carousel/`)
 			.then((res) => {
@@ -97,7 +99,7 @@ function Carousel(props) {
 	};
 
 	const actualizarImagen = async (formdata) => {
-		setLoadButton(true);
+		setLoading(true);
 		await clienteAxios
 			.put(`/carousel/${producto}/`, formdata, {
 				headers: {
@@ -107,7 +109,7 @@ function Carousel(props) {
 			})
 			.then((res) => {
 				obtenerCarouseles();
-				setLoadButton(false);
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
@@ -116,14 +118,14 @@ function Carousel(props) {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
-					setLoadButton(false);
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoadButton(false);
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -135,6 +137,7 @@ function Carousel(props) {
 
 	///ELIMINAR IMAGEN
 	const eliminarImagen = async (productoID) => {
+		setLoading(true);
 		await clienteAxios
 			.delete(`/carousel/${productoID}/`, {
 				headers: {
@@ -143,6 +146,7 @@ function Carousel(props) {
 			})
 			.then((res) => {
 				obtenerCarouseles();
+				setLoading(false);
 				notification.success({
 					message: 'Hecho!',
 					description: res.data.message,
@@ -151,12 +155,14 @@ function Carousel(props) {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -175,6 +181,7 @@ function Carousel(props) {
 
 	function closeModalCrear() {
 		setModalCrearVisible(false);
+		setReload(true);
 	}
 	function showModalCrear() {
 		setModalCrearVisible(true);
@@ -182,22 +189,20 @@ function Carousel(props) {
 
 	function showDeleteConfirm(productoID) {
 		confirm({
-			title: 'estas seguro de eliminar esto?',
+			title: 'Estás seguro de eliminar esto?',
 			icon: <ExclamationCircleOutlined />,
 			okText: 'Si',
 			okType: 'danger',
 			cancelText: 'No',
 			onOk() {
 				eliminarImagen(productoID);
-			},
-			onCancel() {
-				console.log('Cancel');
 			}
 		});
 	}
 
 	const render = productosFiltrados.map((productos) => (
 		<List.Item
+			key={productos._id}
 			actions={[
 				<Space>
 					<Button
@@ -217,7 +222,6 @@ function Carousel(props) {
 							className="d-flex justify-content-center align-items-center"
 							style={{ fontSize: 16 }}
 							type="primary"
-							loading={loadButton}
 							onClick={() => {
 								setProducto(productos.producto._id);
 							}}
@@ -263,7 +267,7 @@ function Carousel(props) {
 	));
 
 	return (
-		<div>
+		<Spin size="large" spinning={loading}>
 			<p>
 				En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso de que
 				no existan promociones, si no existen promociones apareceran esta imagen
@@ -290,14 +294,11 @@ function Carousel(props) {
 					</Button>
 				</Col>
 			</Row>
-			{loading ? (
-				<Spin />
-			) : productosFiltrados.length === 0 ? (
+			{productosFiltrados.length === 0 ? (
 				<div className="w-100 d-flex justify-content-center align-items-center">
 					<Result
 						status="404"
-						title="Articulo no encontrado"
-						subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+						title="No hay resultados"
 					/>
 				</div>
 			) : (
@@ -327,9 +328,9 @@ function Carousel(props) {
 				width={800}
 				style={{ top: 20 }}
 			>
-				<CarouselImages />
+				<CarouselImages reload={reload} />
 			</Modal>
-		</div>
+		</Spin>
 	);
 }
 export default withRouter(Carousel);

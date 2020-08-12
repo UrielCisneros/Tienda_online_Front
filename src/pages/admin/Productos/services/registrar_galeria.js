@@ -6,13 +6,11 @@ import {
 	EyeOutlined,
 	DeleteOutlined,
 	PictureOutlined,
-	LoadingOutlined,
 	ExclamationCircleOutlined
 } from '@ant-design/icons';
 import './registrar_galeria.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 
-const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 const { confirm } = Modal;
 
 function RegistrarGaleria() {
@@ -169,32 +167,33 @@ function RegistrarGaleria() {
 	}
 
 	return (
-		<div className="responsive">
-			<div className="col-sm-4 col-lg-6 imgUploads">
-				<Upload {...props}>
-					<Button>
-						<UploadOutlined /> Upload
-					</Button>
-					{loading ? <Spin indicator={antIcon} /> : <div />}
-				</Upload>
-				<div className="padre">{render}</div>
-			</div>
-			<div className="col-sm-4 col-lg-6">
-				<p className="text-center">Visualización de la imagen</p>
-				<div className="shadow rounded imgPreview-registrar-galeria d-flex justify-content-center align-items-center">
-					{prev === '' || galeria.length === 0 ? (
-						<PictureOutlined style={{ fontSize: 80 }} />
-					) : (
-						<img
-							className="imagen-registrar-galeria"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/
-						${prev}`}
-							alt="preview-imagen"
-						/>
-					)}
+		<Spin size="large" spinning={loading}>
+			<div className="responsive">
+				<div className="col-sm-4 col-lg-6 imgUploads">
+					<Upload {...props}>
+						<Button>
+							<UploadOutlined /> Upload
+						</Button>
+					</Upload>
+					<div className="padre">{render}</div>
+				</div>
+				<div className="col-sm-4 col-lg-6">
+					<p className="text-center">Visualización de la imagen</p>
+					<div className="shadow rounded imgPreview-registrar-galeria d-flex justify-content-center align-items-center">
+						{prev === '' || galeria.length === 0 ? (
+							<PictureOutlined style={{ fontSize: 80 }} />
+						) : (
+							<img
+								className="imagen-registrar-galeria"
+								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/
+							${prev}`}
+								alt="preview-imagen"
+							/>
+						)}
+					</div>
 				</div>
 			</div>
-		</div>
+		</Spin>
 	);
 }
 export default RegistrarGaleria;

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Tabs, Form, Input, Upload, Button, notification, Select, Spin } from 'antd';
-import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import ActualizarGaleria from './actualizar_galeria';
 import ActualizarTalla from './actualizar_talla';
@@ -10,7 +10,6 @@ import { Editor } from '@tinymce/tinymce-react';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
-const antIcon = <LoadingOutlined style={{ fontSize: 24, marginLeft: 10 }} spin />;
 
 const layout = {
 	labelCol: { span: 6 },
@@ -25,13 +24,8 @@ function ActualizarProducto(props) {
 	const [ select, setSelect ] = useState('');
 	const [ editor, setEditor ] = useState();
 	const [ loading, setLoading ] = useState(false);
-	const [ spinning, setSpinning ] = useState(false);
-	const [ reload, setReload ] = props.reloadProductos;
+	const reload = props.reloadProductos;
 	const [ upload, setUpload ] = useState(false);
-
-	if (reload) {
-		form.resetFields();
-	}
 
 	const [ productos, setProductos ] = useState([
 		{
@@ -45,6 +39,12 @@ function ActualizarProducto(props) {
 
 	useEffect(
 		() => {
+			if(reload){
+				/* obtenerDatos(); */
+				form.resetFields();
+				setFiles([])
+				setUpload(false);
+			}
 			obtenerDatos();
 		},
 		[ productoID, reload ]
@@ -70,11 +70,11 @@ function ActualizarProducto(props) {
 	};
 
 	const obtenerDatos = async () => {
-		setSpinning(true);
+		setLoading(true);
 		await clienteAxios
 			.get(`/productos/${productoID}`)
 			.then((res) => {
-				setSpinning(false);
+				setLoading(false);
 				form.setFieldsValue({
 					codigo: res.data.codigo,
 					nombre: res.data.nombre,
@@ -90,14 +90,14 @@ function ActualizarProducto(props) {
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
-					setSpinning(false);
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: res.response.data.message,
 						duration: 2
 					});
 				} else {
-					setSpinning(false);
+					setLoading(false);
 					notification.error({
 						message: 'Error',
 						description: 'Hubo un error',
@@ -148,7 +148,6 @@ function ActualizarProducto(props) {
 				}
 			})
 			.then((res) => {
-				setReload(true);
 				obtenerDatos();
 				setLoading(false);
 				notification.success({
@@ -179,7 +178,7 @@ function ActualizarProducto(props) {
 	return (
 		<Tabs defaultActiveKey="1">
 			<TabPane tab="Actualizar datos del producto" key="1">
-				<Spin spinning={spinning}>
+				<Spin size="large" spinning={loading}>
 					{productos.categoria === 'ropa' ? (
 						<div className="d-flex justify-content-center">{<ActualizarTalla />}</div>
 					) : (
@@ -234,7 +233,7 @@ function ActualizarProducto(props) {
 								<Input type="number" name="precio" />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Descripcion del producto">
+						<Form.Item label="Descripcion del producto" name="descripcion" >
 							<Form.Item
 								rules={[ { required: true, message: 'Este campo es requerido' } ]}
 								noStyle
@@ -242,7 +241,8 @@ function ActualizarProducto(props) {
 								valuePropName="Editor"
 							>
 								<Editor
-									value={editor}
+								value={editor}
+								name="descripcion"
 									init={{
 										height: 300,
 										menubar: true,
@@ -277,7 +277,6 @@ function ActualizarProducto(props) {
 							<Button type="primary" htmlType="submit">
 								Actualizar
 							</Button>
-							{loading ? <Spin indicator={antIcon} /> : <div />}
 						</Form.Item>
 					</Form>
 				</Spin>

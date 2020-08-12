@@ -1,20 +1,36 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../config/axios';
 import RegistrarProducto from './services/registrar_producto';
 import ActualizarProducto from './services/actualizar_producto';
-import { Card, Col, Row, Input, Button, Modal, Drawer, Result, notification } from 'antd';
-import Spin from '../../../components/Spin';
+import { Card, Col, Row, Input, Button, Modal, Drawer, Result, notification, Spin } from 'antd';
 import Pagination from '../../../components/Pagination/pagination';
-import { StepsContext, StepsProvider } from '../contexts/stepsContext';
+/* import { StepsContext, StepsProvider } from '../contexts/stepsContext'; */
 import { IdProductoContext } from '../contexts/ProductoContext';
-import { ExclamationCircleOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import {
+	ExclamationCircleOutlined,
+	EditOutlined,
+	DeleteOutlined,
+	PlusCircleOutlined,
+	RollbackOutlined
+} from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import queryString from 'query-string';
+import './productos.scss';
 
 const { Search } = Input;
 const { confirm } = Modal;
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
+
+const formatoMexico = (number) => {
+	if (!number) {
+		return null;
+	} else {
+		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
+		const rep = '$1,';
+		return number.toString().replace(exp, rep);
+	}
+};
 
 function RegistrarProductos(props) {
 	//Tomar la paginacion actual
@@ -22,15 +38,17 @@ function RegistrarProductos(props) {
 	const { page = 1 } = queryString.parse(location.search);
 
 	const [ productoID, setProductoID ] = useState('');
-	const [ disabled, setDisabled ] = useContext(StepsContext);
+	/* const [ disabled, setDisabled ] = useContext(StepsContext); */
+	const [ disabled, setDisabled ] = useState(true);
 	const [ productos, setProductos ] = useState([]);
 	const [ productosRender, setProductosRender ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
 	const [ visible, setVisible ] = useState(false);
 	const [ accion, setAccion ] = useState(false);
 	const [ reload, setReload ] = useState(false);
-	const [ closeDrawer, setCloseDrawer ] = useState(false);
 	const token = localStorage.getItem('token');
+	const [ reloadData, setReloadData ] = useState(false);
+	const [ visibleButton, setVisibleButton ] = useState('d-none');
 
 	var decoded = Jwt(token);
 
@@ -64,7 +82,6 @@ function RegistrarProductos(props) {
 	function drawnerClose() {
 		setVisible(false);
 		setReload(true);
-		setCloseDrawer(true);
 	}
 	function setActualizar() {
 		setAccion(true);
@@ -81,7 +98,7 @@ function RegistrarProductos(props) {
 		} else {
 			closeConfirm();
 		}
-	}
+	};
 
 	function showDeleteConfirm(idproducto) {
 		confirm({
@@ -92,6 +109,7 @@ function RegistrarProductos(props) {
 			okType: 'danger',
 			cancelText: 'No',
 			async onOk() {
+				setLoading(true);
 				await clienteAxios
 					.delete(`/productos/${idproducto}`, {
 						headers: {
@@ -99,7 +117,8 @@ function RegistrarProductos(props) {
 						}
 					})
 					.then((res) => {
-						obtenerProductos(8, page);
+						setLoading(false);
+						obtenerProductos(20, page);
 						notification.success({
 							message: res.data.message,
 							duration: 2
@@ -107,12 +126,14 @@ function RegistrarProductos(props) {
 					})
 					.catch((res) => {
 						if (res.response.status === 404 || res.response.status === 500) {
+							setLoading(false);
 							notification.error({
 								message: 'Error',
 								description: res.response.data.message,
 								duration: 2
 							});
 						} else {
+							setLoading(false);
 							notification.error({
 								message: 'Error',
 								description: 'Hubo un error',
@@ -125,34 +146,45 @@ function RegistrarProductos(props) {
 	}
 
 	const obtenerProductosFiltrados = async (busqueda) => {
-		setLoading(true);
-		await clienteAxios
-			.get(`/productos/search/${busqueda}`)
-			.then((res) => {
-				setProductosRender(res.data.posts);
-				setProductos(res.data.posts);
-				setLoading(false);
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+		if (!busqueda) {
+			setVisibleButton('d-none');
+			notification.info({
+				message: 'Escribe algo en el buscador',
+				duration: 4
 			});
+		} else {
+			setVisibleButton('ml-3 d-flex justify-content-center align-items-center');
+			setLoading(true);
+			await clienteAxios
+				.get(`/productos/search/${busqueda}`)
+				.then((res) => {
+					setProductosRender(res.data.posts);
+					setProductos(res.data.posts);
+					setLoading(false);
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
 	};
 
 	const obtenerProductos = async (limit, page) => {
+		setReloadData(false);
+		setVisibleButton('d-none');
 		setLoading(true);
 		await clienteAxios
 			.get(`/productos?limit=${limit}&page=${page}`)
@@ -182,11 +214,10 @@ function RegistrarProductos(props) {
 
 	useEffect(
 		() => {
-			obtenerProductos(8, page);
+			obtenerProductos(20, page);
 			setReload(false);
-			setCloseDrawer(false);
 		},
-		[ page, reload, closeDrawer ]
+		[ page, reload ]
 	);
 
 	const render = productosRender.map((productos) => (
@@ -225,9 +256,9 @@ function RegistrarProductos(props) {
 						</Button>
 					]}
 				>
-					<div style={{ height: 100 }}>
-						<h1 className="h4">{productos.nombre}</h1>
-						<h2 className="h5">{new Intl.NumberFormat('es-MX').format(productos.precio)}</h2>
+					<div class="contenedor-titulos-productos">
+						<h1 className="titulo-producto">{productos.nombre}</h1>
+						<h2 className="h5">{formatoMexico(productos.precio)}</h2>
 					</div>
 				</Card>
 			</Card.Grid>
@@ -235,7 +266,7 @@ function RegistrarProductos(props) {
 	));
 
 	return (
-		<div>
+		<Spin size="large" spinning={loading}>
 			<Drawer
 				forceRender
 				title={accion === true ? 'Actualizar un producto' : 'Registra un nuevo producto'}
@@ -258,12 +289,13 @@ function RegistrarProductos(props) {
 			>
 				{accion === true ? (
 					<IdProductoContext.Provider value={productoID}>
-						<ActualizarProducto reloadProductos={[ reload, setReload ]} />
+						<ActualizarProducto reloadProductos={reload} />
 					</IdProductoContext.Provider>
 				) : (
-					<StepsProvider value={[ disabled, setDisabled ]}>
-						<RegistrarProducto reloadProductos={/* reload, setReload, */ closeDrawer} />
-					</StepsProvider>
+					<RegistrarProducto reloadProductos={reload} disabledButtons={[ disabled, setDisabled ]} />
+					/* <StepsProvider value={[ disabled, setDisabled ]}>
+						<RegistrarProducto reloadProductos={reload} disabledButtons={[ disabled, setDisabled ]} />
+					</StepsProvider> */
 				)}
 			</Drawer>
 			<Row justify="center">
@@ -275,6 +307,19 @@ function RegistrarProductos(props) {
 						enterButton="Buscar"
 						size="large"
 					/>
+				</Col>
+				<Col>
+					<Button
+							type="primary"
+							size="large"
+							className={visibleButton}
+							onClick={() => {
+								obtenerProductos(20, page);
+							}}
+							icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+						>
+						Volver
+					</Button>
 				</Col>
 				<Col>
 					<Button
@@ -290,9 +335,7 @@ function RegistrarProductos(props) {
 			</Row>
 
 			<Row gutter={8} style={{ maxWidth: '90vw' }} className="mt-4 d-flex justify-content-center">
-				{loading ? (
-					<Spin />
-				) : productos.length === 0 ? (
+				{productos.length === 0 ? (
 					<div className="w-100 d-flex justify-content-center align-items-center">
 						<Result
 							status="404"
@@ -300,14 +343,12 @@ function RegistrarProductos(props) {
 							subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
 						/>
 					</div>
-				) : loading ? (
-					<Spin size="large" />
 				) : (
 					render
 				)}
 			</Row>
 			<Pagination blogs={productos} location={location} history={history} />
-		</div>
+		</Spin>
 	);
 }
 export default withRouter(RegistrarProductos);

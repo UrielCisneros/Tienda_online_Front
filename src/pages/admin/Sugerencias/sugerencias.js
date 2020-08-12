@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../config/axios';
-import { Col, Row, Input, Button, Drawer, notification, Space, List, Result } from 'antd';
-import Spin from '../../../components/Spin';
+import { Col, Row, Input, Button, Drawer, notification, Space, List, Result, Spin } from 'antd';
+import { RollbackOutlined } from '@ant-design/icons';
 import { IdProductoContext } from '../contexts/ProductoContext';
 import jwt_decode from 'jwt-decode';
 import Sugerencia from './services/sugerencia';
+import Pagination from '../../../components/Pagination/pagination';
+import queryString from 'query-string';
 
 const { Search } = Input;
 
 function Sugerencias(props) {
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
+	//Tomar la paginacion actual
+	const { location, history } = props;
+	const { page = 1 } = queryString.parse(location.search);
 
 	const [ productoID, setProductoID ] = useState('');
 	const [ productos, setProductos ] = useState([]);
+	const [ productosPaginacion, setProductosPaginacion ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
 	const [ visible, setVisible ] = useState(false);
+	const [ visibleReload, setVisibleReload ] = useState('d-none');
 
 	function Jwt(token) {
 		try {
@@ -40,37 +47,49 @@ function Sugerencias(props) {
 	}
 
 	const obtenerProductosFiltrados = async (busqueda) => {
-		setLoading(true);
-		await clienteAxios
-			.get(`/productos/search/${busqueda}`)
-			.then((res) => {
-				setProductos(res.data.posts);
-				setLoading(false);
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+		if (!busqueda) {
+			setVisibleReload('d-none');
+			notification.info({
+				message: 'Escribe algo en el buscador',
+				duration: 4
 			});
+		} else {
+			setVisibleReload('ml-3 d-flex justify-content-center align-items-center');
+			setLoading(true);
+			await clienteAxios
+				.get(`/productos/search/${busqueda}`)
+				.then((res) => {
+					setProductosPaginacion(res.data.posts);
+					setProductos(res.data.posts);
+					setLoading(false);
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
 	};
 
-	const obtenerProductos = async () => {
+	const obtenerProductos = async (limit, page) => {
+		setVisibleReload('d-none');
 		setLoading(true);
 		await clienteAxios
-			.get('/productos')
+			.get(`/productos?limit=${limit}&page=${page}`)
 			.then((res) => {
+				setProductosPaginacion(res.data.posts);
 				setProductos(res.data.posts.docs);
 				setLoading(false);
 			})
@@ -93,12 +112,16 @@ function Sugerencias(props) {
 			});
 	};
 
-	useEffect(() => {
-		obtenerProductos();
-	}, []);
+	useEffect(
+		() => {
+			obtenerProductos(20, page);
+		},
+		[ page ]
+	);
 
 	const render = productos.map((productos) => (
 		<List.Item
+			key={productos._id}
 			className="d-flex justify-content-center align-items-center mt-3"
 			actions={[
 				<Space>
@@ -139,8 +162,10 @@ function Sugerencias(props) {
 	));
 
 	return (
-		<div>
-			<p style={{ fontSize: 20 }}>En este apartado puedes agregar sugerencias de otro producto a un producto</p>
+		<Spin size="large" spinning={loading}>
+			<p style={{ fontSize: 20 }}>
+				En este apartado puedes agregar sugerencias de compra de otro producto a un producto
+			</p>
 			<Row justify="center mt-5">
 				<Col>
 					<Search
@@ -151,19 +176,27 @@ function Sugerencias(props) {
 						size="large"
 					/>
 				</Col>
+				<Col>
+					<Button
+						type="primary"
+						size="large"
+						className={visibleReload}
+						onClick={() => obtenerProductos(20, page)}
+						icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+					>
+						Volver
+					</Button>
+				</Col>
 			</Row>
-			{loading ? (
-				<Spin />
-			) : productos.length === 0 ? (
+			{productos.length === 0 ? (
 				<div className="w-100 d-flex justify-content-center align-items-center">
-					<Result
-						status="404"
-						title="Articulo no encontrado"
-						subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
-					/>
+					<Result status="404" title="No hay resultados" />
 				</div>
 			) : (
-				<List>{render}</List>
+				<div>
+					<List>{render}</List>
+					<Pagination blogs={productosPaginacion} location={location} history={history} />
+				</div>
 			)}
 			<Drawer
 				title={'Sugerencias'}
@@ -196,7 +229,7 @@ function Sugerencias(props) {
 					<Sugerencia />
 				</IdProductoContext.Provider>
 			</Drawer>
-		</div>
+		</Spin>
 	);
 }
 export default withRouter(Sugerencias);
