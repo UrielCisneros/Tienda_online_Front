@@ -129,7 +129,7 @@ import {Link} from 'react-router-dom';
                         </div>
                     }
                 >
-                    <RegistroTienda datosNegocio={datosNegocio} token={token} />
+                    <RegistroTienda datosNegocio={datosNegocio} token={token} setLoading={setLoading} />
                 </Drawer>
             
             <div className="d-flex">

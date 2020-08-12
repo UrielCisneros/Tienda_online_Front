@@ -1,11 +1,13 @@
 import React,{useState,useEffect} from 'react'
 import {Form, Col, Row, Input,Divider, Button,Alert,Upload,notification} from 'antd';
-import {PlusCircleOutlined,EditOutlined,UploadOutlined,UserOutlined } from '@ant-design/icons';
+import {PlusCircleOutlined,EditOutlined,UploadOutlined } from '@ant-design/icons';
 import {Editor} from '@tinymce/tinymce-react';
 import clienteAxios from '../../../../../config/axios';
 
+
 export default function RegistroTienda(props) {
-    const {datosNegocio,token} = props;
+
+    const {datosNegocio,token,setLoading} = props;
 
     const [datos, setDatos] = useState({})
     const [control, setControl] = useState(false)
@@ -22,9 +24,7 @@ export default function RegistroTienda(props) {
 
     useEffect(() => {
         console.log(datosNegocio._id)
-
         if(datosNegocio !== undefined){
-
             setImagen(datosNegocio.imagenLogo)
             if(datosNegocio.ubicacion[0].lat === "undefined"){
                 datosNegocio.ubicacion[0].lat = "";
@@ -105,8 +105,7 @@ export default function RegistroTienda(props) {
     };
 
     const SendForm = async () => {
-
-            console.log(datos);
+            
             const formData = new FormData();
             formData.append('nombre', datos.nombre);
             formData.append('telefono', datos.telefono);
@@ -129,6 +128,7 @@ export default function RegistroTienda(props) {
                         description: 'La imagen es obligatoria',
                       })
                 }else{
+                    setLoading(true)
                     formData.append('imagen', files);
                     await clienteAxios.post('/tienda/', formData, {
                         headers: {
@@ -136,6 +136,7 @@ export default function RegistroTienda(props) {
                             Authorization: `bearer ${token}`
                         }
                     }).then((res) => {
+                        setLoading(false)
                         console.log(res);
                             notification.success({
                                 message: 'Registro exitoso',
@@ -143,7 +144,8 @@ export default function RegistroTienda(props) {
                                 })
     
                     })
-                    .catch((err) => {   
+                    .catch((err) => {  
+                        setLoading(false) 
                         console.log(err.response);                 
                         if(err.response.status === 500 || err.response.status === 404){
                             notification.error({
@@ -159,6 +161,7 @@ export default function RegistroTienda(props) {
                     });   
                 }
             }else{
+                setLoading(true)
                 if(files.length !== 0){
                     formData.append('imagen', files);
                 }
@@ -168,6 +171,7 @@ export default function RegistroTienda(props) {
                         Authorization: `bearer ${token}`
                     }
                 }).then((res) => {
+                    setLoading(false) 
                     console.log(res);
                         notification.success({
                             message: 'Registro exitoso',
@@ -176,6 +180,7 @@ export default function RegistroTienda(props) {
 
                 })
                 .catch((err) => {   
+                    setLoading(false) 
                     console.log(err.response);                 
                     if(err.response.status === 500 || err.response.status === 404){
                         notification.error({
