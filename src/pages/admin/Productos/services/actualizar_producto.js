@@ -47,7 +47,7 @@ function ActualizarProducto(props) {
 			}
 			obtenerDatos();
 		},
-		[ productoID, reload ]
+		[ productoID, reload, form ]
 	);
 
 	///UPLOAD ANTD PRODUCTO

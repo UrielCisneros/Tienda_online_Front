@@ -217,8 +217,9 @@ function RegistrarProductos(props) {
 			obtenerProductos(20, page);
 			setReload(false);
 		},
-		[ page, reload ]
+		[ page, reload, reloadData ]
 	);
+
 
 	const render = productosRender.map((productos) => (
 		<Col span={32} key={productos._id}>
@@ -256,7 +257,7 @@ function RegistrarProductos(props) {
 						</Button>
 					]}
 				>
-					<div class="contenedor-titulos-productos">
+					<div className="contenedor-titulos-productos">
 						<h1 className="titulo-producto">{productos.nombre}</h1>
 						<h2 className="h5">{formatoMexico(productos.precio)}</h2>
 					</div>
