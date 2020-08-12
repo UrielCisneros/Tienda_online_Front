@@ -61,7 +61,7 @@ const RegistrarPromocion = (props) => {
 				setPage(res.data.posts.nextPage);
 			});
 		},
-		[ reload, reloadData ]
+		[ reload, reloadData, form ]
 	);
 
 	const obtenerProductos = (callback) => {
