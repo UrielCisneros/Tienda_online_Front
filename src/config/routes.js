@@ -22,7 +22,7 @@ import PedidosUsuario from '../pages/users/pedidos'
 import Ofertas from '../pages/users/ofertas'
 import Articulo from '../pages/users/articulo'
 
-
+import Politicas from '../components/politicas'
 import VistaProducto from '../pages/users/VistaProductos'
 
 //other
@@ -132,6 +132,11 @@ const routes = [
 			{
 				path: '/vistaproductos',
 				component: VistaProducto,
+				exact: true
+			},
+			{
+				path: '/politicas',
+				component: Politicas,
 				exact: true
 			},
 			{
