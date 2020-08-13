@@ -22,6 +22,24 @@ const formatoMexico = (number) => {
 	}
 };
 
+const formatoFecha = (fecha) => {
+	if (!fecha) {
+		return null;
+	} else {
+		var newdate = new Date(fecha);
+		return newdate.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+	}
+};
+
+const formatoHora = (hora) => {
+	if (!hora) {
+		return null;
+	} else {
+		var newtime = new Date(hora);
+		return newtime.toLocaleTimeString('es-MX', { hour12: 'false' });
+	}
+};
+
 function Pedidos(props) {
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
@@ -40,25 +58,27 @@ function Pedidos(props) {
 		props.history.push('/');
 	}
 
-    //Tomar la paginacion actual
+	//Tomar la paginacion actual
 	const { location, history } = props;
-    const { page = 1 } = queryString.parse(location.search);
-    
-    const [ pedidos, setPedidos ] = useState([]);
-    const [ pedidosPaginacion, setPedidosPaginacion ] = useState([]);
-	const [ pedidosFiltrados, setPedidosFiltrados ] = useState([]);
+	const { page = 1 } = queryString.parse(location.search);
+
+	const [ pedidos, setPedidos ] = useState([]);
+	const [ pedidosPaginacion, setPedidosPaginacion ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
 	//state modales
-    const [ visible, setVisible ] = useState(false);
-    const [ estadoVisible, setEstadoVisible ] = useState(false);
+	const [ visible, setVisible ] = useState(false);
+	const [ estadoVisible, setEstadoVisible ] = useState(false);
 	//state para mostrar pedido en el modal
-    const [ detallePedido, setDetallePedido ] = useState([]);
-    const [ reload, setReload ] = useState(false);
+	const [ detallePedido, setDetallePedido ] = useState([]);
+	const [ reload, setReload ] = useState(false);
 
-	useEffect(() => {
-        obtenerPedidos(10, page);
-        setReload(false);
-	}, [reload, page]);
+	useEffect(
+		() => {
+			obtenerPedidos(10, page);
+			setReload(false);
+		},
+		[ reload, page ]
+	);
 
 	const obtenerPedidos = async (limit, page) => {
 		setLoading(true);
@@ -69,8 +89,8 @@ function Pedidos(props) {
 				}
 			})
 			.then((res) => {
-                setPedidos(res.data.docs);
-                setPedidosPaginacion(res.data);
+				setPedidos(res.data.docs);
+				setPedidosPaginacion(res.data);
 				setLoading(false);
 			})
 			.catch((res) => {
@@ -90,9 +110,9 @@ function Pedidos(props) {
 					});
 				}
 			});
-    };
-    
-    const obtenerPedidosFiltrados = async (limit, page, filtro) => {
+	};
+
+	const obtenerPedidosFiltrados = async (limit, page, filtro) => {
 		setLoading(true);
 		await clienteAxios
 			.get(`/pedidos/admin/filtrados?limit=${limit}&page=${page}&filtro=${filtro}`, {
@@ -101,8 +121,8 @@ function Pedidos(props) {
 				}
 			})
 			.then((res) => {
-                setPedidos(res.data.docs);
-                setPedidosPaginacion(res.data);
+				setPedidos(res.data.docs);
+				setPedidosPaginacion(res.data);
 				setLoading(false);
 			})
 			.catch((res) => {
@@ -125,39 +145,39 @@ function Pedidos(props) {
 	};
 
 	function onChange(e) {
-        const estado = e.target.value;
-        switch (estado) {
-            case 'todos':
-                obtenerPedidos(10, page);
-                break;
-            case 'proceso':
-                obtenerPedidosFiltrados(10, page, 'En proceso');
-                break;
-            case 'enviados':
-                obtenerPedidosFiltrados(10, page, 'Enviado');
-                break;
-            default:
-                obtenerPedidos(10, page);
-                break;
-        }
+		const estado = e.target.value;
+		switch (estado) {
+			case 'todos':
+				obtenerPedidos(10, page);
+				break;
+			case 'proceso':
+				obtenerPedidosFiltrados(10, page, 'En proceso');
+				break;
+			case 'enviados':
+				obtenerPedidosFiltrados(10, page, 'Enviado');
+				break;
+			default:
+				obtenerPedidos(10, page);
+				break;
+		}
 	}
 	const showModal = () => {
 		setVisible(true);
-    };
-    const showModalEstado = () => {
+	};
+	const showModalEstado = () => {
 		setEstadoVisible(true);
-    };
-    const handleCancelEstado = () => {
+	};
+	const handleCancelEstado = () => {
 		setEstadoVisible(false);
 	};
 	const handleCancel = () => {
-        setVisible(false);
+		setVisible(false);
 	};
 
 	const render = pedidos.map((pedidos) => (
 		<Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} key={pedidos._id}>
 			<Card
-            className="shadow-sm"
+				className="shadow-sm"
 				actions={[
 					<div className="d-flex justify-content-center align-items-center">
 						<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />
@@ -176,7 +196,7 @@ function Pedidos(props) {
 						<p
 							onClick={() => {
 								setDetallePedido(pedidos);
-								showModalEstado()
+								showModalEstado();
 							}}
 							className="d-inline"
 						>
@@ -186,6 +206,7 @@ function Pedidos(props) {
 				]}
 			>
 				<Meta
+                    className="contenedor-card-pedidos"
 					description={
 						<div>
 							<div className="my-2">
@@ -194,8 +215,16 @@ function Pedidos(props) {
 							</div>
 							<div className="my-2">
 								<h6 className="titulos-info-pedidos">Creado el:</h6>
-								<p className="data-info-pedidos">{pedidos.createdAt}</p>
+								<p className="data-info-pedidos">{formatoFecha(pedidos.createdAt)}</p>
 							</div>
+							{pedidos.fecha_envio ? (
+								<div className="my-2">
+									<h6 className="titulos-info-pedidos">Enviado el:</h6>
+									<p className="data-info-pedidos">{formatoFecha(pedidos.fecha_envio)}</p>
+								</div>
+							) : (
+								<div />
+							)}
 							<div className="my-2">
 								<h6 className="titulos-info-pedidos">Cliente:</h6>
 								<p className="data-info-pedidos">{pedidos.cliente.nombre}</p>
@@ -267,35 +296,35 @@ function Pedidos(props) {
 				</div>
 			</div>
 			<Modal
-                key="detalle"
+				key="detalle"
 				width={600}
 				style={{ top: 0 }}
 				title="Detalles de este pedido"
-                visible={visible}
-                onCancel={handleCancel}
+				visible={visible}
+				onCancel={handleCancel}
 				footer={[
-                    <Button key="detalle" type="primary" onClick={handleCancel}>
-                      Cerrar
-                    </Button>
-                  ]}
+					<Button key="detalle" type="primary" onClick={handleCancel}>
+						Cerrar
+					</Button>
+				]}
 			>
 				<DetallesPedido datosDetalle={detallePedido} />
 			</Modal>
-            <Modal
-                key="estado"
+			<Modal
+				key="estado"
 				width={600}
 				title="Estado del pedido"
-                visible={estadoVisible}
-                onCancel={handleCancelEstado}
+				visible={estadoVisible}
+				onCancel={handleCancelEstado}
 				footer={[
-                    <Button key="estado" type="primary" onClick={handleCancelEstado}>
-                      Cerrar
-                    </Button>
-                  ]}
+					<Button key="estado" type="primary" onClick={handleCancelEstado}>
+						Cerrar
+					</Button>
+				]}
 			>
-				<EstadoPedido datosPedido={detallePedido} reload={setReload}/>
+				<EstadoPedido datosPedido={detallePedido} reload={setReload} />
 			</Modal>
-            <Pagination blogs={pedidosPaginacion} location={location} history={history} />
+			<Pagination blogs={pedidosPaginacion} location={location} history={history} />
 		</Spin>
 	);
 }

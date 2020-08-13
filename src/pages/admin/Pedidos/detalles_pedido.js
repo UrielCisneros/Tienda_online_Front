@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tag, Divider } from 'antd';
+import pedidos from './pedidos';
 
 const formatoMexico = (number) => {
 	if (!number) {
@@ -8,6 +9,24 @@ const formatoMexico = (number) => {
 		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
 		const rep = '$1,';
 		return number.toString().replace(exp, rep);
+	}
+};
+
+const formatoFecha = (fecha) => {
+	if (!fecha) {
+		return null;
+	} else {
+		var newdate = new Date(fecha);
+		return newdate.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+	}
+};
+
+const formatoHora = (hora) => {
+	if (!hora) {
+		return null;
+	} else {
+		var newtime = new Date(hora);
+		return newtime.toLocaleTimeString('es-MX', { hour12: 'false' });
 	}
 };
 
@@ -22,9 +41,27 @@ const DetallesPedido = (props) => {
 				<p className="data-info-pedidos">{pedido._id}</p>
 			</div>
 			<div className="my-2">
-				<h6 className="titulos-info-pedidos">Creado el:</h6>
-				<p className="data-info-pedidos">{pedido.createdAt}</p>
+				<h6 className="titulos-info-pedidos">fecha de creación:</h6>
+				<p className="data-info-pedidos">{formatoFecha(pedido.createdAt)}</p>
 			</div>
+			<div className="my-2">
+				<h6 className="titulos-info-pedidos">Hora de creación:</h6>
+				<p className="data-info-pedidos">{formatoHora(pedido.createdAt)}</p>
+			</div>
+			{pedido.fecha_envio ? (
+				<div>
+					<div className="my-2">
+						<h6 className="titulos-info-pedidos">fecha de envío:</h6>
+						<p className="data-info-pedidos">{formatoFecha(pedido.fecha_envio)}</p>
+					</div>
+					<div className="my-2">
+						<h6 className="titulos-info-pedidos">Hora de envío:</h6>
+						<p className="data-info-pedidos">{formatoHora(pedido.fecha_envio)}</p>
+					</div>
+				</div>
+			) : (
+				<div />
+			)}
 			<div className="my-2">
 				<h6 className="titulos-info-pedidos">No. de productos:</h6>
 				<p className="data-info-pedidos">{pedido.pedido.length}</p>
@@ -59,8 +96,7 @@ const DetallesPedido = (props) => {
 					<div className="my-2">
 						<h6 className="titulos-info-pedidos">Dirección:</h6>
 						<p className="data-info-pedidos">
-							{direccion.calle_numero}, {direccion.ciudad},{' '}
-							{direccion.estado},{' CP '}
+							{direccion.calle_numero}, {direccion.ciudad}, {direccion.estado},{' CP '}
 							{direccion.cp}
 						</p>
 					</div>
