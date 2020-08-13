@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import clienteAxios from '../config/axios';
 import { Link } from 'react-router-dom';
 import {  Button} from 'antd';
 
@@ -9,8 +10,29 @@ import './footer.scss';
 const Style = {fontSize:15, color: "black"};
 
 
+
 const FooterPage = () => {
   
+    const [redes, setRedes] = useState([]);
+    
+    function peticionRedes(){
+		clienteAxios.get('/tienda/')
+			.then((res) => {
+                console.log(res)
+                setRedes(res.data[0])
+			})
+			.catch((err) => {
+                console.log(err);
+                console.log("No funciona");
+			});
+    }
+
+    useEffect(() => {
+        peticionRedes();
+    }, []);
+    
+
+
 
     return(
        
@@ -37,6 +59,7 @@ const FooterPage = () => {
                     <h2 style={{fontSize: 18}} >A&B Soluciones</h2>
                     <p>Descubrimos lo mejor de tu empresa</p>
                     <p>Nuestra Ubicacion</p>
+                     
                     </div>
                 </div>
 
@@ -47,9 +70,9 @@ const FooterPage = () => {
 
                 <div className="col-lg-3 p-3" style={{textAlign:"center"}}>
                     <p style={{fontSize: 30, }}>Buscanos en:</p>
-                    <Link><FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} /></Link>
-                    <Link><InstagramFilled className="ml-3" id="is" style={{fontSize:  45 ,color:"gray"}} /></Link>
-                    <Link><TwitterCircleFilled className="mt-3 ml-3" id="is"  style={{fontSize: 45, color:"gray"}}/></Link>
+                    <a href={redes.linkFace}><FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} /></a>
+                    <Link to={redes.linkInsta}><InstagramFilled className="ml-3" id="is" style={{fontSize:  45 ,color:"gray"}} /></Link>
+                    <Link to={redes.linkTweeter}><TwitterCircleFilled className="mt-3 ml-3" id="is"  style={{fontSize: 45, color:"gray"}}/></Link>
                 </div>
                 </div>
         //     <p style={{textAlign:"center"}}>Ant Design ©2018 Created by Ant UED</p>

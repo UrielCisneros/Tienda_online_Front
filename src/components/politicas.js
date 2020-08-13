@@ -1,4 +1,4 @@
-import React, { useState, useEffect , Component} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import clienteAxios from '../config/axios';
 
@@ -12,19 +12,30 @@ function Politicas() {
     const [ loading, setLoading ] = useState(false);
     const [politicas, setPoliticas] = useState([]);
 
-    useEffect(() => {
-        setLoading(true);
-		clienteAxios
-			.get('/tienda')
+    function peticionPoliticas(){
+		clienteAxios.get('/tienda/')
 			.then((res) => {
-                console.log(res);
-                setPoliticas(res.data[0].politicas);
-                setLoading(false);
+                console.log(res)
+                
+                    if (res.data[0].politicas !== "") {
+                        console.log("Si hay datos")
+                        setPoliticas(res.data[0].politicas)
+                    }else{
+                        console.log("No hay datos")
+                        
+                    }
 			})
 			.catch((err) => {
-				console.log(err);
+                console.log(err);
+                console.log("No funciona");
 			});
-	}, []);
+    }
+
+    useEffect(() => {
+        peticionPoliticas();
+    }, []);
+    
+
 
     return(
        <div > 
@@ -33,9 +44,7 @@ function Politicas() {
             <h3 className="text-center mt-4">
                Para poder brindarte una mayor experiencia de compra, te invitamos a leer nuestras politicas de privacidad.
             </h3>
-            <div style={{width: 1140, height: "100%"}}>
-
-            </div>
+            
             <h2 className='mt-5 px-4 text-center'>
             {politicas}
             </h2>
