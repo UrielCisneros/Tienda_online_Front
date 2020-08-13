@@ -6,6 +6,7 @@ import clienteAxios from '../../../config/axios';
 const { TextArea } = Input;
 
 const EstadoPedido = (props) => {
+    const [ form ] = Form.useForm();
     const token = localStorage.getItem('token');
     const IDpedido = props.datosPedido;
     const [ pedido, setPedido ] = useState([]);
@@ -15,11 +16,12 @@ const EstadoPedido = (props) => {
     const [ disabled, setDisabled ] = useState(false);
     const [ datos, setDatos ] = useState({
         estado_pedido: '',
-        mensaje_admin: 'Tu pedido esta siendo procesado'
+        mensaje_admin: ''
     })
 
     useEffect(() => {
         obtenerPedido();
+        setDisabled(false);
     }, [IDpedido])
 
 	const cambiarEstado = async () => {
@@ -68,7 +70,13 @@ const EstadoPedido = (props) => {
 			})
 			.then((res) => {
 				setLoading(false);
-				setPedido(res.data);
+                setPedido(res.data);
+                form.setFieldsValue({
+					mensaje_admin: res.data.mensaje_admin
+                });
+                setDatos({
+                    ...datos, 'estado_pedido': res.data.estado_pedido, 'mensaje_admin': res.data.mensaje_admin
+                });
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -116,7 +124,7 @@ const EstadoPedido = (props) => {
 			</Menu.Item>
 		</Menu>
 	);
-console.log(pedido)
+
 	return (
 		<Spin size="large" spinning={loading}>
 			<Divider orientation="left">Estado del pedido</Divider>
@@ -127,9 +135,9 @@ console.log(pedido)
 			</Dropdown>
 			<Divider orientation="left">Mensaje para el cliente</Divider>
 			<p>Si el producto ya fue enviado puedes mandarle un mensaje a tu cliente para notificarle</p>
-			<Form onFinish={cambiarEstado} initialValues={{ mensaje_admin : pedido.mensaje_admin}}>
+			<Form onFinish={cambiarEstado} form={form}>
 				<Form.Item name="mensaje_admin">
-					<TextArea rows={4} name="mensaje_admin" onChange={onChange} disabled={pedido.estado_pedido === 'Enviado' ? false : true}/>
+					<TextArea rows={4} name="mensaje_admin" onChange={onChange}/>
 				</Form.Item>
 				<Form.Item >
 					<Button type="primary" htmlType="submit" className="float-right">

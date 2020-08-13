@@ -54,14 +54,19 @@ const DetallesPedido = (props) => {
 				<h6 className="titulos-info-pedidos">Email:</h6>
 				<p className="data-info-pedidos">{pedido.cliente.email}</p>
 			</div>
-			<div className="my-2">
-				<h6 className="titulos-info-pedidos">Dirección:</h6>
-				<p className="data-info-pedidos">
-					{pedido.cliente.direccion[0].calle_numero}, {pedido.cliente.direccion[0].ciudad},{' '}
-					{pedido.cliente.direccion[0].estado},{' CP '}
-					{pedido.cliente.direccion[0].cp}
-				</p>
-			</div>
+			{pedido.cliente.direccion.map((direccion) => {
+				return (
+					<div className="my-2">
+						<h6 className="titulos-info-pedidos">Dirección:</h6>
+						<p className="data-info-pedidos">
+							{direccion.calle_numero}, {direccion.ciudad},{' '}
+							{direccion.estado},{' CP '}
+							{direccion.cp}
+						</p>
+					</div>
+				);
+			})}
+
 			<Divider className="text-center">Detalles del producto</Divider>
 			{pedido.pedido.map((pedido, index) => {
 				return (
