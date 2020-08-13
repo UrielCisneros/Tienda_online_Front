@@ -45,9 +45,7 @@ function Politicas() {
                Para poder brindarte una mayor experiencia de compra, te invitamos a leer nuestras politicas de privacidad.
             </h3>
             
-            <h2 dangerouslySetInnerHTML={{__html: politicas}}className='mt-5 px-4 text-center'>
-            
-            </h2>
+            <h2 dangerouslySetInnerHTML={{__html: politicas}} className='mt-5 px-4'></h2>
             
         </div> 
     )

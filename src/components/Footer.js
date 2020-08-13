@@ -13,16 +13,31 @@ const Style = {fontSize:15, color: "black"};
 
 const FooterPage = () => {
   
-    const [redes, setRedes] = useState([]);
-    
+    const [tienda, setTienda] = useState({})
+    const [calle, setCalle] = useState("")
+    const [colonia, setColonia] = useState("")
+
     function peticionRedes(){
 		clienteAxios.get('/tienda/')
 			.then((res) => {
                 console.log(res)
-                setRedes(res.data[0])
+                setTienda(res.data[0])
+
+                if(res.data[0]){
+                    console.log(setTienda(res.data[0].direccion[0].cp));
+                    if(res.data[0].direccion[0].calle_numero === "" || res.data[0].direccion[0].calle_numero === "undefined"){
+                        setTienda("Sin definir")
+                        setColonia("Sin colonia")
+                        setCalle("Sin calle")
+                        console.log("sind definir");
+                    }else{
+                        setTienda(res.data[0])
+                        setCalle(res.data[0].direccion[0].calle_numero)
+                        console.log("datos");
+                    }
+                }
 			})
 			.catch((err) => {
-                console.log(err);
                 console.log("No funciona");
 			});
     }
@@ -56,9 +71,9 @@ const FooterPage = () => {
                     </Link>
                     </div>
                     <div className="mt-2 p-3">
-                    <h2 style={{fontSize: 18}} >A&B Soluciones</h2>
-                    <p>Descubrimos lo mejor de tu empresa</p>
-                    <p>Nuestra Ubicacion</p>
+                    <h2 style={{fontSize: 18}} >{tienda.nombre}</h2>
+                    {/* <p>Descubrimos lo mejor de tu empresa</p> */}
+                    <p>{tienda.nombre}</p>
                      
                     </div>
                 </div>
@@ -70,9 +85,9 @@ const FooterPage = () => {
 
                 <div className="col-lg-3 p-3" style={{textAlign:"center"}}>
                     <p style={{fontSize: 30, }}>Buscanos en:</p>
-                    <a href={redes.linkFace}><FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} /></a>
-                    <Link to={redes.linkInsta}><InstagramFilled className="ml-3" id="is" style={{fontSize:  45 ,color:"gray"}} /></Link>
-                    <Link to={redes.linkTweeter}><TwitterCircleFilled className="mt-3 ml-3" id="is"  style={{fontSize: 45, color:"gray"}}/></Link>
+                    <Link to={tienda.linkFace}><FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} /></Link>
+                    <Link to={tienda.linkInsta}><InstagramFilled className="ml-3" id="is" style={{fontSize:  45 ,color:"gray"}} /></Link>
+                    <Link to={tienda.linkTweeter}><TwitterCircleFilled className="mt-3 ml-3" id="is"  style={{fontSize: 45, color:"gray"}}/></Link>
                 </div>
                 </div>
         //     <p style={{textAlign:"center"}}>Ant Design ©2018 Created by Ant UED</p>
