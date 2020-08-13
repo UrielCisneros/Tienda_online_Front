@@ -3,6 +3,10 @@ import {Helmet} from "react-helmet";
 import { withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode'
 
+import MostrarRegistroTienda from './services/RegistroTienda/MostrarRegistroTienda';
+
+
+
 function Admin(props) {
     const token = localStorage.getItem('token')
     var decoded = Jwt(token) 
@@ -27,7 +31,11 @@ function Admin(props) {
                 <meta charSet="utf-8" />
                 <title>Panel Principal</title>
             </Helmet>
-            <h1>Estamos en admin home</h1>
+            <div>
+                <div>
+                    <MostrarRegistroTienda token={token} />
+                </div>
+            </div>
         </div>
     )
 }
