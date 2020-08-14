@@ -15,7 +15,9 @@
     display: none;
   }
   .top-menu-responsive{
-    display: inline;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }
   .ant-layout-header{
     padding: 0;
