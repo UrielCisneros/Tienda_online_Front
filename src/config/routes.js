@@ -3,30 +3,34 @@ import LayoutAdmin from '../components/LayoutAdmin'
 import LayoutBasic from '../components/Layout'
 
 //Admin pages
-import AdminHome from '../pages/admin'
-import RegistrarProductos from '../pages/admin/productos'
-import Pedidos from '../pages/admin/pedidos'
-import Promociones from '../pages/admin/promociones'
-import SistemaApartado from '../pages/admin/apartado'
-import Inventario from '../pages/admin/inventario'
-import BlogAdmin from '../pages/admin/blog'
+import AdminHome from '../pages/admin/Principal/principal'
+import RegistrarProductos from '../pages/admin/Productos/productos'
+import Pedidos from '../pages/admin/Pedidos/pedidos'
+import Promociones from '../pages/admin/Promociones/promociones'
+import SistemaApartado from '../pages/admin/Apartado/apartado'
+import Inventario from '../pages/admin/Inventario/inventario'
+import Sugerencias from '../pages/admin/Sugerencias/sugerencias'
+import Carousel from '../pages/admin/Carousel/carousel'
+import BlogAdmin from '../pages/admin/Blog/blog'
 
 //Users pages
 import Home from '../pages/users/home'
 import Entrar from '../pages/users/entrar'
 import QuienesSomos from '../pages/users/quienes_somos'
 import ShoppingCart from '../pages/users/shopping_cart'
-import Productos from '../pages/users/productos'
+import Productos from '../pages/users/Productos/productos'
 import Blog from '../pages/users/blog'
 import PedidosUsuario from '../pages/users/pedidos'
-import Ofertas from '../pages/users/ofertas'
+import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
+import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
 
 //Secondary Component
 import VistaProducto from '../pages/users/VistaProductos'
 
 //other
 import Error404 from '../pages/users/error404'
+import Search404 from '../pages/users/Resultado_Busqueda/404'
 
 const routes = [
 	{
@@ -67,6 +71,16 @@ const routes = [
 			{
 				path: '/admin/blog',
 				component: BlogAdmin,
+				exact: true
+			},
+			{
+				path: '/admin/sugerencias',
+				component: Sugerencias,
+				exact: true
+			},
+			{
+				path: '/admin/carousel',
+				component: Carousel,
 				exact: true
 			},
 			{
@@ -120,7 +134,7 @@ const routes = [
 				exact: true
 			},
 			{
-				path: '/productos?:user',
+				path: '/productos',
 				component: Productos,
 				exact: true
 			},
@@ -132,6 +146,16 @@ const routes = [
 			{
 				path: '/vistaproductos',
 				component: VistaProducto,
+				exact: true
+			},
+			{
+				path: '/searching/:url',
+				component: ResultadoBusqueda,
+				exact: true
+			},
+			{
+				path: '/searching/',
+				component: Search404,
 				exact: true
 			},
 			{

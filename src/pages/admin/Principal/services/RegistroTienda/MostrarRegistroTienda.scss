@@ -1,0 +1,33 @@
+
+/* 
+p{
+    font-weight: bold;
+} */
+
+/* span{
+    margin-left: 10px;
+} */
+
+.info-tienda{
+
+    &__button-registro{
+        text-align: right!important;
+        margin-bottom: 20px!important;
+    }
+}
+
+.mostrarRegistroTienda-imagen{
+    display: flex!important;
+    flex-direction: row!important;
+    flex-wrap: wrap!important;
+    justify-content: center!important;
+    align-items: center!important;
+}
+
+.mostrarRegistroTienda-button{
+    display: flex!important;
+    flex-direction: row!important;
+    flex-wrap: wrap!important;
+    justify-content: right!important;
+    align-items: right!important;
+}
