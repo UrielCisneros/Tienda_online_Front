@@ -29,32 +29,30 @@ export default function ShoppingCart() {
 		} catch (e) {
 			return null;
 		}
-	}
+  }
+  
+  console.log(decoded);
 
     const [ carrito, setCarrito ] = useState([]);
     const [ loading, setLoading ] = useState(false);
 
+    async function obtenerDatosCarrito(){
+      setLoading(true);
+        await clienteAxios
+          .get(`/carrito/${decoded._id}`)
+          .then((res) => {
+                      // setCarrito(res.data.articulos);
+                      console.log(res);
+                      console.log(decoded);
+          })
+          .catch((res) => {
+                      // setCarrito([]);
+                      console.log("No hay datos");
+        });
+    }
+
     useEffect(() => {
-        setLoading(true);
-        const obtenerCarrito = async () => {
-			await clienteAxios
-				.get(`/carrito/${decoded._id}`, {
-                    
-					headers: {
-						Authorization: `bearer ${token}`
-					}
-                }
-                )
-				.then((res) => {
-                    // setCarrito(res.data.articulos);
-                    console.log(res);
-                    console.log(decoded);
-				})
-				.catch((res) => {
-                    // setCarrito([]);
-                    console.log("No hay datos");
-				});
-		};
+      obtenerDatosCarrito();
     }, []);
     
    
