@@ -39,17 +39,20 @@ export default function ShoppingCart() {
         const obtenerCarrito = async () => {
 			await clienteAxios
 				.get(`/carrito/${decoded._id}`, {
+                    
 					headers: {
 						Authorization: `bearer ${token}`
 					}
-				})
+                }
+                )
 				.then((res) => {
-                    setCarrito(res.data.articulos.length);
-                    console.log(setCarrito(res.data.articulos.length));
+                    // setCarrito(res.data.articulos);
+                    console.log(res);
+                    console.log(decoded);
 				})
 				.catch((res) => {
-                    setCarrito(0);
-                    console.log("No datos");
+                    // setCarrito([]);
+                    console.log("No hay datos");
 				});
 		};
     }, []);
@@ -58,11 +61,11 @@ export default function ShoppingCart() {
 
     return (
         <div className="container-fluid px-5">
-        <h1 className="text-center">Tu carrito de compras</h1>
+        {/* <h1 className="text-center">Tu carrito de compras</h1>
         <div className="col-lg-12 d-flex justify-content-lg-center">
         <List
             itemLayout="horizontal"
-             dataSource={data}
+            dataSource={data}
             renderItem={item => (
             <List.Item>
                  <div className="d-none d-lg-block px-5">
@@ -99,7 +102,7 @@ export default function ShoppingCart() {
         <div className="d-flex justify-content-lg-center" >
             <h3>Total:</h3>
             
-        </div>
+        </div> */}
             
         </div>
     )
