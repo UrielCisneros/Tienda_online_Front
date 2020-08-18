@@ -39,14 +39,20 @@ export default function ShoppingCart() {
     async function obtenerDatosCarrito(){
       setLoading(true);
         await clienteAxios
-          .get(`/carrito/${decoded._id}`)
+          .get(`/carrito/${decoded._id}`,{
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `bearer ${token}`
+            }
+        })
           .then((res) => {
                       // setCarrito(res.data.articulos);
                       console.log(res);
                       console.log(decoded);
           })
-          .catch((res) => {
+          .catch((err) => {
                       // setCarrito([]);
+                      console.log(err.response);
                       console.log("No hay datos");
         });
     }
