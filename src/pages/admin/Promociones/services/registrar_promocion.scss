@@ -62,3 +62,7 @@
 .list-item-promocion{
     box-shadow: 0px 0px 5px 0px rgb(0, 140, 255);
 }
+.button-disabled-promocion:disabled, .button-disabled-promocion:hover {
+    color: #22bb33!important;
+    background-color: #22bb3411!important;
+}

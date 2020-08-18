@@ -1,6 +1,5 @@
 import React from 'react';
 import { Tag, Divider } from 'antd';
-import pedidos from './pedidos';
 
 const formatoMexico = (number) => {
 	if (!number) {
@@ -107,9 +106,16 @@ const DetallesPedido = (props) => {
 			{pedido.pedido.map((pedido, index) => {
 				return (
 					<div key={pedido._id}>
-						<strong>Producto {index + 1}</strong>
+						<div className="h6">
+							<strong>Producto {index + 1}</strong>
+						</div>
+						<div className="d-flex justify-content-center">
+							<div className="contenedor-imagen-producto-detalle">
+								<img alt="imagen-producto-detalle" className="imagen-producto-detalle" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.producto.imagen}`} />
+							</div>
+						</div>
 						<div className="my-2 contenedor-info-pedidos">
-							<h6 className="titulos-info-pedidos">Codigo:</h6>
+							<h6 className="titulos-info-pedidos">Código de barras:</h6>
 							<p className="data-info-pedidos">{pedido.producto.codigo}</p>
 						</div>
 						<div className="my-2 contenedor-info-pedidos">

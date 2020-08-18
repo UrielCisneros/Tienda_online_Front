@@ -25,3 +25,14 @@
 .contenedor-card-pedidos{
     height: 250px;
 }
+.contenedor-imagen-producto-detalle{
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.imagen-producto-detalle{
+    max-width: 100%;
+    height: 100%;
+}
