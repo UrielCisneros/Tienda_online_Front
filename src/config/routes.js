@@ -18,14 +18,16 @@ import Home from '../pages/users/home'
 import Entrar from '../pages/users/entrar'
 import QuienesSomos from '../pages/users/quienes_somos'
 import ShoppingCart from '../pages/users/shopping_cart'
-import Productos from '../pages/users/productos'
+import Productos from '../pages/users/Productos/productos'
 import Blog from '../pages/users/blog'
 import PedidosUsuario from '../pages/users/pedidos'
 import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
+import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
 
 //other
 import Error404 from '../pages/users/error404'
+import Search404 from '../pages/users/Resultado_Busqueda/404'
 
 const routes = [
 	{
@@ -136,6 +138,16 @@ const routes = [
 			{
 				path: '/articulo',
 				component: Articulo,
+				exact: true
+			},
+			{
+				path: '/searching/:url',
+				component: ResultadoBusqueda,
+				exact: true
+			},
+			{
+				path: '/searching/',
+				component: Search404,
 				exact: true
 			},
 			{

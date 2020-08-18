@@ -3,6 +3,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import './ofertas.scss';
 import clienteAxios from '../../../config/axios';
 import { withRouter } from 'react-router-dom';
+import { Spin } from 'antd';
 
 function Ofertas(props) {
 	const [ index, setIndex ] = useState(0);
@@ -20,11 +21,7 @@ function Ofertas(props) {
 					setCarousels(res.data);
 				})
 				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoading(false);
-					} else {
-						setLoading(false);
-					}
+					setLoading(false);
 				});
 		};
 		const obtenerPromociones = async () => {
@@ -42,11 +39,7 @@ function Ofertas(props) {
 					}
 				})
 				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoading(false);
-					} else {
-						setLoading(false);
-					}
+					setLoading(false);
 				});
 		};
 		obtenerPromociones();
@@ -65,7 +58,7 @@ function Ofertas(props) {
 							? carousel.imagenPromocion
 							: carousel.imagen})`
 					}}/>
-					<div class="contenedor-imagen-principal">
+					<div className="contenedor-imagen-principal">
 						<img
 							onClick={() => props.history.push(`/vistaProductos/${esPromocion
 								? carousel.productoPromocion._id
@@ -83,11 +76,11 @@ function Ofertas(props) {
 	});
 
 	return (
-		<div>
+		<Spin spinning={loading} size="large">
 			<Carousel activeIndex={index} onSelect={handleSelect}>
 				{render}
 			</Carousel>
-		</div>
+		</Spin>
 	);
 }
 
