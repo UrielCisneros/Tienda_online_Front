@@ -35,17 +35,19 @@ function RightMenu() {
 					Entrar<Link to="/entrar" />
 				</Menu.Item>
 			) : (
-				<Button
-					type="primary"
-					onClick={() => {
-						localStorage.removeItem('token');
-						firebase.auth().signOut();
-						window.location.reload();
-					}}
-					danger
-				>
-					Cerrar Sesión
-				</Button>
+				<Menu.Item>
+					<Button
+						type="primary"
+						onClick={() => {
+							localStorage.removeItem('token');
+							firebase.auth().signOut();
+							window.location.reload();
+						}}
+						danger
+					>
+						Cerrar Sesión
+					</Button>
+				</Menu.Item>
 			)}
 		</Menu>
 	);

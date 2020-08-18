@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Ofertas from './ofertas'
+import Ofertas from './Carusel_ofertas/ofertas'
 import Productos from './productos'
 import Geolocalizacion from './geolocalizacion'
 

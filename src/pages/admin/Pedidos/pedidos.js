@@ -7,6 +7,8 @@ import { ContainerOutlined, EditOutlined } from '@ant-design/icons';
 import clienteAxios from '../../../config/axios';
 import DetallesPedido from './detalles_pedido';
 import EstadoPedido from './estado_pedido';
+import Pagination from '../../../components/Pagination/pagination';
+import queryString from 'query-string';
 
 const { Meta } = Card;
 
@@ -17,6 +19,24 @@ const formatoMexico = (number) => {
 		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
 		const rep = '$1,';
 		return number.toString().replace(exp, rep);
+	}
+};
+
+const formatoFecha = (fecha) => {
+	if (!fecha) {
+		return null;
+	} else {
+		var newdate = new Date(fecha);
+		return newdate.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+	}
+};
+
+const formatoHora = (hora) => {
+	if (!hora) {
+		return null;
+	} else {
+		var newtime = new Date(hora);
+		return newtime.toLocaleTimeString('es-MX', { hour12: 'false' });
 	}
 };
 
@@ -38,57 +58,71 @@ function Pedidos(props) {
 		props.history.push('/');
 	}
 
-	const [ pedidos, setPedidos ] = useState([]);
-	const [ pedidosFiltrados, setPedidosFiltrados ] = useState([]);
-	const [ loading, setLoading ] = useState(false);
-	//States de filtros
-	const [ mostrarPedidos, setMostrarPedidos ] = useState('todos');
-	//state modales
-    const [ visible, setVisible ] = useState(false);
-    const [ estadoVisible, setEstadoVisible ] = useState(false);
-	//state para mostrar pedido en el modal
-    const [ detallePedido, setDetallePedido ] = useState([]);
-    const [ reload, setReload ] = useState(false);
+	//Tomar la paginacion actual
+	const { location, history } = props;
+	const { page = 1 } = queryString.parse(location.search);
 
-	useEffect(() => {
-        obtenerPedidos();
-        setReload(false);
-	}, [reload]);
+	const [ pedidos, setPedidos ] = useState([]);
+	const [ pedidosPaginacion, setPedidosPaginacion ] = useState([]);
+	const [ loading, setLoading ] = useState(false);
+	//state modales
+	const [ visible, setVisible ] = useState(false);
+	const [ estadoVisible, setEstadoVisible ] = useState(false);
+	//state para mostrar pedido en el modal
+	const [ detallePedido, setDetallePedido ] = useState([]);
+	const [ reload, setReload ] = useState(false);
 
 	useEffect(
 		() => {
-			setPedidosFiltrados(
-				pedidos.filter((pedido) => {
-					switch (mostrarPedidos) {
-						case 'todos':
-							return pedido;
-						case 'proceso':
-							return pedido.estado_pedido.includes('En proceso');
-						case 'enviados':
-							return pedido.estado_pedido.includes('Enviado');
-						case 'pagados':
-							return pedido.pagado.toString().includes('true');
-						case 'noPagados':
-							return pedido.pagado.toString().includes('false');
-						default:
-							return pedido;
-					}
-				})
-			);
+			obtenerPedidos(10, page);
+			setReload(false);
 		},
-		[ mostrarPedidos, pedidos ]
+		[ reload, page ]
 	);
 
-	const obtenerPedidos = async () => {
+	const obtenerPedidos = async (limit, page) => {
 		setLoading(true);
 		await clienteAxios
-			.get('/pedidos', {
+			.get(`/pedidos/admin?limit=${limit}&page=${page}`, {
 				headers: {
 					Authorization: `bearer ${token}`
 				}
 			})
 			.then((res) => {
-				setPedidos(res.data);
+				setPedidos(res.data.docs);
+				setPedidosPaginacion(res.data);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	};
+
+	const obtenerPedidosFiltrados = async (limit, page, filtro) => {
+		setLoading(true);
+		await clienteAxios
+			.get(`/pedidos/admin/filtrados?limit=${limit}&page=${page}&filtro=${filtro}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setPedidos(res.data.docs);
+				setPedidosPaginacion(res.data);
 				setLoading(false);
 			})
 			.catch((res) => {
@@ -111,24 +145,39 @@ function Pedidos(props) {
 	};
 
 	function onChange(e) {
-		setMostrarPedidos(e.target.value);
+		const estado = e.target.value;
+		switch (estado) {
+			case 'todos':
+				obtenerPedidos(10, page);
+				break;
+			case 'proceso':
+				obtenerPedidosFiltrados(10, page, 'En proceso');
+				break;
+			case 'enviados':
+				obtenerPedidosFiltrados(10, page, 'Enviado');
+				break;
+			default:
+				obtenerPedidos(10, page);
+				break;
+		}
 	}
 	const showModal = () => {
 		setVisible(true);
-    };
-    const showModalEstado = () => {
+	};
+	const showModalEstado = () => {
 		setEstadoVisible(true);
-    };
-    const handleCancelEstado = () => {
+	};
+	const handleCancelEstado = () => {
 		setEstadoVisible(false);
 	};
 	const handleCancel = () => {
-        setVisible(false);
+		setVisible(false);
 	};
 
-	const render = pedidosFiltrados.map((pedidos) => (
+	const render = pedidos.map((pedidos) => (
 		<Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} key={pedidos._id}>
 			<Card
+				className="shadow-sm"
 				actions={[
 					<div className="d-flex justify-content-center align-items-center">
 						<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />
@@ -147,7 +196,7 @@ function Pedidos(props) {
 						<p
 							onClick={() => {
 								setDetallePedido(pedidos);
-								showModalEstado()
+								showModalEstado();
 							}}
 							className="d-inline"
 						>
@@ -157,6 +206,7 @@ function Pedidos(props) {
 				]}
 			>
 				<Meta
+                    className="contenedor-card-pedidos"
 					description={
 						<div>
 							<div className="my-2">
@@ -165,8 +215,16 @@ function Pedidos(props) {
 							</div>
 							<div className="my-2">
 								<h6 className="titulos-info-pedidos">Creado el:</h6>
-								<p className="data-info-pedidos">{pedidos.createdAt}</p>
+								<p className="data-info-pedidos">{formatoFecha(pedidos.createdAt)}</p>
 							</div>
+							{pedidos.fecha_envio ? (
+								<div className="my-2">
+									<h6 className="titulos-info-pedidos">Enviado el:</h6>
+									<p className="data-info-pedidos">{formatoFecha(pedidos.fecha_envio)}</p>
+								</div>
+							) : (
+								<div />
+							)}
 							<div className="my-2">
 								<h6 className="titulos-info-pedidos">Cliente:</h6>
 								<p className="data-info-pedidos">{pedidos.cliente.nombre}</p>
@@ -225,16 +283,10 @@ function Pedidos(props) {
 						<Radio className="d-lg-inline d-block mb-1" value="enviados" onChange={onChange}>
 							Pedidos enviados
 						</Radio>
-						<Radio className="d-lg-inline d-block mb-1" value="pagados" onChange={onChange}>
-							Pedidos Pagados
-						</Radio>
-						<Radio className="d-lg-inline d-block mb-1" value="noPagados" onChange={onChange}>
-							Pedidos no pagados
-						</Radio>
 					</Radio.Group>
 				</div>
 				<div className="mt-4">
-					{pedidos.length === 0 || pedidosFiltrados.length === 0 ? (
+					{pedidos.length === 0 ? (
 						<div className="w-100 d-flex justify-content-center align-items-center">
 							<Result status="404" title="No hay resultados" />
 						</div>
@@ -244,34 +296,35 @@ function Pedidos(props) {
 				</div>
 			</div>
 			<Modal
-                key="detalle"
+				key="detalle"
 				width={600}
 				style={{ top: 0 }}
 				title="Detalles de este pedido"
-                visible={visible}
-                onCancel={handleCancel}
+				visible={visible}
+				onCancel={handleCancel}
 				footer={[
-                    <Button key="detalle" type="primary" onClick={handleCancel}>
-                      Cerrar
-                    </Button>
-                  ]}
+					<Button key="detalle" type="primary" onClick={handleCancel}>
+						Cerrar
+					</Button>
+				]}
 			>
 				<DetallesPedido datosDetalle={detallePedido} />
 			</Modal>
-            <Modal
-                key="estado"
+			<Modal
+				key="estado"
 				width={600}
 				title="Estado del pedido"
-                visible={estadoVisible}
-                onCancel={handleCancelEstado}
+				visible={estadoVisible}
+				onCancel={handleCancelEstado}
 				footer={[
-                    <Button key="estado" type="primary" onClick={handleCancelEstado}>
-                      Cerrar
-                    </Button>
-                  ]}
+					<Button key="estado" type="primary" onClick={handleCancelEstado}>
+						Cerrar
+					</Button>
+				]}
 			>
-				<EstadoPedido datosPedido={detallePedido} reload={setReload}/>
+				<EstadoPedido datosPedido={detallePedido} reload={setReload} />
 			</Modal>
+			<Pagination blogs={pedidosPaginacion} location={location} history={history} />
 		</Spin>
 	);
 }
