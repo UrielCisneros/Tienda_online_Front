@@ -82,7 +82,7 @@ function ResultadoBusqueda(props) {
 					) : (
 						productos.todos.map((promo) => {
 							return (
-								<div className="contenedor-titulos-productos">
+								<div className="contenedor-titulos-productos" key={promo._id}>
 									<h1 className="titulo-producto">{productos.nombre}</h1>
 									<h2 className="h5 precio-producto d-inline mr-2">${formatoMexico(productos.precio)}</h2>
 									<h2 className="h5 precio-rebaja d-inline mr-2">${formatoMexico(promo.precioPromocion)}</h2>
