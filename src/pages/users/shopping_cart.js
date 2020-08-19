@@ -24,36 +24,42 @@ export default function ShoppingCart() {
     var decoded = Jwt(token);
     
     function Jwt(token) {
-		try {
-			return jwt_decode(token);
-		} catch (e) {
-			return null;
-		}
-	}
+    try {
+      return jwt_decode(token);
+    } catch (e) {
+      return null;
+    }
+  }
 
-    const [ carrito, setCarrito ] = useState([]);
-    const [ loading, setLoading ] = useState(false);
+  console.log(decoded);
 
-    useEffect(() => {
-        setLoading(true);
-        const obtenerCarrito = async () => {
-			await clienteAxios
-				.get(`/carrito/${decoded._id}`, {
-					headers: {
-						Authorization: `bearer ${token}`
-					}
-				})
-				.then((res) => {
-                    // setCarrito(res.data.articulos.length);
+  const [ carrito, setCarrito ] = useState([]);
+  const [ loading, setLoading ] = useState(false);
+
+  async function obtenerDatosCarrito(){
+    setLoading(true);
+      await clienteAxios
+        .get(`/carrito/${decoded._id}`,{
+          headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `bearer ${token}`
+          }
+      })
+        .then((res) => {
+                    // setCarrito(res.data.articulos);
                     console.log(res);
-				})
-				.catch((res) => {
-					// setCarrito();
-                    console.log("Nohay datos");
-                });
-		};
-    }, []);
-    
+                    console.log(decoded);
+        })
+        .catch((err) => {
+                    // setCarrito([]);
+                    console.log(err.response);
+                    console.log("No hay datos");
+      });
+  }
+
+  useEffect(() => {
+   obtenerDatosCarrito();
+  }, []);
    
 
     return (
