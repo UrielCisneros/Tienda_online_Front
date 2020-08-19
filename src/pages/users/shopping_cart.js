@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import jwt_decode from 'jwt-decode';
+
 import { List, InputNumber, Button, Avatar } from 'antd';
+import {ShoppingCartOutlined, ExportOutlined, DeleteOutlined} from '@ant-design/icons';
 
-
+const styles ={fontSize: 25};
 const data = [
     {
       title: 'Ant Design Title 1',
@@ -58,7 +60,7 @@ export default function ShoppingCart() {
   }
 
   useEffect(() => {
-   obtenerDatosCarrito();
+   //obtenerDatosCarrito();
   }, []);
    
 
@@ -68,7 +70,6 @@ export default function ShoppingCart() {
         <h1 className="text-center">Tu carrito de compras</h1>
 
         <div  className="row" style={{background: "white"}}>
-        
             <div className="col-lg-11 justify-content-lg-center">
                 <List
                     itemLayout="horizontal"
@@ -95,9 +96,12 @@ export default function ShoppingCart() {
                                 <p className="px-3">Talla: </p>
                             </div>
                             <div className="mt-3">
-                                <Link href="https://ant.design">Comprar ahora </Link> 
-                                <Link className="px-3" href="https://ant.design">Eliminar producto</Link>
-                                <Link className="px-3" href="https://ant.design">Apartar</Link>
+                                <Link href="https://ant.design">
+                                  <ShoppingCartOutlined style={styles}/>Comprar ahora </Link> 
+                                <Link className="px-3" href="https://ant.design">
+                                  <DeleteOutlined style={styles}/>Eliminar producto</Link>
+                                <Link className="px-3" href="https://ant.design">
+                                  <ExportOutlined style={styles}/>Apartar</Link>
                             </div>
                         </div>
         
@@ -116,13 +120,16 @@ export default function ShoppingCart() {
                     
                 />
             </div>
-            <div className="col-lg-11 d-flex flex-row-reverse mt-4" >
+            <div className="col-lg-12 d-flex flex-row-reverse mt-4" >
                 <div>
                     <h2>MilOchoMil</h2>
                     <h2>Gratis</h2>
                     <h1>$1020121</h1>
-                    <Button size="large" className="px-5 align-self-center" type="primary">Comprar ahora</Button>
-                </div>
+                    <Button size="large" className="px-5 align-self-center" type="primary"> 
+                    <ShoppingCartOutlined style={styles}/>Comprar ahora
+                    </Button>
+                    <br/><br/>
+                    </div>
                 <div className="px-5 ">
                     <h2>Productos () </h2>
                     <Link><h2 >Envio a: </h2></Link>
