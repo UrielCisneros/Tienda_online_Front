@@ -31,14 +31,14 @@ const formatoFecha = (fecha) => {
 	}
 };
 
-const formatoHora = (hora) => {
+/* const formatoHora = (hora) => {
 	if (!hora) {
 		return null;
 	} else {
 		var newtime = new Date(hora);
 		return newtime.toLocaleTimeString('es-MX', { hour12: 'false' });
 	}
-};
+}; */
 
 function Pedidos(props) {
 	const token = localStorage.getItem('token');
