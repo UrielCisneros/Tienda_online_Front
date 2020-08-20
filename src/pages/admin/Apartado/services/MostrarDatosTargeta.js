@@ -1,31 +1,16 @@
 import React from 'react'
 import {Card, Col,Tag} from 'antd'
 import { ContainerOutlined, EditOutlined } from '@ant-design/icons';
+import {formatoMexico,formatoFecha} from '../../../../config/reuserFunction'
+
+import './MostrarDatosTargeta.scss';
 
 const { Meta } = Card;
 
-const formatoMexico = (number) => {
-	if (!number) {
-		return null;
-	} else {
-		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-		const rep = '$1,';
-		return number.toString().replace(exp, rep);
-	}
-};
-
-const formatoFecha = (fecha) => {
-	if (!fecha) {
-		return null;
-	} else {
-		var newdate = new Date(fecha);
-		return newdate.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-	}
-};
 
 export default function MostrarDatosTargeta(props) {
 
-    const {setDetalleApartado,showModal,apartado,showModalEstado} = props;
+    const {setDetalleApartado,showModal,apartado} = props;
 
     return (
             <Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} key={apartado._id}>
@@ -41,63 +26,52 @@ export default function MostrarDatosTargeta(props) {
 								}}
 								className="d-inline"
 							>
-								Detalles del pedido
-							</p>
-						</div>,
-						<div className="d-flex justify-content-center align-items-center">
-							<EditOutlined className="mr-2" style={{ fontSize: 20 }} />
-							<p
-								onClick={() => {
-									setDetalleApartado(apartado);
-									showModalEstado();
-								}}
-								className="d-inline"
-							>
-								Cambiar estado
+								Detalle se solicitud de apartado
 							</p>
 						</div>
 					]}
 				>
 					<Meta
-						className="contenedor-card-pedidos"
+						className="contenedor-card-apartados"
 						description={
 							<div>
+{/* 								<div>
+									<img 
+										className="img-fluid" 
+										width="100"
+										alt="imagen de base"
+										src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${apartado.producto.imagen}`}
+									 />
+								</div> */}
 								<div className="my-2">
-									<h6 className="titulos-info-pedidos">ID del pedido: </h6>
-									<p className="data-info-pedidos">{apartado._id}</p>
+									<h6 className="titulos-info-apartados">Id apartado: </h6>
+									<p className="data-info-apartados">{apartado._id}</p>
 								</div>
 								<div className="my-2">
-									<h6 className="titulos-info-pedidos">Creado el:</h6>
-									<p className="data-info-pedidos">{formatoFecha(apartado.createdAt)}</p>
+									<h6 className="titulos-info-apartados">Pedido el:</h6>
+									<p className="data-info-apartados">{formatoFecha(apartado.createdAt)}</p>
 								</div>
 								<div className="my-2">
-									<h6 className="titulos-info-pedidos">Cliente:</h6>
-									<p className="data-info-pedidos">{apartado.cliente.nombre}</p>
+									<h6 className="titulos-info-apartados">Cliente:</h6>
+									<p className="data-info-apartados">{apartado.cliente.nombre}</p>
 								</div>
 								<div className="my-2">
-									<h6 className="titulos-info-pedidos">Estado:</h6>
-									
+									<h6 className="titulos-info-apartados">Estado:</h6>
 									<Tag
-										className="data-info-pedidos"
+										className="data-info-apartados"
 										color={apartado.estado === 'ACEPTADO' ?  '#5cb85c' : apartado.estado === 'PROCESANDO' ? '#0275d8' : '#F75048'}
 									>
 										{apartado.estado}
 									</Tag>
 								</div>
+
 								<div className="my-2">
-									<h6 className="titulos-info-pedidos">Pagado:</h6>
-									<Tag
-										className="data-info-pedidos"
-										color={apartado.pagado === true ? '#5cb85c' : '#f0ad4e'}
-									>
-										{apartado.pagado === true ? 'Si' : 'No'}
-									</Tag>
+									<h6 className="titulos-info-apartados">Producto:</h6>
+									<p className="data-info-apartados">{apartado.producto.nombre}</p>
 								</div>
 								<div className="my-2">
-									<h6 className="titulos-info-pedidos">Total:</h6>
-									<p className="precio-total-pedidos data-info-pedidos">
-										$ {formatoMexico(apartado.total)}
-									</p>
+									<h6 className="titulos-info-apartados">Cantidad de articulos:</h6>
+									<p className="data-info-apartados">{apartado.cantidad}</p>	
 								</div>
 							</div>
 						}

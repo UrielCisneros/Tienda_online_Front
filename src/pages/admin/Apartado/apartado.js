@@ -5,6 +5,8 @@ import clienteAxios from '../../../config/axios';
 import {notification,Card, Col,Tag,Spin,Radio,Result,Row,Modal,Button } from 'antd'
 import queryString from 'query-string';
 import MostrarDatosTargeta from './services/MostrarDatosTargeta'
+import DetalleApartado from './services/DetalleApartado';
+import Pagination from '../../../components/Pagination/pagination'
 
 
 
@@ -18,14 +20,15 @@ function SistemaApartado(props) {
 
     const [ loading, setLoading ] = useState(false);
     const [ apartados, setApartados ] = useState([]);
-    const [ detalleApartado, setDetalleApartado ] = useState([]);
+	const [ detalleApartado, setDetalleApartado ] = useState([]);
+	const [apartadoPaginacion, setApartadoPaginacion] = useState([])
 
     const [colorTag, setColorTag] = useState('')
 
     const [filter, setFilter] = useState('')
 
     const [ visible, setVisible ] = useState(false);
-	const [ estadoVisible, setEstadoVisible ] = useState(false);
+	const [ estado, setEstado ] = useState(false);
 
     const token = localStorage.getItem('token')
     var decoded = Jwt(token) 
@@ -41,9 +44,12 @@ function SistemaApartado(props) {
     function obtenerDatos(limit,page,filter){
         clienteAxios.get(`/apartado/?limit=${limit}&page=${page}&filter=${filter}`)
         .then((res) => {
+			setLoading(false);
             console.log(res);
-            setApartados(res.data.docs)
+			setApartados(res.data.docs)
+			setApartadoPaginacion(res.data)
         }).catch((err) => {
+			setLoading(false);
 			console.log(err);
             notification.error({
                 message: 'Error del servidor',
@@ -54,8 +60,10 @@ function SistemaApartado(props) {
     }
 
     useEffect(() => {
-        obtenerDatos(10,page,filter);
-    }, [page,filter])
+		obtenerDatos(10,page,filter);
+		setLoading(true);
+		setEstado(false)
+    }, [page,filter,estado])
 
     if(token === '' || token === null){
         props.history.push('/entrar')
@@ -70,91 +78,69 @@ function SistemaApartado(props) {
     const showModal = () => {
 		setVisible(true);
 	};
-	const showModalEstado = () => {
-		setEstadoVisible(true);
-	};
-	const handleCancelEstado = () => {
-		setEstadoVisible(false);
-	};
+
 	const handleCancel = () => {
 		setVisible(false);
     };
 
     return (
        <div>
-           <Spin size="large" spinning={loading}>
-			<div>
-				<p style={{ fontSize: 20 }}>
-					Aqui puedes ver todas las solicitudes de productos a apartar.
-				</p>
-				<div className="mt-4">
-					<p className="d-lg-inline d-block mr-5">Mostrar por:</p>
-					<Radio.Group name="radiogroup" defaultValue="" size="mediun">
-						<Radio className="d-lg-inline d-block mb-1" value="" onChange={e => {handleChange(e)}} >
-							Todas las solicitudes
-						</Radio>
-						<Radio className="d-lg-inline d-block mb-1" value="PROCESANDO" onChange={e => {handleChange(e)}} >
-							Solicitudes en proceso
-						</Radio>
-						<Radio className="d-lg-inline d-block mb-1" value="ACEPTADO" onChange={e => {handleChange(e)}}>
-							Solicitudes aceptadas
-						</Radio>
-                        <Radio className="d-lg-inline d-block mb-1" value="RECHAZADO" onChange={e => {handleChange(e)}}>
-							Solicitudes rechazadas
-						</Radio>
-					</Radio.Group>
+			<Spin size="large" spinning={loading}>
+				<div>
+					<p style={{ fontSize: 20 }}>
+						Aqui puedes ver todas las solicitudes de productos a apartar.
+					</p>
+					<div className="mt-4">
+						<p className="d-lg-inline d-block mr-5">Mostrar por:</p>
+						<Radio.Group name="radiogroup" defaultValue="" size="mediun">
+							<Radio className="d-lg-inline d-block mb-1" value="" onChange={e => {handleChange(e)}} >
+								Todas las solicitudes
+							</Radio>
+							<Radio className="d-lg-inline d-block mb-1" value="PROCESANDO" onChange={e => {handleChange(e)}} >
+								Solicitudes en proceso
+							</Radio>
+							<Radio className="d-lg-inline d-block mb-1" value="ACEPTADO" onChange={e => {handleChange(e)}}>
+								Solicitudes aceptadas
+							</Radio>
+							<Radio className="d-lg-inline d-block mb-1" value="RECHAZADO" onChange={e => {handleChange(e)}}>
+								Solicitudes rechazadas
+							</Radio>
+						</Radio.Group>
+					</div>
+					<div className="mt-4">
+						{apartados.length === 0 ? (
+							<div className="w-100 d-flex justify-content-center align-items-center">
+								<Result status="404" title="No hay resultados" />
+							</div>
+						) : (
+							<Row gutter={16}>{
+								apartados.map((apartado) => (							
+									<MostrarDatosTargeta 
+										setDetalleApartado={setDetalleApartado} 
+										showModal={showModal} 
+										apartado={apartado} 
+									/>
+								))
+								}
+							</Row>
+						)}
+					</div>
 				</div>
-				<div className="mt-4">
-					{apartados.length === 0 ? (
-						<div className="w-100 d-flex justify-content-center align-items-center">
-							<Result status="404" title="No hay resultados" />
-						</div>
-					) : (
-						<Row gutter={16}>{
-							apartados.map((apartado) => (							
-								<MostrarDatosTargeta 
-									setDetalleApartado={setDetalleApartado} 
-									showModal={showModal} apartado={apartado} 
-									showModalEstado={showModalEstado} 
-								/>
-							))
-}
-						
-						</Row>
-					)}
-				</div>
-			</div>
-			<Modal
-				key="detalle"
-				width={600}
-				style={{ top: 0 }}
-				title="Detalles de este pedido"
-				visible={visible}
-				onCancel={'handleCancel'}
-				footer={[
-					<Button key="detalle" type="primary" onClick={'handleCancel'}>
-						Cerrar
-					</Button>
-				]}
-			>
-				{/* <DetallesPedido datosDetalle={'detallePedido'} /> */}
-			</Modal>
-			<Modal
-				key="estado"
-				width={600}
-				title="Estado del pedido"
-				visible={estadoVisible}
-				onCancel={'handleCancelEstado'}
-				footer={[
-					<Button key="estado" type="primary" onClick={'handleCancelEstado'}>
-						Cerrar
-					</Button>
-				]}
-			>
-				{/* <EstadoPedido datosPedido={'detallePedido'} reload={'setReload'} /> */}
-			</Modal>
-			{/* <Pagination blogs={pedidosPaginacion} location={location} history={history} /> */}
-		</Spin>
+				<Modal
+					key="detalle"
+					width={600}
+					style={{ top: 0 }}
+					title="Detalles de este pedido"
+					visible={visible}
+					onCancel={handleCancel}
+					footer={[
+						''
+					]}
+				>
+					<DetalleApartado detalleApartado={detalleApartado} setEstado={setEstado} setFilter={setFilter} />
+				</Modal>
+				<Pagination blogs={apartadoPaginacion} location={location} history={history} />
+			</Spin>
        </div>
     )
 }

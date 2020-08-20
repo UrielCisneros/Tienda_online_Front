@@ -177,7 +177,7 @@ function Pedidos(props) {
 	const render = pedidos.map((pedidos) => (
 		<Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} key={pedidos._id}>
 			<Card
-				className="shadow-sm"
+				className="shadow-sm card-p-pedidos"
 				actions={[
 					<div className="d-flex justify-content-center align-items-center">
 						<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />

@@ -1,18 +1,19 @@
 
 @media(max-width: 768px){
-    .titulos-info-pedidos{
+    .titulos-info-apartados{
         line-height: 0;
         display: block!important;
     }
-    .data-info-pedidos{
+    .data-info-apartados{
         float: none!important;
     }
 }
-.titulos-info-pedidos{
+
+.titulos-info-apartados{
     line-height: 0;
     display: inline;
 }
-.data-info-pedidos{
+.data-info-apartados{
     float: right;
     max-width: 80%;
     overflow:hidden;
@@ -22,9 +23,8 @@
 .precio-total-pedidos{
     font-size: 18px!important;
 }
-.contenedor-card-pedidos{
-    height: 250px;
-}
-.card-p-pedidos p {
-    font-size: 16px;
+
+
+.contenedor-card-apartados{
+    height: 200px;
 }
