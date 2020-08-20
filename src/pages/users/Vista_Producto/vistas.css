@@ -1,0 +1,26 @@
+.caracteristicas{
+    background: #ffffff ;
+}
+.titulo-principal{
+    font-size: 30px;
+}
+.titulos-vista-productos{
+    font-size: 30px;
+}
+.titulo-precio{
+    font-size: 30px;
+}
+.talla-vista-producto{
+    margin: 3px;
+}
+.descripcion-sm{
+    display: none;
+}
+@media(max-width: 768px){
+    .descripcion-sm{
+        display: block;
+    }
+    .descripcion-lg{
+        display: none;
+    }
+  }

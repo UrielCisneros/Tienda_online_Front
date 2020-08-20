@@ -142,7 +142,7 @@ const Navegacion = (props) => {
 										</Badge>
 									</Menu.Item>
 								)}
-								{token ? (
+								{token && decoded['rol'] === false ? (
 									<SubMenu
 										icon={
 											!decoded.imagen ? (
