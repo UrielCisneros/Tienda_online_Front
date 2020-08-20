@@ -25,6 +25,9 @@ import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
 import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
 
+//Secondary Component
+import VistaProducto from '../pages/users/VistaProductos'
+
 //other
 import Error404 from '../pages/users/error404'
 import Search404 from '../pages/users/Resultado_Busqueda/404'
