@@ -25,35 +25,37 @@ function ConsultaProductos(props) {
 	const [ productos, setProductos ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
 
-	useEffect(() => {
-		async function obtenerProductos(limit, page) {
-			setLoading(true);
-			await clienteAxios
-				.get(`/productos?limit=${limit}&page=${page}`)
-				.then((res) => {
-					setProductos(res.data.posts.docs);
-					setProductosPaginacion(res.data.posts);
+	async function obtenerProductos(limit, page) {
+		setLoading(true);
+		await clienteAxios
+			.get(`/productos?limit=${limit}&page=${page}`)
+			.then((res) => {
+				setProductos(res.data.posts.docs);
+				setProductosPaginacion(res.data.posts);
+				console.log(res.data);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
-				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoading(false);
-						notification.error({
-							message: 'Error',
-							description: res.response.data.message,
-							duration: 2
-						});
-					} else {
-						setLoading(false);
-						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
-							duration: 2
-						});
-					}
-				});
-		}
-		obtenerProductos(20, page);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	}
+
+	useEffect(() => {
+		obtenerProductos(10, page);
 	}, [page]);
 
 	const render = productos.map((productos) => (
@@ -87,7 +89,8 @@ function ConsultaProductos(props) {
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
 					<Row gutter={45} style={{ maxWidth: '90vw' }} className="mt-4">
-						{productos.length ? (
+						{console.log(productos.length)}
+						{productos.length > 0 ? (
 							render
 						) : (
 							<div className="w-100 d-flex justify-content-center align-items-center">
