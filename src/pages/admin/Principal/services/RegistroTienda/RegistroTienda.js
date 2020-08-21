@@ -23,7 +23,6 @@ export default function RegistroTienda(props) {
      }
 
     useEffect(() => {
-        console.log(datosNegocio._id)
         if(datosNegocio !== undefined){
             setImagen(datosNegocio.imagenLogo)
             if(datosNegocio.ubicacion[0].lat === "undefined"){
