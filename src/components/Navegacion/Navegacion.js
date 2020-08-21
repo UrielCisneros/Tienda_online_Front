@@ -157,7 +157,7 @@ const Navegacion = (props) => {
 										}
 									>
 										<Menu.Item>
-											<SettingOutlined />Mi cuenta<Link to="/" />
+											<SettingOutlined />Mi cuenta<Link to="/perfiles" />
 										</Menu.Item>
 										<Menu.Item>
 											<p
