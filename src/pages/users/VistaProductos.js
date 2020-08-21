@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import  Scroll  from '../users/subs/scroll';
 import  Sugerencia from '../users/subs/sugerencia';
 import  ReadMoreReact from 'read-more-react';
-import './vistas.css';
+
 
 
 import ImageGallery from 'react-image-gallery';

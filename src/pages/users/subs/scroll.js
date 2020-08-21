@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from 'react';
 
 import clienteAxios from '../../../config/axios.js';
-import '../vistas.css';
+
 
 import ImageScroller from 'react-image-scroller';
 

@@ -19,7 +19,7 @@ import Entrar from '../pages/users/entrar'
 import QuienesSomos from '../pages/users/quienes_somos'
 import ShoppingCart from '../pages/users/shopping_cart'
 import Productos from '../pages/users/Productos/productos'
-import Blog from '../pages/users/blog'
+import Blog from '../pages/users/Blogs/blog';
 import PedidosUsuario from '../pages/users/pedidos'
 import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
