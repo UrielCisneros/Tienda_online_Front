@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import clienteAxios from '../config/axios';
+import clienteAxios from '../../config/axios';
 import { Link } from 'react-router-dom';
 import {  Button} from 'antd';
 
