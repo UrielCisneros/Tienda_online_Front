@@ -1,16 +1,15 @@
 import React,{useState,useEffect} from 'react'
-import { Link } from 'react-router-dom';
 import clienteAxios from '../../../config/axios';
-import { List, Pagination,Spin} from 'antd';
-import  ReadMoreReact from 'read-more-react';
-
-import "./vistas.css"
+import {Spin,notification} from 'antd';
+import queryString from 'query-string';
+import Pagination from '../../../components/Pagination/pagination';
+import BlogsList from'./services/BlogList';
 
 
 
 
 const listData = [];
-for (let i = 1; i < 5; i++) {
+for (let i = 1; i <= 10; i++) {
   listData.push({
     href: 'https://ant.design',
     title: `Mi primer Blog ${i}`,
@@ -19,62 +18,57 @@ for (let i = 1; i < 5; i++) {
   });
 }
 
-const Descrip = ({texto}) => (
-    <Link>
-    <ReadMoreReact 
-    text = { (texto)}
-    min = { 120 }
-    ideal = { 150 }
-    max = { 1000 }
-    readMoreText ="Ver mas..." />
-    </Link>
-    );
-
     
-export default function Blog() {
+export default function Blog(props) {
+
+    const {location,history} = props;
+    const {page = 1} = queryString.parse(location.search);
     
-    const [loading, setloading] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [blogs, setBlogs] = useState([])
 
 
-    async function obtenerDatos(){
-        await clienteAxios.get()
+    function getBlogsApi(limit,page){
+        setLoading(true);
+        clienteAxios.get(`/blog?limit=${limit}&page=${page}`)
+        .then((res) => {
+            console.log(res)
+                setBlogs(res.data.posts);
+                setLoading(false);
+        })
+        .catch((err) => {
+            notification.error({
+                message: 'Error del servidor',
+                description:
+                  'Paso algo en el servidor, al parecer la conexion esta fallando.',
+              });
+            console.log(err);
+        });
     }
+
+    useEffect(() => {
+        setLoading(true);
+        getBlogsApi(10,page)
+    }, [page])
 
 
     return (
-        <Spin >
+        <Spin size="large" spinning={loading} >
             <div  id="blog" className="container">
                 <h1 className="text-center">Bienvenidos a nuestro Blog!</h1>
                 <div className="container-fluid">
                     <div id="cards">
-                    <List className="p-3"
-                        itemLayout="vertical"
-                        size="large"
-                        dataSource={listData}
-                        renderItem={item => (
-                            <Link>
-                                <List.Item 
-                                    key={item.title}
-                                    extra={
-                                    <img
-                                        width={272}
-                                        alt="logo"
-                                        src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                                    />
-                                    }
-                                >
-                                    <List.Item.Meta
-                                    title={<a href={item.href}>{item.title}</a>}
-                                    description={ <Descrip texto={item.description}/>}
-                                    />
-                                </List.Item>
-                            </Link>
-                        )}
-                    />
+                        <BlogsList 
+                            blogs={blogs} 
+                            setLoading={setLoading}
+                        />
                     </div>
 
-                    <Pagination size='large' className="p-5 text-center"
-                    defaultCurrent={1} total={100} />
+                    <Pagination 
+                        blogs={blogs} 
+                        location={location}  
+                        history={history}
+                    />
                 </div>
             </div>
         </Spin>
