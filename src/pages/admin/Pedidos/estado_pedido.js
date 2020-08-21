@@ -134,7 +134,7 @@ const EstadoPedido = (props) => {
 				</Button>
 			</Dropdown>
 			<Divider orientation="left">Mensaje para el cliente</Divider>
-			<p>Si el producto ya fue enviado puedes mandarle un mensaje a tu cliente para notificarle</p>
+			<p style={{fontSize: 16}}>Si el producto ya fue enviado puedes mandarle un mensaje a tu cliente para notificarle</p>
 			<Form onFinish={cambiarEstado} form={form}>
 				<Form.Item name="mensaje_admin">
 					<TextArea rows={4} name="mensaje_admin" onChange={onChange}/>

@@ -26,7 +26,7 @@ import Articulo from '../pages/users/articulo'
 import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
 
 //Secondary Component
-import VistaProducto from '../pages/users/VistaProductos'
+import VistaProducto from '../pages/users/Vista_Producto/vista_producto'
 
 //other
 import Error404 from '../pages/users/error404'
@@ -141,6 +141,11 @@ const routes = [
 			{
 				path: '/articulo',
 				component: Articulo,
+				exact: true
+			},
+			{
+				path: '/vista_producto/:url',
+				component: VistaProducto,
 				exact: true
 			},
 			{

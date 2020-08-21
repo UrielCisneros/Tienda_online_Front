@@ -10,8 +10,10 @@
     "antd": "^4.2.4",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
+    "dompurify": "^2.0.12",
     "dotenv": "^8.2.0",
     "firebase": "^7.14.5",
+    "html-react-parser": "^0.13.0",
     "jwt-decode": "^2.2.0",
     "materialize-css": "^1.0.0-rc.2",
     "moment": "^2.27.0",
@@ -28,6 +30,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-search-field": "^1.0.0",
+    "read-more-react": "^1.0.10",
     "tinymce": "^5.4.1"
   },
   "scripts": {

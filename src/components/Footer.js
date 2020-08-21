@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { Layout, Button, Input, Modal} from 'antd';
+import { Layout} from 'antd';
 
-import {FacebookFilled, InstagramFilled, TwitterCircleFilled, PhoneOutlined, UserOutlined, KeyOutlined } from '@ant-design/icons';
 
 const { Footer } = Layout;
 const Style = {fontSize:17, color: "black"};
