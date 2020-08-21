@@ -9,7 +9,7 @@ import './blogList.scss'
 const {confirm} = Modal;
 
 export default function blogList(props) {
-    
+
     const {blogs,setReloadBlog,showDrawer,setAccion,setInfoBlog} = props;
     const token = localStorage.getItem('token');
 
@@ -63,6 +63,7 @@ export default function blogList(props) {
 
 
 function Blog(props){
+    
     const {blog,deleteBlog,showDrawer,setAccion,setInfoBlog} = props;
 
     return(
