@@ -13,11 +13,6 @@ import {
 
 export default function Perfiles() {
 
-    const [componentSize, setComponentSize] = useState('default');
-    const onFormLayoutChange = ({ size }) => {
-        setComponentSize(size);
-    };
-
     return (
     <div className="container col-lg-6">
          <h1 className="mt-5 text-center">Bienvenido a tu perfil</h1>
@@ -25,18 +20,8 @@ export default function Perfiles() {
                 <br/>
             <Form 
                     layout="horizontal"
-                    initialValues={{ size: componentSize }}
-                    onValuesChange={onFormLayoutChange}
-                    size={componentSize}
-                   
+                    size={"large"}
                 >
-                    <Form.Item label="Puedes adecuar a tu vista" name="size" >
-                    <Radio.Group>
-                        <Radio.Button value="small">Pequeño</Radio.Button>
-                        <Radio.Button value="default">Normal</Radio.Button>
-                        <Radio.Button value="large">Grande</Radio.Button>
-                    </Radio.Group>
-                    </Form.Item>
 
                     <h2>Informacion personal:</h2>
                     <br/>
