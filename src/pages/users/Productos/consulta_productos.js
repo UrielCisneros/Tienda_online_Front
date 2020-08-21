@@ -59,7 +59,7 @@ function ConsultaProductos(props) {
 		},
 		[ page ]
 	);
-	console.log(productos)
+
 	function agregarPorcentaje(precio_descuento, precio_producto) {
 		var porcentaje = Math.round(precio_descuento / precio_producto * 100);
 		var descuento = 100 - porcentaje;

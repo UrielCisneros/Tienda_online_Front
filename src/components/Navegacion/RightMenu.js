@@ -72,15 +72,15 @@ function RightMenu() {
 			{token ? (
 				<SubMenu
 					icon={
-						!decoded.imagen ? (
+						!decoded.imagen && !decoded.imagenFireBase ? (
 							<Avatar size="large" style={{ backgroundColor: '#87d068' }}>
 								<p>{decoded.nombre.charAt(0)}</p>
 							</Avatar>
-						) : (
-							<Avatar size="large" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${decoded.imagen}`}>
-								{/* <p>{decoded.nombre.charAt(0)}</p> */}
-							</Avatar>
-						)
+							) : decoded.imagenFireBase ? (
+							<Avatar size="large" src={decoded.imagenFireBase} />
+							 ) : (
+							<Avatar size="large" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${decoded.imagen}`} />
+							 )
 					}
 				>
 					<Menu.Item>

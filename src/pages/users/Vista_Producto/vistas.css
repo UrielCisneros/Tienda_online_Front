@@ -9,6 +9,10 @@
 }
 .titulo-precio{
     font-size: 30px;
+    display: inline;
+}
+.titulo-porcentaje{
+    font-size: 30px!important;
 }
 .talla-vista-producto{
     margin: 3px;
@@ -16,6 +20,19 @@
 .descripcion-sm{
     display: none;
 }
+.read-more{
+    height: auto;
+}
+.read-less{
+    max-height: 250px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+.texto-ver-mas{
+    color: #2196F3;
+    cursor: pointer;
+}
+
 @media(max-width: 768px){
     .descripcion-sm{
         display: block;

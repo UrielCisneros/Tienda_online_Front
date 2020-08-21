@@ -22,7 +22,8 @@ function Galeria(props) {
 	const [ imagenZoom, setImagenZoom ] = useState();
 
 	function onLoad(imagen) {
-		setImagenZoom(imagen.target.src);
+		const url = imagen.target.src.split('.com/');// se hace asi porque al poner la variable con la url saltaban warnings del src estaba undefind
+		setImagenZoom(url[1]);
 	}
 
 	const galery = {
@@ -41,7 +42,7 @@ function Galeria(props) {
 		() => {
 			async function obtenerImagen() {
 				await clienteAxios.get(`/productos/${idproducto}`).then((res) => {
-					setImagenZoom(`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${res.data.imagen}`);
+					setImagenZoom(res.data.imagen);
 					setImagen([
 						{
 							original: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${res.data.imagen}`,
@@ -94,6 +95,20 @@ function Galeria(props) {
 		[ count, galeria, imagen ]
 	);
 
+	const propiedadesImageMagnify= {
+		smallImage: {
+			alt: 'imagen-producto',
+			src: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenZoom}`,
+			isFluidWidth: true
+		},
+		largeImage: {
+			src: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenZoom}`,
+			width: 1140,
+			height: 980
+		},
+		enlargedImagePortalId: 'zoom-render'
+	}
+
 	function myRenderItem() {
 		return (
 			<ReactImageMagnify
@@ -101,19 +116,7 @@ function Galeria(props) {
 				enlargedImageContainerClassName="image-gallery-image-large-container"
 				enlargedImageClassName="image-gallery-image-large"
 				className="imagen-gallery-container"
-				{...{
-					smallImage: {
-						alt: 'imagen-producto',
-						src: imagenZoom,
-						isFluidWidth: true
-					},
-					largeImage: {
-						src: imagenZoom,
-						width: 1140,
-						height: 980
-					},
-					enlargedImagePortalId: 'zoom-render'
-				}}
+				{...propiedadesImageMagnify}
 			/>
 		);
 	}
