@@ -4,8 +4,9 @@ import {withRouter } from 'react-router-dom';
 import {
     Form,
     Input,
-    Radio,
-    Select
+    Divider,
+    Select,
+    Button
   } from 'antd';
 
   const { Option} = Select;
@@ -23,7 +24,7 @@ export default function Perfiles() {
                     size={"large"}
                 >
 
-                    <h2>Informacion personal:</h2>
+                    <Divider style={{fontSize: 22}}>Información Personal</Divider>
                     <br/>
                     <Form.Item >
                         <h2>Nombre</h2>
@@ -43,9 +44,9 @@ export default function Perfiles() {
                         <h2>Telefono</h2>
                         <Input  placeholder="+52 3171234567" />
                     </Form.Item>
-
-                    <h2 className="text-aling-center">Datos domiciliarios</h2>
-                    <br />
+                    <br/>
+                    <Divider className="mt-5" style={{fontSize: 22}}>Datos domiciliarios</Divider>
+                    
                     <Form.Item >
                         <h2>Calle y Numero</h2>
                         <Input.Group compact>
@@ -96,8 +97,20 @@ export default function Perfiles() {
                         <h2>Contraseña:</h2>
                         <Input.Password placeholder="Password" />
                     </Form.Item>
+
+                    <Form.Item >
+                        <h2>Confirmar Contraseña:</h2>
+                        <Input.Password placeholder="Password" />
+                    </Form.Item>
             </Form>
+            
             <br/>
+            <div className="d-flex justify-content-center pb-3">
+                <Button type="primary" size="large" style={{width: 150, fontSize: 20}}>
+                    Guardar
+                </Button>
+            </div>
+
             </div>
     </div>
     )
