@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Layout } from 'antd';
 import Navegacion from '../components/Navegacion/Navegacion';
-import FooterPage from '../components/Footer';
+import FooterPage from '../components/Footer/Footer';
 
 export default function LayoutBasic(props) {
 	const { routes } = props;
