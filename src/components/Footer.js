@@ -17,6 +17,8 @@ const FooterPage = () => {
     const [calle, setCalle] = useState("")
     const [colonia, setColonia] = useState("")
 
+    
+
     function peticionRedes(){
 		clienteAxios.get('/tienda/')
 			.then((res) => {
@@ -85,9 +87,10 @@ const FooterPage = () => {
 
                 <div className="col-lg-3 p-3" style={{textAlign:"center"}}>
                     <p style={{fontSize: 30, }}>Buscanos en:</p>
-                    <Link to={tienda.linkFace}><FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} /></Link>
-                    <Link to={tienda.linkInsta}><InstagramFilled className="ml-3" id="is" style={{fontSize:  45 ,color:"gray"}} /></Link>
-                    <Link to={tienda.linkTweeter}><TwitterCircleFilled className="mt-3 ml-3" id="is"  style={{fontSize: 45, color:"gray"}}/></Link>
+                    {tienda.linkFace !== 'undefined' ? (<Link to={tienda.linkFace}><FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} /></Link>):('')}
+                    {tienda.linkInsta !== 'undefined' ? (<Link to={tienda.linkInsta}><InstagramFilled className="ml-3" id="is" style={{fontSize:  45 ,color:"gray"}} /></Link>):('')}
+                    {tienda.linkTweeter !== 'undefined' ? (<Link to={tienda.linkTweeter}><TwitterCircleFilled className="mt-3 ml-3" id="is"  style={{fontSize: 45, color:"gray"}}/></Link>):('')}
+                    
                 </div>
                 </div>
         //     <p style={{textAlign:"center"}}>Ant Design ©2018 Created by Ant UED</p>
