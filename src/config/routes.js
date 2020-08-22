@@ -16,7 +16,7 @@ import BlogAdmin from '../pages/admin/Blog/blog'
 //Users pages
 import Home from '../pages/users/home'
 import Entrar from '../pages/users/entrar'
-import QuienesSomos from '../pages/users/quienes_somos'
+import QuienesSomos from '../pages/users/Quienes_somos/quienes_somos';
 import ShoppingCart from '../pages/users/shopping_cart'
 import Productos from '../pages/users/Productos/productos'
 import Blog from '../pages/users/Blogs/blog';
@@ -25,7 +25,7 @@ import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
 import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
 
-import Politicas from '../components/politicas'
+import Politicas from '../pages/users/Politicas/politicas'
 //Secondary Component
 import VistaProducto from '../pages/users/Vista_Producto/vista_producto'
 

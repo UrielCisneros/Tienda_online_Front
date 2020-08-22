@@ -55,16 +55,22 @@ const FooterPage = () => {
                 <div id="foot"  className="row">  
                     <div className="col-lg-9 text-lg-left text-center ">
                         <div className="m-4 footer-border">
-                            <Link  to="/quienes_somos" >
-                                <Button id="is" type="link" style={Style} ><HomeOutlined  style={{fontSize: 17}} />
-                                    Imagen Coorporativa
-                                </Button>
-                            </Link>
-                            <Link  to="/politicas">
-                                <Button id="is" type="link" style={Style} ><KeyOutlined style={{fontSize: 17}}/>
-                                    Aviso de Privacidad
-                                </Button>
-                            </Link>
+                            {tienda.imagenCorp !== "" ? (
+                                <Link  to="/quienes_somos" >
+                                    <Button id="is" type="link" style={Style} ><HomeOutlined  style={{fontSize: 17}} />
+                                        Imagen Coorporativa
+                                    </Button>
+                                </Link>
+                            ): ""}
+
+                            {tienda.politicas !== "" ? (
+                                <Link  to="/politicas">
+                                    <Button id="is" type="link" style={Style} ><KeyOutlined style={{fontSize: 17}}/>
+                                        Aviso de Privacidad
+                                    </Button>
+                                </Link>
+                            ): ""}
+
                             <Link  to="/quienes_somos" >
                                 <Button id="is" type="link" style={Style} ><UserOutlined style={{fontSize: 17}}/>
                                     Conocenos
@@ -98,7 +104,7 @@ const FooterPage = () => {
                         {insta !== '' ? 
                             (
                             <a href={insta}>
-                                <FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} />
+                                <InstagramFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')
                         }
@@ -106,7 +112,7 @@ const FooterPage = () => {
                         {twitter !== '' ? 
                             (
                             <a href={twitter}>
-                                <FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} />
+                                <TwitterCircleFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')
                         }
