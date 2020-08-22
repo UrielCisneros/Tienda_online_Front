@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
 import { Card, Col, Row, Spin, notification, Result } from 'antd';
+import { Link } from 'react-router-dom';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
@@ -60,44 +61,46 @@ function ResultadoBusqueda(props) {
 
 	const render = productos.map((productos) => (
 		<Col span={32} key={productos._id}>
-			<Card.Grid hoverable style={gridStyle}>
-				<Card
-					style={{ width: 300, maxHeight: 400 }}
-					cover={
-						<div className="d-flex justify-content-center align-items-center" style={{ height: 250 }}>
-							<img
-								className="img-fluid"
-								alt="producto"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
-								style={{ maxHeight: '99%', maxWidth: '99%' }}
-							/>
-						</div>
-					}
-				>
-					{!productos.todos.length ? (
-						<div className="contenedor-titulos-productos">
-							<h1 className="titulo-producto">{productos.nombre}</h1>
-							<h2 className="h5 precio-rebaja">${formatoMexico(productos.precio)}</h2>
-						</div>
-					) : (
-						productos.todos.map((promo) => {
-							return (
-								<div className="contenedor-titulos-productos" key={promo._id}>
-									<h1 className="titulo-producto">{productos.nombre}</h1>
-									<h2 className="h5 precio-producto d-inline mr-2">${formatoMexico(productos.precio)}</h2>
-									<h2 className="h5 precio-rebaja d-inline mr-2">${formatoMexico(promo.precioPromocion)}</h2>
-									<p className="h4 porcentaje-descuento d-inline mr-2">
-										{agregarPorcentaje(
-											promo.precioPromocion,
-											productos.precio
-										)}%OFF
-									</p>
-								</div>
-							);
-						})
-					)}
-				</Card>
-			</Card.Grid>
+			<Link to={`/vista_producto/${productos._id}`}>
+				<Card.Grid hoverable style={gridStyle}>
+					<Card
+						bodyStyle={{ padding: 22, backgroundColor: '#F7F7F7'}}
+						className="contenedor-card-body"
+						cover={
+							<div className="contenedor-imagen-producto-principal" style={{ height: 250 }}>
+								<img
+									className="imagen-producto-principal"
+									alt="producto"
+									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+								/>
+							</div>
+						}
+					>
+						{!productos.todos.length ? (
+							<div className="contenedor-titulos-productos">
+								<h1 className="titulo-producto">{productos.nombre}</h1>
+								<h2 className="h5 precio-rebaja">${formatoMexico(productos.precio)}</h2>
+							</div>
+						) : (
+							productos.todos.map((promo) => {
+								return (
+									<div className="contenedor-titulos-productos" key={promo._id}>
+										<h1 className="titulo-producto">{productos.nombre}</h1>
+										<h2 className="h5 precio-producto d-inline mr-2">${formatoMexico(productos.precio)}</h2>
+										<h2 className="h5 precio-rebaja d-inline mr-2">${formatoMexico(promo.precioPromocion)}</h2>
+										<p className="h4 porcentaje-descuento d-inline mr-2">
+											{agregarPorcentaje(
+												promo.precioPromocion,
+												productos.precio
+											)}%OFF
+										</p>
+									</div>
+								);
+							})
+						)}
+					</Card>
+				</Card.Grid>
+			</Link>
 		</Col>
 	));
 

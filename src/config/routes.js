@@ -16,10 +16,10 @@ import BlogAdmin from '../pages/admin/Blog/blog'
 //Users pages
 import Home from '../pages/users/home'
 import Entrar from '../pages/users/entrar'
-import QuienesSomos from '../pages/users/quienes_somos'
+import QuienesSomos from '../pages/users/Quienes_somos/quienes_somos';
 import ShoppingCart from '../pages/users/shopping_cart'
 import Productos from '../pages/users/Productos/productos'
-import Blog from '../pages/users/blog'
+import Blog from '../pages/users/Blogs/blog';
 import PedidosUsuario from '../pages/users/pedidos'
 import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
@@ -27,6 +27,10 @@ import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqu
 import Perfiles from '../pages/users/Perfiles/perfiles'
 
 
+
+import Politicas from '../pages/users/Politicas/politicas'
+//Secondary Component
+import VistaProducto from '../pages/users/Vista_Producto/vista_producto'
 
 //other
 import Error404 from '../pages/users/error404'
@@ -122,6 +126,11 @@ const routes = [
 				path: '/blog',
 				component: Blog,
 				exact: true
+			},
+			{
+				path: '/blog/:url',
+				component: Blog,
+				exact: true
             },
             {
 				path: '/pedidos',
@@ -141,6 +150,16 @@ const routes = [
 			{
 				path: '/articulo',
 				component: Articulo,
+				exact: true
+			},
+			{
+				path: '/vista_producto/:url',
+				component: VistaProducto,
+				exact: true
+			},
+			{
+				path: '/politicas',
+				component: Politicas,
 				exact: true
 			},
 			{

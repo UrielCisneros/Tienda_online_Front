@@ -33,7 +33,7 @@ const DetallesPedido = (props) => {
 	const pedido = props.datosDetalle;
 
 	return (
-		<div>
+		<div className="card-p-pedidos">
 			<Divider className="text-center">Detalles del pedido</Divider>
 			<div className="my-2">
 				<h6 className="titulos-info-pedidos">ID del pedido: </h6>

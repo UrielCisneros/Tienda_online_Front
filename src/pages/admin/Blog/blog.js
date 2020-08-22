@@ -20,6 +20,7 @@ function BlogAdmin(props) {
 
     //Tomar la paginacion actual
     const {location,history} = props;
+    console.log(location);
     const {page = 1} = queryString.parse(location.search);
     
     //Uses
