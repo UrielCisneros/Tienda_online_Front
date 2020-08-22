@@ -51,8 +51,8 @@ const RegistrarPromocion = (props) => {
 				setContent(false);
 				setInputValue(0);
 				setPromocion([]);
-				setPrecioPromocion()
-				setDisabledSumit(true)
+				setPrecioPromocion();
+				setDisabledSumit(true);
 				form.resetFields();
 			}
 			obtenerProductos((res) => {
@@ -313,17 +313,23 @@ const RegistrarPromocion = (props) => {
 										dataSource={data}
 										renderItem={(productos) => (
 											<List.Item
-												className={producto._id === productos._id ? "list-item-promocion": ''}
+												className={producto._id === productos._id ? 'list-item-promocion' : ''}
 												key={productos._id}
 												actions={[
-													<Button
-														onClick={() => {
-															setProducto(productos);
-															setContent(true);
-														}}
-													>
-														Seleccionar
-													</Button>
+													!productos.todos.length ? (
+														<Button
+															onClick={() => {
+																setProducto(productos);
+																setContent(true);
+															}}
+														>
+															Seleccionar
+														</Button>
+													) : (
+														<Button className="button-disabled-promocion" disabled>
+															Ya tiene promoción
+														</Button>
+													)
 												]}
 											>
 												<List.Item.Meta

@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React from 'react'
 import {List,Button,Modal,notification,Avatar } from 'antd';
 import { EyeOutlined,EditOutlined,DeleteOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
 import {Link} from 'react-router-dom';
@@ -9,6 +9,7 @@ import './blogList.scss'
 const {confirm} = Modal;
 
 export default function blogList(props) {
+
     const {blogs,setReloadBlog,showDrawer,setAccion,setInfoBlog} = props;
     const token = localStorage.getItem('token');
 
@@ -62,6 +63,7 @@ export default function blogList(props) {
 
 
 function Blog(props){
+    
     const {blog,deleteBlog,showDrawer,setAccion,setInfoBlog} = props;
 
     return(

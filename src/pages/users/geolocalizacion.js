@@ -22,7 +22,7 @@ export default function Geolocalizacion({height, width, center, titleLayer, zoom
 
           window.L.marker(center, {
             icon: window.L.mapquest.icons.marker(),
-            draggable: true
+            draggable: false
           }).bindPopup(nombreMarcador).addTo(map);
 
           map.addControl(window.L.mapquest.control());

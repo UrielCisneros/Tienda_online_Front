@@ -242,6 +242,7 @@ function Inventario(props) {
 				</Col>
 			</Row>
 			<Table
+				className="tabla-inventario"
 				columns={columns}
 				dataSource={productosRender}
 				pagination={false}
