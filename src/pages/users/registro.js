@@ -43,7 +43,7 @@ function Registro(props) {
 	};
 
 	return (
-		<div>
+		<div className="col-12">
 			<Form {...layout} name="basic" initialValues={{ remember: true }} onFinish={onFinish}>
 				<Form.Item label="Nombre" >
 					<Form.Item name="nombre" rules={[ { required: true, message: 'El nombre es obligatorio!' } ]} noStyle >

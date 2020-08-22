@@ -1,0 +1,27 @@
+.principal-productos{
+    color: white;
+    text-align: center;
+    background-color: rgb(48, 48, 48);
+    padding: 40px;
+    font-size: 40px;
+    letter-spacing: 20px;
+    font-weight: bold;
+}
+.contenedor-card-body{
+    width: 300px;
+    max-height: 400px;
+}
+.contenedor-card-producto-principal{
+    cursor: pointer;
+}
+.contenedor-imagen-producto-principal{
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.imagen-producto-principal{
+    max-width: 100%;
+    max-height: 100%;
+}
+
