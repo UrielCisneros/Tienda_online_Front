@@ -17,7 +17,7 @@ import BlogAdmin from '../pages/admin/Blog/blog'
 import Home from '../pages/users/home'
 import Entrar from '../pages/users/entrar'
 import QuienesSomos from '../pages/users/Quienes_somos/quienes_somos';
-import ShoppingCart from '../pages/users/shopping_cart'
+import ShoppingCart from '../pages/users/Carrito/shopping_cart'
 import Productos from '../pages/users/Productos/productos'
 import Blog from '../pages/users/Blogs/blog';
 import PedidosUsuario from '../pages/users/pedidos'
