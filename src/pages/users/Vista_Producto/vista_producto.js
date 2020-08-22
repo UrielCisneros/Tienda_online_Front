@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
-import ReadMoreReact from 'read-more-react';
-import { Button, Divider, Row, Col, notification, Spin } from 'antd';
+import { Divider, Row, Col, notification, Spin } from 'antd';
 import { CreditCardOutlined, ShoppingCartOutlined, TagsOutlined, BellOutlined } from '@ant-design/icons';
 import Scroll from './subs/scroll';
 import Sugerencia from './subs/sugerencia';
@@ -71,7 +70,7 @@ function VistaProductos(props) {
 						<div className="descripcion-lg">
 							<p className="titulos-vista-productos">Descripcion:</p>
 							<div
-								className={readMore}
+								className={readMore, 'contenedor-p-vista-producto-descripcion'}
 								dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productos.descripcion) }}
 							/>
 							{readMore === 'read-less' ? (
@@ -105,36 +104,19 @@ function VistaProductos(props) {
 							</div>
 						)}
 						<Divider />
-						<TallasCantidades producto={productos} /> {/* Componente tallas */}
-						<Divider />
 						<p>
 							<CreditCardOutlined style={{ fontSize: 20 }} className="mr-2" />
 							Formas de Pago
 						</p>
 						<Divider />
-						<div className="d-flex justify-content-center">
-							<div>
-								<Button className="d-block" type="primary" size="large" style={{ width: 200 }}>
-									<TagsOutlined style={{ fontSize: 20 }} />
-									Comprar ahora
-								</Button>
-								<Button className="mt-3 d-block" size="large" style={{ width: 200 }}>
-									<BellOutlined style={{ fontSize: 20 }} />
-									Apartar
-								</Button>
-								<Button className="mt-3 d-block" size="large" style={{ width: 200 }}>
-									<ShoppingCartOutlined style={{ fontSize: 20 }} />
-									Agregar al carrito
-								</Button>
-							</div>
-						</div>
+						<TallasCantidades producto={productos} /> {/* Componente tallas */}
 					</div>
 					<div className="descripcion-sm">
 						<Divider />
 						<p className="titulos-vista-productos text-center">Descripcion:</p>
 						<div style={{ fontSize: 18, textAlign: 'justify' }} className="px-3">
 							<div
-								className={readMore}
+								className={readMore, 'contenedor-p-vista-producto-descripcion'}
 								dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productos.descripcion) }}
 							/>
 							{readMore === 'read-less' ? (
