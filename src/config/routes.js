@@ -163,7 +163,7 @@ const routes = [
 				path: '/searching/:url',
 				component: ResultadoBusqueda,
 				exact: true
-			}
+			},
 			{
 				path: '/searching/',
 				component: Search404,

@@ -21,8 +21,8 @@ export default function LayoutBasic(props) {
 					
 				</Layout>
 			</Layout>
-			<Footer>
-				<FooterPage />
+			<Footer style={{margin:0,padding: 0}} >
+				<FooterPage style={{margin:0,padding: 0}} />
 			</Footer>
 		</div>
 	);
