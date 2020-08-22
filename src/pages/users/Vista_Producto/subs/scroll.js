@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import '../vistas.css';
+import '../vistas.scss';
 import ImageScroller from 'react-image-scroller';
 import { Card, Col } from 'antd';
 import { Link } from 'react-router-dom';
