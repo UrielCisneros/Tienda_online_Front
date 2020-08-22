@@ -1,24 +1,75 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
+import clienteAxios from '../../../../config/axios';
+import {Spin,notification} from 'antd';
+import queryString from 'query-string';
+import Pagination from '../../../../components/Pagination/pagination';
+
+
 import {List} from 'antd'
 import { Link } from 'react-router-dom';
-import  ReadMoreReact from 'read-more-react';
+import DOMPurify from 'dompurify'
+import './BlogList.scss';
+
 
 export default function BlogList(props) {
 
-    const {blogs} = props;
-
-    const Descrip = ({texto}) => (
-        <Link>
-            <ReadMoreReact 
-                text = { <div className="content" dangerouslySetInnerHTML={{__html: texto }}></div>}
-                min = { 120 }
-                ideal = { 150 }
-                max = { 1000 }
-                readMoreText ="Ver mas..." 
-            />
-        </Link>
-        );
+    const {location,history} = props;
+    const {page = 1} = queryString.parse(location.search);
     
+    const [loading, setLoading] = useState(false)
+    const [blogs, setBlogs] = useState([])
+
+
+    function getBlogsApi(limit,page){
+        setLoading(true);
+        clienteAxios.get(`/blog?limit=${limit}&page=${page}`)
+        .then((res) => {
+            console.log(res)
+                setBlogs(res.data.posts);
+                setLoading(false);
+        })
+        .catch((err) => {
+            notification.error({
+                message: 'Error del servidor',
+                description:
+                  'Paso algo en el servidor, al parecer la conexion esta fallando.',
+              });
+            console.log(err);
+        });
+    }
+
+    useEffect(() => {
+        setLoading(true);
+        getBlogsApi(10,page)
+    }, [page])
+
+
+    return (
+        <Spin size="large" spinning={loading} >
+            <div  id="blog" className="container">
+                <h1 className="text-center">Bienvenidos a nuestro Blog!</h1>
+                <div className="container-fluid">
+                    <div id="cards">
+                        <BlogsList2 
+                            blogs={blogs} 
+                            setLoading={setLoading}
+                        />
+                    </div>
+
+                    <Pagination 
+                        blogs={blogs} 
+                        location={location}  
+                        history={history}
+                    />
+                </div>
+            </div>
+        </Spin>
+    )
+
+}
+
+function BlogsList2 (props){
+    const {blogs} = props;
 
 
     return (
@@ -28,7 +79,7 @@ export default function BlogList(props) {
                     size="large"
                     dataSource={blogs.docs}
                     renderItem={blog => 
-                        <Blog blog={blog} Descrip={Descrip} />
+                        <Blog blog={blog} />
                     }
                 />
         </div>
@@ -37,11 +88,12 @@ export default function BlogList(props) {
 
 function Blog(props){
 
-    const {blog,Descrip} = props;
+    const {blog} = props;
 
     return(
-        <Link to="">
+        <Link to={`/blog/${blog.url}`} className="blogList">
             <List.Item 
+                className="blogList__lista m-3"
                 key={blog.nombre}
                 extra={
                 <img
@@ -51,12 +103,19 @@ function Blog(props){
                 />
                 }
             >
-                <List.Item.Meta
-                title={blog.nombre}
-                description={blog.administrador}
-                />
-                {<Descrip texto={blog.descripcion}/>}
+                <List.Item.Meta title={<p className="blogList__title">{blog.nombre}</p>} description={<p className="blogList__author">Autor: {blog.administrador}</p>}/>
+                    {
+                        <div>
+                            <div
+                                className={'blogList__content-description m-0'}
+                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.descripcion) }}
+                            />
+                            <p>Leer mas</p>
+                        </div>
+
+                    }
             </List.Item>
         </Link>
     )
 }
+

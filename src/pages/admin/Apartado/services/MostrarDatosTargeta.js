@@ -1,7 +1,7 @@
 import React from 'react'
 import {Card, Col,Tag} from 'antd'
 import { ContainerOutlined, EditOutlined } from '@ant-design/icons';
-import {formatoMexico,formatoFecha} from '../../../../config/reuserFunction'
+import {formatoFecha} from '../../../../config/reuserFunction'
 
 import './MostrarDatosTargeta.scss';
 

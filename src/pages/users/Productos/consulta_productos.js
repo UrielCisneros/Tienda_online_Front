@@ -55,7 +55,7 @@ function ConsultaProductos(props) {
 						}
 					});
 			}
-			obtenerProductos(20, page);
+			obtenerProductos(10, page);
 		},
 		[ page ]
 	);

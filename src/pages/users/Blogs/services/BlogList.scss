@@ -1,0 +1,26 @@
+
+.blogList{
+
+    text-decoration: none;
+
+    &__lista{
+        border-bottom: 3px solid gray !important;
+    }
+
+    &__title{
+        font-size: 25px;
+        font-weight: bold;
+        line-height: 35px;
+    }
+
+    &__author{
+        font-size: 20px;
+    }
+
+    &__content-description{
+        max-height: 250px;
+        max-width: 700px;
+        overflow:hidden;
+        text-overflow: ellipsis;
+    }
+}

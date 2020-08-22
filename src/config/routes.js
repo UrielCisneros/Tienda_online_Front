@@ -122,6 +122,11 @@ const routes = [
 				path: '/blog',
 				component: Blog,
 				exact: true
+			},
+			{
+				path: '/blog/:url',
+				component: Blog,
+				exact: true
             },
             {
 				path: '/pedidos',
