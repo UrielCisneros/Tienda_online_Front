@@ -22,8 +22,10 @@
 }
 .read-more{
     height: auto;
+    font-size: 18px;
 }
 .read-less{
+    font-size: 18px;
     max-height: 250px;
     overflow:hidden;
     text-overflow: ellipsis;
@@ -37,9 +39,6 @@
 }
 .contenedor-p-seleccion-compra > p {
     font-size: 20px;
-}
-.contenedor-p-vista-producto-descripcion{
-    font-size: 18px;
 }
 @media(max-width: 768px){
     .descripcion-sm{

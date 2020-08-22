@@ -56,7 +56,8 @@ function VistaProductos(props) {
 		} else {
 			setReadMore('read-less');
 		}
-	};
+  };
+  console.log(readMore)
 
 	return (
 		<Spin size="large" spinning={loading}>
@@ -70,7 +71,7 @@ function VistaProductos(props) {
 						<div className="descripcion-lg">
 							<p className="titulos-vista-productos">Descripcion:</p>
 							<div
-								className={readMore, 'contenedor-p-vista-producto-descripcion'}
+								className={readMore}
 								dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productos.descripcion) }}
 							/>
 							{readMore === 'read-less' ? (
@@ -116,7 +117,7 @@ function VistaProductos(props) {
 						<p className="titulos-vista-productos text-center">Descripcion:</p>
 						<div style={{ fontSize: 18, textAlign: 'justify' }} className="px-3">
 							<div
-								className={readMore, 'contenedor-p-vista-producto-descripcion'}
+								className={readMore}
 								dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productos.descripcion) }}
 							/>
 							{readMore === 'read-less' ? (

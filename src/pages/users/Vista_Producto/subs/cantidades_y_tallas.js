@@ -78,33 +78,33 @@ function TallasCantidades(props) {
 		[ productos ]
 	);
 
-	function obtenerCantidad(cantidad){
-		if(cantidad <= 0 || cantidad > productos.cantidad ){
+	function obtenerCantidad(cantidad) {
+		if (cantidad <= 0 || cantidad > productos.cantidad) {
 			setValidateStatus('error');
-		}else {
+		} else {
 			setValidateStatus('validating');
-			setCantidadFinal(cantidad)
+			setCantidadFinal(cantidad);
 		}
 	}
-	function obtenerCantidadNumero(cantidad){
-		if(cantidad <= 0 || cantidad > numeros.cantidad ){
+	function obtenerCantidadNumero(cantidad) {
+		if (cantidad <= 0 || cantidad > numeros.cantidad) {
 			setValidateStatus('error');
-		}else {
+		} else {
 			setValidateStatus('validating');
-			setCantidadFinal(cantidad)
+			setCantidadFinal(cantidad);
 		}
 	}
-	function obtenerCantidadTalla(cantidad){
-		if(cantidad <= 0 || cantidad > tallas.cantidad ){
+	function obtenerCantidadTalla(cantidad) {
+		if (cantidad <= 0 || cantidad > tallas.cantidad) {
 			setValidateStatus('error');
-		}else {
+		} else {
 			setValidateStatus('validating');
-			setCantidadFinal(cantidad)
+			setCantidadFinal(cantidad);
 		}
 	}
 
-	function enviarDatos(){
-		console.log(cantidadFinal, numeros.numero)
+	function enviarDatos() {
+		console.log(cantidadFinal, numeros.numero);
 	}
 
 	return (
@@ -121,13 +121,19 @@ function TallasCantidades(props) {
 				<p />
 			)}
 
-			<Form initialValues={{cantidad: 1}}>
+			<Form initialValues={{ cantidad: 1 }}>
 				{categoria !== 'otros' ? (
 					<Form.Item
 						name="cantidad"
 						label="Cantidad"
 						validateStatus={validateStatus}
-						help={categoria === 'ropa' ? <p>Solo hay {tallas.cantidad} disponibles</p> : <p>Solo hay {numeros.cantidad} disponibles</p>}
+						help={
+							categoria === 'ropa' && tallas.length !== 0 ? (
+								<p>Solo hay {tallas.cantidad} disponibles</p>
+							) : categoria === 'calzado' && numeros.length !== 0 ? (
+								<p>Solo hay {numeros.cantidad} disponibles</p>
+							) : <p>Elige una talla</p>
+						}
 					>
 						<InputNumber
 							size="large"
@@ -160,7 +166,13 @@ function TallasCantidades(props) {
 			<Divider />
 			<div className="d-flex justify-content-center">
 				<div>
-					<Button className="d-block" type="primary" size="large" style={{ width: 200 }} onClick={() => enviarDatos()}>
+					<Button
+						className="d-block"
+						type="primary"
+						size="large"
+						style={{ width: 200 }}
+						onClick={() => enviarDatos()}
+					>
 						<TagsOutlined style={{ fontSize: 20 }} />
 						Comprar ahora
 					</Button>
