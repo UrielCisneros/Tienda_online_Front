@@ -7,11 +7,11 @@ import './blog.scss';
 import queryString from 'query-string';
 import clienteAxios from '../../../config/axios';
 import Spin from '../../../components/Spin';
-import BlogsList from '../services/blog/blogList';
+import BlogsList from './services/blogList';
 import Pagination from '../../../components/Pagination/pagination';
 import { BlogContext } from '../contexts/BlogContext';
-import ActualizarBlog from '../services/blog/ActualizarBlog';
-import RegistrarBlog from '../services/blog/RegistrarBlog';
+import ActualizarBlog from './services/ActualizarBlog';
+import RegistrarBlog from './services/RegistrarBlog';
 
 
 
@@ -20,6 +20,7 @@ function BlogAdmin(props) {
 
     //Tomar la paginacion actual
     const {location,history} = props;
+    console.log(location);
     const {page = 1} = queryString.parse(location.search);
     
     //Uses

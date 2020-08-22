@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import  Scroll  from '../users/subs/scroll';
 import  Sugerencia from '../users/subs/sugerencia';
 import  ReadMoreReact from 'read-more-react';
-import './vistas.css';
+
 
 
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/scss/image-gallery.scss';
 import 'react-image-gallery/styles/css/image-gallery.css';
 
-import {CreditCardOutlined, ShoppingCartOutlined, TagsOutlined, BellOutlined} from '@ant-design/icons';
+import { SyncOutlined, CreditCardOutlined, ShoppingCartOutlined, TagsOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 
 
@@ -76,32 +76,25 @@ class VistaProductos extends React.Component {
               <h5>$ 1,500</h5>
               <p style={{borderTopStyle: 'solid', marginTop: 10}}></p>
 
-              <p className="mt-3" style={caracte}>En Stock</p>
-
-              <p className="mt-3" style={caracte}> 
+              <p className="mt-4" style={caracte}> 
               Cantidad: <InputNumber size="large" min={1} max={10} defaultValue={0} onChange={onChange} /></p>
 
-              <p className="mt-3" style={caracte} > 
-              Talla: <InputNumber size="large" min={1} max={30} defaultValue={0} onChange={onChange} style={{ width: 130 }}/></p>
-
-              <p className="mt-3" style={caracte}>
+              <p className="mt-4" style={caracte}>
               Talla:  <Select size="large" style={{ width: 130 }} >
               <Option value="Chica">Chica</Option>
               <Option value="Mediana">Mediana</Option>
               <Option value="Grande">Grande</Option>
               <Option value="X-L">E.- Grande</Option>
               </Select> </p>
-
+              
               <p style={{borderTopStyle: 'solid', marginTop: 10}}></p>
               <Button className="mt-3" type="primary" size="large" style={botton}> <TagsOutlined style={{ fontSize: 20 }} />
               Comprar ahora</Button>
-
-              <Button className="mt-3"  width="100"  size="large" style={botton}> <BellOutlined style={{ fontSize: 20 }} />
-              Apartar</Button>
               
               <Button className="mt-3"  width="100"  size="large" style={botton}> <ShoppingCartOutlined style={{ fontSize: 20 }}/>
               Agregar al carrito</Button>
 
+              
               <p className="mt-4" style={{color:'green', fontSize: '17px', borderTopStyle: 'solid' }}> <CreditCardOutlined style={{ fontSize: 20 }}/>   
               Formas de Pago</p>
              

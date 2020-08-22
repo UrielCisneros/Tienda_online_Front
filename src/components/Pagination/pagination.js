@@ -5,7 +5,6 @@ import './pagination.scss'
 export default function pagination(props) {
     const {blogs, location, history} = props;
     const currentPage = parseInt(blogs.page);
-    console.log(location)
 
     const onChangePage = newPage => {
         history.push(`${location.pathname}?page=${newPage}`)
