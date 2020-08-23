@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
-import { Card, Col, Row, Pagination, Spin, Input, notification } from 'antd';
+import { Card, Col, Row, Pagination, Spin, Input } from 'antd';
 
 const { Search } = Input;
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
@@ -16,23 +17,12 @@ function Productos() {
 		clienteAxios
 			.get('/productos')
 			.then((res) => {
+				console.log(res);
 				setProductos(res.data.posts.docs);
 				setLoading(false);
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+			.catch((err) => {
+				console.log(err);
 			});
 	}, []);
 
@@ -58,6 +48,8 @@ function Productos() {
 	const render = productosFiltrados.map((productos) => (
 		<Col span={32} key={productos.id}>
 			<Card.Grid hoverable style={gridStyle}>
+				{/* Verificacion de prueba */}
+			<Link to="/vistaproductos"> 
 				<Card
 					style={{ width: 300 }}
 					cover={
@@ -75,6 +67,7 @@ function Productos() {
 						<h2 className="h5">{new Intl.NumberFormat().format(productos.precio)}</h2>
 					</div>
 				</Card>
+				</Link>
 			</Card.Grid>
 		</Col>
 	));
