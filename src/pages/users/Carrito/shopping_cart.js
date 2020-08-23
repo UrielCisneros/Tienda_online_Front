@@ -68,19 +68,19 @@ export default function ShoppingCart() {
    
 
     return (
-      <div className="px-5" >
+      <div className="container" >
 
         <h1 className="text-center">Tu carrito de compras</h1>
 
         <div  className="row mx-auto" style={{background: "white"}}>
-          <div className="col-xl-11 col-lg-11 justify-content-lg-center">
+          <div className="col-lg-12 ">
             <List
               itemLayout="horizontal"
               dataSource={data}
               renderItem={item => (
 
                 <List.Item>
-                  <div className="d-none d-lg-block px-5">
+                  <div className="d-none d-lg-block px-2">
                   {<img src="" width="130" height="150" />}
                   </div>
 
@@ -123,7 +123,7 @@ export default function ShoppingCart() {
               )}
             />
 
-            <div className="d-flex flex-row-reverse mt-4" >
+            <div className="d-flex flex-row-reverse mt-22" >
               <div>
                 <h2>MilOchoMil</h2>
                 <h2>Gratis</h2>
