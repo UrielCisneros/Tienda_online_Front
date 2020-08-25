@@ -48,11 +48,8 @@ export default function ShoppingCart() {
           }
       })
         .then((res) => {
-          if(decoded._id===null){
-              console.log("no hay codigo");
-          }
-                    // setCarrito(res.data.articulos);
-                    console.log(res.data);
+                    setCarrito(res.data.articulos);
+                    console.log(res);
                     console.log(decoded);
         })
         .catch((err) => {
@@ -63,7 +60,7 @@ export default function ShoppingCart() {
   }
 
   useEffect(() => {
-  //  obtenerDatosCarrito();
+   obtenerDatosCarrito();
   }, []);
    
 
