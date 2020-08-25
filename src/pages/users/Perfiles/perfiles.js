@@ -1,5 +1,6 @@
-import React, { useState} from 'react';
+import React, { useState,useCallback} from 'react';
 import {withRouter } from 'react-router-dom';
+import {useDropzone} from 'react-dropzone'
 
 import {
     Form,
@@ -14,6 +15,11 @@ import {
 
 export default function Perfiles() {
 
+    const onDrop = useCallback(acceptedFiles => {
+        // Do something with the files
+      }, [])
+      const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
     return (
     <div className="container col-lg-6">
          <h1 className="mt-5 text-center">Bienvenido a tu perfil</h1>
@@ -23,6 +29,14 @@ export default function Perfiles() {
                     layout="horizontal"
                     size={"large"}
                 >
+                    <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        {
+                        isDragActive ?
+                            <p>Drop the files here ...</p> :
+                            <p>Drag 'n' drop some files here, or click to select files</p>
+                        }
+                    </div>
 
                     <Divider style={{fontSize: 22}}>Información Personal</Divider>
                     <br/>
