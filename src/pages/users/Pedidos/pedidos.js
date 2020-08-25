@@ -1,15 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import "./pedidos.scss";
+import DetallesPedido from './detalles';
 
-import { Card, Col, Row, Modal, notification, Result, Spin, Radio, Tag, Button } from 'antd';
+import { Card, Col, Row, Modal,  Tag, Button } from 'antd';
 import { ContainerOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
 
+
+
 export default function PedidosUsuario() {
+    const [ visible, setVisible ] = useState(false);
+
+    //modal del pedido
+    const [ detallePedido, setDetallePedido ] = useState([]);
+	const [ reload, setReload ] = useState(false);
+
+
+
+    const showModal = () => {
+        setVisible(true);
+    };
+    const handleCancel = () => {
+		setVisible(false);
+	};
+
     return(
-        <div>
+        <div className= "container-fluid">
             <h1>Tus pedidos:</h1>
 
 
@@ -18,12 +36,14 @@ export default function PedidosUsuario() {
 				actions={[
 					<div className="d-flex justify-content-center align-items-center">
 						<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />
-						<p
+							<p
 							onClick={() => {
-				                }}
+								setDetallePedido();
+								showModal();
+							}}
 							className="d-inline"
 						>
-							Detalles del pedido
+							Detalles de mi pedido
 						</p>
 					</div>
 				]}
@@ -64,7 +84,7 @@ export default function PedidosUsuario() {
 								<Tag
 									className="data-info-pedidos"
 								>
-                                    <p>tags</p>
+                                    <p>Pagado</p>
 								</Tag>
 							</div>
 							<div className="my-2">
@@ -78,6 +98,23 @@ export default function PedidosUsuario() {
 				/>
 			</Card>
 		</Col>
+
+
+        <Modal
+				key="detalle"
+				width={600}
+				style={{ top: 0 }}
+				title="Detalles de este pedido"
+				visible={visible}
+				onCancel={handleCancel}
+				footer={[
+					<Button key="detalle" type="primary" onClick={handleCancel}>
+						Cerrar
+					</Button>
+				]}
+			>
+				<DetallesPedido datosDetalle={detallePedido}/>
+			</Modal>
         </div>
     )
 }
