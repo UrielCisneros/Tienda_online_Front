@@ -1,0 +1,14 @@
+
+@media(max-width: 768px){
+    .titulos-info-pedidos{
+        line-height: 0;
+        display: block!important;
+    }
+    .data-info-pedidos{
+        float: none!important;
+    }
+}
+
+.contenedor-card-pedidos{
+    height: 250px;
+}
