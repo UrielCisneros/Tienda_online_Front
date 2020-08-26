@@ -45,7 +45,6 @@ function SistemaApartado(props) {
         clienteAxios.get(`/apartado/?limit=${limit}&page=${page}&filter=${filter}`)
         .then((res) => {
 			setLoading(false);
-            console.log(res);
 			setApartados(res.data.docs)
 			setApartadoPaginacion(res.data)
         }).catch((err) => {
@@ -116,6 +115,7 @@ function SistemaApartado(props) {
 							<Row gutter={16}>{
 								apartados.map((apartado) => (							
 									<MostrarDatosTargeta 
+										key={apartado._id}
 										setDetalleApartado={setDetalleApartado} 
 										showModal={showModal} 
 										apartado={apartado} 

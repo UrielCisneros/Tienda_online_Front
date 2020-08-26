@@ -18,7 +18,7 @@ export default function Geolocalizacion({height, width, center, titleLayer, zoom
             zoom
           });
 
-          console.log(map);
+          /* console.log(map); */
 
           window.L.marker(center, {
             icon: window.L.mapquest.icons.marker(),
@@ -26,7 +26,7 @@ export default function Geolocalizacion({height, width, center, titleLayer, zoom
           }).bindPopup(nombreMarcador).addTo(map);
 
           map.addControl(window.L.mapquest.control());
-          console.log(window.L.mapquest.control())
+         /*  console.log(window.L.mapquest.control()) */
     })
 
 	return (

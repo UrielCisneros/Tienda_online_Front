@@ -38,13 +38,12 @@ import {Link} from 'react-router-dom';
         setLoading(true);
         clienteAxios.get(`/tienda/`)
         .then((res) => {
-            console.log(res.data)
             setLoading(false);
             setDatosNegocio(res.data[0])
             if(res.data[0]){
                 setAction(true)
-                console.log(res.data[0].ubicacion[0].lat)
-                console.log(res.data[0].ubicacion[0].lng)
+                /* console.log(res.data[0].ubicacion[0].lat)
+                console.log(res.data[0].ubicacion[0].lng) */
                 if(res.data[0].ubicacion[0].lat === "" || res.data[0].ubicacion[0].lat === "undefined"){
                     setLat("19.767980")
                 }else{
@@ -72,7 +71,6 @@ import {Link} from 'react-router-dom';
             setLat("19.767980")
             setLng("-104.358159")
             setDatosNegocio({})
-            console.log(err)
             notification.error({
                 message: 'Error del servidor',
                 description:
@@ -208,11 +206,11 @@ import {Link} from 'react-router-dom';
 
                     <Row>
                         <Col span={12}>
-                        <p className="m-3 h3">Politicas de provacidad</p>
+                        <p className="m-3 h3">Politicas de privacidad</p>
                         {action === false ? (
-                            <Empty description={<p className="h6">Aun no hay informacion</p>} />
+                            <Empty description={<span className="h6">Aun no hay informacion</span>} />
                         ):(
-                            <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<p className="h6">Informacion existente</p>} >
+                            <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<span className="h6">Informacion existente</span>} >
                                 <Link to={`/`} target="_blank">
                                     <Button type="dashed">
                                         <EyeOutlined /> Ver
@@ -225,9 +223,9 @@ import {Link} from 'react-router-dom';
                         <Col span={12}>
                         <p className="m-3 h3">Imagen coorporativa</p>
                         {action === false ? (
-                            <Empty description={<p className="h6">Aun no hay informacion</p>} />
+                            <Empty description={<span className="h6">Aun no hay informacion</span>} />
                         ):(
-                            <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<p className="h6">Informacion existente</p>} >
+                            <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<span className="h6">Informacion existente</span>} >
                                 <Link to={`/`} target="_blank">
                                     <Button type="dashed">
                                         <EyeOutlined /> Ver

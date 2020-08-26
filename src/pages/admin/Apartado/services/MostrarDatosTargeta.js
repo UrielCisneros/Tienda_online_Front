@@ -1,6 +1,6 @@
 import React from 'react'
 import {Card, Col,Tag} from 'antd'
-import { ContainerOutlined, EditOutlined } from '@ant-design/icons';
+import { ContainerOutlined } from '@ant-design/icons';
 import {formatoFecha} from '../../../../config/reuserFunction'
 
 import './MostrarDatosTargeta.scss';
