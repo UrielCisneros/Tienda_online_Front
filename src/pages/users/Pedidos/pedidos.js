@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import clienteAxios from '../../../config/axios';
+import jwt_decode from 'jwt-decode';
 import { withRouter } from 'react-router-dom';
-import "./pedidos.scss";
 import DetallesPedido from './detalles';
+import "./pedidos.scss";
 
-import { Card, Col, Row, Modal,  Tag, Button } from 'antd';
+
+import { Card, Col, Row, Spin, Modal,  Tag, Button } from 'antd';
 import { ContainerOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
@@ -11,13 +14,23 @@ const { Meta } = Card;
 
 
 export default function PedidosUsuario() {
+
+	const token = localStorage.getItem('token');
+	var decoded = Jwt(token);
+
+	function Jwt(token) {
+		try {
+			return jwt_decode(token);
+		} catch (e) {
+			return null;
+		}
+	}
+
+	const [ pedidos, setPedidos ] = useState([]);
     const [ visible, setVisible ] = useState(false);
 
     //modal del pedido
     const [ detallePedido, setDetallePedido ] = useState([]);
-	const [ reload, setReload ] = useState(false);
-
-
 
     const showModal = () => {
         setVisible(true);
@@ -25,6 +38,7 @@ export default function PedidosUsuario() {
     const handleCancel = () => {
 		setVisible(false);
 	};
+
 
     return(
         <div className= "container-fluid">
