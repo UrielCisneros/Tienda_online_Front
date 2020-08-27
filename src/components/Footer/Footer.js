@@ -50,8 +50,8 @@ const FooterPage = () => {
 
     return(
        
-         <Layout className="layout">
-             <Footer  >
+         <Layout className="layout" >
+             <Footer >
                 <div className="row">  
                     <div className="col-lg-9 text-lg-left text-center ">
                         <div className="m-4 footer-border">
@@ -119,7 +119,7 @@ const FooterPage = () => {
                         
                     </div>
                 </div>
-              <p style={{textAlign:"center"}}>Ant Design ©2018 Created by Ant UED</p>
+              
              </Footer>
          </Layout>
     )

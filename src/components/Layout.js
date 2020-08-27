@@ -4,12 +4,13 @@ import { Layout } from 'antd';
 import Navegacion from '../components/Navegacion/Navegacion';
 import FooterPage from '../components/Footer/Footer';
 
+
 export default function LayoutBasic(props) {
 	const { routes } = props;
 	const { Content, Footer } = Layout;
 
 	return (
-		<div>
+		<div >
 			<Layout>
 				<Layout>
 					<Navegacion />
@@ -19,7 +20,7 @@ export default function LayoutBasic(props) {
 						</div>
 					</Content>
 					<Footer style={{margin:0,padding: 0}} >
-						<FooterPage style={{margin:0,padding: 0}} />
+						<FooterPage  style={{margin:0,padding: 0}} />
 					</Footer>
 				</Layout>
 			</Layout>
