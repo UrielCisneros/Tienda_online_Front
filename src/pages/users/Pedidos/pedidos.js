@@ -14,20 +14,9 @@ const { Meta } = Card;
 
 
 export default function PedidosUsuario() {
-
-	const token = localStorage.getItem('token');
-	var decoded = Jwt(token);
-
-	function Jwt(token) {
-		try {
-			return jwt_decode(token);
-		} catch (e) {
-			return null;
-		}
-	}
-
 	const [ pedidos, setPedidos ] = useState([]);
-    const [ visible, setVisible ] = useState(false);
+	const [ visible, setVisible ] = useState(false);
+	const [ loading, setLoading ] = useState(false);
 
     //modal del pedido
     const [ detallePedido, setDetallePedido ] = useState([]);
@@ -38,6 +27,54 @@ export default function PedidosUsuario() {
     const handleCancel = () => {
 		setVisible(false);
 	};
+
+	const token = localStorage.getItem('token');
+  	var decoded = Jwt(token);
+  
+	function Jwt(token) {
+	try {
+		return jwt_decode(token);
+	} catch (e) {
+		return null;
+	}
+	}
+
+
+	async function obtenerPedidos(){
+		setLoading(true);
+		await clienteAxios
+			.get(`/pedidos/${decoded._id}`,{
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				Authorization: `bearer ${token}`
+			}
+		})
+
+			.then((res) => {
+			if(decoded._id===null){
+				console.log("no hay codigo");
+			}
+				setPedidos(res.data);
+				setLoading(false);
+				if (setPedidos() === undefined) {
+					console.log("No hay productos");
+				}
+
+				console.log(decoded);
+			})
+
+			.catch((err) => {
+			console.log(err);
+			console.log(err.response);
+		});
+	}
+
+    useEffect(() => {
+		obtenerPedidos();
+      setLoading(true);
+	}, []);
+	
+
 
 
     return(
