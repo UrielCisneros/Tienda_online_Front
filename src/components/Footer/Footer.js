@@ -19,6 +19,7 @@ const FooterPage = () => {
     const [imagenCorp, setImagenCorp] = useState('')
     const [nombreCorp, setNombreCorp] = useState('')
     const [politicas, setPoliticas] = useState('')
+    const [telefono, setTelefono] = useState('')
     const [accion, setAccion] = useState(false)
 
     
@@ -27,10 +28,12 @@ const FooterPage = () => {
 		clienteAxios.get('/tienda/')
 			.then((res) => {
                 console.log(res)
-                if(res.data[0].lenght > 0){
+                if(res.data[0]){
+                    console.log("entro");
                     setImagenCorp(res.data[0].imagenCorp)
                     setNombreCorp(res.data[0].nombre)
                     setPoliticas(res.data[0].politicas)
+                    setTelefono(res.data[0].telefono)
                     if(res.data[0].linkFace !== 'undefined' && res.data[0].linkFace !== ''){
                         setFace(res.data[0].linkFace);
                         setAccion(true);
@@ -65,7 +68,7 @@ const FooterPage = () => {
                 <div id="foot"  className="row">  
                     <div className="col-lg-9 text-lg-left text-center ">
                         <div className="m-4 footer-border">
-                            {console.log()}
+                            {console.log(imagenCorp)}
                             {imagenCorp !== '' ? (
                                 <Link  to="/quienes_somos" >
                                     <Button id="is" type="link" style={Style} ><UserOutlined style={{fontSize: 17}}/>
@@ -85,6 +88,7 @@ const FooterPage = () => {
 
                         <div className="mt-2 p-3">
                             <h2 style={{fontSize: 18}} >{nombreCorp !== '' ? nombreCorp : ""}</h2>
+                            {telefono !== '' ? (<p>Telefono: {telefono} </p>): ""}
                         </div>
                     </div>
 
@@ -102,7 +106,7 @@ const FooterPage = () => {
                         }
                         {insta !== '' ? 
                             (
-                            <a href={insta}>
+                            <a href={`https://${insta}`} target="_blank">
                                 <InstagramFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')
@@ -110,7 +114,7 @@ const FooterPage = () => {
                         
                         {twitter !== '' ? 
                             (
-                            <a href={twitter}>
+                            <a href={`https://${twitter}`} target="_blank">
                                 <TwitterCircleFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')
