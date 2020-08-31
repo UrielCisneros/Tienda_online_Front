@@ -202,6 +202,8 @@ import {Link} from 'react-router-dom';
                                 zoom={15}
                                 apikey = 'I0G4Jr6RUg71dsHIRF0qGzn0l39bAY1V'
                                 nombreMarcador = "AB soluciones Empresariales"
+                                tituloheader={false}
+                                draggable={true}
                             />
                         </Col>   
                     </Row>

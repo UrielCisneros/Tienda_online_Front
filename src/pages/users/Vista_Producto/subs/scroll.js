@@ -12,14 +12,15 @@ const properties = {
 	scrollWithArrows: true
 };
 
-function Scroll() {
+function Scroll(props) {
 	const [ productos, setProductos ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
+	const producto = props.productos;
 
 	useEffect(() => {
 		setLoading(true);
 		clienteAxios
-			.get('/productos')
+			.get('/productos/')
 			.then((res) => {
 				/* console.log(res); */
 				setProductos(res.data.posts.docs);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { InputNumber, Button, Form, Badge, Divider } from 'antd';
+import { InputNumber, Button, Form, Badge, Divider, notification } from 'antd';
 import { ShoppingCartOutlined, TagsOutlined, BellOutlined } from '@ant-design/icons';
+import jwt_decode from 'jwt-decode';
+import clienteAxios from '../../../../config/axios';
 
 function TallasCantidades(props) {
 	const productos = props.producto;
@@ -11,6 +13,21 @@ function TallasCantidades(props) {
 	const [ render, setRender ] = useState([]);
 	const [ validateStatus, setValidateStatus ] = useState('validating');
 	const [ cantidadFinal, setCantidadFinal ] = useState(1);
+	const [ carrito, setCarrito ] = useState({
+		cliente: '', articulos: [{ idarticulo: '', cantidad: '', medida: ''}] 
+	});
+	const [ loading, setLoading ] = useState(false);
+	const token = localStorage.getItem('token');
+	var decoded = Jwt(token);
+
+	function Jwt(token) {
+		try {
+			return jwt_decode(token);
+		} catch (e) {
+			return null;
+		}
+	}
+	console.log(productos)
 
 	useEffect(
 		() => {
@@ -92,6 +109,9 @@ function TallasCantidades(props) {
 		} else {
 			setValidateStatus('validating');
 			setCantidadFinal(cantidad);
+/* 			setCarrito({
+				cliente: decoded._id, articulos: [{idarticulo: productos._id, cantidad, medida: }]
+			}) */
 		}
 	}
 	function obtenerCantidadTalla(cantidad) {
@@ -103,8 +123,120 @@ function TallasCantidades(props) {
 		}
 	}
 
-	function enviarDatos() {
-		console.log(cantidadFinal, numeros.numero);
+	async function AgregarCarrito() {
+		if (categoria === 'calzado') {
+			if (!numeros.numero) {
+				notification.info({
+					message: 'Selecciona una talla',
+					duration: 2
+				});
+			} else {
+				console.log(cantidadFinal, numeros.numero);
+				await clienteAxios
+					.post(`/carrito/nuevo/${decoded._id}`,
+					{cliente: decoded._id, articulos: [{idarticulo: productos._id, cantidad: cantidadFinal, medida: numeros.numero }]}, {
+						headers: {
+							Authorization: `bearer ${token}`
+						}
+					})
+					.then((res) => {
+						setLoading(false);
+						notification.success({
+							message: res.data.message,
+							duration: 2
+						});
+					})
+					.catch((res) => {
+						if (res.response.status === 404 || res.response.status === 500) {
+							setLoading(false);
+							notification.error({
+								message: 'Error',
+								description: res.response.data.message,
+								duration: 2
+							});
+						} else {
+							setLoading(false);
+							notification.error({
+								message: 'Error',
+								description: 'Hubo un error',
+								duration: 2
+							});
+						}
+					});
+			}
+		} else if (categoria === 'ropa') {
+			if (!tallas.talla) {
+				notification.info({
+					message: 'Selecciona una talla',
+					duration: 2
+				});
+			} else {
+				await clienteAxios
+					.post(`/carrito/nuevo/${decoded._id}`,
+					{cliente: decoded._id, articulos: [{idarticulo: productos._id, cantidad: cantidadFinal, medida: tallas.talla }]}, {
+						headers: {
+							Authorization: `bearer ${token}`
+						}
+					})
+					.then((res) => {
+
+						setLoading(false);
+						notification.success({
+							message: res.data.message,
+							duration: 2
+						});
+					})
+					.catch((res) => {
+						if (res.response.status === 404 || res.response.status === 500) {
+							setLoading(false);
+							notification.error({
+								message: 'Error',
+								description: res.response.data.message,
+								duration: 2
+							});
+						} else {
+							setLoading(false);
+							notification.error({
+								message: 'Error',
+								description: 'Hubo un error',
+								duration: 2
+							});
+						}
+					});
+			}
+		} else if (categoria === 'otros') {
+			await clienteAxios
+					.post(`/carrito/nuevo/${decoded._id}`,
+					{cliente: decoded._id, articulos: [{idarticulo: productos._id, cantidad: cantidadFinal }]}, {
+						headers: {
+							Authorization: `bearer ${token}`
+						}
+					})
+					.then((res) => {
+						setLoading(false);
+						notification.success({
+							message: res.data.message,
+							duration: 2
+						});
+					})
+					.catch((res) => {
+						if (res.response.status === 404 || res.response.status === 500) {
+							setLoading(false);
+							notification.error({
+								message: 'Error',
+								description: res.response.data.message,
+								duration: 2
+							});
+						} else {
+							setLoading(false);
+							notification.error({
+								message: 'Error',
+								description: 'Hubo un error',
+								duration: 2
+							});
+						}
+					});
+		}
 	}
 
 	return (
@@ -132,7 +264,9 @@ function TallasCantidades(props) {
 								<p>Solo hay {tallas.cantidad} disponibles</p>
 							) : categoria === 'calzado' && numeros.length !== 0 ? (
 								<p>Solo hay {numeros.cantidad} disponibles</p>
-							) : <p>Elige una talla</p>
+							) : (
+								<p>Elige una talla</p>
+							)
 						}
 					>
 						<InputNumber
@@ -166,13 +300,7 @@ function TallasCantidades(props) {
 			<Divider />
 			<div className="d-flex justify-content-center">
 				<div>
-					<Button
-						className="d-block"
-						type="primary"
-						size="large"
-						style={{ width: 200 }}
-						onClick={() => enviarDatos()}
-					>
+					<Button className="d-block" type="primary" size="large" style={{ width: 200 }}>
 						<TagsOutlined style={{ fontSize: 20 }} />
 						Comprar ahora
 					</Button>
@@ -180,7 +308,12 @@ function TallasCantidades(props) {
 						<BellOutlined style={{ fontSize: 20 }} />
 						Apartar
 					</Button>
-					<Button className="mt-3 d-block" size="large" style={{ width: 200 }}>
+					<Button
+						className="mt-3 d-block"
+						size="large"
+						style={{ width: 200 }}
+						onClick={() => AgregarCarrito()}
+					>
 						<ShoppingCartOutlined style={{ fontSize: 20 }} />
 						Agregar al carrito
 					</Button>
