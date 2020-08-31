@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import '../vistas.css';
+import '../vistas.scss';
 import ImageScroller from 'react-image-scroller';
 import { Card, Col } from 'antd';
 import { Link } from 'react-router-dom';
@@ -12,14 +12,15 @@ const properties = {
 	scrollWithArrows: true
 };
 
-function Scroll() {
+function Scroll(props) {
 	const [ productos, setProductos ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
+	const producto = props.productos;
 
 	useEffect(() => {
 		setLoading(true);
 		clienteAxios
-			.get('/productos')
+			.get('/productos/')
 			.then((res) => {
 				/* console.log(res); */
 				setProductos(res.data.posts.docs);
