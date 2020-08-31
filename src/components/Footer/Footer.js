@@ -3,7 +3,7 @@ import clienteAxios from '../../config/axios';
 import { Link } from 'react-router-dom';
 import {  Button} from 'antd';
 
-import {FacebookFilled, InstagramFilled, TwitterCircleFilled, HomeOutlined, UserOutlined, KeyOutlined } from '@ant-design/icons';
+import {FacebookFilled, InstagramFilled, TwitterCircleFilled, UserOutlined, KeyOutlined } from '@ant-design/icons';
 import './footer.scss';
 
 // const { Footer } = Layout;
