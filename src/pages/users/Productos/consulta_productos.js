@@ -114,7 +114,7 @@ function ConsultaProductos(props) {
 											${formatoMexico(promo.precioPromocion)}
 										</h2>
 										<p className="h4 porcentaje-descuento d-inline">
-											-{agregarPorcentaje(promo.precioPromocion, productos.precio)}%OFF
+											{agregarPorcentaje(promo.precioPromocion, productos.precio)}%OFF
 										</p>
 									</div>
 								);

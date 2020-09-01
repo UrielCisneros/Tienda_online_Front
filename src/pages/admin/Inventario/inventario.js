@@ -57,11 +57,23 @@ function Inventario(props) {
 			key: 'codigo',
 			render: (text) => (!text ? <p>-</p> : <p>{text}</p>)
 		},
+		/* {
+			title: 'tipo de Categoria',
+			dataIndex: 'tipoCategoria',
+			key: 'tipoCategoria',
+			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
+		}, */
 		{
 			title: 'Categoria',
 			dataIndex: 'categoria',
 			key: 'categoria',
-			render: (text) => <p>{text.toLowerCase()}</p>
+			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
+		},
+		{
+			title: 'Subcategoria',
+			dataIndex: 'subCategoria',
+			key: 'subCategoria',
+			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
 		},
 		{
 			title: 'Cantidad',
