@@ -127,25 +127,25 @@ export default function DetalleApartado(props) {
                         <p className="h3 text-center">Datos Usuario</p>
                         <div className="col-sm-12 col-lg-6 m-2">
                             <h6 className=" m-2">Nombre: </h6>
-                            <p className=" m-2">{detalleApartado.cliente.nombre}</p>
+                            <p className=" m-2">{detalleApartado.cliente[0].nombre}</p>
                             <h6 className=" m-2">Telefono: </h6>
-                            <p className=" m-2">{detalleApartado.cliente.telefono}</p>
+                            <p className=" m-2">{detalleApartado.cliente[0].telefono}</p>
                             <h6 className=" m-2">Calle: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].calle_numero}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].calle_numero}</p>}
                             <h6 className=" m-2">Calles referentes a las que vive: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].entre_calles}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].entre_calles}</p>}
                             <h6 className=" m-2">Codigo Postal: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].cp}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].cp}</p>}
                         </div>
                         <div className="col-sm-12 col-lg-6 m-2">
                         <h6 className=" m-2">Colonia: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].colonia}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].colonia}</p>}
                             <h6 className=" m-2">Cidudad: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].ciudad}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].ciudad}</p>}
                             <h6 className=" m-2">Estado: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].estado}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].estado}</p>}
                             <h6 className=" m-2">Pais: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].pais}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].pais}</p>}
                         </div>
                     </Col>
                     <Col span={24} className="detalle-apartado__border d-block m-2">
@@ -156,23 +156,23 @@ export default function DetalleApartado(props) {
                                     className="img-fluid"
                                     width="200"
                                     alt="imagen de base"
-                                    src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${detalleApartado.producto.imagen}`}
+                                    src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${detalleApartado.producto[0].imagen}`}
                                 />
                             </div>
                             <h6 className=" m-2">Nombre: </h6>
-                            <p className=" m-2">{detalleApartado.producto.nombre}</p>
+                            <p className=" m-2">{detalleApartado.producto[0].nombre}</p>
                             <h6 className=" m-2">Codigo de barras: </h6>
-                            {<p className=" m-2">{detalleApartado.producto.codigo}</p>}
+                            {<p className=" m-2">{detalleApartado.producto[0].codigo}</p>}
                             <h6 className=" m-2">Categoria: </h6>
-                            {<p className=" m-2">{detalleApartado.producto.categoria}</p>}
+                            {<p className=" m-2">{detalleApartado.producto[0].categoria}</p>}
                             {console.log(promocion.length)}
                             {promocion.length > 0 ? (
                                 <div className="">
                                     <h6 className="">Precio:</h6>
-                                    <Text className="h4 color-precio-apartado" delete >$ {detalleApartado.producto.precio}</Text> 
+                                    <Text className="h4 color-precio-apartado" delete >$ {detalleApartado.producto[0].precio}</Text> 
                                     <p className="h4">$ {promocion[0].precioPromocion}</p>
                                 </div>
-                            ):(<p className=" m-2">$ {detalleApartado.producto.precio}</p>)}
+                            ):(<p className=" m-2">$ {detalleApartado.producto[0].precio}</p>)}
 
 
 
@@ -182,8 +182,8 @@ export default function DetalleApartado(props) {
                         <div>
                             <div>
                             <p className="h3 text-center">Informacion a apartar</p>
-                                <h6 className=" m-2">{detalleApartado.producto.categoria === 'calzado' ? 'Numero a apartar:': detalleApartado.producto.categoria === 'ropa' ? 'Talla a apartar' : '' }</h6>
-                                    {detalleApartado.producto.categoria === 'calzado' ? (
+                                <h6 className=" m-2">{detalleApartado.producto[0].categoria === 'calzado' ? 'Numero a apartar:': detalleApartado.producto[0].categoria === 'ropa' ? 'Talla a apartar' : '' }</h6>
+                                    {detalleApartado.producto[0].categoria === 'calzado' ? (
                                         <Badge className="m-2">
                                                 <p 
                                                     className="detalle-contenido-talla m-2"
@@ -192,7 +192,7 @@ export default function DetalleApartado(props) {
                                                     {detalleApartado.medida[0].numero}
                                                 </p>
                                             </Badge>  
-                                    ): detalleApartado.producto.categoria === 'ropa' ? (
+                                    ): detalleApartado.producto[0].categoria === 'ropa' ? (
                                         <Badge className="m-2">
                                             <p 
                                                 className="detalle-contenido-talla m-2"
