@@ -43,6 +43,7 @@ function SistemaApartado(props) {
 	}
 	
 	function obtenerProductosFiltrados(filter){
+		setVisibleReload('ml-3 d-flex justify-content-center align-items-center');
 		clienteAxios.get(`/apartado/filtroCliente/${filter}`,{
 			headers: {
 				'Content-Type': 'multipart/form-data',
@@ -67,6 +68,7 @@ function SistemaApartado(props) {
 	
     
     function obtenerDatos(limit,page){
+		setVisibleReload('d-none');
         clienteAxios.get(`/apartado/?limit=${limit}&page=${page}`,{
 			headers: {
 				'Content-Type': 'multipart/form-data',
