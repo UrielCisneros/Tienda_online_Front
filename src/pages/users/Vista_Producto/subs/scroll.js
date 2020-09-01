@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import '../vistas.scss';
 import ImageScroller from 'react-image-scroller';
-import { Card, Col } from 'antd';
+import { Card, Col, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
@@ -20,16 +20,15 @@ function Scroll(props) {
 	useEffect(() => {
 		setLoading(true);
 		clienteAxios
-			.get('/productos/')
+			.get(`/productos/search?nombre=${producto.nombre}&categoria=${producto.categoria}&subcategoria=${producto.subCategoria}`)
 			.then((res) => {
-				/* console.log(res); */
-				setProductos(res.data.posts.docs);
+				setProductos(res.data.posts);
 				setLoading(false);
 			})
 			.catch((err) => {
-				/* console.log(err); */
+				console.log(err);
 			});
-	}, []);
+	}, [producto]);
 
 	function agregarPorcentaje(precio_descuento, precio_producto) {
 		var porcentaje = Math.round(precio_descuento / precio_producto * 100);
@@ -94,12 +93,14 @@ function Scroll(props) {
 	));
 
 	return (
-		<div className="mt-5">
-			<p className="titulos-vista-productos">Tambien te pueden interesar:</p>
-			<div>
-				<ImageScroller {...properties}>{render}</ImageScroller>
+		<Spin spinning={loading}>
+			<div className="mt-5">
+				<p className="titulos-vista-productos">Tambien te pueden interesar:</p>
+				<div>
+					<ImageScroller {...properties}>{render}</ImageScroller>
+				</div>
 			</div>
-		</div>
+		</Spin>
 	);
 }
 

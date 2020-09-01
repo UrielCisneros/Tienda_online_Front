@@ -27,7 +27,7 @@ function TallasCantidades(props) {
 			return null;
 		}
 	}
-	console.log(productos)
+	/* console.log(productos) */
 
 	useEffect(
 		() => {
