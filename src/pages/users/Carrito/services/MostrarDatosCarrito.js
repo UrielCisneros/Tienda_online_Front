@@ -41,14 +41,14 @@ async function obtenerDatosCarrito(){
           if(decoded._id===null){
               console.log("no hay codigo");
           }
-          
-              setCarrito(res.data.articulos);
-              setLoading(false);
+            setCarrito(res.data);
+            setLoading(false);
               if (setCarrito() === undefined) {
                 console.log("No hay productos");
               }
 
-              console.log(decoded);
+            console.log(decoded);
+            console.log(res.data);
         })
 
         .catch((err) => {

@@ -155,10 +155,16 @@ const Sugerencia = (props) => {
 		await clienteAxios
 			.get(`/sugerencia/${productoContext}`)
 			.then((res) => {
-				res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
+				console.log(res)
+				if(res.data.sugerencias){
+					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));	
+				}else {
+					setSugerencia('No hay sugerencia');
+				}
 				setLoading(false);
 			})
 			.catch((res) => {
+				console.log(res)
 				if (res.response.status === 404) {
 					setLoading(false);
 					setSugerencia('No hay sugerencia');
