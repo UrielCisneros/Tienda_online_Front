@@ -2,12 +2,14 @@ import React,{useEffect,useState} from 'react'
 import { withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import clienteAxios from '../../../config/axios';
-import {notification,Card, Col,Tag,Spin,Radio,Result,Row,Modal,Button } from 'antd'
+import {notification,Card, Col,Tag,Spin,Radio,Result,Row,Modal,Button,Input } from 'antd'
 import queryString from 'query-string';
 import MostrarDatosTargeta from './services/MostrarDatosTargeta'
 import DetalleApartado from './services/DetalleApartado';
 import Pagination from '../../../components/Pagination/pagination'
+import { RollbackOutlined } from '@ant-design/icons';
 
+const { Search } = Input;
 
 
 
@@ -21,9 +23,8 @@ function SistemaApartado(props) {
     const [ loading, setLoading ] = useState(false);
     const [ apartados, setApartados ] = useState([]);
 	const [ detalleApartado, setDetalleApartado ] = useState([]);
-	const [apartadoPaginacion, setApartadoPaginacion] = useState([])
-
-    const [colorTag, setColorTag] = useState('')
+	const [apartadoPaginacion, setApartadoPaginacion] = useState([]);
+	const [ visibleReload, setVisibleReload ] = useState('d-none');
 
     const [filter, setFilter] = useState('')
 
@@ -39,10 +40,11 @@ function SistemaApartado(props) {
 		} catch (e) {
 			return null;
 		}
-    }
-    
-    function obtenerDatos(limit,page,filter){
-        clienteAxios.get(`/apartado/?limit=${limit}&page=${page}&filter=${filter}`,{
+	}
+	
+	function obtenerProductosFiltrados(filter){
+		setVisibleReload('ml-3 d-flex justify-content-center align-items-center');
+		clienteAxios.get(`/apartado/filtroCliente/${filter}`,{
 			headers: {
 				'Content-Type': 'multipart/form-data',
 				Authorization: `bearer ${token}`
@@ -50,7 +52,33 @@ function SistemaApartado(props) {
 		})
         .then((res) => {
 			setLoading(false);
-			setApartados(res.data.docs)
+			console.log(res);
+			setApartados(res.data)
+        }).catch((err) => {
+			setLoading(false);
+			console.log(err.response);
+            notification.error({
+                message: 'Error del servidor',
+                description:
+                  'Paso algo en el servidor, al parecer la conexion esta fallando.',
+              });
+        })
+	}
+
+	
+    
+    function obtenerDatos(limit,page){
+		setVisibleReload('d-none');
+        clienteAxios.get(`/apartado/?limit=${limit}&page=${page}`,{
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				Authorization: `bearer ${token}`
+			}
+		})
+        .then((res) => {
+			setLoading(false);
+            console.log(res);
+			setApartados(res.data.posts.docs)
 			setApartadoPaginacion(res.data)
         }).catch((err) => {
 			setLoading(false);
@@ -64,20 +92,16 @@ function SistemaApartado(props) {
     }
 
     useEffect(() => {
-		obtenerDatos(10,page,filter);
+		obtenerDatos(10,page);
 		setLoading(true);
 		setEstado(false)
-    }, [page,filter,estado])
+	}, [page,filter,estado])
+	
 
     if(token === '' || token === null){
         props.history.push('/entrar')
     }else if(decoded['rol'] !== true){
         props.history.push('/')
-    }
-
-    function handleChange(e){
-        console.log(e.target.value);
-        setFilter(e.target.value)
     }
     const showModal = () => {
 		setVisible(true);
@@ -91,26 +115,37 @@ function SistemaApartado(props) {
        <div>
 			<Spin size="large" spinning={loading}>
 				<div>
-					<p style={{ fontSize: 20 }}>
+					<p className="text-center" style={{ fontSize: 20 }}>
 						Aqui puedes ver todas las solicitudes de productos a apartar.
 					</p>
-					<div className="mt-4">
-						<p className="d-lg-inline d-block mr-5">Mostrar por:</p>
-						<Radio.Group name="radiogroup" defaultValue="" size="mediun">
-							<Radio className="d-lg-inline d-block mb-1" value="" onChange={e => {handleChange(e)}} >
-								Todas las solicitudes
-							</Radio>
-							<Radio className="d-lg-inline d-block mb-1" value="PROCESANDO" onChange={e => {handleChange(e)}} >
-								Solicitudes en proceso
-							</Radio>
-							<Radio className="d-lg-inline d-block mb-1" value="ACEPTADO" onChange={e => {handleChange(e)}}>
-								Solicitudes aceptadas
-							</Radio>
-							<Radio className="d-lg-inline d-block mb-1" value="RECHAZADO" onChange={e => {handleChange(e)}}>
-								Solicitudes rechazadas
-							</Radio>
-						</Radio.Group>
-					</div>
+					<Row justify="center mt-5">
+						<Col>
+							<Search
+								placeholder="Buscar apartados"
+								onSearch={(value) => {
+									if(value === ""){
+										obtenerDatos(10,page,filter)
+									}else{
+										obtenerProductosFiltrados(value)
+									}
+								}}
+								style={{ width: 600, height: 40, marginBottom: 10 }}
+								enterButton="Buscar"
+								size="large"
+							/>
+						</Col>
+						<Col>
+							<Button
+								type="primary"
+								size="large"
+								className={visibleReload}
+								onClick={() => obtenerDatos(10,page,filter)}
+								icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+							>
+								Volver
+							</Button>
+						</Col>
+					</Row>
 					<div className="mt-4">
 						{apartados.length === 0 ? (
 							<div className="w-100 d-flex justify-content-center align-items-center">
