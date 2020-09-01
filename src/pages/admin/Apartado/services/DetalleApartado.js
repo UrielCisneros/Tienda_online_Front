@@ -1,22 +1,57 @@
 import React,{useState,useEffect} from 'react'
-import {Col,Row,Badge,Select,Form, Button,Spin,notification} from 'antd'
+import {Col,Row,Badge,Select,Form, Button,Spin,notification,Typography,Tag,Input} from 'antd'
 import './DetalleApartado.scss';
 import clienteAxios from '../../../../config/axios';
 
+const { TextArea } = Input;
+const { Text } = Typography;
 const { Option } = Select;
 
 export default function DetalleApartado(props) {
 
-    const {detalleApartado,setFilter,setEstado} = props;
+    const {detalleApartado,setEstado} = props;
     
     const [selectEstado, setSelectEstado] = useState('')
+    const [promocion, setpromocion] = useState([])
     const [ loading, setLoading ] = useState(false);
+    const [ datosEnvio, setdatosEnvio ] = useState();
+
+    const [ form ] = Form.useForm();
 
     const token = localStorage.getItem('token')
 
+    function obtenerApartado(){
+        clienteAxios.get(`/apartado/${detalleApartado._id}`,{
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				Authorization: `bearer ${token}`
+			}
+		})
+        .then((res) => {
+			setLoading(false);
+            console.log(res);
+            setpromocion(res.data.promocion)
+        }).catch((err) => {
+			setLoading(false);
+			console.log(err.response);
+            notification.error({
+                message: 'Error del servidor',
+                description:
+                  'Paso algo en el servidor, al parecer la conexion esta fallando.',
+              });
+        })
+    }
+
     useEffect(() => {
+        monstrarInformacionBlog({
+            mensajeUser:detalleApartado.mensajeUser,
+            paqueteria:detalleApartado.paqueteria,
+            url:detalleApartado.url,
+            codigo_seguimiento:detalleApartado.codigo_seguimiento,
+        })
+        obtenerApartado()
         setSelectEstado(detalleApartado.estado)
-        setLoading(false)
+        setLoading(true)
     }, [detalleApartado])
 
 
@@ -24,10 +59,28 @@ export default function DetalleApartado(props) {
         setSelectEstado(e)
     }
 
+    const monstrarInformacionBlog = (e) => {
+        form.setFieldsValue(e);
+     }
+
+
+
     const guardarEstadoApartado = async () => {
-        const data = {
-            estado: selectEstado
+            let data = {};
+        if(selectEstado === "ENVIADO"){
+            data = {
+                estado: selectEstado,
+                codigo_seguimiento: datosEnvio.codigo_seguimiento,
+                mensajeUser: datosEnvio.mensajeUser,
+                paqueteria: datosEnvio.paqueteria,
+                url: datosEnvio.url,
+            }
+        }else{
+            data = {
+                estado: selectEstado,
+            }
         }
+
         setLoading(true)
         await clienteAxios.put(`/apartado/${detalleApartado._id}`,data,{
             headers: {
@@ -112,8 +165,16 @@ export default function DetalleApartado(props) {
                             {<p className=" m-2">{detalleApartado.producto.codigo}</p>}
                             <h6 className=" m-2">Categoria: </h6>
                             {<p className=" m-2">{detalleApartado.producto.categoria}</p>}
-                            <h6 className=" m-2">Precio: </h6>
-                            <p className=" m-2">$ {detalleApartado.producto.precio}</p>
+                            {console.log(promocion.length)}
+                            {promocion.length > 0 ? (
+                                <div className="">
+                                    <h6 className="">Precio:</h6>
+                                    <Text className="h4 color-precio-apartado" delete >$ {detalleApartado.producto.precio}</Text> 
+                                    <p className="h4">$ {promocion[0].precioPromocion}</p>
+                                </div>
+                            ):(<p className=" m-2">$ {detalleApartado.producto.precio}</p>)}
+
+
 
                         </div>
                     </Col>
@@ -144,17 +205,66 @@ export default function DetalleApartado(props) {
                             </div>
                             <h6 className=" m-2">Cantidad de articulos por apartar: </h6>
                             <p className=" m-2">{detalleApartado.cantidad}</p>
+
+                            <h6 className=" m-2">Tipo de entrega:</h6>
+                            <Tag
+                                style={{size:"50px"}}
+                                color={detalleApartado.tipoEntrega === 'Envio' ?  '#5cb85c' : '#0275d8'}
+                            >
+                                {detalleApartado.tipoEntrega === 'Envio' ? 'Envio a domicilio' : 'Pasaran por el'}
+                            </Tag>
+                            <p></p>
+
                             
-                            <Form onFinish={guardarEstadoApartado}>
+                            <Form 
+                                onFinish={guardarEstadoApartado}
+                                form={form}
+                            >
                             <Form.Item>
                                 <Select value={selectEstado} placeholder="Seleciona una categoria" onChange={handleonChange} style={{ width: 300 }}>
                                     <Option value="PROCESANDO">En proceso</Option>
-                                    <Option value="ACEPTADO">Aceptado</Option>
-                                    <Option value="RECHAZADO">Rechazado</Option>
+                                    {detalleApartado.tipoEntrega === 'Envio' ? (
+                                        <>
+                                            <Option value="ENVIADO">Enviado</Option>
+                                            <Option value="CANCELADO">Cancelado</Option>
+                                        </>
+
+                                    ):(
+                                        <>
+                                            <Option value="ACEPTADO">Aceptado</Option>
+                                            <Option value="RECHAZADO">Rechazado</Option>
+                                        </>
+
+                                    )}
+
                                 </Select>
                             </Form.Item>
+                            {selectEstado === 'ENVIADO' ? detalleApartado.tipoEntrega === 'Envio' ? (
+                                <div className="row">
+                                    <div className="col-lg-8">
+                                        <h6>Mensaje:</h6>
+                                        <Form.Item  name="mensajeUser">
+                                            <TextArea rows={4} name="mensajeUser" onChange={e => setdatosEnvio({ ...datosEnvio, mensajeUser: e.target.value })} />
+                                        </Form.Item>
+                                        <h6>Paqueteria:</h6>
+                                        <Form.Item  name="paqueteria">
+                                            <Input   name="paqueteria" placeholder="Paqueteria" onChange={e => setdatosEnvio({ ...datosEnvio, paqueteria: e.target.value })}/>
+                                        </Form.Item>
+                                        <h6>Url de vinculacion:</h6>
+                                        <Form.Item  name="url">
+                                            <Input   name="url" placeholder="Url de vinculacion del paquete" onChange={e => setdatosEnvio({ ...datosEnvio, url: e.target.value })}/>
+                                        </Form.Item>
+                                        <h6>Numero de seguimiento:</h6>
+                                        <Form.Item  name="codigo_seguimiento">
+                                            <Input   name="codigo_seguimiento" placeholder="Numero de seguimiento del paquete" onChange={e => setdatosEnvio({ ...datosEnvio, codigo_seguimiento: e.target.value })}/>
+                                        </Form.Item>
+                                    </div>
+                                </div>
+                            ) : "" : "" }
+
+
                             <Form.Item>
-                                 <Button className="float-right" type="primary" htmlType="submit" >
+                                 <Button className=" d-flex justify-content-center align-items-center" type="primary" htmlType="submit" >
                                     Guardar
                                 </Button>
                             </Form.Item>
