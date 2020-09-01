@@ -34,12 +34,7 @@ export default function Datos_tienda() {
                 if(res.data[0].linkFace !== 'undefined' && res.data[0].linkFace !== ''){
                     setFace(res.data[0].linkFace);
                 }
-                if(res.data[0].linkInsta !== 'undefined' && res.data[0].linkInsta !== ''){
-                    setInsta(res.data[0].linkInsta);
-                }
-                if(res.data[0].linkTweeter !== 'undefined' && res.data[0].linkTweeter !== ''){
-                    setTwitter(res.data[0].linkTweeter);
-                }
+               
 			})
 			.catch((err) => {
                 console.log("No funciona");
@@ -52,7 +47,7 @@ export default function Datos_tienda() {
     }, []);
 
 
-    const styles = {fontsize: "30", alignText:"center"};
+    const styles = {fontSize: 25};
 
     return (
         <div>
@@ -63,7 +58,7 @@ export default function Datos_tienda() {
             </div>
 
                 <div className="row">
-                    <div className="col-lg-7">
+                    <div className="col-lg-6">
                     <Geolocalizacion 
                         height="60vh"
                         width="100%"
@@ -75,46 +70,14 @@ export default function Datos_tienda() {
                     />
                     </div>
 
-                    
-
-                    <div className="col-lg-4 text-center" style={styles}>
-                    <Divider className="font-weight-bold" style={{background: "white"}}type="vertical" />
-                        <img
-                            width="200"
-                            alt="imagen de base"
-                            src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
-                        />
-                        <Divider style={{backgroundcolor: "white"}}>
-                        <p className="font-weight-bold">{tienda.nombre}</p>
-                        </Divider>
-                        <p>Tel: <spam>{tienda.telefono}</spam></p>
-                        <p>Direccion: <spam>{direccion.calle_numero}</spam></p>
-                        <p><spam>Col. {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
-                        <p>CP: <spam>{direccion.cp}</spam></p>
+                    <div className="col-lg-5 mt-5 text-center"X >
+                      
+                        <p style={styles} className="font-weight-bold mt-5">{tienda.nombre}</p>
+                        <p style={styles} className="mt-3">Tel: <spam>{tienda.telefono}</spam></p>
+                        <p style={styles}>Direccion: <spam>{direccion.calle_numero}</spam></p>
+                        <p style={styles}><spam>Col. {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
+                        <p style={styles}>CP: <spam>{direccion.cp}</spam></p>
                         
-                        {/* <p style={{fontSize: 25, }}>Buscanos en:</p>
-
-                        {face !== '' ? 
-                            (
-                            <a href={`https://${face}`} target="_blank">
-                                <FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} />
-                            </a>
-                            ):('')
-                        }
-                        {insta !== '' ? 
-                            (
-                            <a href={insta}>
-                                <InstagramFilled  id="is" style={{fontSize: 45, color:"gray"}} />
-                            </a>
-                            ):('')
-                        }
-                        {twitter !== '' ? 
-                            (
-                            <a href={twitter}>
-                                <TwitterCircleFilled  id="is" style={{fontSize: 45, color:"gray"}} />
-                            </a>
-                            ):('')
-                        } */}
                     </div>
                 </div>
             </div>           
