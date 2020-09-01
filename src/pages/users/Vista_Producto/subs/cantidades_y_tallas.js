@@ -31,7 +31,7 @@ function TallasCantidades(props) {
 
 	useEffect(
 		() => {
-			if (productos.categoria === 'calzado') {
+			if (productos.tipoCategoria === 'calzado') {
 				setCategoria('calzado');
 				setRender(
 					productos.numeros.map((numeros) => {
@@ -59,7 +59,7 @@ function TallasCantidades(props) {
 						);
 					})
 				);
-			} else if (productos.categoria === 'ropa') {
+			} else if (productos.tipoCategoria === 'ropa') {
 				setCategoria('ropa');
 				setRender(
 					productos.tallas.map((tallas) => {
@@ -87,7 +87,7 @@ function TallasCantidades(props) {
 						);
 					})
 				);
-			} else if (productos.categoria === 'otros') {
+			} else if (productos.tipoCategoria === 'otros') {
 				setCategoria('otros');
 				setCantidad(productos.cantidad);
 			}

@@ -45,11 +45,6 @@ import {Link} from 'react-router-dom';
             setDatosNegocio(res.data[0])
             if(res.data[0]){
                 setAction(true)
-<<<<<<< HEAD
-                /* console.log(res.data[0].ubicacion[0].lat)
-                console.log(res.data[0].ubicacion[0].lng) */
-=======
->>>>>>> a0314370dc4417cb9ca4eda5def6c4cc8ade541a
                 if(res.data[0].ubicacion[0].lat === "" || res.data[0].ubicacion[0].lat === "undefined"){
                     setLat("19.767980")
                 }else{
@@ -183,88 +178,6 @@ import {Link} from 'react-router-dom';
                             </div>
                     </div>
 
-<<<<<<< HEAD
-                    <Row className="m-4">
-                        <Col span={8}>
-                            <p>Nombre del negocio: <span className="h6"> {action === false ? "Nombre de tu negocio": datosNegocio.nombre} </span> </p>
-                        </Col>
-                        <Col span={8}>
-                            <p>Telefono:<span className="h6"> {action === false ? "Telefono": datosNegocio.telefono} </span></p>
-                        </Col>
-                        <Col span={8}> 
-                            <p>Codigo Postal:<span className="h6"> {action === false ? "Codigo Postal": datosNegocio.direccion[0].cp} </span></p>
-                        </Col>
-                    </Row>
-
-
-                    <Row className="m-4">
-                        <Col span={8}>
-                            <p>Calle:<span className="h6"> {action === false ? "Calle": datosNegocio.direccion[0].calle_numero} </span></p>
-                        </Col>
-                        <Col span={8}>
-                            <p>Colonia:<span className="h6"> {action === false ? "Colonia": datosNegocio.direccion[0].colonia} </span></p>
-                        </Col>
-                        <Col span={8}>
-                            <p>Ciudad:<span className="h6"> {action === false ? "Colonia": datosNegocio.direccion[0].ciudad} Ciudad</span></p>
-                        </Col>
-                    </Row>
-
-
-                    <Row className="m-4">
-                        <Col span={24}>
-                            <p>Estado:<span className="h6"> {action === false ? "Estado": datosNegocio.direccion[0].estado}</span></p>
-                        </Col>
-                    </Row>
-                    
-                    <Row className="m-4">
-                        <Col span={24}>
-                        <p className="m-3 ">Ubicacion actual: </p>
-                            <Geolocalizacion 
-                                height="60vh"
-                                width="100%"
-                                center={[lat, lng]}
-                                titleLayer={'map'}
-                                zoom={15}
-                                apikey = 'I0G4Jr6RUg71dsHIRF0qGzn0l39bAY1V'
-                                nombreMarcador = "AB soluciones Empresariales"
-                                tituloheader={false}
-                                draggable={true}
-                            />
-                        </Col>   
-                    </Row>
-
-                    <Row>
-                        <Col span={12}>
-                        <p className="m-3 h3">Politicas de privacidad</p>
-                        {action === false ? (
-                            <Empty description={<span className="h6">Aun no hay informacion</span>} />
-                        ):(
-                            <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<span className="h6">Informacion existente</span>} >
-                                <Link to={`/`} target="_blank">
-                                    <Button type="dashed">
-                                        <EyeOutlined /> Ver
-                                    </Button>
-                                </Link>
-                            </Empty>
-                        )}
-                            
-                        </Col>
-                        <Col span={12}>
-                        <p className="m-3 h3">Imagen coorporativa</p>
-                        {action === false ? (
-                            <Empty description={<span className="h6">Aun no hay informacion</span>} />
-                        ):(
-                            <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<span className="h6">Informacion existente</span>} >
-                                <Link to={`/`} target="_blank">
-                                    <Button type="dashed">
-                                        <EyeOutlined /> Ver
-                                    </Button>
-                                </Link>
-                            </Empty>
-                        )}
-                        </Col>
-                    </Row>
-=======
                     <div className="row m-4">
                             <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
                                 <p>Calle:<span className="h6"> {action === false ? "Calle": datosNegocio.direccion[0].calle_numero} </span></p>
@@ -308,7 +221,6 @@ import {Link} from 'react-router-dom';
                                 }
                             </div>  
                     </div>
->>>>>>> a0314370dc4417cb9ca4eda5def6c4cc8ade541a
 
                     <div className="row">
                         <div className="col-12">
