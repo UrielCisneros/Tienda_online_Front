@@ -26,7 +26,7 @@ export default function MostrarDatosTargeta(props) {
 								}}
 								className="d-inline"
 							>
-								Detalle se solicitud de apartado
+								Detalle de solicitud de apartado
 							</p>
 						</div>
 					]}
@@ -34,42 +34,44 @@ export default function MostrarDatosTargeta(props) {
 					<Meta
 						className="contenedor-card-apartados"
 						description={
-							<div>
-{/* 								<div>
-									<img 
-										className="img-fluid" 
-										width="100"
-										alt="imagen de base"
-										src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${apartado.producto.imagen}`}
-									 />
-								</div> */}
-								<div className="my-2">
+							<div className="">
+								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Id apartado: </h6>
 									<p className="data-info-apartados">{apartado._id}</p>
 								</div>
-								<div className="my-2">
+								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Pedido el:</h6>
 									<p className="data-info-apartados">{formatoFecha(apartado.createdAt)}</p>
 								</div>
-								<div className="my-2">
+								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Cliente:</h6>
 									<p className="data-info-apartados">{apartado.cliente.nombre}</p>
 								</div>
-								<div className="my-2">
+								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Estado:</h6>
 									<Tag
 										className="data-info-apartados"
-										color={apartado.estado === 'ACEPTADO' ?  '#5cb85c' : apartado.estado === 'PROCESANDO' ? '#0275d8' : '#F75048'}
+										color={apartado.estado === 'ACEPTADO' ?  '#5cb85c' : apartado.estado === 'PROCESANDO' ? '#0275d8' :  apartado.estado === 'ENVIADO' ? "#5cb85c": "#F75048"}
 									>
 										{apartado.estado}
 									</Tag>
 								</div>
 
-								<div className="my-2">
+								<div className="sistema-apartado m-2">
+									<h6 className="titulos-info-apartados">Tipo de entrega:</h6>
+									<Tag
+										className="data-info-apartados"
+										color={apartado.tipoEntrega === 'Envio' ?  '#5cb85c' : '#0275d8'}
+									>
+										{apartado.tipoEntrega === 'Envio' ? 'Envio a domicilio' : 'Pasaran por el'}
+									</Tag>
+								</div>
+
+								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Producto:</h6>
 									<p className="data-info-apartados">{apartado.producto.nombre}</p>
 								</div>
-								<div className="my-2">
+								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Cantidad de articulos:</h6>
 									<p className="data-info-apartados">{apartado.cantidad}</p>	
 								</div>

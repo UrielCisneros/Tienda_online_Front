@@ -42,14 +42,19 @@ function SistemaApartado(props) {
     }
     
     function obtenerDatos(limit,page,filter){
-        clienteAxios.get(`/apartado/?limit=${limit}&page=${page}&filter=${filter}`)
+        clienteAxios.get(`/apartado/?limit=${limit}&page=${page}&filter=${filter}`,{
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				Authorization: `bearer ${token}`
+			}
+		})
         .then((res) => {
 			setLoading(false);
 			setApartados(res.data.docs)
 			setApartadoPaginacion(res.data)
         }).catch((err) => {
 			setLoading(false);
-			console.log(err);
+			console.log(err.response);
             notification.error({
                 message: 'Error del servidor',
                 description:

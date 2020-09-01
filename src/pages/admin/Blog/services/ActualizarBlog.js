@@ -66,7 +66,8 @@ export default function ActualizarBlog(props) {
         };
 
         function obtenerUrl(text){
-            const datos = text.split(" ");
+            const trim = text.trim();
+            const datos = trim.split(" ");
             for(var i = 0; i < datos.length; i++ ){
                 if(datos.length - 1 === i){
                     urlGuion += datos[i];
