@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import clienteAxios from '../../config/axios';
 import { Link } from 'react-router-dom';
-import {  Button} from 'antd';
+import {  Button, Layout} from 'antd';
 
 import {FacebookFilled, InstagramFilled, TwitterCircleFilled, HomeOutlined, UserOutlined, KeyOutlined } from '@ant-design/icons';
 import './footer.scss';
 
-// const { Footer } = Layout;
+ const { Footer } = Layout;
 const Style = {fontSize:15, color: "black"};
 
 
@@ -50,8 +50,8 @@ const FooterPage = () => {
 
     return(
        
-        // <Layout className="layout">
-        //     <Footer  >
+         <Layout className="layout">
+             <Footer  >
                 <div id="foot"  className="row">  
                     <div className="col-lg-9 text-lg-left text-center ">
                         <div className="m-4 footer-border">
@@ -119,9 +119,9 @@ const FooterPage = () => {
                         
                     </div>
                 </div>
-        //     <p style={{textAlign:"center"}}>Ant Design ©2018 Created by Ant UED</p>
-        //     </Footer>
-        // </Layout>
+             {/* <p style={{textAlign:"center"}}>Ant Design ©2018 Created by Ant UED</p> */}
+             </Footer>
+         </Layout>
     )
 }
 

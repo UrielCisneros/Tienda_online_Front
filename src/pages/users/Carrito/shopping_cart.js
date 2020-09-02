@@ -18,7 +18,7 @@ export default function ShoppingCart() {
         <div  className="row mx-auto" style={{background: "white"}}>
           <div className="col-lg-12 ">
             
-          <MostrarDatosProductos></MostrarDatosProductos>
+          <MostrarDatosProductos ></MostrarDatosProductos>
 
 
             <div className="d-flex flex-row-reverse mt-22" >

@@ -41,14 +41,14 @@ async function obtenerDatosCarrito(){
           if(decoded._id===null){
               console.log("no hay codigo");
           }
-            setCarrito(res.data);
+            setCarrito(res.data.articulos);
             setLoading(false);
-              if (setCarrito() === undefined) {
-                console.log("No hay productos");
-              }
+            //  if (setCarrito() === undefined) {
+              //  console.log("No hay productos");
+              //}
 
-            console.log(decoded);
-            console.log(res.data);
+           // console.log(decoded);
+            console.log(res.data.articulos);
         })
 
         .catch((err) => {
@@ -67,31 +67,35 @@ async function obtenerDatosCarrito(){
     return(
       <Spin  size="large" spinning={loading} >
         <div>
-            <carritoList 
-            carrito={carrito} 
-            setLoading={setLoading}
+        <List className="p-3"
+                itemLayout="horizontal"
+                size="large"
+                dataSource={carrito.articulos}
+                renderItem={carrit => 
+                    <Productos carrito={carrit} />
+                }
             />
         </div>
       </Spin>
 )
 }
 
-function carritoList (props) {
-  const {carrito} = props;
+// function carritoList (props) {
+//   const {carrito} = props;
 
-  return (
-    <div>
-        <List className="p-3"
-                itemLayout="horizontal"
-                size="large"
-                dataSource={carrito.idarticulo}
-                renderItem={carrito => 
-                    <Productos carrito={carrito} />
-                }
-            />
-    </div>
-)
-}
+//   return (
+//     <div>
+//         <List className="p-3"
+//                 itemLayout="horizontal"
+//                 size="large"
+//                 dataSource={carrito}
+//                 renderItem={carrito => 
+//                     <Productos carrito={carrito} />
+//                 }
+//             />
+//     </div>
+// )
+// }
 
 function Productos (props) {
   const {carrito} = props;
@@ -102,16 +106,16 @@ function Productos (props) {
     <div className="d-none d-lg-block px-2">
       <img
         width={272}
-        src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${carrito.producto.imagen}`}
+        src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${carrito.idarticulo[0].imagen}`}
       />
     </div>
 
     <div>
       <div className="d-flex justify-content-lg-center">
         <List.Item.Meta
-          avatar={<img src={carrito.producto.imagen} 
+          avatar={<img src={carrito.idarticulo[0].imagen} 
           className="d-block d-sm-block d-lg-none"  height="70" width="70"/>}
-          title={carrito.producto.nombre}
+          title={carrito.idarticulo[0].nombre}
         />
       </div>
 
