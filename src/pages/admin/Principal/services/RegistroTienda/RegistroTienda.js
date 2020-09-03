@@ -47,6 +47,7 @@ export default function RegistroTienda(props) {
                 cp:datosNegocio.direccion[0].cp,
                 colonia:datosNegocio.direccion[0].colonia,
                 ciudad: datosNegocio.direccion[0].ciudad,
+                estado: datosNegocio.direccion[0].estado,
                 lat: datosNegocio.ubicacion[0].lat,
                 lng: datosNegocio.ubicacion[0].lng,
                 politicas: datosNegocio.politicas,
@@ -62,6 +63,7 @@ export default function RegistroTienda(props) {
                 cp:datosNegocio.direccion[0].cp,
                 colonia:datosNegocio.direccion[0].colonia,
                 ciudad: datosNegocio.direccion[0].ciudad,
+                estado: datosNegocio.direccion[0].estado,
                 lat: datosNegocio.ubicacion[0].lat,
                 lng: datosNegocio.ubicacion[0].lng,
                 politicas: datosNegocio.politicas,
@@ -112,6 +114,7 @@ export default function RegistroTienda(props) {
             formData.append('cp', datos.cp);
             formData.append('colonia', datos.colonia);
             formData.append('ciudad', datos.ciudad);
+            formData.append('estado', datos.estado);
             formData.append('lat',datos.lat);
             formData.append('lng',datos.lng);
             formData.append('politicas', datos.politicas);
@@ -211,134 +214,143 @@ export default function RegistroTienda(props) {
                 onFinish={SendForm}
                 form={form}
             >
-                <div>
-                <Divider>Logo del negocio</Divider>
-                    <div className="m-auto">
-                        <Form.Item label="Logo" >
-                            <Upload {...propss} name="imagen">
-                                <Button disabled={upload}>
-                                    <UploadOutlined /> Subir
-                                </Button>
-                            </Upload>
-                        </Form.Item>  
-                        {control === false ? "" : (
-                            <Form.Item label="Imagen Actual">
-                                <img
-                                    className="d-block img-fluid mt-2"
-                                    width="200"
-                                    alt="imagen de base"
-                                    src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagen}`}
-                                />
-                            </Form.Item>
-                        )}
+                <div className="row">
+                    <div className="col-12">
+                        <Divider>Logo del negocio</Divider>
+                        <div className="m-auto">
+                            <Form.Item label="Logo" >
+                                <Upload {...propss} name="imagen">
+                                    <Button disabled={upload}>
+                                        <UploadOutlined /> Subir
+                                    </Button>
+                                </Upload>
+                            </Form.Item>  
+                            {control === false ? "" : (
+                                <div>
+                                    <p className="text-center">Imagen actual:</p>
+                                    <div className="d-flex justify-content-center align-items-center">
+                                        
+                                            <img
+                                                className="d-block img-fluid mt-2"
+                                                width="200"
+                                                alt="imagen de base"
+                                                src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagen}`}
+                                            />
+                                    </div>
+                                </div>
+
+                            )}
+                        </div>
                     </div>
-                <Divider>Informacion de la tienda</Divider>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item className="m-2" label="Nombre"  onChange={ e => setDatos({ ...datos, nombre: e.target.value }) }>
-                                <Form.Item rules={[{ required: true, message: 'Nombre obligatorio' }]}  noStyle name="nombre" >
-                                    <Input name="nombre" placeholder="Nombre del negocio"  />
-                                </Form.Item>
+                </div>
+                <div className="row">
+                    <Divider>Informacion de la tienda</Divider>
+                    <div className="col-lg-6 col-sm-12">
+                        <Form.Item className="m-2" label="Nombre"  onChange={ e => setDatos({ ...datos, nombre: e.target.value }) }>
+                            <Form.Item rules={[{ required: true, message: 'Nombre obligatorio' }]}  noStyle name="nombre" >
+                                <Input name="nombre" placeholder="Nombre del negocio"  />
                             </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item className="m-2" label="Telefono "  onChange={ e => setDatos({ ...datos, telefono: e.target.value }) }>
-                                <Form.Item rules={[{ required: true, message: 'Telefono obligatorio' }]}  noStyle name="telefono" >
-                                    <Input name="telefono" placeholder="Telefono"  />
-                                </Form.Item>
+                        </Form.Item>
+                    </div>
+                    <div className="col-lg-6 col-sm-12">
+                        <Form.Item className="m-2" label="Telefono "  onChange={ e => setDatos({ ...datos, telefono: e.target.value }) }>
+                            <Form.Item rules={[{ required: true, message: 'Telefono obligatorio' }]}  noStyle name="telefono" >
+                                <Input name="telefono" placeholder="Telefono"  />
                             </Form.Item>
-                        </Col>
-                    </Row>
+                        </Form.Item>
+                    </div>  
+                </div>
 
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item className="m-2" label="Calle"  onChange={ e => setDatos({ ...datos, calle_numero: e.target.value }) }>
-                                <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="calle_numero" >
-                                    <Input name="calle_numero" placeholder="Calle y Numero" />
-                                </Form.Item>
+                <div className="row">
+                     <div className="col-lg-4 col-sm-12">
+                        <Form.Item className="m-2" label="Calle"  onChange={ e => setDatos({ ...datos, calle_numero: e.target.value }) }>
+                            <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="calle_numero" >
+                                <Input name="calle_numero" placeholder="Calle y Numero" />
                             </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item className="m-2" label="Codigo Postal "  onChange={ e => setDatos({ ...datos, cp: e.target.value }) }>
-                                <Form.Item rules={[{ required: true, message: 'Codigo Postal obligatorio' }]}  noStyle name="cp" >
-                                    <Input name="cp" placeholder="Codigo Postal"  />
-                                </Form.Item>
+                        </Form.Item>
+                     </div>
+                     <div className="col-lg-4 col-sm-12">
+                        <Form.Item className="m-2" label="Codigo Postal "  onChange={ e => setDatos({ ...datos, cp: e.target.value }) }>
+                            <Form.Item rules={[{ required: true, message: 'Codigo Postal obligatorio' }]}  noStyle name="cp" >
+                                <Input name="cp" placeholder="Codigo Postal"  />
                             </Form.Item>
-                        </Col>
-                    </Row>
+                        </Form.Item>
+                     </div>
+                     <div className="col-lg-4 col-sm-12">
+                        <Form.Item className="m-2" label="Colonia "  onChange={ e => setDatos({ ...datos, colonia: e.target.value }) }>
+                            <Form.Item rules={[{ required: true, message: 'Colonia obligatoria' }]}  noStyle name="colonia" >
+                                <Input name="colonia" placeholder="Colonia"  />
+                            </Form.Item>
+                        </Form.Item>
+                     </div>
+                </div>
 
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item className="m-2" label="Colonia "  onChange={ e => setDatos({ ...datos, colonia: e.target.value }) }>
-                                <Form.Item rules={[{ required: true, message: 'Colonia obligatoria' }]}  noStyle name="colonia" >
-                                    <Input name="colonia" placeholder="Colonia"  />
-                                </Form.Item>
+                <div className="row">
+                    <div className="col-lg-6 col-sm-12">
+                        <Form.Item className="m-2" label="Ciudad"  onChange={ e => setDatos({ ...datos, ciudad: e.target.value }) }>
+                            <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="ciudad" >
+                                <Input name="ciudad" placeholder="Calle y Numero"  />
                             </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item className="m-2" label="Ciudad"  onChange={ e => setDatos({ ...datos, ciudad: e.target.value }) }>
-                                <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="ciudad" >
-                                    <Input name="ciudad" placeholder="Calle y Numero"  />
-                                </Form.Item>
+                        </Form.Item>
+                    </div>
+                    <div className="col-lg-6 col-sm-12">
+                        <Form.Item className="m-2" label="Estado"  onChange={ e => setDatos({ ...datos, estado: e.target.value }) }>
+                            <Form.Item rules={[{ required: true, message: 'Estado obligatorio' }]}  noStyle name="estado" >
+                                <Input name="estado" placeholder="Estado donde vives"  />
                             </Form.Item>
-                        </Col>
-                    </Row>
+                        </Form.Item>
+                    </div>
+                </div>
+                
+                <div className="row d-flex justify-content-center align-items-center">
                     <Divider>Ubicacion</Divider>
-                    <div className="w-100" style={{margin: "auto"}} >
-                        {control === false ? (                 
-                             <Alert
-                                description={<p className="h6 text-center">Estos datos no son obigatorios, pero tu tienda sera encontrada mas facil si incorporas estos datos</p>}
-                                type="info"
-                            />
-                            )
-                        : "" }
-
-                    </div>
-
-                    <Row>
-                        <Col span={12}>
+                    <div className="row">
+                        <div className="col-lg-6 col-sm-12">
                             <Form.Item className="m-2" label="Latitud "  onChange={ e => setDatos({ ...datos, lat: e.target.value }) }>
-                                <Form.Item noStyle name="lat" >
+                                <Form.Item rules={[{ required: true, message: 'Latitud obligatoria' }]} noStyle name="lat" >
                                     <Input name="lat" placeholder="Latitud"  />
                                 </Form.Item>
                             </Form.Item>
-                        </Col>
-                        <Col span={12}>
+                        </div>
+                        <div className="col-lg-6 col-sm-12">
                             <Form.Item className="m-2" label="Longitud"  onChange={ e => setDatos({ ...datos, lng: e.target.value }) }>
-                                <Form.Item noStyle name="lng" >
+                                <Form.Item rules={[{ required: true, message: 'Longitud obligatoria' }]} noStyle name="lng" >
                                     <Input name="lng" placeholder="Latitud"  />
                                 </Form.Item>
                             </Form.Item>
-                        </Col>
-                    </Row>
-                    <Divider>Redes sociales</Divider>
-                    <Row>
-                        <Col span={8}>
-                            <Form.Item className="m-2" label="Facebook "  onChange={ e => setDatos({ ...datos, linkFace: e.target.value }) }>
-                                <Form.Item noStyle name="linkFace" >
-                                    <Input name="linkFace" placeholder="Link de pagina de facebook" />
-                                </Form.Item>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row">
+                <Divider>Redes sociales</Divider>
+                    <div className="col-lg-4 col-sm-12">
+                        <Form.Item className="m-2" label="Facebook "  onChange={ e => setDatos({ ...datos, linkFace: e.target.value }) }>
+                            <Form.Item noStyle name="linkFace" >
+                                <Input name="linkFace" placeholder="Link de pagina de facebook" />
                             </Form.Item>
-                        </Col>
-                        <Col span={8}>
-                            <Form.Item className="m-2" label="Instagram"  onChange={ e => setDatos({ ...datos, linkInsta: e.target.value }) }>
-                                <Form.Item noStyle name="linkInsta" >
-                                    <Input name="linkInsta" placeholder="Link de perfil de Instagram"  />
-                                </Form.Item>
+                        </Form.Item>
+                    </div>
+                    <div className="col-lg-4 col-sm-12">
+                        <Form.Item className="m-2" label="Instagram"  onChange={ e => setDatos({ ...datos, linkInsta: e.target.value }) }>
+                            <Form.Item noStyle name="linkInsta" >
+                                <Input name="linkInsta" placeholder="Link de perfil de Instagram"  />
                             </Form.Item>
-                        </Col>
-                        <Col span={8}>
-                            <Form.Item className="m-2" label="Tweeter"  onChange={ e => setDatos({ ...datos, linkTweeter: e.target.value }) }>
-                                <Form.Item noStyle name="linkTweeter" >
-                                    <Input name="linkTweeter" placeholder="Link de perfil en tweeter" />
-                                </Form.Item>
+                        </Form.Item>
+                    </div>
+                    <div className="col-lg-4 col-sm-12">
+                        <Form.Item className="m-2" label="Tweeter"  onChange={ e => setDatos({ ...datos, linkTweeter: e.target.value }) }>
+                            <Form.Item noStyle name="linkTweeter" >
+                                <Input name="linkTweeter" placeholder="Link de perfil en tweeter" />
                             </Form.Item>
-                        </Col>
-                    </Row>
-                    <Divider>Informacion de Politicas de la empresa</Divider>
-                    <Row>
-                        <Col span={24}>
-                            <Form.Item className="m-2" >
+                        </Form.Item>
+                    </div>
+                </div>
+                
+                <div className="row">
+                <Divider>Informacion de Politicas de la empresa</Divider>
+                    <div className="col-12">
+                        <Form.Item className="m-2" >
                                 <Form.Item rules={[{ required: true, message: 'Politicas de privacidad obligatorias' }]}  noStyle name="politicas" >
                                     <Editor
                                         disabled={false}
@@ -359,13 +371,12 @@ export default function RegistroTienda(props) {
                                     />
                                 </Form.Item>
                             </Form.Item>
-                        </Col>
-                    </Row>
-
-                    <Divider>Imagen corporativa</Divider>
-                    <Row>
-                        <Col span={24}>
-                            <Form.Item className="m-2" >
+                    </div>
+                </div>
+                <div className="row">
+                <Divider>Imagen corporativa</Divider>
+                    <div className="col-12">
+                        <Form.Item className="m-2" >
                                 <Form.Item rules={[{ required: true, message: 'Imagen corporativa es obligatoria' }]}  noStyle name="imagenCorp" >
                                     <Editor
                                         disabled={false}
@@ -386,9 +397,10 @@ export default function RegistroTienda(props) {
                                     />
                                 </Form.Item>
                             </Form.Item>
-                        </Col>
-                    </Row>
+                    </div>
                 </div>
+                
+
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                     <Button className="text-center" size="large" type="primary" htmlType="submit" icon={control === false ? (<PlusCircleOutlined style={{ fontSize: 24 }} />):(<EditOutlined style={{ fontSize: 24 }} />)}>
                         {control === false ? "Registrar" : "Editar"}
