@@ -163,6 +163,7 @@ export default function RegistroTienda(props) {
             }else{
                 setLoading(true)
                 if(files.length !== 0){
+                    console.log(files);
                     formData.append('imagen', files);
                 }
                 await clienteAxios.put(`/tienda/${datosNegocio._id}`, formData, {

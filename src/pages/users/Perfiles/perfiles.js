@@ -9,6 +9,7 @@ export default function Perfiles(props) {
 
     const [datosUser, setDatosUser] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [accion, setAccion] = useState(false)
     
     //Obtener token de localStorage
     const token = localStorage.getItem('token')
@@ -55,7 +56,8 @@ export default function Perfiles(props) {
       useEffect(() => {
         setLoading(true)
         obtenerDatosUser();
-      }, [])
+        setAccion(false);
+      }, [accion])
 
 
 
@@ -64,7 +66,7 @@ export default function Perfiles(props) {
             <div className="container col-lg-6">
                 <h1 className="mt-5 text-center">Bienvenido a tu perfil</h1>
                     <div className="mt-3 px-5 mx-auto" style={{background: "white", left: "50%"}}>
-                        <ActualizarUsuario datosUser={datosUser} decoded={decoded} />
+                        <ActualizarUsuario datosUser={datosUser} decoded={decoded} token={token} setLoading={setLoading} setAccion={setAccion} />
                     </div>
             </div>
         </Spin>
