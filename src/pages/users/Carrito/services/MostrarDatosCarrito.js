@@ -3,8 +3,7 @@ import clienteAxios from '../../../../config/axios';
 import jwt_decode from 'jwt-decode';
 import { Link} from 'react-router-dom';
 import "./carrito.scss";
-
-import { List, InputNumber, notification, Spin } from 'antd';
+import { List, InputNumber,  Spin} from 'antd';
 import {ShoppingCartOutlined, ExportOutlined, DeleteOutlined} from '@ant-design/icons';
 
 
@@ -44,12 +43,11 @@ export default function MostrarDatosProductos () {
       if(decoded._id===null){
         console.log("no hay codigo");
       }
-        
         setContador(res.data.articulos.length);
         setCliente(res.data.cliente);
         setCarrito(res.data);
         setLoading(false);
-        console.log(res.data.cliente.nombre);
+        console.log(res.data);
       })
 
       .catch((err) => {
@@ -58,26 +56,26 @@ export default function MostrarDatosProductos () {
       });
   }
 
+ 
 
-
+  
   useEffect(() => {
     obtenerDatosCarrito();
     setLoading(true);
   }, []);
  
   return(
-    <Spin  size="large" spinning={loading} >
-      <h1 className="principal bg-dark">Bievenido {cliente.nombre}</h1>
-    <div>
-
     
-
+    <Spin  size="large" spinning={loading} >
+      
+      <div>
+      <h1 className="ml-5 principal bg-dark">Bievenido a tu carrito {cliente.nombre}</h1>
       <List className="p-3"
             itemLayout="horizontal"
             size="large"
             dataSource={carrito.articulos}
             renderItem={carrit => 
-              <Productos carrito={carrit} />
+              <Productos carrito={carrit}/> 
             }
       />
 
@@ -124,24 +122,25 @@ export default function MostrarDatosProductos () {
             title={<p className="carritoList__titulo">{carrito.idarticulo.nombre}</p>}
           />
         </div>
+        
 
-        {/* <div className="d-flex mt-3">
-        {carrito.producto.categoria === 'calzado' ? (
+        <div className="d-flex mt-3">
+        {/* {carrito.medida === 'calzado' ? (
             <p>
             
           </p>
-          ): carrito.producto.categoria === 'ropa' ? (
+          ): carrito.medida === 'ropa' ? (
           <p>
           
           </p>
-          ) : '' }
-        </div> */}
+          ) : '' } */}
+        </div>
 
         <div className="mt-3 d-flex">
-          <p><Link to="/">
-            <ShoppingCartOutlined style={styles}/>Comprar ahora </Link> </p>
           <p><Link to="/" className="px-3">
-            <DeleteOutlined style={styles}/>Eliminar producto</Link></p>
+            <ShoppingCartOutlined style={styles}/>Comprar ahora </Link> </p>
+          <p><Link  to="/" className="px-3">
+            <DeleteOutlined style={styles}/>Eliminar producto </Link> </p>
           <p><Link  to="/" className="px-3">
             <ExportOutlined style={styles}/>Apartar</Link></p>
           </div>

@@ -16,8 +16,7 @@ export default function ShoppingCart() {
         <h1 className="text-center">Tu carrito de compras</h1>
 
         <div className="row mx-auto" style={{background: "white"}}>
-
-          <div>
+        <div>
             <MostrarDatosProductos ></MostrarDatosProductos>
           
             <div className="d-flex flex-row-reverse pb-3 mr-5" >
@@ -25,8 +24,7 @@ export default function ShoppingCart() {
                 <ShoppingCartOutlined style={styles}/> Comprar ahora
               </Button>
             </div>
-          </div>
-          
+        </div>
         </div>
       </div>
     )
