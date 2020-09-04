@@ -89,12 +89,13 @@ function Pedidos(props) {
 				}
 			})
 			.then((res) => {
+				console.log(res);
 				setPedidos(res.data.docs);
-				setPedidosPaginacion(res.data);
+				// setPedidosPaginacion(res.data);
 				setLoading(false);
 			})
 			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
+/* 				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
 					notification.error({
 						message: 'Error',
@@ -108,7 +109,7 @@ function Pedidos(props) {
 						description: 'Hubo un error',
 						duration: 2
 					});
-				}
+				} */
 			});
 	};
 
@@ -227,7 +228,7 @@ function Pedidos(props) {
 							)}
 							<div className="my-2">
 								<h6 className="titulos-info-pedidos">Cliente:</h6>
-								<p className="data-info-pedidos">{pedidos.cliente.nombre}</p>
+								<p className="data-info-pedidos">{pedidos.cliente.nombre === null ? "" : pedidos.cliente.nombre}</p>
 							</div>
 							<div className="my-2">
 								<h6 className="titulos-info-pedidos">No. de productos:</h6>
