@@ -6,7 +6,7 @@ import DetallesPedido from './detalles';
 import "./pedidos.scss";
 
 
-import { Card, Col, Row, Spin, Modal,  Tag, Button } from 'antd';
+import { Card, Col, Row, Spin, Modal,  Tag, Button, Divider } from 'antd';
 import { ContainerOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
@@ -78,14 +78,14 @@ export default function PedidosUsuario() {
 
 
     return(
-        <div className= "container-fluid">
+        <div className= "container">
             <h1>Tus pedidos:</h1>
 
 
-            <Col className="mb-3"  span={window.screen.width > 990 ? 8 : 24}>
+        <Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} >
 			<Card
 				actions={[
-					<div className="d-flex justify-content-center align-items-center">
+					<div className="">
 						<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />
 							<p
 							onClick={() => {
@@ -103,34 +103,36 @@ export default function PedidosUsuario() {
                     className="contenedor-card-pedidos"
 					description={
 						<div>
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">ID del pedido: </h6>
-								<p className="data-info-pedidos"> </p>
+							<div className="my-2 ">
+								 <h6 className="titulos-info-pedidos">Cliente:</h6>
+								<p className="data-info-pedidos">Brayan Antonio</p>
 							</div>
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">Creado el:</h6>
-								<p className="data-info-pedidos"></p>
+							<Divider/>
+							<div className="my-2 mt-3">
+								<h6 className="titulos-info-pedidos">ID del pedido: </h6>
+								<p className="data-info-pedidos">ASSSSS5S22</p>
+							</div>
+							<div className="my-2 mt-3">
+								<h6 className="titulos-info-pedidos">Hecho el dia:</h6>
+								<p className="data-info-pedidos">22 / 05 / 2020</p>
 							</div>
 							
-                            <p>Fceha de envio</p>
-                        
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">Cliente:</h6>
-								<p className="data-info-pedidos"></p>
-							</div>
-							<div className="my-2">
+								
+							<div className="my-2 mt-3">
 								<h6 className="titulos-info-pedidos">No. de productos:</h6>
-								<p className="data-info-pedidos"></p>
+								<p className="data-info-pedidos">XXXXX</p>
 							</div>
-							<div className="my-2">
+
+							<div className="my-2 mt-3">
 								<h6 className="titulos-info-pedidos">Estado:</h6>
 								<Tag
 									className="data-info-pedidos"
 								>
-									<p>tags 1</p>
+									<p>Entregado</p>
 								</Tag>
 							</div>
-							<div className="my-2">
+
+							<div className="my-2 mt-3">
 								<h6 className="titulos-info-pedidos">Pagado:</h6>
 								<Tag
 									className="data-info-pedidos"
@@ -138,12 +140,14 @@ export default function PedidosUsuario() {
                                     <p>Pagado</p>
 								</Tag>
 							</div>
-							<div className="my-2">
+
+							<div className="my-2 mt-3">
 								<h6 className="titulos-info-pedidos">Total:</h6>
 								<p className="precio-total-pedidos data-info-pedidos">
-									
+									10202
 								</p>
 							</div>
+
 						</div>
 					}
 				/>
@@ -152,20 +156,21 @@ export default function PedidosUsuario() {
 
 
         <Modal
-				key="detalle"
-				width={600}
-				style={{ top: 0 }}
-				title="Detalles de este pedido"
-				visible={visible}
-				onCancel={handleCancel}
-				footer={[
-					<Button key="detalle" type="primary" onClick={handleCancel}>
-						Cerrar
-					</Button>
-				]}
-			>
-				<DetallesPedido datosDetalle={detallePedido}/>
-			</Modal>
+			key="detalle"
+			width={600}
+			style={{ top: 0 }}
+			title="Detalles de este pedido"
+			visible={visible}
+			onCancel={handleCancel}
+			footer={[
+				<Button key="detalle" type="primary" onClick={handleCancel}>
+					Cerrar
+				</Button>
+			]}
+		>
+		<DetallesPedido datosDetalle={detallePedido}/>
+		</Modal>
+
         </div>
     )
 }
