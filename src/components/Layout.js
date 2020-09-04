@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Layout } from 'antd';
-import Navegacion from '../components/Navegacion';
-import FooterPage from '../components/Footer';
+import Navegacion from '../components/Navegacion/Navegacion';
+import FooterPage from '../components/Footer/Footer';
 
 export default function LayoutBasic(props) {
 	const { routes } = props;
@@ -21,8 +21,8 @@ export default function LayoutBasic(props) {
 					
 				</Layout>
 			</Layout>
-			<Footer>
-				<FooterPage />
+			<Footer style={{margin:0,padding: 0}} >
+				<FooterPage style={{margin:0,padding: 0}} />
 			</Footer>
 		</div>
 	);
