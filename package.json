@@ -22,6 +22,7 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
+    "react-dropzone": "^11.0.3",
     "react-firebaseui": "^4.1.0",
     "react-google-maps": "^9.4.5",
     "react-helmet": "^6.0.0",
@@ -32,6 +33,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-search-field": "^1.0.0",
+    "read-more-react": "^1.0.10",
     "tinymce": "^5.4.1"
   },
   "scripts": {
