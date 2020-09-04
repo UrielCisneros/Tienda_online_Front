@@ -31,9 +31,7 @@ export default function Geolocalizacion({height, width, center, titleLayer, zoom
 
 	return (
 		<div>
-            <div className="bg-dark" style={{height: '5vh'}}>
-                <h3 className="text-white text-center h2 m-3">Encuentra nuestra tienda</h3>
-            </div>
+           
             <div id="map" style={{height, width}} className="d-flex justify-content-center align-items-center">
                 <div className="spinner-border display-3"  style={{width: '10rem',height: '10rem'}} role="status">
                     <span className="sr-only">Loading...</span>
