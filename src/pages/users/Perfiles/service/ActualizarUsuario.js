@@ -2,7 +2,6 @@ import React,{useCallback,useEffect,useState} from 'react'
 import {Form,Input,Divider,Button,Avatar,notification,Upload} from 'antd'
 import {useDropzone} from 'react-dropzone';
 import clienteAxios from '../../../../config/axios';
-import {UploadOutlined } from '@ant-design/icons';
 
 import './ActualizarUsuario.scss';
 
@@ -14,6 +13,8 @@ export default function ActualizarUsuario(props) {
     const [enviarFile, setEnviarFile] = useState([]);
     const [datosFormulario, setdatosFormulario] = useState({});
 
+    const [password, setPassword] = useState({});
+
     const [ form ] = Form.useForm();
 
     const mostrarDatosUser = (e) => {
@@ -23,7 +24,9 @@ export default function ActualizarUsuario(props) {
 
     useEffect(() => {
         if(datosUser !== null){
+            console.log(decoded.imagen);
             if(decoded.imagen){
+                
                 setAvatar({preview:`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${decoded.imagen}`})
             }
         }
@@ -68,22 +71,26 @@ export default function ActualizarUsuario(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [datosUser])
 
-    const propss = {
-		listType: 'picture',
-		beforeUpload: (file) => {
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onload = (e) => {
-				file.thumbUrl = e.target.result;
-                setEnviarFile(file);
-            };
-			return false;
-        }
-    };
-
     async function enviarDatosUser(){
-        setAccion(true);
+        
         const formData = new FormData();
+
+        if(password.contrasenaActual){
+            if(password.contrasena && password.repeatContrasena){
+                if(password.contrasena ===  password.repeatContrasena ){
+                    formData.append('contrasena', password.contrasena);
+                    formData.append('repeatContrasena', password.repeatContrasena);
+                    formData.append('contrasenaActual', password.contrasenaActual);
+                }else{
+                    notification.error({
+                        message: 'Error',
+                        description: 'Las contrasenas no son iguales',
+                        duration: 2
+                    });
+                    return null;
+                }
+            }
+        }
         formData.append('nombre', datosFormulario.nombre);
         formData.append('apellido', datosFormulario.apellido);
         formData.append('email', datosFormulario.email);
@@ -95,12 +102,12 @@ export default function ActualizarUsuario(props) {
         formData.append('ciudad', datosFormulario.ciudad);
         formData.append('estado', datosFormulario.estado);
         formData.append('pais', datosFormulario.pais);
-        formData.append('imagen', enviarFile);
-        if(enviarFile.length !== 0){
-            console.log(enviarFile);
-            
-        }
 
+
+        if(enviarFile.length !== 0){
+            formData.append('imagen', enviarFile);
+        }
+        setAccion(true);
         await clienteAxios.put(`/cliente/${decoded._id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -108,9 +115,11 @@ export default function ActualizarUsuario(props) {
             }
         })
         .then((res) => {
-            // localStorage.removeItem('token');
-            // localStorage.setItem('token', res.data.token);
-            // window.location.reload();
+            setTimeout(() => {
+                localStorage.removeItem('token');
+                localStorage.setItem('token', res.data.token);
+                window.location.reload();
+            },1000)
             setLoading(false)
             console.log(res);
             notification.success({
@@ -121,21 +130,21 @@ export default function ActualizarUsuario(props) {
         })
         .catch((res) => {
             console.log(res.response);
-            if (res.response.status === 404 || res.response.status === 500) {
-                setLoading(false);
+            setLoading(false);
+            if(res.response.status === 404 || res.response.status === 500){
                 notification.error({
                     message: 'Error',
-                    description: res.response.data.message,
+                    description: `${res.response.data.message}`,
                     duration: 2
                 });
-            } else {
-                setLoading(false);
+            }else{
                 notification.error({
                     message: 'Error',
-                    description: 'Hubo un error',
+                    description: 'Error de conexion',
                     duration: 2
                 });
             }
+
         });
     }
 
@@ -148,6 +157,13 @@ export default function ActualizarUsuario(props) {
 			...datosFormulario,
 			[e.target.name]: e.target.value
 		});
+    };
+    
+    const datosPassword = (e) => {
+		setPassword({
+			...password,
+			[e.target.name]: e.target.value
+		});
 	};
 
     return (
@@ -158,13 +174,6 @@ export default function ActualizarUsuario(props) {
                 form={form}
                 onFinish={enviarDatosUser}
             >
-                        <Form.Item label="Logo" >
-                            <Upload {...propss} name="imagen">
-                                <Button >
-                                    <UploadOutlined /> Subir
-                                </Button>
-                            </Upload>
-                        </Form.Item>  
                 {decoded.tipoSesion !== "APIRestAB" ? (
                     <div>
                         <div className="upload-user-perfil">
@@ -177,72 +186,108 @@ export default function ActualizarUsuario(props) {
                     </div>
                 ) : 
                 (
-                   "" // <UploadAvatar avatar={avatar} setAvatar={setAvatar} nombre={decoded.nombre} setEnviarFile={setEnviarFile} />
+                    <UploadAvatar avatar={avatar} setAvatar={setAvatar} nombre={decoded.nombre} setEnviarFile={setEnviarFile} />
                 ) }
                     
 
                     <Divider style={{fontSize: 22}}>Información Personal</Divider>
                     
-                    <h2>Nombre:</h2>
-                    <Form.Item name="nombre" onChange={datosForm} >
-                        <Input name="nombre" a placeholder="Nombre"  />
-                    </Form.Item>
-                    <h2>Apellidos:</h2>
-                    <Form.Item name="apellido" onChange={datosForm} >
-                        <Input name="apellido"  placeholder="Apellidos" />
+                    <h5>Nombre:</h5>
+                    <Form.Item name="nombre" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Nombre obligatorio' }]}  noStyle name="nombre" >
+                            <Input name="nombre" a placeholder="Nombre"  />
+                        </Form.Item>
                     </Form.Item>
 
-                    <h2>Email:</h2>
-                    <Form.Item name="email" onChange={datosForm} >
-                        <Input name="email"  placeholder="usuario@usuario.hotmail.com" />
+                    <h5>Apellidos:</h5>
+                    <Form.Item name="apellido" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Apellidos obligatorios' }]}  noStyle name="apellido" >
+                            <Input name="apellido" a placeholder="Apellidos"  />
+                        </Form.Item>
                     </Form.Item>
 
-                    <h2>Telefono:</h2>
-                    <Form.Item  name="telefono" onChange={datosForm} >
-                        <Input name="telefono"  placeholder="+52 3171234567" />
+
+                    <h5>Email:</h5>
+                    <Form.Item name="email" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Correo electronico obligatorio' }]}  noStyle name="email" >
+                            <Input name="email" a placeholder="Correo electronico"  />
+                        </Form.Item>
                     </Form.Item>
-                    <br/>
+
+
+                    <h5>Telefono:</h5>
+                    <Form.Item name="telefono" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Telefono obligatorio' }]}  noStyle name="telefono" >
+                            <Input name="telefono" a placeholder="+52 3171234567"  />
+                        </Form.Item>
+                    </Form.Item>
+
                     <Divider className="mt-5" style={{fontSize: 22}}>Datos domiciliarios</Divider>
                     
-                    <h2>Direccion:</h2>
-                    <Form.Item name="calle_numero" onChange={datosForm} >
-                        <Input name="calle_numero" placeholder="Calle y numero de calle"  />
+                    <h5>Direccion:</h5>
+                    <Form.Item name="calle_numero" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="calle_numero" >
+                            <Input name="calle_numero" a placeholder="Calle y numero de calle"  />
+                        </Form.Item>
                     </Form.Item>
 
-                    <h2>Referencia:</h2>
-                    <Form.Item name="entre_calles" onChange={datosForm} >
-                        <Input name="entre_calles" placeholder="Calles de referencia"  />
+
+                    <h5>Referencia:</h5>
+                    <Form.Item name="entre_calles" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Referencia obligatoria' }]}  noStyle name="entre_calles" >
+                            <Input name="entre_calles" a placeholder="Calles de referencia"  />
+                        </Form.Item>
                     </Form.Item>
-                    <h2>Codigo postal:</h2>
-                    <Form.Item name="cp" onChange={datosForm} >
-                        <Input name="cp"   placeholder="Codigo Postal" />
+
+                    <h5>Codigo postal:</h5>
+                    <Form.Item name="cp" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Codigo postal obligatorio' }]}  noStyle name="cp" >
+                            <Input name="cp" a placeholder="Codigo Postal"  />
+                        </Form.Item>
                     </Form.Item>
-                    <h2>Colonia:</h2>
-                    <Form.Item name="colonia" onChange={datosForm} >
-                        <Input name="colonia"  placeholder="Colonia" />
+
+                    <h5>Colonia:</h5>
+                    <Form.Item name="colonia" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Colonia obligatoria' }]}  noStyle name="colonia" >
+                            <Input name="colonia" a placeholder="Colonia"  />
+                        </Form.Item>
                     </Form.Item>
-                    <h2>Ciudad: </h2>
-                    <Form.Item name="ciudad" onChange={datosForm} >
-                        <Input name="ciudad"  placeholder="Localidad" />
+
+                    <h5>Ciudad: </h5>
+                    <Form.Item name="ciudad" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Localidad obligatoria' }]}  noStyle name="ciudad" >
+                            <Input name="ciudad" a placeholder="Localidad"  />
+                        </Form.Item>
                     </Form.Item>
-                    <h2>Estado:</h2>
-                    <Form.Item name="estado"  onChange={datosForm} >
-                        <Input name="estado" placeholder="Estado:" />
+
+                    <h5>Estado:</h5>
+                    <Form.Item name="estado" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Estado obligatoria' }]}  noStyle name="estado" >
+                            <Input name="estado" a placeholder="Estado"  />
+                        </Form.Item>
                     </Form.Item>
-                    <h2>País:</h2>
-                    <Form.Item name="pais" onChange={datosForm} >
-                        <Input name="pais" placeholder="País:" />
+
+                    <h5>País:</h5>
+                    <Form.Item name="pais" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'País obligatoria' }]}  noStyle name="pais" >
+                            <Input name="pais" a placeholder="País"  />
+                        </Form.Item>
                     </Form.Item>
 
                     {decoded.tipoSesion === 'FireBase' ? "":(
                         <div>
-                            <h2>Contraseña:</h2>
-                            <Form.Item onChange={datosForm} >
-                                <Input.Password  placeholder="Password" />
+                            <Divider style={{fontSize: 22}}>Contrasena</Divider>
+                            <h5>Contraseña Actual:</h5>
+                            <Form.Item name="contrasenaActual" onChange={datosPassword} >
+                                <Input.Password name="contrasenaActual"  placeholder="Contraseña actual" />
                             </Form.Item>
-                            <h2>Confirmar Contraseña:</h2>
-                            <Form.Item onChange={datosForm} >
-                                <Input.Password placeholder="Password" />
+                            <h5>Contraseña:</h5>
+                            <Form.Item name="contrasena" onChange={datosPassword} >
+                                <Input.Password name="contrasena"  placeholder="Contraseña" />
+                            </Form.Item>
+                            <h5>Confirmar Contraseña:</h5>
+                            <Form.Item name="repeatContrasena" onChange={datosPassword} >
+                                <Input.Password name="repeatContrasena" placeholder="Confirmar contraseña" />
                             </Form.Item>
                         </div>
                     )}

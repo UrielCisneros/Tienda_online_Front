@@ -15,7 +15,6 @@ export default function Perfiles(props) {
     const token = localStorage.getItem('token')
     var decoded = Jwt(token) 
     
-    console.log(decoded);
     //Decodificar el JWT
 	function Jwt(token) {
 		try {
@@ -43,7 +42,6 @@ export default function Perfiles(props) {
                 }
             })
             .then((res) => {
-                console.log(res);
                 setDatosUser(res.data);
             })
             .catch((err) => {
