@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import '../vistas.css';
+import '../vistas.scss';
 import ImageScroller from 'react-image-scroller';
-import { Card, Col } from 'antd';
+import { Card, Col, Spin } from 'antd';
 import { Link } from 'react-router-dom';
+import { formatoMexico } from '../../../../config/reuserFunction'
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 const properties = {
@@ -12,39 +13,29 @@ const properties = {
 	scrollWithArrows: true
 };
 
-function Scroll() {
+function Scroll(props) {
 	const [ productos, setProductos ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
+	const producto = props.productos;
 
 	useEffect(() => {
 		setLoading(true);
 		clienteAxios
-			.get('/productos')
+			.get(`/productos/search?nombre=${producto.nombre}&categoria=${producto.categoria}&subcategoria=${producto.subCategoria}`)
 			.then((res) => {
-				/* console.log(res); */
-				setProductos(res.data.posts.docs);
+				setProductos(res.data.posts);
 				setLoading(false);
 			})
 			.catch((err) => {
-				/* console.log(err); */
+				console.log(err);
 			});
-	}, []);
+	}, [producto]);
 
 	function agregarPorcentaje(precio_descuento, precio_producto) {
 		var porcentaje = Math.round(precio_descuento / precio_producto * 100);
 		var descuento = 100 - porcentaje;
 		return descuento;
 	}
-
-	const formatoMexico = (number) => {
-		if (!number) {
-			return null;
-		} else {
-			const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-			const rep = '$1,';
-			return number.toString().replace(exp, rep);
-		}
-	};
 
 	const render = productos.map((productos) => (
 		<Col span={32} key={productos._id}>
@@ -93,12 +84,14 @@ function Scroll() {
 	));
 
 	return (
-		<div className="mt-5">
-			<p className="titulos-vista-productos">Tambien te pueden interesar:</p>
-			<div>
-				<ImageScroller {...properties}>{render}</ImageScroller>
+		<Spin spinning={loading}>
+			<div className="mt-5">
+				<p className="titulos-vista-productos">Tambien te pueden interesar:</p>
+				<div>
+					<ImageScroller {...properties}>{render}</ImageScroller>
+				</div>
 			</div>
-		</div>
+		</Spin>
 	);
 }
 

@@ -7,15 +7,30 @@
     letter-spacing: 20px;
     font-weight: bold;
 }
-.contenedor-card-body{
+.titulo-elipsis{
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* .contenedor-card-body{
+    width: 100%;
+    max-width: 400px;
+    background-color: #F7F7F7;
+} */
+.ant-col{
     width: 300px;
-    max-height: 400px;
 }
 .contenedor-card-producto-principal{
     cursor: pointer;
 }
+.contenedor-card-producto-principal:hover .titulo-elipsis{
+    height: 100px;
+    transition-duration: .2s;
+    transition-delay: .4s;
+    /* transition: ease-out .2s; */
+}
 .contenedor-imagen-producto-principal{
-    height: 250px;
+    height: 250px; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,5 +38,8 @@
 .imagen-producto-principal{
     max-width: 100%;
     max-height: 100%;
+}
+.rebajado{
+    font-size: 15px;
 }
 

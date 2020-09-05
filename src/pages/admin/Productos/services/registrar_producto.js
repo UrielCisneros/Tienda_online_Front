@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Select, Steps, notification, Upload, Spin } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Button, Input, Select, Steps, notification, Upload, Spin, Divider } from 'antd';
+import { UploadOutlined, PlusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import './registrar_producto.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
-/* import { StepsContext } from '../../contexts/stepsContext'; */
 import RegistrarGaleria from './registrar_galeria';
 import RegistrarTalla from './registrar_talla';
 import RegistrarNumero from './registrar_numero';
@@ -23,14 +22,12 @@ const layout = {
 function RegistrarProducto(props) {
 	const formRef = useRef(null);
 	const [ form ] = Form.useForm();
-	/* const [ disabled, setDisabled ] = useContext(StepsContext); */
 	const [ disabled, setDisabled ] = props.disabledButtons;
 	///Autorizacion a la pagina con Token
 	const token = localStorage.getItem('token');
 	/// Declaracion de variables para los pasos
 	const [ current, setCurrent ] = useState(0);
 
-	////Activar y desactivar los botones Next y Prev
 	const [ editor, setEditor ] = useState();
 	const [ disabledPrev, setDisabledPrev ] = useState(false);
 	const [ disabledform, setDisabledForm ] = useState(true);
@@ -38,6 +35,14 @@ function RegistrarProducto(props) {
 	const [ loading, setLoading ] = useState(false);
 	const reload = props.reloadProductos;
 	const [ upload, setUpload ] = useState(false);
+
+	const [ item, setItem ] = useState();
+	const [ buttonCat, setButtonCat ] = useState(true);
+	const [ categoriasBD, setCategoriasBD ] = useState([]);
+	const [ categoriasDefault, setCategoriasDefault ] = useState([ 'ropa', 'calzado' ]);
+	const [ subcategoriasDefault, setSubcategoriasDefault ] = useState([]);
+	const [ subCategoriasBD, setSubCategoriasBD] = useState([]);
+	const [ subCategoria, setSubCategoria] = useState([]);
 
 	useEffect(
 		() => {
@@ -48,13 +53,17 @@ function RegistrarProducto(props) {
 			}
 			setCurrent(0);
 			setDisabledFormProductos(false);
+			obtenerCategorias();
 		},
 		[ reload, form ]
 	);
 
+	
+
 	const next = () => {
 		setCurrent(current + 1);
 		if (current === 0) {
+			obtenerSubcategorias();
 			setDisabled(true);
 		} else if (current >= 1) {
 			setDisabledPrev(true);
@@ -87,19 +96,26 @@ function RegistrarProducto(props) {
 		}
 	};
 
-	///capturar datos maualmente}
+	///capturar datos}
 	const [ datos, setDatos ] = useState({
 		codigo: '',
+		subCategoria: '',
 		nombre: '',
 		cantidad: '',
 		precio: '',
 		imagen: ''
 	});
-	//// Capturar valores del select
+	//// Capturar valores de categoria
 	const [ select, setSelect ] = useState('');
+	const [ tipoCategoria, setTipoCategoria ] = useState('');
 
 	const onSelect = (value) => {
 		setSelect(value);
+		if (value === 'calzado' || value === 'ropa') {
+			setTipoCategoria(value);
+		} else {
+			setTipoCategoria('otros');
+		}
 		if (value) {
 			setDisabled(false);
 		} else {
@@ -125,6 +141,8 @@ function RegistrarProducto(props) {
 		formData.append('codigo', datos.codigo);
 		formData.append('nombre', datos.nombre);
 		formData.append('categoria', select);
+		formData.append('tipoCategoria', tipoCategoria);
+		formData.append('subCategoria', subCategoria);
 		formData.append('cantidad', datos.cantidad);
 		formData.append('precio', datos.precio);
 		formData.append('descripcion', editor);
@@ -169,6 +187,89 @@ function RegistrarProducto(props) {
 			});
 	}
 
+	async function obtenerCategorias() {
+		setLoading(true);
+		await clienteAxios
+			.get('/productos/categorias', {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setLoading(false);
+				setCategoriasBD(res.data);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	}
+	async function obtenerSubcategorias(){
+		await clienteAxios
+				.get(`/productos/Subcategorias/${select}`, {
+					headers: {
+						Authorization: `bearer ${token}`
+					}
+				})
+				.then((res) => {
+					setSubCategoriasBD(res.data);
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+	}
+
+	const addItemCategoria = () => {
+		setCategoriasDefault([ ...categoriasDefault, item ]);
+	};
+	const addItemSubCategoria = () => {
+		setSubcategoriasDefault([ ...subcategoriasDefault, item ]);
+	};
+	const onSelectSubCategoria = (value) => {
+		setSubCategoria(value)
+	}
+	const onCategoriaChange = (e) => {
+		if (e.target.value.length !== 0) {
+			setItem(e.target.value);
+			setButtonCat(false);
+		} else {
+			setButtonCat(true);
+		}
+	};
+	const onSubCategoriaChange = (e) => {
+		if (e.target.value.length !== 0) {
+			setItem(e.target.value);
+			setButtonCat(false);
+		} else {
+			setButtonCat(true);
+		}
+	};
+
 	////CONTENIDO DE LOS PASOS
 	const steps = [
 		{
@@ -177,10 +278,35 @@ function RegistrarProducto(props) {
 				<div className="d-flex justify-content-center align-items-center mt-4 mb-2">
 					<div className="text-center">
 						<h2 className="mb-5">Selecciona una categoria para continuar</h2>
-						<Select placeholder="Seleciona una categoria" onChange={onSelect} style={{ width: 300 }}>
-							<Option value="ropa">Ropa</Option>
-							<Option value="calzado">Calzado</Option>
-							<Option value="otros">Otros</Option>
+						<Select
+							style={{ width: 300 }}
+							placeholder="Seleciona una categoria"
+							onChange={onSelect}
+							dropdownRender={(menu) => (
+								<div>
+									{menu}
+									<Divider style={{ margin: '4px 0' }} />
+									<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
+										<Input style={{ flex: 'auto' }} onChange={onCategoriaChange} />
+										<Button disabled={buttonCat} onClick={addItemCategoria}>
+											<PlusOutlined style={{ fontSize: 20 }} /> Nueva
+										</Button>
+									</div>
+								</div>
+							)}
+						>
+							{categoriasDefault.map((item) => <Option key={item}>{item}</Option>)}
+							{categoriasBD.length === 0 ? (
+								<Option />
+							) : (
+								categoriasBD.map((item) => {
+									if (item._id === 'ropa' || item._id === 'calzado') {
+										return null;
+									} else {
+										return <Option key={item._id}>{item._id}</Option>;
+									}
+								})
+							)}
 						</Select>
 					</div>
 				</div>
@@ -208,6 +334,40 @@ function RegistrarProducto(props) {
 										placeholder="Campo opcional"
 									/>
 								</Form.Item>
+								<Form.Item label="Subcategoria" onChange={datosForm}>
+									<Form.Item name="subCategoria">
+										<Select
+											style={{ width: 300 }}
+											placeholder="Seleciona una subcategoria"
+											onChange={onSelectSubCategoria}
+											dropdownRender={(menu) => (
+												<div>
+													{menu}
+													<Divider style={{ margin: '4px 0' }} />
+													<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
+														<Input style={{ flex: 'auto' }} onChange={onSubCategoriaChange} />
+														<Button disabled={buttonCat} onClick={addItemSubCategoria}>
+															<PlusOutlined style={{ fontSize: 20 }} /> Nueva
+														</Button>
+													</div>
+												</div>
+											)}
+										>
+											{subcategoriasDefault.map((item) => <Option key={item}>{item}</Option>)}
+											{subCategoriasBD.length === 0 ? (
+												<Option />
+											) : (
+												subCategoriasBD.map((item) => {
+													if (item._id === null) {
+														return null;
+													} else {
+														return <Option key={item._id}>{item._id}</Option>;
+													}
+												})
+											)}
+										</Select>
+									</Form.Item>
+								</Form.Item>
 								<Form.Item label="Nombre del producto" onChange={datosForm}>
 									<Form.Item
 										rules={[ { required: true, message: 'Este campo es requerido' } ]}
@@ -217,7 +377,7 @@ function RegistrarProducto(props) {
 										<Input name="nombre" disabled={disabledformProductos} />
 									</Form.Item>
 								</Form.Item>
-								{select === 'otros' ? (
+								{tipoCategoria === 'otros' ? (
 									<Form.Item label="Cantidad" onChange={datosForm}>
 										<Form.Item
 											rules={[ { required: true, message: 'Este campo es requerido' } ]}
@@ -286,7 +446,7 @@ function RegistrarProducto(props) {
 							{select === 'ropa' ? (
 								<div className="d-flex justify-content-center">
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
-										<RegistrarTalla disabledButtons={setDisabled}/>
+										<RegistrarTalla disabledButtons={setDisabled} />
 									</ProductoContext.Provider>
 								</div>
 							) : (
@@ -295,7 +455,7 @@ function RegistrarProducto(props) {
 							{select === 'calzado' ? (
 								<div>
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
-										<RegistrarNumero disabledButtons={setDisabled}/>
+										<RegistrarNumero disabledButtons={setDisabled} />
 									</ProductoContext.Provider>
 								</div>
 							) : (
