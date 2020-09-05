@@ -60,7 +60,7 @@ function ResultadoBusqueda(props) {
 	}
 
 	const render = productos.map((productos) => (
-		<Col span={6} key={productos._id}>
+		<Col key={productos._id}>
 			<Link to={`/vista_producto/${productos._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card

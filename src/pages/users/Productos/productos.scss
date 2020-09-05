@@ -14,9 +14,12 @@
 }
 /* .contenedor-card-body{
     width: 100%;
-    max-height: 400px;
+    max-width: 400px;
     background-color: #F7F7F7;
 } */
+.ant-col{
+    width: 300px;
+}
 .contenedor-card-producto-principal{
     cursor: pointer;
 }

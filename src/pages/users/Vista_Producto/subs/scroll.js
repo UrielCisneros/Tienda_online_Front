@@ -4,6 +4,7 @@ import '../vistas.scss';
 import ImageScroller from 'react-image-scroller';
 import { Card, Col, Spin } from 'antd';
 import { Link } from 'react-router-dom';
+import { formatoMexico } from '../../../../config/reuserFunction'
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 const properties = {
@@ -35,16 +36,6 @@ function Scroll(props) {
 		var descuento = 100 - porcentaje;
 		return descuento;
 	}
-
-	const formatoMexico = (number) => {
-		if (!number) {
-			return null;
-		} else {
-			const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-			const rep = '$1,';
-			return number.toString().replace(exp, rep);
-		}
-	};
 
 	const render = productos.map((productos) => (
 		<Col span={32} key={productos._id}>

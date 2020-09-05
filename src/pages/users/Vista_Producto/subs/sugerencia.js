@@ -1,25 +1,128 @@
 import React, { useEffect, useState } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { notification, Spin, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { notification, Spin, Button, Select, Card, Form, InputNumber, Modal } from 'antd';
+import { IssuesCloseOutlined } from '@ant-design/icons';
 import { formatoMexico, agregarPorcentaje } from '../../../../config/reuserFunction';
+import { AgregarPedido } from './servicesSugerencia';
+import jwt_decode from 'jwt-decode';
 
-import { Card } from 'antd';
-
+const { Option } = Select;
 const { Meta } = Card;
+const { confirm } = Modal;
 
 const Sugerencia = (props) => {
 	const [ loading, setLoading ] = useState(false);
-	const [ producto, setProducto ] = useState([]);
-	const [ sugerencia, setSugerencia ] = useState([]);
-	const [ productoPromocion, setProductoPromocion ] = useState([]);
-	const [ sugerenciaPromocion, setSugerenciaPromocion ] = useState([]);
 	const [ total, setTotal ] = useState(0);
 	const idproducto = props.producto;
+	const token = localStorage.getItem('token');
+	var decoded = Jwt(token);
+
+	function Jwt(token) {
+		try {
+			return jwt_decode(token);
+		} catch (e) {
+			return null;
+		}
+	}
+
+	///PRODUCTO
+	const [ producto, setProducto ] = useState([]);
+	const [ productoPromocion, setProductoPromocion ] = useState([]);
+	const [ validateStatus, setValidateStatus ] = useState('validating');
+	const [ medida, setMedida ] = useState([]);
+	const [ cantidadFinalProducto, setCantidadFinalProducto ] = useState(1);
+
+	function selectTallaProducto(value) {
+		setMedida(value);
+	}
+	function obtenerCantidadProducto(cantidad) {
+		if (cantidad <= 0 || cantidad > producto.cantidad) {
+			setValidateStatus('error');
+		} else {
+			setValidateStatus('validating');
+			setCantidadFinalProducto(cantidad);
+		}
+	}
+	function obtenerCantidadNumeroProducto(cantidad) {
+		if (cantidad <= 0 || cantidad > medida[1]) {
+			setValidateStatus('error');
+		} else {
+			setValidateStatus('validating');
+			setCantidadFinalProducto(cantidad);
+		}
+	}
+	function obtenerCantidadTallaProducto(cantidad) {
+		if (cantidad <= 0 || cantidad > medida[1]) {
+			setValidateStatus('error');
+		} else {
+			setValidateStatus('validating');
+			setCantidadFinalProducto(cantidad);
+		}
+	}
+
+	///SUGERENCIA
+	const [ sugerencia, setSugerencia ] = useState([]);
+	const [ sugerenciaPromocion, setSugerenciaPromocion ] = useState([]);
+	const [ validateStatusSug, setValidateStatusSug ] = useState('validating');
+	const [ medidaSugerencia, setMedidaSugerencia ] = useState([]);
+	const [ cantidadFinalSugerencia, setCantidadFinalSugerencia ] = useState(1);
+
+	function selectTallaSugerencia(value) {
+		setMedidaSugerencia(value);
+	}
+	function obtenerCantidadSugerencia(cantidad) {
+		if (cantidad <= 0 || cantidad > producto.cantidad) {
+			setValidateStatusSug('error');
+		} else {
+			setValidateStatusSug('validating');
+			setCantidadFinalSugerencia(cantidad);
+		}
+	}
+	function obtenerCantidadNumeroSugerencia(cantidad) {
+		if (cantidad <= 0 || cantidad > medidaSugerencia[1]) {
+			setValidateStatusSug('error');
+		} else {
+			setValidateStatusSug('validating');
+			setCantidadFinalSugerencia(cantidad);
+		}
+	}
+	function obtenerCantidadTallaSugerencia(cantidad) {
+		if (cantidad <= 0 || cantidad > medidaSugerencia[1]) {
+			setValidateStatusSug('error');
+		} else {
+			setValidateStatusSug('validating');
+			setCantidadFinalSugerencia(cantidad);
+		}
+	}
 
 	useEffect(() => {
 		obtenerSugerencia();
 	}, []);
+	useEffect(
+		() => {
+			if (sugerencia.length !== 0) {
+				if (productoPromocion.length !== 0 && sugerenciaPromocion.length !== 0) {
+					setTotal(
+						productoPromocion.precioPromocion * cantidadFinalProducto +
+							sugerenciaPromocion.precioPromocion * cantidadFinalSugerencia
+					);
+				} else if (productoPromocion.length !== 0 && sugerenciaPromocion.length === 0) {
+					setTotal(
+						productoPromocion.precioPromocion * cantidadFinalProducto +
+							sugerencia.precio * cantidadFinalSugerencia
+					);
+				} else if (productoPromocion.length === 0 && sugerenciaPromocion.length !== 0) {
+					setTotal(
+						producto.precio * cantidadFinalProducto +
+							sugerenciaPromocion.precioPromocion * cantidadFinalSugerencia
+					);
+				} else if (productoPromocion.length === 0 && sugerenciaPromocion.length === 0) {
+					setTotal(producto.precio * cantidadFinalProducto + sugerencia.precio * cantidadFinalSugerencia);
+				}
+			}
+		},
+		[ obtenerSugerencia ]
+	);
 
 	async function obtenerSugerencia() {
 		setLoading(true);
@@ -59,22 +162,51 @@ const Sugerencia = (props) => {
 			});
 	}
 
-	useEffect(
-		() => {
-			if(sugerencia.length !== 0){
-				if (productoPromocion.length !== 0 && sugerenciaPromocion.length !== 0) {
-					setTotal(productoPromocion.precioPromocion + sugerenciaPromocion.precioPromocion);
-				} else if (productoPromocion.length !== 0 && sugerenciaPromocion.length === 0) {
-					setTotal(productoPromocion.precioPromocion + sugerencia.precio);
-				} else if (productoPromocion.length === 0 && sugerenciaPromocion.length !== 0) {
-					setTotal(producto.precio + sugerenciaPromocion.precioPromocion);
-				} else if (productoPromocion.length === 0 && sugerenciaPromocion.length === 0) {
-					setTotal(producto.precio + sugerencia.precio);
-				}
-			}
-		},
-		[ obtenerSugerencia ]
-	);
+	async function Pedido() {
+		////AGREGAR PEDIDO
+		AgregarPedido(
+			decoded._id,
+			producto._id,
+			sugerencia._id,
+			producto.tipoCategoria,
+			sugerencia.tipoCategoria,
+			cantidadFinalProducto,
+			cantidadFinalSugerencia,
+			medida[0],
+			medidaSugerencia[0],
+			total,
+			token
+		);
+	}
+
+	function showConfirm() {
+		if (!medida[0] || !medidaSugerencia[0]) {
+			notification.info({
+				message: 'Selecciona una talla',
+				duration: 2
+			});
+		} else {
+			confirm({
+				title: 'Comprar los siguientes articulos:',
+				icon: <IssuesCloseOutlined />,
+				okText: 'Continuar con la compra',
+				content: (
+					<div>
+						  <p>{producto.nombre}</p>
+						  <p>{sugerencia.nombre}</p>
+						<p>Precio total: ${formatoMexico(total.toFixed(2))} + envio</p>
+					</div>
+				  ),
+				  onOk() {
+					  
+					  Pedido();
+				  },
+				  onCancel() {
+					console.log('Cancel');
+				  },
+			});
+		}
+	  }
 
 	return (
 		<Spin spinning={loading}>
@@ -88,9 +220,7 @@ const Sugerencia = (props) => {
 							<div className="d-lg-flex d-sm-block px-5">
 								<div className="d-sm-block">
 									<Card
-										onClick={() => window.location.href = `/vista_producto/${producto._id}`}
 										className="shadow"
-										style={{ width: 250, cursor: 'pointer' }}
 										cover={
 											<div
 												className="d-flex justify-content-center align-items-center"
@@ -103,8 +233,85 @@ const Sugerencia = (props) => {
 												/>
 											</div>
 										}
+										actions={[
+											producto.tipoCategoria !== 'otros' ? (
+												<Select
+													defaultValue="Talla"
+													style={{ width: 120 }}
+													onChange={selectTallaProducto}
+												>
+													{producto.tallas && producto.tallas.length !== 0 ? (
+														producto.tallas.map((res) => (
+															<Option key={res._id} value={[ res.talla, res.cantidad ]}>
+																{res.talla}
+															</Option>
+														))
+													) : producto.numeros && producto.numeros.length !== 0 ? (
+														producto.numeros.map((res) => (
+															<Option key={res._id} value={[ res.numero, res.cantidad ]}>
+																{res.numero}
+															</Option>
+														))
+													) : (
+														<Option />
+													)}
+												</Select>
+											) : (
+												<p>-</p>
+											),
+											<div>
+												<Form initialValues={{ cantidad: 1 }}>
+													{producto.tipoCategoria !== 'otros' ? (
+														<Form.Item
+															name="cantidad"
+															validateStatus={validateStatus}
+															help={
+																producto.tipoCategoria !== 'otros' &&
+																medida.length !== 0 ? (
+																	<p>Solo hay {medida[1]} disponibles</p>
+																) : (
+																	<p>Elige una cantidad</p>
+																)
+															}
+														>
+															<InputNumber
+																placeholder="Cantidad"
+																min={1}
+																max={medida[1]}
+																defaultValue={1}
+																onChange={
+																	producto.tipoCategoria === 'ropa' ? (
+																		obtenerCantidadTallaProducto
+																	) : (
+																		obtenerCantidadNumeroProducto
+																	)
+																}
+																style={{ width: 130 }}
+																disabled={medida.length !== 0 ? false : true}
+															/>
+														</Form.Item>
+													) : (
+														<Form.Item
+															validateStatus={validateStatus}
+															help={<p>Solo hay {producto.cantidad} disponibles</p>}
+														>
+															<InputNumber
+																placeholder="Cantidad"
+																min={1}
+																max={producto.cantidad}
+																defaultValue={1}
+																onChange={obtenerCantidadProducto}
+																style={{ width: 130 }}
+															/>
+														</Form.Item>
+													)}
+												</Form>
+											</div>
+										]}
 									>
 										<Meta
+											onClick={() => (window.location.href = `/vista_producto/${producto._id}`)}
+											style={{ width: 250, cursor: 'pointer' }}
 											title={producto.nombre}
 											description={
 												<div>
@@ -144,9 +351,7 @@ const Sugerencia = (props) => {
 								</div>
 								<div className="d-sm-block">
 									<Card
-										onClick={() => window.location.href = `/vista_producto/${sugerencia._id}`}
 										className="shadow"
-										style={{ width: 250, cursor: 'pointer' }}
 										cover={
 											<div
 												className="d-flex justify-content-center align-items-center"
@@ -159,8 +364,85 @@ const Sugerencia = (props) => {
 												/>
 											</div>
 										}
+										actions={[
+											sugerencia.tipoCategoria !== 'otros' ? (
+												<Select
+													defaultValue="Talla"
+													style={{ width: 120 }}
+													onChange={selectTallaSugerencia}
+												>
+													{sugerencia.tallas && sugerencia.tallas.length !== 0 ? (
+														sugerencia.tallas.map((res) => (
+															<Option key={res._id} value={[ res.talla, res.cantidad ]}>
+																{res.talla}
+															</Option>
+														))
+													) : sugerencia.numero && sugerencia.numeros.length !== 0 ? (
+														sugerencia.numeros.map((res) => (
+															<Option key={res._id} value={[ res.numero, res.cantidad ]}>
+																{res.numero}
+															</Option>
+														))
+													) : (
+														<Option />
+													)}
+												</Select>
+											) : (
+												<p>-</p>
+											),
+											<div>
+												<Form initialValues={{ cantidad: 1 }}>
+													{sugerencia.tipoCategoria !== 'otros' ? (
+														<Form.Item
+															name="cantidad"
+															validateStatus={validateStatusSug}
+															help={
+																sugerencia.tipoCategoria !== 'otros' &&
+																medidaSugerencia.length !== 0 ? (
+																	<p>Solo hay {medidaSugerencia[1]} disponibles</p>
+																) : (
+																	<p>Elige una cantidad</p>
+																)
+															}
+														>
+															<InputNumber
+																placeholder="Cantidad"
+																min={1}
+																max={medidaSugerencia[1]}
+																defaultValue={1}
+																onChange={
+																	sugerencia.tipoCategoria === 'ropa' ? (
+																		obtenerCantidadTallaSugerencia
+																	) : (
+																		obtenerCantidadNumeroSugerencia
+																	)
+																}
+																style={{ width: 130 }}
+																disabled={medidaSugerencia.length !== 0 ? false : true}
+															/>
+														</Form.Item>
+													) : (
+														<Form.Item
+															validateStatus={validateStatus}
+															help={<p>Solo hay {sugerencia.cantidad} disponibles</p>}
+														>
+															<InputNumber
+																placeholder="Cantidad"
+																min={1}
+																max={sugerencia.cantidad}
+																defaultValue={1}
+																onChange={obtenerCantidadSugerencia}
+																style={{ width: 130 }}
+															/>
+														</Form.Item>
+													)}
+												</Form>
+											</div>
+										]}
 									>
 										<Meta
+											onClick={() => (window.location.href = `/vista_producto/${sugerencia._id}`)}
+											style={{ width: 250, cursor: 'pointer' }}
 											title={sugerencia.nombre}
 											description={
 												<div>
@@ -203,21 +485,20 @@ const Sugerencia = (props) => {
 									</p>
 								</div>
 								<div className="d-flex justify-content-center align-items-center mt-4">
-									<Button type="primary" size="large" className="d-block m-1">
+									<Button
+										type="primary"
+										size="large"
+										className="d-block m-1"
+										onClick={() => showConfirm()}
+									>
 										Comprar
-									</Button>
-									<Button size="large" className="d-block m-1">
-										Agregar al carrito
-									</Button>
-									<Button size="large" className="d-block m-1">
-										Apartar
 									</Button>
 								</div>
 							</div>
 						</div>
 					</div>
 				)}
-			</div>
+			</div>			
 		</Spin>
 	);
 };
