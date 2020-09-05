@@ -57,11 +57,23 @@ function Inventario(props) {
 			key: 'codigo',
 			render: (text) => (!text ? <p>-</p> : <p>{text}</p>)
 		},
+		/* {
+			title: 'tipo de Categoria',
+			dataIndex: 'tipoCategoria',
+			key: 'tipoCategoria',
+			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
+		}, */
 		{
 			title: 'Categoria',
 			dataIndex: 'categoria',
 			key: 'categoria',
-			render: (text) => <p>{text.toLowerCase()}</p>
+			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
+		},
+		{
+			title: 'Subcategoria',
+			dataIndex: 'subCategoria',
+			key: 'subCategoria',
+			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
 		},
 		{
 			title: 'Cantidad',
@@ -161,7 +173,7 @@ function Inventario(props) {
 			setVisible('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search/${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}`)
 				.then((res) => {
 					setProductosRender(res.data.posts);
 					setProductos(res.data.posts);

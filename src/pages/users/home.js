@@ -12,15 +12,6 @@ export default function Home(props) {
 		<div>
 			<Ofertas />
 			<ConsultaProductos propiedades={props} />
-            {/* <Geolocalizacion 
-                height="60vh"
-                width="100%"
-                center={[lat, lng]}
-                titleLayer={'map'}
-                zoom={15}
-                apikey = 'I0G4Jr6RUg71dsHIRF0qGzn0l39bAY1V'
-                nombreMarcador = "AB soluciones Empresariales"
-            /> */}
             <Datos_tienda />
 		</div>
 	);

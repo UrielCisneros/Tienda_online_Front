@@ -156,7 +156,7 @@ function RegistrarProductos(props) {
 			setVisibleButton('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search/${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}`)
 				.then((res) => {
 					setProductosRender(res.data.posts);
 					setProductos(res.data.posts);
