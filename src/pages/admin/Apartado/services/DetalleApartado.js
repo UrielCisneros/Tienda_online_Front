@@ -243,20 +243,31 @@ export default function DetalleApartado(props) {
                                 <div className="row">
                                     <div className="col-lg-8">
                                         <h6>Mensaje:</h6>
-                                        <Form.Item  name="mensajeUser">
-                                            <TextArea rows={4} name="mensajeUser" onChange={e => setdatosEnvio({ ...datosEnvio, mensajeUser: e.target.value })} />
+                                        <Form.Item name="mensajeUser" onChange={e => setdatosEnvio({ ...datosEnvio, mensajeUser: e.target.value })} >
+                                            <Form.Item rules={[{ required: true, message: 'Mensaje obligatorio' }]}  noStyle name="mensajeUser">
+                                                <TextArea rows={4} name="mensajeUser" />
+                                            </Form.Item>
                                         </Form.Item>
+
                                         <h6>Paqueteria:</h6>
-                                        <Form.Item  name="paqueteria">
-                                            <Input   name="paqueteria" placeholder="Paqueteria" onChange={e => setdatosEnvio({ ...datosEnvio, paqueteria: e.target.value })}/>
+                                        <Form.Item name="paqueteria" onChange={e => setdatosEnvio({ ...datosEnvio, paqueteria: e.target.value })} >
+                                            <Form.Item rules={[{ required: true, message: 'Paqueteria obligatoria' }]}  noStyle name="paqueteria">
+                                                <Input   name="paqueteria" placeholder="Paqueteria" />
+                                            </Form.Item>
                                         </Form.Item>
+
                                         <h6>Url de vinculacion:</h6>
-                                        <Form.Item  name="url">
-                                            <Input   name="url" placeholder="Url de vinculacion del paquete" onChange={e => setdatosEnvio({ ...datosEnvio, url: e.target.value })}/>
+                                        <Form.Item name="url" onChange={e => setdatosEnvio({ ...datosEnvio, url: e.target.value })} >
+                                            <Form.Item rules={[{ required: true, message: 'Link de vinculacion obligatorio' }]}  noStyle name="url">
+                                                <Input   name="url" placeholder="Link de vinculacion" />
+                                            </Form.Item>
                                         </Form.Item>
+
                                         <h6>Numero de seguimiento:</h6>
-                                        <Form.Item  name="codigo_seguimiento">
-                                            <Input   name="codigo_seguimiento" placeholder="Numero de seguimiento del paquete" onChange={e => setdatosEnvio({ ...datosEnvio, codigo_seguimiento: e.target.value })}/>
+                                        <Form.Item name="codigo_seguimiento" onChange={e => setdatosEnvio({ ...datosEnvio, codigo_seguimiento: e.target.value })} >
+                                            <Form.Item rules={[{ required: true, message: 'Link de vinculacion obligatorio' }]}  noStyle name="codigo_seguimiento">
+                                                <Input   name="codigo_seguimiento" placeholder="Numero de seguimiento del paquete" />
+                                            </Form.Item>
                                         </Form.Item>
                                     </div>
                                 </div>
