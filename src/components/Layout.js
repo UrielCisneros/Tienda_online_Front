@@ -18,12 +18,13 @@ export default function LayoutBasic(props) {
 							<LoadRoutes routes={routes} />
 						</div>
 					</Content>
-					
+					<Footer style={{margin:0,padding: 0}} >
+						<FooterPage style={{margin:0,padding: 0}} />
+					</Footer>
 				</Layout>
+				
 			</Layout>
-			<Footer style={{margin:0,padding: 0}} >
-				<FooterPage style={{margin:0,padding: 0}} />
-			</Footer>
+		
 		</div>
 	);
 }
