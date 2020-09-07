@@ -1,22 +1,57 @@
 import React,{useState,useEffect} from 'react'
-import {Col,Row,Badge,Select,Form, Button,Spin,notification} from 'antd'
+import {Col,Row,Badge,Select,Form, Button,Spin,notification,Typography,Tag,Input} from 'antd'
 import './DetalleApartado.scss';
 import clienteAxios from '../../../../config/axios';
 
+const { TextArea } = Input;
+const { Text } = Typography;
 const { Option } = Select;
 
 export default function DetalleApartado(props) {
 
-    const {detalleApartado,setFilter,setEstado} = props;
+    const {detalleApartado,setEstado} = props;
     
     const [selectEstado, setSelectEstado] = useState('')
+    const [promocion, setpromocion] = useState([])
     const [ loading, setLoading ] = useState(false);
+    const [ datosEnvio, setdatosEnvio ] = useState();
+
+    const [ form ] = Form.useForm();
 
     const token = localStorage.getItem('token')
 
+    function obtenerApartado(){
+        clienteAxios.get(`/apartado/${detalleApartado._id}`,{
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				Authorization: `bearer ${token}`
+			}
+		})
+        .then((res) => {
+			setLoading(false);
+            console.log(res);
+            setpromocion(res.data.promocion)
+        }).catch((err) => {
+			setLoading(false);
+			console.log(err.response);
+            notification.error({
+                message: 'Error del servidor',
+                description:
+                  'Paso algo en el servidor, al parecer la conexion esta fallando.',
+              });
+        })
+    }
+
     useEffect(() => {
+        monstrarInformacionBlog({
+            mensajeUser:detalleApartado.mensajeUser,
+            paqueteria:detalleApartado.paqueteria,
+            url:detalleApartado.url,
+            codigo_seguimiento:detalleApartado.codigo_seguimiento,
+        })
+        obtenerApartado()
         setSelectEstado(detalleApartado.estado)
-        setLoading(false)
+        setLoading(true)
     }, [detalleApartado])
 
 
@@ -24,10 +59,28 @@ export default function DetalleApartado(props) {
         setSelectEstado(e)
     }
 
+    const monstrarInformacionBlog = (e) => {
+        form.setFieldsValue(e);
+     }
+
+
+
     const guardarEstadoApartado = async () => {
-        const data = {
-            estado: selectEstado
+            let data = {};
+        if(selectEstado === "ENVIADO"){
+            data = {
+                estado: selectEstado,
+                codigo_seguimiento: datosEnvio.codigo_seguimiento,
+                mensajeUser: datosEnvio.mensajeUser,
+                paqueteria: datosEnvio.paqueteria,
+                url: datosEnvio.url,
+            }
+        }else{
+            data = {
+                estado: selectEstado,
+            }
         }
+
         setLoading(true)
         await clienteAxios.put(`/apartado/${detalleApartado._id}`,data,{
             headers: {
@@ -74,25 +127,25 @@ export default function DetalleApartado(props) {
                         <p className="h3 text-center">Datos Usuario</p>
                         <div className="col-sm-12 col-lg-6 m-2">
                             <h6 className=" m-2">Nombre: </h6>
-                            <p className=" m-2">{detalleApartado.cliente.nombre}</p>
+                            <p className=" m-2">{detalleApartado.cliente[0].nombre}</p>
                             <h6 className=" m-2">Telefono: </h6>
-                            <p className=" m-2">{detalleApartado.cliente.telefono}</p>
+                            <p className=" m-2">{detalleApartado.cliente[0].telefono}</p>
                             <h6 className=" m-2">Calle: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].calle_numero}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].calle_numero}</p>}
                             <h6 className=" m-2">Calles referentes a las que vive: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].entre_calles}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].entre_calles}</p>}
                             <h6 className=" m-2">Codigo Postal: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].cp}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].cp}</p>}
                         </div>
                         <div className="col-sm-12 col-lg-6 m-2">
                         <h6 className=" m-2">Colonia: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].colonia}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].colonia}</p>}
                             <h6 className=" m-2">Cidudad: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].ciudad}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].ciudad}</p>}
                             <h6 className=" m-2">Estado: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].estado}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].estado}</p>}
                             <h6 className=" m-2">Pais: </h6>
-                            {<p className=" m-2">{detalleApartado.cliente.direccion[0].pais}</p>}
+                            {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].pais}</p>}
                         </div>
                     </Col>
                     <Col span={24} className="detalle-apartado__border d-block m-2">
@@ -103,17 +156,25 @@ export default function DetalleApartado(props) {
                                     className="img-fluid"
                                     width="200"
                                     alt="imagen de base"
-                                    src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${detalleApartado.producto.imagen}`}
+                                    src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${detalleApartado.producto[0].imagen}`}
                                 />
                             </div>
                             <h6 className=" m-2">Nombre: </h6>
-                            <p className=" m-2">{detalleApartado.producto.nombre}</p>
+                            <p className=" m-2">{detalleApartado.producto[0].nombre}</p>
                             <h6 className=" m-2">Codigo de barras: </h6>
-                            {<p className=" m-2">{detalleApartado.producto.codigo}</p>}
+                            {<p className=" m-2">{detalleApartado.producto[0].codigo}</p>}
                             <h6 className=" m-2">Categoria: </h6>
-                            {<p className=" m-2">{detalleApartado.producto.categoria}</p>}
-                            <h6 className=" m-2">Precio: </h6>
-                            <p className=" m-2">$ {detalleApartado.producto.precio}</p>
+                            {<p className=" m-2">{detalleApartado.producto[0].categoria}</p>}
+                            {console.log(promocion.length)}
+                            {promocion.length > 0 ? (
+                                <div className="">
+                                    <h6 className="">Precio:</h6>
+                                    <Text className="h4 color-precio-apartado" delete >$ {detalleApartado.producto[0].precio}</Text> 
+                                    <p className="h4">$ {promocion[0].precioPromocion}</p>
+                                </div>
+                            ):(<p className=" m-2">$ {detalleApartado.producto[0].precio}</p>)}
+
+
 
                         </div>
                     </Col>
@@ -121,8 +182,8 @@ export default function DetalleApartado(props) {
                         <div>
                             <div>
                             <p className="h3 text-center">Informacion a apartar</p>
-                                <h6 className=" m-2">{detalleApartado.producto.categoria === 'calzado' ? 'Numero a apartar:': detalleApartado.producto.categoria === 'ropa' ? 'Talla a apartar' : '' }</h6>
-                                    {detalleApartado.producto.categoria === 'calzado' ? (
+                                <h6 className=" m-2">{detalleApartado.producto[0].categoria === 'calzado' ? 'Numero a apartar:': detalleApartado.producto[0].categoria === 'ropa' ? 'Talla a apartar' : '' }</h6>
+                                    {detalleApartado.producto[0].categoria === 'calzado' ? (
                                         <Badge className="m-2">
                                                 <p 
                                                     className="detalle-contenido-talla m-2"
@@ -131,7 +192,7 @@ export default function DetalleApartado(props) {
                                                     {detalleApartado.medida[0].numero}
                                                 </p>
                                             </Badge>  
-                                    ): detalleApartado.producto.categoria === 'ropa' ? (
+                                    ): detalleApartado.producto[0].categoria === 'ropa' ? (
                                         <Badge className="m-2">
                                             <p 
                                                 className="detalle-contenido-talla m-2"
@@ -144,17 +205,66 @@ export default function DetalleApartado(props) {
                             </div>
                             <h6 className=" m-2">Cantidad de articulos por apartar: </h6>
                             <p className=" m-2">{detalleApartado.cantidad}</p>
+
+                            <h6 className=" m-2">Tipo de entrega:</h6>
+                            <Tag
+                                style={{size:"50px"}}
+                                color={detalleApartado.tipoEntrega === 'Envio' ?  '#5cb85c' : '#0275d8'}
+                            >
+                                {detalleApartado.tipoEntrega === 'Envio' ? 'Envio a domicilio' : 'Pasaran por el'}
+                            </Tag>
+                            <p></p>
+
                             
-                            <Form onFinish={guardarEstadoApartado}>
+                            <Form 
+                                onFinish={guardarEstadoApartado}
+                                form={form}
+                            >
                             <Form.Item>
                                 <Select value={selectEstado} placeholder="Seleciona una categoria" onChange={handleonChange} style={{ width: 300 }}>
                                     <Option value="PROCESANDO">En proceso</Option>
-                                    <Option value="ACEPTADO">Aceptado</Option>
-                                    <Option value="RECHAZADO">Rechazado</Option>
+                                    {detalleApartado.tipoEntrega === 'Envio' ? (
+                                        <>
+                                            <Option value="ENVIADO">Enviado</Option>
+                                            <Option value="CANCELADO">Cancelado</Option>
+                                        </>
+
+                                    ):(
+                                        <>
+                                            <Option value="ACEPTADO">Aceptado</Option>
+                                            <Option value="RECHAZADO">Rechazado</Option>
+                                        </>
+
+                                    )}
+
                                 </Select>
                             </Form.Item>
+                            {selectEstado === 'ENVIADO' ? detalleApartado.tipoEntrega === 'Envio' ? (
+                                <div className="row">
+                                    <div className="col-lg-8">
+                                        <h6>Mensaje:</h6>
+                                        <Form.Item  name="mensajeUser">
+                                            <TextArea rows={4} name="mensajeUser" onChange={e => setdatosEnvio({ ...datosEnvio, mensajeUser: e.target.value })} />
+                                        </Form.Item>
+                                        <h6>Paqueteria:</h6>
+                                        <Form.Item  name="paqueteria">
+                                            <Input   name="paqueteria" placeholder="Paqueteria" onChange={e => setdatosEnvio({ ...datosEnvio, paqueteria: e.target.value })}/>
+                                        </Form.Item>
+                                        <h6>Url de vinculacion:</h6>
+                                        <Form.Item  name="url">
+                                            <Input   name="url" placeholder="Url de vinculacion del paquete" onChange={e => setdatosEnvio({ ...datosEnvio, url: e.target.value })}/>
+                                        </Form.Item>
+                                        <h6>Numero de seguimiento:</h6>
+                                        <Form.Item  name="codigo_seguimiento">
+                                            <Input   name="codigo_seguimiento" placeholder="Numero de seguimiento del paquete" onChange={e => setdatosEnvio({ ...datosEnvio, codigo_seguimiento: e.target.value })}/>
+                                        </Form.Item>
+                                    </div>
+                                </div>
+                            ) : "" : "" }
+
+
                             <Form.Item>
-                                 <Button className="float-right" type="primary" htmlType="submit" >
+                                 <Button className=" d-flex justify-content-center align-items-center" type="primary" htmlType="submit" >
                                     Guardar
                                 </Button>
                             </Form.Item>

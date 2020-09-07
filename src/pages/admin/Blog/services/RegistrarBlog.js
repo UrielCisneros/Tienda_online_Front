@@ -25,7 +25,6 @@ export default function RegistrarBlog(props) {
     };
 
     const processPost = async e => {
-            console.log("Creando Blog")
             if(blogData.descripcion === undefined){
                 notification.info({
                     message: 'Ups, algo salio mal',
@@ -82,7 +81,8 @@ export default function RegistrarBlog(props) {
     }
     //Funcion que quita los espacios y los remplasa por guiones
     function obtenerUrl(text){
-        const datos = text.split(" ");
+        const trim = text.trim();
+        const datos = trim.split(" ");
         console.log(datos.length);
         for(var i = 0; i < datos.length; i++ ){
             if(datos.length - 1 === i){
