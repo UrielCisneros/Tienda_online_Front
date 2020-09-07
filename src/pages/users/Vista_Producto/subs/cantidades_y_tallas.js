@@ -32,6 +32,7 @@ function TallasCantidades(props) {
 	const [ tipoEnvio, setTipoEnvio ] = useState('');
 	const [ loading, setLoading ] = useState(false);
 	const [ visible, setVisible ] = useState(false);
+	const [ disponibilidad, setDisponibilidad ] = useState('');
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
 
@@ -49,6 +50,11 @@ function TallasCantidades(props) {
 				productos.promocion.forEach((res) => setPromocion(res.precioPromocion));
 			}
 			if (productos.tipoCategoria === 'calzado') {
+				productos.numeros.forEach((numeros, index) => {
+					if(numeros.cantidad === 0 && numeros.cantidad === index ){
+						setDisponibilidad('Producto no disponible');
+					}
+				})
 				setCategoria('calzado');
 				setRender(
 					productos.numeros.map((numeros) => {
@@ -77,6 +83,11 @@ function TallasCantidades(props) {
 					})
 				);
 			} else if (productos.tipoCategoria === 'ropa') {
+				productos.tallas.forEach((tallas, index) => {
+					if(tallas.cantidad === 0 && tallas.cantidad === index ){
+						setDisponibilidad('Producto no disponible');
+					}
+				})
 				setCategoria('ropa');
 				setRender(
 					productos.tallas.map((tallas) => {
@@ -106,7 +117,9 @@ function TallasCantidades(props) {
 				);
 			} else if (productos.tipoCategoria === 'otros') {
 				setCategoria('otros');
-				/* setCantidad(productos.cantidad); */
+				if(productos.cantidad === 0 ){
+					setDisponibilidad('Producto no disponible');
+				}
 			}
 		},
 		[ productos ]
@@ -157,8 +170,15 @@ function TallasCantidades(props) {
 		}
 	};
 	const handleOk = (e) => {
-		setVisible(false);
-		Apartado();
+		if(!tipoEnvio){
+			notification.info({
+				message: 'Selecciona un tipo de envio',
+				duration: 2
+			});
+		}else{
+			setVisible(false);
+			Apartado();
+		}
 	};
 
 	const handleCancel = (e) => {
@@ -321,16 +341,10 @@ function TallasCantidades(props) {
 		<Spin spinning={loading}>
 			<div className="contenedor-p-seleccion-compra">
 				<div className="contenedor-p-seleccion-compra mb-4">
+					<h3 className="disponibilidad">{disponibilidad}</h3>
 					{categoria !== 'otros' ? <p className="mb-3">Tallas:</p> : <p />}
 					<div>{render}</div>
 				</div>
-				{categoria === 'otros' && productos.cantidad > 0 ? (
-					<p className="disponibilidad-p mb-3">{productos.cantidad} articulos disponibles!</p>
-				) : categoria === 'otros' && productos.cantidad <= 0 ? (
-					<p className="disponibilidad-p mb-3">En este momento no hay articulos disponibles</p>
-				) : (
-					<p />
-				)}
 
 				<Form initialValues={{ cantidad: 1 }} {...formItemLayout}>
 					{categoria !== 'otros' ? (

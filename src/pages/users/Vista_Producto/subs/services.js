@@ -42,7 +42,8 @@ export async function AgregarCarrito(idcliente, idproducto, cantidad, talla, num
 }
 
 export async function AgregarApartado(idcliente, idproducto, cantidad, talla, numero, tipoEntrega, token) {
-	if (!numero) {
+	console.log(idcliente, idproducto, cantidad, talla, numero, tipoEntrega, token)
+	if (talla) {
 		await clienteAxios
 			.post(
 				`/apartado/nuevo/${idcliente}`,
@@ -67,6 +68,7 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 				});
 			})
 			.catch((res) => {
+				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					return notification.error({
 						message: 'Error',
@@ -81,10 +83,10 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 					});
 				}
 			});
-	} else if (!talla) {
+	} else if (numero) {
 		await clienteAxios
 			.post(
-				`/carrito/nuevo/${idcliente}`,
+				`/apartado/nuevo/${idcliente}`,
 				{
 					producto: idproducto,
 					cliente: idcliente,
@@ -106,6 +108,7 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 				});
 			})
 			.catch((res) => {
+				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					return notification.error({
 						message: 'Error',
@@ -123,7 +126,7 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 	} else if (!talla && !numero) {
 		await clienteAxios
 			.post(
-				`/carrito/nuevo/${idcliente}`,
+				`/apartado/nuevo/${idcliente}`,
 				{
 					producto: idproducto,
 					cliente: idcliente,
@@ -144,6 +147,7 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 				});
 			})
 			.catch((res) => {
+				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					return notification.error({
 						message: 'Error',
