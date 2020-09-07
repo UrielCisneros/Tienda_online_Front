@@ -24,6 +24,9 @@ import PedidosUsuario from '../pages/users/Pedidos/pedidos'
 import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
 import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
+import Perfiles from '../pages/users/Perfiles/perfiles'
+
+
 
 import Politicas from '../pages/users/Politicas/politicas'
 //Secondary Component
@@ -167,6 +170,11 @@ const routes = [
 			{
 				path: '/searching/',
 				component: Search404,
+				exact: true
+			},
+			{
+				path: '/perfiles/',
+				component: Perfiles,
 				exact: true
 			},
 			{
