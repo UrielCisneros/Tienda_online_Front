@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import clienteAxios from '../../../config/axios';
 import Geolocalizacion from '../geolocalizacion'
+import './informacion.scss'
+
 import {Divider} from 'antd'
 import {FacebookFilled, InstagramFilled, TwitterCircleFilled } from '@ant-design/icons';
 
@@ -47,20 +49,19 @@ export default function Datos_tienda() {
     }, []);
 
 
-    const styles = {fontSize: 25};
 
     return (
         <div>
             <div className="container-fluid">
 
-            <div className="bg-dark" style={{height: '8vh'}}>
+            <div className="bg-dark" style={{height: '6 vh'}}>
                 <h1 className="text-white text-center h2 m-3">Localiza nuestra tienda</h1>
             </div>
 
                 <div className="row">
-                    <div className="col-lg-6">
+                    <div className="col-lg-8">
                     <Geolocalizacion 
-                        height="60vh"
+                        height="40vh"
                         width="100%"
                         center={[lat, lng]}
                         titleLayer={'map'}
@@ -70,13 +71,18 @@ export default function Datos_tienda() {
                     />
                     </div>
 
-                    <div className="col-lg-5 mt-5 text-center"X >
-                      
-                        <p style={styles} className="font-weight-bold mt-5">{tienda.nombre}</p>
-                        <p style={styles} className="mt-3">Tel: <spam>{tienda.telefono}</spam></p>
-                        <p style={styles}>Direccion: <spam>{direccion.calle_numero}</spam></p>
-                        <p style={styles}><spam>Col. {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
-                        <p style={styles}>CP: <spam>{direccion.cp}</spam></p>
+                    <div className="col-lg-4 text-center caligra" >
+                        <img
+                        className="logotipo"
+                        
+                        alt="imagen de base"
+                        src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
+                        />
+                        <p className="fonts">{tienda.nombre}</p>
+                        <p className="fonts mt-2">Tel: <spam className="subs" > {tienda.telefono}</spam></p>
+                        <p className="fonts" >Direccion: <spam className="subs">{direccion.calle_numero}</spam></p>
+                        <p><spam>Col. {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
+                        <p>CP: <spam>{direccion.cp}</spam></p>
                         
                     </div>
                 </div>
