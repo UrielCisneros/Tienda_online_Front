@@ -165,6 +165,11 @@ function TallasCantidades(props) {
 				message: 'Selecciona una talla',
 				duration: 2
 			});
+		} else if (disponibilidad.length){
+			notification.info({
+				message: 'No hay productos disponibles',
+				duration: 2
+			});
 		} else {
 			setVisible(true);
 		}
