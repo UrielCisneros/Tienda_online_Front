@@ -111,6 +111,7 @@ function RegistrarProducto(props) {
 
 	const onSelect = (value) => {
 		setSelect(value);
+		setValueSelect(value);
 		if (value === 'calzado' || value === 'ropa') {
 			setTipoCategoria(value);
 		} else {
@@ -244,8 +245,14 @@ function RegistrarProducto(props) {
 				});
 	}
 
+	const [ valueSelect, setValueSelect ] = useState();
+	
 	const addItemCategoria = () => {
 		setCategoriasDefault([ ...categoriasDefault, item ]);
+		setSelect(item);
+		setTipoCategoria('otros');
+		setDisabled(false);
+		setValueSelect(item);
 	};
 	const addItemSubCategoria = () => {
 		setSubcategoriasDefault([ ...subcategoriasDefault, item ]);
@@ -279,6 +286,7 @@ function RegistrarProducto(props) {
 					<div className="text-center">
 						<h2 className="mb-5">Selecciona una categoria para continuar</h2>
 						<Select
+							value={valueSelect}
 							style={{ width: 300 }}
 							placeholder="Seleciona una categoria"
 							onChange={onSelect}
