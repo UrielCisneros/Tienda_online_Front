@@ -15,9 +15,8 @@ export default function Datos_tienda() {
     const [tienda, setTienda] = useState({})
     const [direccion, setDireccion] = useState({})
 
-    const [face, setFace] = useState('')
-    const [insta, setInsta] = useState('')
-    const [twitter, setTwitter] = useState('')
+    const [infor, setInfo] = useState('')
+    
 
     function peticionDireccion(){
         clienteAxios.get('/tienda/')
@@ -33,9 +32,11 @@ export default function Datos_tienda() {
 		clienteAxios.get('/tienda/')
 			.then((res) => {
                 setTienda(res.data[0]);
-                if(res.data[0].linkFace !== 'undefined' && res.data[0].linkFace !== ''){
-                    setFace(res.data[0].linkFace);
-                }
+                setInfo(res.data[0].nombre)
+
+                // if(res.data[0].nombre !== 'undefined' && res.data[0].nombre !== ''){
+                //    setInfo(res.data[0].nombre);
+                // }
                
 			})
 			.catch((err) => {
@@ -61,7 +62,7 @@ export default function Datos_tienda() {
                 <div className="row">
                     <div className="col-lg-8">
                     <Geolocalizacion 
-                        height="40vh"
+                        height="48vh"
                         width="100%"
                         center={[lat, lng]}
                         titleLayer={'map'}
@@ -72,18 +73,25 @@ export default function Datos_tienda() {
                     </div>
 
                     <div className="col-lg-4 text-center caligra" >
-                        <img
-                        className="logotipo"
-                        
-                        alt="imagen de base"
-                        src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
-                        />
-                        <p className="fonts">{tienda.nombre}</p>
-                        <p className="fonts mt-2">Tel: <spam className="subs" > {tienda.telefono}</spam></p>
-                        <p className="fonts" >Direccion: <spam className="subs">{direccion.calle_numero}</spam></p>
-                        <p><spam>Col. {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
-                        <p>CP: <spam>{direccion.cp}</spam></p>
-                        
+                    {infor !== '' ? 
+                    (
+                        <div> 
+                            <img
+                            className="logotipo"
+                            alt="imagen de base"
+                            src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
+                            />
+                               
+                            <p className="fonts font-weight-bold"> {tienda.nombre} </p>
+                            <p className="fonts">Tel: <spam className="subs">{tienda.telefono}</spam></p>
+                            <p className="fonts">Direccion: <spam className="fonts">{direccion.calle_numero}</spam></p>
+                            <p className="fonts">Col. <spam className="fonts"> {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
+                            <p className="fonts">CP: <spam>{direccion.cp}</spam></p> 
+                        </div>
+                    ):('')
+                    }
+                       
+                      
                     </div>
                 </div>
             </div>           
