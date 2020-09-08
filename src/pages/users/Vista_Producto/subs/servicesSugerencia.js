@@ -153,10 +153,11 @@ export async function AgregarPedido(
 			}
 		)
 		.then((res) => {
-			return notification.success({
+			window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
+			return (notification.success({
 				message: res.data.message,
 				duration: 2
-			});
+			}))
 		})
 		.catch((res) => {
 			if (res.response.status === 404 || res.response.status === 500) {
