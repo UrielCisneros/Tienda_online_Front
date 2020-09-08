@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { notification, Spin, Avatar, Row } from 'antd';
+import { notification, Spin, Avatar } from 'antd';
 import './info-tienda.scss';
 import Geolocalizacion from '../../../../pages/users/geolocalizacion';
 
@@ -45,7 +45,14 @@ const InfoTienda = () => {
 
 	return (
 		<Spin spinning={loading}>
+			<div className="contenedor-info-tienda">
 			<p className="titulos-vista-productos text-center">Ubicación</p>
+			<div className="row">
+				<Avatar size={64} src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`} />
+				<div className="d-flex align-items-center ml-2">
+					<p style={{fontSize: 20}}>{tienda.nombre}</p>
+				</div>
+			</div>
 			{tienda.length !== 0 ? (
 				tienda.direccion.map((direccion) => {
 					return (
@@ -81,6 +88,7 @@ const InfoTienda = () => {
 			) : (
 				<p />
 			)}
+			</div>
 		</Spin>
 	);
 };

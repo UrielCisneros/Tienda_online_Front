@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
 import { Divider, Row, Col, notification, Spin } from 'antd';
-import { CreditCardOutlined, ShoppingCartOutlined, TagsOutlined, BellOutlined } from '@ant-design/icons';
+import { CreditCardOutlined } from '@ant-design/icons';
 import Scroll from './subs/scroll';
 import Sugerencia from './subs/sugerencia';
 import Galeria from './Galeria_tienda/galeria';
@@ -21,6 +21,7 @@ function VistaProductos(props) {
 
 	useEffect(() => {
 		obtenerProducto();
+		window.scrollTo(0, 0)
 	}, []);
 
 	function obtenerProducto() {

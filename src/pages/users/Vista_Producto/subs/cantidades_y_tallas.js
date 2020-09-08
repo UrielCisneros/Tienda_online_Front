@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { InputNumber, Button, Form, Badge, Divider, notification, Modal, Select, Spin } from 'antd';
 import { ShoppingCartOutlined, TagsOutlined, BellOutlined, IssuesCloseOutlined } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
-import clienteAxios from '../../../../config/axios';
 import { AgregarCarrito, AgregarApartado, AgregarPedido } from './services';
 import { formatoMexico } from '../../../../config/reuserFunction';
+import { withRouter } from 'react-router-dom';
+import { MenuContext } from '../../../../context/carritoContext';
 
 const formItemLayout = {
 	labelCol: {
@@ -20,6 +21,7 @@ const { Option } = Select;
 const { confirm } = Modal;
 
 function TallasCantidades(props) {
+	const {active, setActive} = useContext(MenuContext)
 	const productos = props.producto;
 	const [ categoria, setCategoria ] = useState();
 	/* 	const [ cantidad, setCantidad ] = useState(); */
@@ -35,6 +37,7 @@ function TallasCantidades(props) {
 	const [ disponibilidad, setDisponibilidad ] = useState('');
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
+	var total = 0;
 
 	function Jwt(token) {
 		try {
@@ -51,10 +54,10 @@ function TallasCantidades(props) {
 			}
 			if (productos.tipoCategoria === 'calzado') {
 				productos.numeros.forEach((numeros, index) => {
-					if(numeros.cantidad === 0 && numeros.cantidad === index ){
+					if (numeros.cantidad === 0 && numeros.cantidad === index) {
 						setDisponibilidad('Producto no disponible');
 					}
-				})
+				});
 				setCategoria('calzado');
 				setRender(
 					productos.numeros.map((numeros) => {
@@ -84,10 +87,10 @@ function TallasCantidades(props) {
 				);
 			} else if (productos.tipoCategoria === 'ropa') {
 				productos.tallas.forEach((tallas, index) => {
-					if(tallas.cantidad === 0 && tallas.cantidad === index ){
+					if (tallas.cantidad === 0 && tallas.cantidad === index) {
 						setDisponibilidad('Producto no disponible');
 					}
-				})
+				});
 				setCategoria('ropa');
 				setRender(
 					productos.tallas.map((tallas) => {
@@ -117,7 +120,7 @@ function TallasCantidades(props) {
 				);
 			} else if (productos.tipoCategoria === 'otros') {
 				setCategoria('otros');
-				if(productos.cantidad === 0 ){
+				if (productos.cantidad === 0) {
 					setDisponibilidad('Producto no disponible');
 				}
 			}
@@ -155,32 +158,40 @@ function TallasCantidades(props) {
 	}
 
 	const showModal = () => {
-		if (categoria === 'ropa' && !tallas.talla) {
+		if(!token){
+			props.history.push('/entrar');
 			notification.info({
-				message: 'Selecciona una talla',
+				message: 'inicia sesión para poder realizar tus compras',
 				duration: 2
 			});
-		} else if (categoria === 'calzado' && !numeros.numero) {
-			notification.info({
-				message: 'Selecciona una talla',
-				duration: 2
-			});
-		} else if (disponibilidad.length){
-			notification.info({
-				message: 'No hay productos disponibles',
-				duration: 2
-			});
-		} else {
-			setVisible(true);
+		}else{
+			if (disponibilidad.length) {
+				notification.info({
+					message: 'No hay productos disponibles',
+					duration: 2
+				});
+			} else if (categoria === 'ropa' && !tallas.talla) {
+				notification.info({
+					message: 'Selecciona una talla',
+					duration: 2
+				});
+			} else if (categoria === 'calzado' && !numeros.numero) {
+				notification.info({
+					message: 'Selecciona una talla',
+					duration: 2
+				});
+			} else {
+				setVisible(true);
+			}
 		}
 	};
 	const handleOk = (e) => {
-		if(!tipoEnvio){
+		if (!tipoEnvio) {
 			notification.info({
 				message: 'Selecciona un tipo de envio',
 				duration: 2
 			});
-		}else{
+		} else {
 			setVisible(false);
 			Apartado();
 		}
@@ -191,85 +202,117 @@ function TallasCantidades(props) {
 	};
 
 	function showConfirm() {
-		if (categoria === 'calzado' && !numeros.numero) {
+		if (disponibilidad.length) {
+			setLoading(false);
 			notification.info({
-				message: 'Selecciona una talla',
+				message: 'No hay productos disponibles',
 				duration: 2
 			});
-		}else if(categoria === 'ropa' && !tallas.talla){
+		}else if(!token){
+			props.history.push('/entrar');
 			notification.info({
-				message: 'Selecciona una talla',
+				message: 'inicia sesión para poder realizar tus compras',
 				duration: 2
 			});
-		} else {
-			confirm({
-				title: 'Comprar los siguientes articulos:',
-				icon: <IssuesCloseOutlined />,
-				okText: 'Continuar con la compra',
-				content: (
-					<div>
-						<p>{productos.nombre}</p>
-						<p>Cantiad: {cantidadFinal}</p>
-						{categoria !== 'otros' && !tallas.talla ? 
-						<p>Talla: {numeros.numero}</p> :
-						<p>Talla: {tallas.talla}</p>
-						}
-						{!productos.promocion ? (
-							<p>Precio total: ${formatoMexico(productos.precio)} + envio</p>
-						) : (
-							productos.promocion.map((res) => {
-								return (
-									<div key={res._id} className="mb-3">
-										<h6 className="d-inline">Precio: </h6>
-										<p>Precio total: ${formatoMexico(res.precioPromocion)} + envio</p>
-									</div>
-								);
-							})
-						)}
-					</div>
-				),
-				onOk() {
-					Pedido();
-				},
-				onCancel() {
-					console.log('Cancel');
-				}
-			});
+		}else{
+			if (categoria === 'calzado' && !numeros.numero) {
+				notification.info({
+					message: 'Selecciona una talla',
+					duration: 2
+				});
+			} else if (categoria === 'ropa' && !tallas.talla) {
+				notification.info({
+					message: 'Selecciona una talla',
+					duration: 2
+				});
+			} else {
+				confirm({
+					title: 'Comprar los siguientes articulos:',
+					icon: <IssuesCloseOutlined />,
+					okText: 'Continuar con la compra',
+					content: (
+						<div>
+							<p>{productos.nombre}</p>
+							<p>Cantiad: {cantidadFinal}</p>
+							{categoria !== 'otros' && !tallas.talla ? (
+								<p>Talla: {numeros.numero}</p>
+							) : (
+								<p>Talla: {tallas.talla}</p>
+							)}
+							{!productos.promocion ? (
+								<p>Precio total: ${formatoMexico(productos.precio)} + envio</p>
+							) : (
+								productos.promocion.map((res) => {
+									return (
+										<div key={res._id} className="mb-3">
+											<h6 className="d-inline">Precio: </h6>
+											<p>Precio total: ${formatoMexico(res.precioPromocion)} + envio</p>
+										</div>
+									);
+								})
+							)}
+						</div>
+					),
+					onOk() {
+						Pedido();
+					},
+					onCancel() {
+						console.log('Cancel');
+					}
+				});
+			}
 		}
+		
 	}
 
 	async function Carrito() {
 		////AGREGAR CARRITO
-		setLoading(true);
-		if (categoria === 'calzado') {
-			if (!numeros.numero) {
-				setLoading(false);
-				notification.info({
-					message: 'Selecciona una talla',
-					duration: 2
-				});
-			} else {
-				const talla = '';
-				AgregarCarrito(decoded._id, productos._id, cantidadFinal, talla, numeros.numero, token);
-				setLoading(false);
-			}
-		} else if (categoria === 'ropa') {
-			if (!tallas.talla) {
-				setLoading(false);
-				notification.info({
-					message: 'Selecciona una talla',
-					duration: 2
-				});
-			} else {
-				const numero = '';
-				setLoading(false);
-				AgregarCarrito(decoded._id, productos._id, cantidadFinal, tallas.talla, numero, token);
-			}
-		} else if (categoria === 'otros') {
-			const talla = '';
-			const numero = '';
-			AgregarCarrito(decoded._id, productos._id, cantidadFinal, talla, numero, token);
+		if (disponibilidad.length) {
 			setLoading(false);
+			notification.info({
+				message: 'No hay productos disponibles',
+				duration: 2
+			});
+		}else if(!token){
+			props.history.push('/entrar');
+			notification.info({
+				message: 'inicia sesión para poder realizar tus compras',
+				duration: 2
+			});
+		} else {
+			setLoading(true);
+			if (categoria === 'calzado') {
+				if (!numeros.numero) {
+					setLoading(false);
+					notification.info({
+						message: 'Selecciona una talla',
+						duration: 2
+					});
+				} else {
+					const talla = '';
+					if (AgregarCarrito(decoded._id, productos._id, cantidadFinal, talla, numeros.numero, token)){
+						setActive(!active);
+					}
+					setLoading(false);
+				}
+			} else if (categoria === 'ropa') {
+				if (!tallas.talla) {
+					setLoading(false);
+					notification.info({
+						message: 'Selecciona una talla',
+						duration: 2
+					});
+				} else {
+					const numero = '';
+					setLoading(false);
+					AgregarCarrito(decoded._id, productos._id, cantidadFinal, tallas.talla, numero, token);
+				}
+			} else if (categoria === 'otros') {
+				const talla = '';
+				const numero = '';
+				AgregarCarrito(decoded._id, productos._id, cantidadFinal, talla, numero, token);
+				setLoading(false);
+			}
 		}
 	}
 
@@ -305,9 +348,9 @@ function TallasCantidades(props) {
 			} else {
 				const talla = '';
 				if (promocion.length !== 0) {
-					var total = cantidadFinal * promocion;
+					total = cantidadFinal * promocion;
 				} else {
-					var total = cantidadFinal * productos.precio;
+					total = cantidadFinal * productos.precio;
 				}
 				AgregarPedido(decoded._id, productos._id, cantidadFinal, talla, numeros.numero, total, token);
 				setLoading(false);
@@ -322,9 +365,9 @@ function TallasCantidades(props) {
 			} else {
 				const numero = '';
 				if (promocion.length !== 0) {
-					var total = cantidadFinal * promocion;
+					total = cantidadFinal * promocion;
 				} else {
-					var total = cantidadFinal * productos.precio;
+					total = cantidadFinal * productos.precio;
 				}
 				setLoading(false);
 				AgregarPedido(decoded._id, productos._id, cantidadFinal, tallas.talla, numero, total, token);
@@ -333,9 +376,9 @@ function TallasCantidades(props) {
 			const talla = '';
 			const numero = '';
 			if (promocion.length !== 0) {
-				var total = cantidadFinal * promocion;
+				total = cantidadFinal * promocion;
 			} else {
-				var total = cantidadFinal * productos.precio;
+				total = cantidadFinal * productos.precio;
 			}
 			AgregarPedido(decoded._id, productos._id, cantidadFinal, talla, numero, total, token);
 			setLoading(false);
@@ -493,4 +536,4 @@ function TallasCantidades(props) {
 		</Spin>
 	);
 }
-export default TallasCantidades;
+export default withRouter(TallasCantidades);

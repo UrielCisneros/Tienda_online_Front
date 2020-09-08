@@ -3,8 +3,7 @@ import clienteAxios from '../../../../config/axios';
 import '../vistas.scss';
 import ImageScroller from 'react-image-scroller';
 import { Card, Col, Spin } from 'antd';
-import { Link } from 'react-router-dom';
-import { formatoMexico } from '../../../../config/reuserFunction'
+import { formatoMexico, agregarPorcentaje } from '../../../../config/reuserFunction'
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 const properties = {
@@ -31,19 +30,13 @@ function Scroll(props) {
 			});
 	}, [producto]);
 
-	function agregarPorcentaje(precio_descuento, precio_producto) {
-		var porcentaje = Math.round(precio_descuento / precio_producto * 100);
-		var descuento = 100 - porcentaje;
-		return descuento;
-	}
-
 	const render = productos.map((productos) => (
 		<Col span={32} key={productos._id}>
-			<Link to={`/vista_producto/${productos._id}`}>
 				<Card.Grid hoverable style={gridStyle}>
 					<Card
+						onClick={() => (window.location.href = `/vista_producto/${productos._id}`)}
 						bodyStyle={{ padding: 22, backgroundColor: '#F7F7F7' }}
-						style={{ maxHeight: 300, width: 300 }}
+						style={{ maxHeight: 300, width: 300, cursor: 'pointer' }}
 						cover={
 							<div className="d-flex justify-content-center align-items-center" style={{ height: 220 }}>
 								<img
@@ -79,7 +72,6 @@ function Scroll(props) {
 						)}
 					</Card>
 				</Card.Grid>
-			</Link>
 		</Col>
 	));
 

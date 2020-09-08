@@ -24,7 +24,6 @@ export async function AgregarCarrito(idcliente, idproducto, cantidad, talla, num
 				});
 			})
 			.catch((res) => {
-				console.log(res);
 				if (res.response.status === 404 || res.response.status === 500) {
 					return notification.error({
 						message: 'Error',
@@ -39,10 +38,10 @@ export async function AgregarCarrito(idcliente, idproducto, cantidad, talla, num
 					});
 				}
 			});
+			return true;
 }
 
 export async function AgregarApartado(idcliente, idproducto, cantidad, talla, numero, tipoEntrega, token) {
-	console.log(idcliente, idproducto, cantidad, talla, numero, tipoEntrega, token)
 	if (talla) {
 		await clienteAxios
 			.post(
@@ -68,7 +67,6 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 				});
 			})
 			.catch((res) => {
-				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					return notification.error({
 						message: 'Error',
@@ -108,7 +106,6 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 				});
 			})
 			.catch((res) => {
-				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					return notification.error({
 						message: 'Error',
@@ -147,7 +144,6 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 				});
 			})
 			.catch((res) => {
-				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					return notification.error({
 						message: 'Error',
@@ -187,10 +183,15 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
 				}
 			)
 			.then((res) => {
-				return notification.success({
-					message: res.data.message,
-					duration: 2
-				});
+				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
+				return (
+					notification.success({
+						message: res.data.message,
+						duration: 2
+					})
+				)
+				
+				
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -228,10 +229,12 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
 				}
 			)
 			.then((res) => {
-				return notification.success({
+				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
+				return (
+					notification.success({
 					message: res.data.message,
 					duration: 2
-				});
+				}))
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -268,10 +271,12 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
 				}
 			)
 			.then((res) => {
-				return notification.success({
+				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
+				return (
+					notification.success({
 					message: res.data.message,
 					duration: 2
-				});
+				}))
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {

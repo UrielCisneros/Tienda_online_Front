@@ -5,6 +5,7 @@ import { IssuesCloseOutlined } from '@ant-design/icons';
 import { formatoMexico, agregarPorcentaje } from '../../../../config/reuserFunction';
 import { AgregarPedido } from './servicesSugerencia';
 import jwt_decode from 'jwt-decode';
+import { withRouter } from 'react-router-dom';
 
 const { Option } = Select;
 const { Meta } = Card;
@@ -31,6 +32,7 @@ const Sugerencia = (props) => {
 	const [ validateStatus, setValidateStatus ] = useState('validating');
 	const [ medida, setMedida ] = useState([]);
 	const [ cantidadFinalProducto, setCantidadFinalProducto ] = useState(1);
+	const [ disponibilidad, setDisponibilidad ] = useState('');
 
 	function selectTallaProducto(value) {
 		setMedida(value);
@@ -43,15 +45,7 @@ const Sugerencia = (props) => {
 			setCantidadFinalProducto(cantidad);
 		}
 	}
-	function obtenerCantidadNumeroProducto(cantidad) {
-		if (cantidad <= 0 || cantidad > medida[1]) {
-			setValidateStatus('error');
-		} else {
-			setValidateStatus('validating');
-			setCantidadFinalProducto(cantidad);
-		}
-	}
-	function obtenerCantidadTallaProducto(cantidad) {
+	function obtenerCantidadMedidaProducto(cantidad) {
 		if (cantidad <= 0 || cantidad > medida[1]) {
 			setValidateStatus('error');
 		} else {
@@ -66,6 +60,7 @@ const Sugerencia = (props) => {
 	const [ validateStatusSug, setValidateStatusSug ] = useState('validating');
 	const [ medidaSugerencia, setMedidaSugerencia ] = useState([]);
 	const [ cantidadFinalSugerencia, setCantidadFinalSugerencia ] = useState(1);
+	const [ disponibilidadSugerencia, setDisponibilidadSugerencia ] = useState('');
 
 	function selectTallaSugerencia(value) {
 		setMedidaSugerencia(value);
@@ -78,15 +73,7 @@ const Sugerencia = (props) => {
 			setCantidadFinalSugerencia(cantidad);
 		}
 	}
-	function obtenerCantidadNumeroSugerencia(cantidad) {
-		if (cantidad <= 0 || cantidad > medidaSugerencia[1]) {
-			setValidateStatusSug('error');
-		} else {
-			setValidateStatusSug('validating');
-			setCantidadFinalSugerencia(cantidad);
-		}
-	}
-	function obtenerCantidadTallaSugerencia(cantidad) {
+	function obtenerCantidadMedidaSugerencia(cantidad) {
 		if (cantidad <= 0 || cantidad > medidaSugerencia[1]) {
 			setValidateStatusSug('error');
 		} else {
@@ -100,29 +87,72 @@ const Sugerencia = (props) => {
 	}, []);
 	useEffect(
 		() => {
-			if (sugerencia.length !== 0) {
-				if (productoPromocion.length !== 0 && sugerenciaPromocion.length !== 0) {
-					setTotal(
-						productoPromocion.precioPromocion * cantidadFinalProducto +
-							sugerenciaPromocion.precioPromocion * cantidadFinalSugerencia
-					);
-				} else if (productoPromocion.length !== 0 && sugerenciaPromocion.length === 0) {
-					setTotal(
-						productoPromocion.precioPromocion * cantidadFinalProducto +
-							sugerencia.precio * cantidadFinalSugerencia
-					);
-				} else if (productoPromocion.length === 0 && sugerenciaPromocion.length !== 0) {
-					setTotal(
-						producto.precio * cantidadFinalProducto +
-							sugerenciaPromocion.precioPromocion * cantidadFinalSugerencia
-					);
-				} else if (productoPromocion.length === 0 && sugerenciaPromocion.length === 0) {
-					setTotal(producto.precio * cantidadFinalProducto + sugerencia.precio * cantidadFinalSugerencia);
-				}
-			}
+			obtenerTotal();
+			obtenerDisponibilidad();
 		},
 		[ obtenerSugerencia ]
 	);
+	function obtenerTotal(){
+		if (sugerencia.length !== 0) {
+			if (productoPromocion.length !== 0 && sugerenciaPromocion.length !== 0) {
+				setTotal(
+					productoPromocion.precioPromocion * cantidadFinalProducto +
+						sugerenciaPromocion.precioPromocion * cantidadFinalSugerencia
+				);
+			} else if (productoPromocion.length !== 0 && sugerenciaPromocion.length === 0) {
+				setTotal(
+					productoPromocion.precioPromocion * cantidadFinalProducto +
+						sugerencia.precio * cantidadFinalSugerencia
+				);
+			} else if (productoPromocion.length === 0 && sugerenciaPromocion.length !== 0) {
+				setTotal(
+					producto.precio * cantidadFinalProducto +
+						sugerenciaPromocion.precioPromocion * cantidadFinalSugerencia
+				);
+			} else if (productoPromocion.length === 0 && sugerenciaPromocion.length === 0) {
+				setTotal(producto.precio * cantidadFinalProducto + sugerencia.precio * cantidadFinalSugerencia);
+			}
+		}
+	}
+	function obtenerDisponibilidad(){
+		///disponibilidad Productos
+		if (producto && producto.tipoCategoria === 'ropa') {
+			producto.tallas.forEach((tallas, index) => {
+				if (tallas.cantidad === 0 && tallas.cantidad === index) {
+					setDisponibilidad('Producto no disponible');
+				}
+			});
+		} else if (producto && producto.tipoCategoria === 'calzado') {
+			producto.numeros.forEach((numeros, index) => {
+				if (numeros.cantidad === 0 && numeros.cantidad === index) {
+					setDisponibilidad('Producto no disponible');
+				}
+			});
+		} else if (producto && producto.tipoCategoria === 'otros') {
+			if (producto.cantidad === 0) {
+				setDisponibilidad('Producto no disponible');
+			}
+		}
+
+		//// Disponibilidad Sugerencias
+		if (sugerencia && sugerencia.tipoCategoria === 'ropa') {
+			sugerencia.tallas.forEach((tallas, index) => {
+				if (tallas.cantidad === 0 && tallas.cantidad === index) {
+					setDisponibilidadSugerencia('Producto no disponible');
+				}
+			});
+		} else if (sugerencia && sugerencia.tipoCategoria === 'calzado') {
+			sugerencia.numeros.forEach((numeros, index) => {
+				if (numeros.cantidad === 0 && numeros.cantidad === index) {
+					setDisponibilidadSugerencia('Producto no disponible');
+				}
+			});
+		} else if (sugerencia && sugerencia.tipoCategoria === 'otros') {
+			if (sugerencia.cantidad === 0) {
+				setDisponibilidadSugerencia('Producto no disponible');
+			}
+		}
+	}
 
 	async function obtenerSugerencia() {
 		setLoading(true);
@@ -144,6 +174,7 @@ const Sugerencia = (props) => {
 				setLoading(false);
 			})
 			.catch((res) => {
+				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
 					notification.error({
@@ -180,7 +211,43 @@ const Sugerencia = (props) => {
 	}
 
 	function showConfirm() {
-		if (!medida[0] || !medidaSugerencia[0]) {
+		if(!token){
+			props.history.push('/entrar');
+			notification.info({
+				message: 'inicia sesión para poder realizar tus compras',
+				duration: 2
+			});
+		}else{
+			if(disponibilidadSugerencia.length !== 0 || disponibilidad.length !== 0){
+				notification.info({
+					message: 'No hay productos disponibles',
+					duration: 2
+				});
+			}else if (!medida[0] || !medidaSugerencia[0]) {
+				notification.info({
+					message: 'Selecciona una talla',
+					duration: 2
+				});
+			} else {
+				confirm({
+					title: 'Comprar los siguientes articulos:',
+					icon: <IssuesCloseOutlined />,
+					okText: 'Continuar con la compra',
+					content: (
+						<div>
+							<p>{producto.nombre}</p>
+							<p>{sugerencia.nombre}</p>
+							<p>Precio total: ${formatoMexico(total.toFixed(2))} + envio</p>
+						</div>
+					),
+					onOk() {
+						Pedido();
+						if(disponibilidadSugerencia.length || setDisponibilidad.length){
+			notification.info({
+				message: 'No hay productos disponibles',
+				duration: 2
+			});
+		}else if (!medida[0] || !medidaSugerencia[0]) {
 			notification.info({
 				message: 'Selecciona una talla',
 				duration: 2
@@ -192,21 +259,21 @@ const Sugerencia = (props) => {
 				okText: 'Continuar con la compra',
 				content: (
 					<div>
-						  <p>{producto.nombre}</p>
-						  <p>{sugerencia.nombre}</p>
+						<p>{producto.nombre}</p>
+						<p>{sugerencia.nombre}</p>
 						<p>Precio total: ${formatoMexico(total.toFixed(2))} + envio</p>
 					</div>
-				  ),
-				  onOk() {
-					  
-					  Pedido();
-				  },
-				  onCancel() {
-					console.log('Cancel');
-				  },
+				),
+				onOk() {
+					Pedido();
+				}
 			});
 		}
-	  }
+					}
+				});
+			}
+		}
+	}
 
 	return (
 		<Spin spinning={loading}>
@@ -241,17 +308,37 @@ const Sugerencia = (props) => {
 													onChange={selectTallaProducto}
 												>
 													{producto.tallas && producto.tallas.length !== 0 ? (
-														producto.tallas.map((res) => (
-															<Option key={res._id} value={[ res.talla, res.cantidad ]}>
-																{res.talla}
-															</Option>
-														))
+														producto.tallas.map(
+															(res) =>
+																res.cantidad > 0 ? (
+																	<Option
+																		key={res._id}
+																		value={[ res.talla, res.cantidad ]}
+																	>
+																		{res.talla}
+																	</Option>
+																) : (
+																	<Option key={res._id} disabled>
+																		{res.talla}
+																	</Option>
+																)
+														)
 													) : producto.numeros && producto.numeros.length !== 0 ? (
-														producto.numeros.map((res) => (
-															<Option key={res._id} value={[ res.numero, res.cantidad ]}>
-																{res.numero}
-															</Option>
-														))
+														producto.numeros.map(
+															(res) =>
+																res.cantidad > 0 ? (
+																	<Option
+																		key={res._id}
+																		value={[ res.numero, res.cantidad ]}
+																	>
+																		{res.numero}
+																	</Option>
+																) : (
+																	<Option key={res._id} disabled>
+																		{res.numero}
+																	</Option>
+																)
+														)
 													) : (
 														<Option />
 													)}
@@ -279,13 +366,7 @@ const Sugerencia = (props) => {
 																min={1}
 																max={medida[1]}
 																defaultValue={1}
-																onChange={
-																	producto.tipoCategoria === 'ropa' ? (
-																		obtenerCantidadTallaProducto
-																	) : (
-																		obtenerCantidadNumeroProducto
-																	)
-																}
+																onChange={obtenerCantidadMedidaProducto}
 																style={{ width: 130 }}
 																disabled={medida.length !== 0 ? false : true}
 															/>
@@ -341,6 +422,7 @@ const Sugerencia = (props) => {
 															</p>
 														</div>
 													)}
+													<h6 className="disponibilidad">{disponibilidad}</h6>
 												</div>
 											}
 										/>
@@ -372,17 +454,37 @@ const Sugerencia = (props) => {
 													onChange={selectTallaSugerencia}
 												>
 													{sugerencia.tallas && sugerencia.tallas.length !== 0 ? (
-														sugerencia.tallas.map((res) => (
-															<Option key={res._id} value={[ res.talla, res.cantidad ]}>
-																{res.talla}
-															</Option>
-														))
-													) : sugerencia.numero && sugerencia.numeros.length !== 0 ? (
-														sugerencia.numeros.map((res) => (
-															<Option key={res._id} value={[ res.numero, res.cantidad ]}>
-																{res.numero}
-															</Option>
-														))
+														sugerencia.tallas.map(
+															(res) =>
+																res.cantidad > 0 ? (
+																	<Option
+																		key={res._id}
+																		value={[ res.talla, res.cantidad ]}
+																	>
+																		{res.talla}
+																	</Option>
+																) : (
+																	<Option key={res._id} disabled>
+																		{res.talla}
+																	</Option>
+																)
+														)
+													) : sugerencia.numeros && sugerencia.numeros.length !== 0 ? (
+														sugerencia.numeros.map(
+															(res) =>
+																res.cantidad > 0 ? (
+																	<Option
+																		key={res._id}
+																		value={[ res.numero, res.cantidad ]}
+																	>
+																		{res.numero}
+																	</Option>
+																) : (
+																	<Option key={res._id} disabled>
+																		{res.numero}
+																	</Option>
+																)
+														)
 													) : (
 														<Option />
 													)}
@@ -410,13 +512,7 @@ const Sugerencia = (props) => {
 																min={1}
 																max={medidaSugerencia[1]}
 																defaultValue={1}
-																onChange={
-																	sugerencia.tipoCategoria === 'ropa' ? (
-																		obtenerCantidadTallaSugerencia
-																	) : (
-																		obtenerCantidadNumeroSugerencia
-																	)
-																}
+																onChange={obtenerCantidadMedidaSugerencia}
 																style={{ width: 130 }}
 																disabled={medidaSugerencia.length !== 0 ? false : true}
 															/>
@@ -472,6 +568,7 @@ const Sugerencia = (props) => {
 															</p>
 														</div>
 													)}
+													<h6 className="disponibilidad">{disponibilidadSugerencia}</h6>
 												</div>
 											}
 										/>
@@ -498,9 +595,9 @@ const Sugerencia = (props) => {
 						</div>
 					</div>
 				)}
-			</div>			
+			</div>
 		</Spin>
 	);
 };
 
-export default Sugerencia;
+export default withRouter(Sugerencia);

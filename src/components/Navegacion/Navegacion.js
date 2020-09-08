@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Layout, Menu, Button, Input, Drawer, Badge, Avatar } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import * as firebase from 'firebase/app';
@@ -9,12 +9,14 @@ import { MenuOutlined, ShoppingCartOutlined, SettingOutlined, LogoutOutlined } f
 import jwt_decode from 'jwt-decode';
 import clienteAxios from '../../config/axios';
 import RightMenu from './RightMenu';
+import { MenuContext } from '../../context/carritoContext';
 
 const { Search } = Input;
 const { Header } = Layout;
 const { SubMenu } = Menu;
 
 const Navegacion = (props) => {
+	const {active} = useContext(MenuContext)
 	const [ visible, setVisible ] = useState(false);
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
@@ -61,7 +63,7 @@ const Navegacion = (props) => {
 		if (token) {
 			obtenerCarrito();
 		}
-	}, [ token]);
+	}, [ token, active]);
 
 	const showDrawer = () => {
 		setVisible(true);
