@@ -6,8 +6,8 @@ import DetallesPedido from './detalles';
 import "./pedidos.scss";
 
 
-import { Card, Col, Row, Spin, Modal,  Tag, Button, Divider } from 'antd';
-import { ContainerOutlined, EditOutlined } from '@ant-design/icons';
+import { Card, Col, Row, Spin, Modal,  Tag, Button, Divider,List,Space } from 'antd';
+import { ContainerOutlined, EditOutlined,DeleteOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
 
@@ -49,23 +49,16 @@ export default function PedidosUsuario() {
 				Authorization: `bearer ${token}`
 			}
 		})
-
-			.then((res) => {
-			if(decoded._id===null){
-				console.log("no hay codigo");
+		.then((res) => {
+			console.log(res);
+			setPedidos(res.data);
+			setLoading(false);
+			if (setPedidos() === undefined) {
+				console.log("No hay productos");
 			}
-				setPedidos(res.data);
-				setLoading(false);
-				if (setPedidos() === undefined) {
-					console.log("No hay productos");
-				}
-
-				console.log(decoded);
-			})
-
-			.catch((err) => {
+		})
+		.catch((err) => {
 			console.log(err);
-			console.log(err.response);
 		});
 	}
 
@@ -74,103 +67,88 @@ export default function PedidosUsuario() {
       setLoading(true);
 	}, []);
 	
-
+	if(decoded === null){
+		return null
+	}
 
 
     return(
         <div className= "container">
-            <h1>Tus pedidos:</h1>
-
-
-        <Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} >
-			<Card
-				actions={[
-					<div className="">
-						<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />
-							<p
-							onClick={() => {
-								setDetallePedido();
-								showModal();
-							}}
-							className="d-inline"
-						>
-							Detalles de mi pedido
-						</p>
-					</div>
-				]}
-			>
-				<Meta
-                    className="contenedor-card-pedidos"
-					description={
-						<div>
-							<div className="my-2 ">
-								 <h6 className="titulos-info-pedidos">Cliente:</h6>
-								<p className="data-info-pedidos">Brayan Antonio</p>
-							</div>
-							<Divider/>
-							<div className="my-2 mt-3">
-								<h6 className="titulos-info-pedidos">ID del pedido: </h6>
-								<p className="data-info-pedidos">ASSSSS5S22</p>
-							</div>
-							<div className="my-2 mt-3">
-								<h6 className="titulos-info-pedidos">Hecho el dia:</h6>
-								<p className="data-info-pedidos">22 / 05 / 2020</p>
-							</div>
-							
-								
-							<div className="my-2 mt-3">
-								<h6 className="titulos-info-pedidos">No. de productos:</h6>
-								<p className="data-info-pedidos">XXXXX</p>
-							</div>
-
-							<div className="my-2 mt-3">
-								<h6 className="titulos-info-pedidos">Estado:</h6>
-								<Tag
-									className="data-info-pedidos"
-								>
-									<p>Entregado</p>
-								</Tag>
-							</div>
-
-							<div className="my-2 mt-3">
-								<h6 className="titulos-info-pedidos">Pagado:</h6>
-								<Tag
-									className="data-info-pedidos"
-								>
-                                    <p>Pagado</p>
-								</Tag>
-							</div>
-
-							<div className="my-2 mt-3">
-								<h6 className="titulos-info-pedidos">Total:</h6>
-								<p className="precio-total-pedidos data-info-pedidos">
-									10202
-								</p>
-							</div>
-
-						</div>
-					}
-				/>
-			</Card>
-		</Col>
-
-
-        <Modal
-			key="detalle"
-			width={600}
-			style={{ top: 0 }}
-			title="Detalles de este pedido"
-			visible={visible}
-			onCancel={handleCancel}
-			footer={[
-				<Button key="detalle" type="primary" onClick={handleCancel}>
-					Cerrar
-				</Button>
-			]}
-		>
-		<DetallesPedido datosDetalle={detallePedido}/>
-		</Modal>
-
+            <h4>Compras</h4>
+			<div>
+				<Pedido pedidos={pedidos} />
+			</div>
         </div>
     )
+}
+
+function Pedido(props){
+
+	const {pedidos} = props;
+
+	console.log(pedidos);
+
+	return(
+		<div>
+		<List.Item
+			key=""
+			className="d-flex justify-content-center align-items-center"
+			actions={[
+				<Space>
+					<Button
+						className="d-flex justify-content-center align-items-center"
+						style={{ fontSize: 16 }}
+						type="primary"
+						onClick={() => {
+/* 							setActualizar();
+							setProductoID(productos._id); */
+						}}
+					>
+						<EditOutlined />
+						Actualizar
+					</Button>
+
+{/* 					<Button
+						className="d-flex justify-content-center align-items-center"
+						danger
+						style={{ fontSize: 16 }}
+						onClick={() => {
+							 showDeleteConfirm(productos._id); 
+						}}
+					>
+						<DeleteOutlined />
+						Eliminar
+					</Button> */}
+				</Space>
+			]}
+		>
+			<List.Item.Meta
+				avatar={
+					<div
+						className="d-flex justify-content-center align-items-center mr-2"
+						style={{ width: 100, height: 100 }}
+					>
+						<img
+							className="imagen-promocion-principal"
+							alt="producto"
+							src={`https://www.redwolf.in/image/catalog/artwork-Images/mens/itachi-naruto-t-shirt-artwork-india.png`}
+						/>
+					</div>
+				}
+				title={
+					<div className="titulo-producto">
+						<p className="h6">Perro</p>
+						<p className="h6">
+							modelo
+						</p>
+						<p className="h6">Precio men</p>
+						<p className="h6">
+							Peerro
+						</p>
+					</div>
+				}
+			/>
+		</List.Item>
+		</div>
+	)
 }
