@@ -25,7 +25,6 @@ export default function RegistrarBlog(props) {
     };
 
     const processPost = async e => {
-            console.log("Creando Blog")
             if(blogData.descripcion === undefined){
                 notification.info({
                     message: 'Ups, algo salio mal',

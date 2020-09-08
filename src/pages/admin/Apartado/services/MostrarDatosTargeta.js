@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import {Card, Col,Tag} from 'antd'
 import { ContainerOutlined } from '@ant-design/icons';
 import {formatoFecha} from '../../../../config/reuserFunction'
@@ -10,7 +10,7 @@ const { Meta } = Card;
 
 export default function MostrarDatosTargeta(props) {
 
-    const {setDetalleApartado,showModal,apartado} = props;
+	const {setDetalleApartado,showModal,apartado} = props;
 
     return (
             <Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} key={apartado._id}>
@@ -45,7 +45,7 @@ export default function MostrarDatosTargeta(props) {
 								</div>
 								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Cliente:</h6>
-									<p className="data-info-apartados">{apartado.cliente.nombre}</p>
+									<p className="data-info-apartados">{apartado.cliente[0].nombre}</p>
 								</div>
 								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Estado:</h6>
@@ -69,7 +69,7 @@ export default function MostrarDatosTargeta(props) {
 
 								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Producto:</h6>
-									<p className="data-info-apartados">{apartado.producto.nombre}</p>
+									<p className="data-info-apartados">{apartado.producto[0].nombre}</p>
 								</div>
 								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Cantidad de articulos:</h6>
