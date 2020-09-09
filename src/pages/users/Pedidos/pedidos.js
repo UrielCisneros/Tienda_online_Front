@@ -6,7 +6,7 @@ import DetallesPedido from './detalles';
 import "./pedidos.scss";
 
 
-import { Card, Col, Row, Spin, Modal,  Tag, Button, Divider,List,Space } from 'antd';
+import { Card, Col, Row, Spin, Modal,  Tag, Button, Divider,List,Space,Result } from 'antd';
 import { ContainerOutlined, EditOutlined,DeleteOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
@@ -17,6 +17,7 @@ export default function PedidosUsuario() {
 	const [ pedidos, setPedidos ] = useState([]);
 	const [ visible, setVisible ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
+	const [ showInfo, setshowInfo ] = useState(false);
 
     //modal del pedido
     const [ detallePedido, setDetallePedido ] = useState([]);
@@ -51,7 +52,10 @@ export default function PedidosUsuario() {
 		})
 		.then((res) => {
 			console.log(res);
-			setPedidos(res.data);
+			if(res.data.length > 0){
+				setPedidos(res.data);
+				/* setshowInfo(true); */
+			}
 			setLoading(false);
 			if (setPedidos() === undefined) {
 				console.log("No hay productos");
@@ -64,7 +68,9 @@ export default function PedidosUsuario() {
 
     useEffect(() => {
 		obtenerPedidos();
-      setLoading(true);
+		  setLoading(true);
+		  setPedidos([]);
+		  setshowInfo(false);
 	}, []);
 	
 	if(decoded === null){
@@ -73,20 +79,31 @@ export default function PedidosUsuario() {
 
 
     return(
-        <div className= "container">
-            <h4>Compras</h4>
-			<div>
-				<Pedido pedidos={pedidos} />
+		<Spin size="large" spinning={loading}>
+			<div className= "container">
+				<h4>Compras</h4>
+				<div>
+					{showInfo !== true ? (
+						<Result
+							status="404"
+							title="Parece que aun no tienes compras"
+							subTitle="Ve y realiza tus compras para poder verlas"
+						/>
+					):(
+						<Pedido pedidos={pedidos} />
+					)}
+					
+				</div>
 			</div>
-        </div>
+		</Spin>
     )
 }
 
 function Pedido(props){
 
-	const {pedidos} = props;
+	const {pedido} = props;
 
-	console.log(pedidos);
+
 
 	return(
 		<div>
