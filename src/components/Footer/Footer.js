@@ -64,7 +64,7 @@ const FooterPage = () => {
     return(
        
          <Layout className="layout">
-             <Footer  >
+             <Footer >
                 <div id="foot"  className="row">  
                     <div className="col-lg-9 text-lg-left text-center ">
                         <div className="m-4 footer-border">
