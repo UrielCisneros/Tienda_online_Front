@@ -173,7 +173,7 @@ function Inventario(props) {
 			setVisible('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search/${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`)
 				.then((res) => {
 					setProductosRender(res.data.posts);
 					setProductos(res.data.posts);

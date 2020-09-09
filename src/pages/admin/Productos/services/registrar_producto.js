@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
 import { Form, Button, Input, Select, Steps, notification, Upload, Spin, Divider } from 'antd';
-import { UploadOutlined, PlusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import './registrar_producto.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 import RegistrarGaleria from './registrar_galeria';
 import RegistrarTalla from './registrar_talla';
 import RegistrarNumero from './registrar_numero';
 import { Editor } from '@tinymce/tinymce-react';
+import { SketchPicker } from 'react-color';
+import reactCSS from 'reactcss';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -41,8 +43,58 @@ function RegistrarProducto(props) {
 	const [ categoriasBD, setCategoriasBD ] = useState([]);
 	const [ categoriasDefault, setCategoriasDefault ] = useState([ 'ropa', 'calzado' ]);
 	const [ subcategoriasDefault, setSubcategoriasDefault ] = useState([]);
-	const [ subCategoriasBD, setSubCategoriasBD] = useState([]);
-	const [ subCategoria, setSubCategoria] = useState([]);
+	const [ subCategoriasBD, setSubCategoriasBD ] = useState([]);
+	const [ subCategoria, setSubCategoria ] = useState([]);
+	const [ displayColorPicker, setDisplayColorPicker ] = useState(false);
+	const [ color, setColor ] = useState('FFFFFF');
+	const [ valueSelect, setValueSelect ] = useState();
+	const [ valueSelectSubCat, setValueSelectSubCat ] = useState();
+	
+	const styles = reactCSS({
+		default: {
+			color: {
+				width: '36px',
+				height: '14px',
+				borderRadius: '2px',
+				background: color
+			},
+			swatch: {
+				padding: '5px',
+				background: '#fff',
+				borderRadius: '1px',
+				boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+				display: 'inline-block',
+				cursor: 'pointer'
+			},
+			popover: {
+				position: 'absolute',
+				zIndex: '2'
+			},
+			cover: {
+				position: 'fixed',
+				top: '0px',
+				right: '0px',
+				bottom: '0px',
+				left: '0px'
+			}
+		}
+	});
+
+	const handleClick = () => {
+		setDisplayColorPicker(true);
+	};
+
+	const handleClose = () => {
+		setDisplayColorPicker(false);
+	};
+
+	const handleChange = (color) => {
+		setColor(color.hex);
+	};
+
+	const resetColor = () => {
+		setColor('');
+	};
 
 	useEffect(
 		() => {
@@ -51,14 +103,14 @@ function RegistrarProducto(props) {
 				setCurrent(0);
 				setDisabledFormProductos(false);
 			}
+			setUpload(false)
+			setValueSelect();
 			setCurrent(0);
 			setDisabledFormProductos(false);
 			obtenerCategorias();
 		},
 		[ reload, form ]
 	);
-
-	
 
 	const next = () => {
 		setCurrent(current + 1);
@@ -107,6 +159,7 @@ function RegistrarProducto(props) {
 	});
 	//// Capturar valores de categoria
 	const [ select, setSelect ] = useState('');
+	const [ genero, setGenero ] = useState('');
 	const [ tipoCategoria, setTipoCategoria ] = useState('');
 
 	const onSelect = (value) => {
@@ -122,6 +175,9 @@ function RegistrarProducto(props) {
 		} else {
 			setDisabled(true);
 		}
+	};
+	const generoOnChange = (value) => {
+		setGenero(value);
 	};
 	const obtenerEditor = (value) => {
 		setEditor(value);
@@ -144,6 +200,8 @@ function RegistrarProducto(props) {
 		formData.append('categoria', select);
 		formData.append('tipoCategoria', tipoCategoria);
 		formData.append('subCategoria', subCategoria);
+		formData.append('genero', genero);
+		formData.append('color', color);
 		formData.append('cantidad', datos.cantidad);
 		formData.append('precio', datos.precio);
 		formData.append('descripcion', editor);
@@ -168,6 +226,9 @@ function RegistrarProducto(props) {
 					description: res.data.message,
 					duration: 2
 				});
+				if(tipoCategoria === 'otros'){
+					next();
+				}
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -218,35 +279,33 @@ function RegistrarProducto(props) {
 				}
 			});
 	}
-	async function obtenerSubcategorias(){
+	async function obtenerSubcategorias() {
 		await clienteAxios
-				.get(`/productos/Subcategorias/${select}`, {
-					headers: {
-						Authorization: `bearer ${token}`
-					}
-				})
-				.then((res) => {
-					setSubCategoriasBD(res.data);
-				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						notification.error({
-							message: 'Error',
-							description: res.response.data.message,
-							duration: 2
-						});
-					} else {
-						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
-							duration: 2
-						});
-					}
-				});
+			.get(`/productos/Subcategorias/${select}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setSubCategoriasBD(res.data);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
 	}
 
-	const [ valueSelect, setValueSelect ] = useState();
-	
 	const addItemCategoria = () => {
 		setCategoriasDefault([ ...categoriasDefault, item ]);
 		setSelect(item);
@@ -256,10 +315,13 @@ function RegistrarProducto(props) {
 	};
 	const addItemSubCategoria = () => {
 		setSubcategoriasDefault([ ...subcategoriasDefault, item ]);
+		setValueSelectSubCat(item);
+		setSubCategoria(item);
 	};
+	
 	const onSelectSubCategoria = (value) => {
-		setSubCategoria(value)
-	}
+		setSubCategoria(value);
+	};
 	const onCategoriaChange = (e) => {
 		if (e.target.value.length !== 0) {
 			setItem(e.target.value);
@@ -344,8 +406,10 @@ function RegistrarProducto(props) {
 								</Form.Item>
 								<Form.Item label="Subcategoria" onChange={datosForm}>
 									<Form.Item name="subCategoria">
+										{console.log()}
 										<Select
-											style={{ width: 300 }}
+											value={valueSelectSubCat}
+											style={{ width: 250 }}
 											placeholder="Seleciona una subcategoria"
 											onChange={onSelectSubCategoria}
 											dropdownRender={(menu) => (
@@ -353,7 +417,10 @@ function RegistrarProducto(props) {
 													{menu}
 													<Divider style={{ margin: '4px 0' }} />
 													<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
-														<Input style={{ flex: 'auto' }} onChange={onSubCategoriaChange} />
+														<Input
+															style={{ flex: 'auto' }}
+															onChange={onSubCategoriaChange}
+														/>
 														<Button disabled={buttonCat} onClick={addItemSubCategoria}>
 															<PlusOutlined style={{ fontSize: 20 }} /> Nueva
 														</Button>
@@ -373,6 +440,23 @@ function RegistrarProducto(props) {
 													}
 												})
 											)}
+										</Select>
+									</Form.Item>
+								</Form.Item>
+								<Form.Item label="Género" onChange={datosForm}>
+									<Form.Item name="genero">
+										<Select
+											name="genero"
+											placeholder="Selecciona un género"
+											style={{ width: 250 }}
+											disabled={disabledformProductos}
+											onChange={generoOnChange}
+										>
+											<Option value="niño">Niño</Option>
+											<Option value="niña">Niña</Option>
+											<Option value="hombre">Hombre</Option>
+											<Option value="mujer">Mujer</Option>
+											<Option value="mixto">Mixto</Option>
 										</Select>
 									</Form.Item>
 								</Form.Item>
@@ -405,6 +489,26 @@ function RegistrarProducto(props) {
 										name="precio"
 									>
 										<Input type="number" disabled={disabledformProductos} name="precio" />
+									</Form.Item>
+								</Form.Item>
+								<Form.Item label="Color del producto" onChange={datosForm}>
+									<Form.Item name="color">
+										<div className="d-flex align-items-center">
+											<div className="d-inline">
+												<div style={styles.swatch} onClick={handleClick}>
+													<div style={styles.color} />
+												</div>
+												{displayColorPicker ? (
+													<div style={styles.popover}>
+														<div style={styles.cover} onClick={handleClose} />
+														<SketchPicker color={color} onChange={handleChange} />
+													</div>
+												) : null}
+											</div>
+											<Button className="d-inline ml-2" size="middle" type="text" onClick={resetColor}>
+												reset color
+											</Button>
+										</div>
 									</Form.Item>
 								</Form.Item>
 								<Form.Item label="Descripcion del producto">

@@ -26,6 +26,7 @@ const Sugerencia = (props) => {
 		await clienteAxios
 			.get(`/sugerencia/${idproducto}`)
 			.then((res) => {
+				console.log(res)
 				setProducto(res.data.producto);
 				if (res.data.sugerencias) {
 					res.data.sugerencias.forEach((element) => setSugerencia(element.producto));
@@ -41,6 +42,7 @@ const Sugerencia = (props) => {
 				setLoading(false);
 			})
 			.catch((res) => {
+				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
 					notification.error({
