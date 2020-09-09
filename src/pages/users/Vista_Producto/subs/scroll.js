@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import '../vistas.scss';
-import ImageScroller from 'react-image-scroller';
 import { Card, Col, Spin } from 'antd';
 import { formatoMexico, agregarPorcentaje } from '../../../../config/reuserFunction'
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
-const properties = {
-	hideScrollbar: false,
-	scrollOnClick: false,
-	scrollWithArrows: true
-};
 
 function Scroll(props) {
 	const [ productos, setProductos ] = useState([]);
@@ -31,12 +25,12 @@ function Scroll(props) {
 	}, [producto]);
 
 	const render = productos.map((productos) => (
-		<Col span={32} key={productos._id}>
+		<Col key={productos._id} className="d-inline-flex mr-2 contenedor-card-tamaño">
 				<Card.Grid hoverable style={gridStyle}>
 					<Card
 						onClick={() => (window.location.href = `/vista_producto/${productos._id}`)}
-						bodyStyle={{ padding: 22, backgroundColor: '#F7F7F7' }}
-						style={{ maxHeight: 300, width: 300, cursor: 'pointer' }}
+						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7' }}
+						style={{ maxHeight: '100%', width: '100%', cursor: 'pointer' }}
 						cover={
 							<div className="d-flex justify-content-center align-items-center" style={{ height: 220 }}>
 								<img
@@ -79,8 +73,8 @@ function Scroll(props) {
 		<Spin spinning={loading}>
 			<div className="mt-5">
 				<p className="titulos-vista-productos">Tambien te pueden interesar:</p>
-				<div>
-					<ImageScroller {...properties}>{render}</ImageScroller>
+				<div className="contenedor-scroller">
+					{render}
 				</div>
 			</div>
 		</Spin>

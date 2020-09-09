@@ -19,10 +19,6 @@ function Login(props) {
 				const token = res.data.token;
 				localStorage.setItem('token', token);
 				props.history.push('/admin');
-				notification.success({
-					message: 'Bienvenido!',
-					duration: 2
-				});
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {

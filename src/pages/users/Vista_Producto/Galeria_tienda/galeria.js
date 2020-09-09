@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import ImageGallery from 'react-image-gallery';
 import ReactImageMagnify from 'react-image-magnify';
-import { notification, Spin } from 'antd';
+import { Spin } from 'antd';
 import 'react-image-gallery/styles/scss/image-gallery.scss';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import './galeria_custom.scss';
@@ -63,21 +63,7 @@ function Galeria(props) {
 						setLoading(false);
 					})
 					.catch((res) => {
-						if (res.response.status === 404 || res.response.status === 500) {
-							setLoading(false);
-							notification.error({
-								message: 'Error',
-								description: res.response.data.message,
-								duration: 2
-							});
-						} else {
-							setLoading(false);
-							notification.error({
-								message: 'Error',
-								description: 'Hubo un error',
-								duration: 2
-							});
-						}
+						console.log(res)
 					});
 			}
 			obtenerImagen();

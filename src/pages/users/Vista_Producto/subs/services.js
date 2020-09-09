@@ -183,15 +183,7 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
 				}
 			)
 			.then((res) => {
-				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
-				return (
-					notification.success({
-						message: res.data.message,
-						duration: 2
-					})
-				)
-				
-				
+				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`				
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -230,11 +222,6 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
 			)
 			.then((res) => {
 				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
-				return (
-					notification.success({
-					message: res.data.message,
-					duration: 2
-				}))
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -272,11 +259,6 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
 			)
 			.then((res) => {
 				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
-				return (
-					notification.success({
-					message: res.data.message,
-					duration: 2
-				}))
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {

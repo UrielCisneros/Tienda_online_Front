@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { notification, Spin, Avatar } from 'antd';
+import { Spin, Avatar } from 'antd';
 import './info-tienda.scss';
 import Geolocalizacion from '../../../../pages/users/geolocalizacion';
+import { withRouter } from 'react-router-dom';
 
-const InfoTienda = () => {
+const InfoTienda = (props) => {
 	const [ loading, setLoading ] = useState(false);
 	const [ tienda, setTienda ] = useState([]);
 
@@ -21,21 +22,8 @@ const InfoTienda = () => {
 				setLoading(false);
 			})
 			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+				setLoading(false);
+				console.log(res)
 			});
 	}
 
@@ -46,10 +34,10 @@ const InfoTienda = () => {
 	return (
 		<Spin spinning={loading}>
 			<div className="contenedor-info-tienda">
-			<p className="titulos-vista-productos text-center">Ubicación</p>
-			<div className="row">
+			<p className="titulos-vista-productos text-center">Encuentra nuestra tienda</p>
+			<div className="text-center">
 				<Avatar size={64} src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`} />
-				<div className="d-flex align-items-center ml-2">
+				<div className="text-center">
 					<p style={{fontSize: 20}}>{tienda.nombre}</p>
 				</div>
 			</div>
@@ -60,6 +48,9 @@ const InfoTienda = () => {
 							<p className="direccion-tienda-vista-producto">
 								Dirección: {direccion.calle_numero}, Col. {direccion.colonia}, {direccion.ciudad},{' '}
 								{direccion.cp}
+							</p>
+							<p className="direccion-tienda-vista-producto">
+								Telefono: {tienda.telefono}
 							</p>
 						</div>
 					);
@@ -93,4 +84,4 @@ const InfoTienda = () => {
 	);
 };
 
-export default InfoTienda;
+export default withRouter(InfoTienda);

@@ -35,6 +35,7 @@ import VistaProducto from '../pages/users/Vista_Producto/vista_producto'
 
 //other
 import Error404 from '../pages/users/error404'
+import Error500 from '../pages/users/error500'
 import Search404 from '../pages/users/Resultado_Busqueda/404'
 
 const routes = [
@@ -181,6 +182,11 @@ const routes = [
 			{
 				path: '/perfiles/',
 				component: Perfiles,
+				exact: true
+			},
+			{
+				path: '/error500/',
+				component: Error500,
 				exact: true
 			},
 			{

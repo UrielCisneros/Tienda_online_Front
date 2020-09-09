@@ -61,6 +61,7 @@ const Sugerencia = (props) => {
 	const [ medidaSugerencia, setMedidaSugerencia ] = useState([]);
 	const [ cantidadFinalSugerencia, setCantidadFinalSugerencia ] = useState(1);
 	const [ disponibilidadSugerencia, setDisponibilidadSugerencia ] = useState('');
+	const [ disabled, setDisabled ] = useState(false);
 
 	function selectTallaSugerencia(value) {
 		setMedidaSugerencia(value);
@@ -92,7 +93,7 @@ const Sugerencia = (props) => {
 		},
 		[ obtenerSugerencia ]
 	);
-	function obtenerTotal(){
+	function obtenerTotal() {
 		if (sugerencia.length !== 0) {
 			if (productoPromocion.length !== 0 && sugerenciaPromocion.length !== 0) {
 				setTotal(
@@ -114,23 +115,26 @@ const Sugerencia = (props) => {
 			}
 		}
 	}
-	function obtenerDisponibilidad(){
+	function obtenerDisponibilidad() {
 		///disponibilidad Productos
 		if (producto && producto.tipoCategoria === 'ropa') {
 			producto.tallas.forEach((tallas, index) => {
 				if (tallas.cantidad === 0 && tallas.cantidad === index) {
 					setDisponibilidad('Producto no disponible');
+					setDisabled(true);
 				}
 			});
 		} else if (producto && producto.tipoCategoria === 'calzado') {
 			producto.numeros.forEach((numeros, index) => {
 				if (numeros.cantidad === 0 && numeros.cantidad === index) {
 					setDisponibilidad('Producto no disponible');
+					setDisabled(true);
 				}
 			});
 		} else if (producto && producto.tipoCategoria === 'otros') {
 			if (producto.cantidad === 0) {
 				setDisponibilidad('Producto no disponible');
+				setDisabled(true);
 			}
 		}
 
@@ -139,17 +143,20 @@ const Sugerencia = (props) => {
 			sugerencia.tallas.forEach((tallas, index) => {
 				if (tallas.cantidad === 0 && tallas.cantidad === index) {
 					setDisponibilidadSugerencia('Producto no disponible');
+					setDisabled(true);
 				}
 			});
 		} else if (sugerencia && sugerencia.tipoCategoria === 'calzado') {
 			sugerencia.numeros.forEach((numeros, index) => {
 				if (numeros.cantidad === 0 && numeros.cantidad === index) {
 					setDisponibilidadSugerencia('Producto no disponible');
+					setDisabled(true);
 				}
 			});
 		} else if (sugerencia && sugerencia.tipoCategoria === 'otros') {
 			if (sugerencia.cantidad === 0) {
 				setDisponibilidadSugerencia('Producto no disponible');
+				setDisabled(true);
 			}
 		}
 	}
@@ -174,7 +181,7 @@ const Sugerencia = (props) => {
 				setLoading(false);
 			})
 			.catch((res) => {
-				console.log(res)
+				console.log(res);
 				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
 					notification.error({
@@ -186,7 +193,7 @@ const Sugerencia = (props) => {
 					setLoading(false);
 					notification.error({
 						message: 'Error',
-						description: 'Hubo un error',
+						description: 'Hubo un error con las sugerencias',
 						duration: 2
 					});
 				}
@@ -211,19 +218,14 @@ const Sugerencia = (props) => {
 	}
 
 	function showConfirm() {
-		if(!token){
+		if (!token) {
 			props.history.push('/entrar');
 			notification.info({
 				message: 'inicia sesión para poder realizar tus compras',
 				duration: 2
 			});
-		}else{
-			if(disponibilidadSugerencia.length !== 0 || disponibilidad.length !== 0){
-				notification.info({
-					message: 'No hay productos disponibles',
-					duration: 2
-				});
-			}else if (!medida[0] || !medidaSugerencia[0]) {
+		} else {
+			if (!medida[0] || !medidaSugerencia[0]) {
 				notification.info({
 					message: 'Selecciona una talla',
 					duration: 2
@@ -242,33 +244,6 @@ const Sugerencia = (props) => {
 					),
 					onOk() {
 						Pedido();
-						if(disponibilidadSugerencia.length || setDisponibilidad.length){
-			notification.info({
-				message: 'No hay productos disponibles',
-				duration: 2
-			});
-		}else if (!medida[0] || !medidaSugerencia[0]) {
-			notification.info({
-				message: 'Selecciona una talla',
-				duration: 2
-			});
-		} else {
-			confirm({
-				title: 'Comprar los siguientes articulos:',
-				icon: <IssuesCloseOutlined />,
-				okText: 'Continuar con la compra',
-				content: (
-					<div>
-						<p>{producto.nombre}</p>
-						<p>{sugerencia.nombre}</p>
-						<p>Precio total: ${formatoMexico(total.toFixed(2))} + envio</p>
-					</div>
-				),
-				onOk() {
-					Pedido();
-				}
-			});
-		}
 					}
 				});
 			}
@@ -362,6 +337,7 @@ const Sugerencia = (props) => {
 															}
 														>
 															<InputNumber
+																type="number"
 																placeholder="Cantidad"
 																min={1}
 																max={medida[1]}
@@ -377,6 +353,7 @@ const Sugerencia = (props) => {
 															help={<p>Solo hay {producto.cantidad} disponibles</p>}
 														>
 															<InputNumber
+																type="number"
 																placeholder="Cantidad"
 																min={1}
 																max={producto.cantidad}
@@ -508,6 +485,7 @@ const Sugerencia = (props) => {
 															}
 														>
 															<InputNumber
+																type="number"
 																placeholder="Cantidad"
 																min={1}
 																max={medidaSugerencia[1]}
@@ -523,6 +501,7 @@ const Sugerencia = (props) => {
 															help={<p>Solo hay {sugerencia.cantidad} disponibles</p>}
 														>
 															<InputNumber
+																type="number"
 																placeholder="Cantidad"
 																min={1}
 																max={sugerencia.cantidad}
@@ -583,6 +562,7 @@ const Sugerencia = (props) => {
 								</div>
 								<div className="d-flex justify-content-center align-items-center mt-4">
 									<Button
+										disabled={disabled}
 										type="primary"
 										size="large"
 										className="d-block m-1"

@@ -21,7 +21,7 @@ const { Option } = Select;
 const { confirm } = Modal;
 
 function TallasCantidades(props) {
-	const {active, setActive} = useContext(MenuContext)
+	const { active, setActive } = useContext(MenuContext);
 	const productos = props.producto;
 	const [ categoria, setCategoria ] = useState();
 	/* 	const [ cantidad, setCantidad ] = useState(); */
@@ -34,6 +34,7 @@ function TallasCantidades(props) {
 	const [ tipoEnvio, setTipoEnvio ] = useState('');
 	const [ loading, setLoading ] = useState(false);
 	const [ visible, setVisible ] = useState(false);
+	const [ disabled, setDisabled ] = useState(false);
 	const [ disponibilidad, setDisponibilidad ] = useState('');
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
@@ -56,6 +57,7 @@ function TallasCantidades(props) {
 				productos.numeros.forEach((numeros, index) => {
 					if (numeros.cantidad === 0 && numeros.cantidad === index) {
 						setDisponibilidad('Producto no disponible');
+						setDisabled(true);
 					}
 				});
 				setCategoria('calzado');
@@ -89,6 +91,7 @@ function TallasCantidades(props) {
 				productos.tallas.forEach((tallas, index) => {
 					if (tallas.cantidad === 0 && tallas.cantidad === index) {
 						setDisponibilidad('Producto no disponible');
+						setDisabled(true);
 					}
 				});
 				setCategoria('ropa');
@@ -122,6 +125,7 @@ function TallasCantidades(props) {
 				setCategoria('otros');
 				if (productos.cantidad === 0) {
 					setDisponibilidad('Producto no disponible');
+					setDisabled(true);
 				}
 			}
 		},
@@ -158,19 +162,14 @@ function TallasCantidades(props) {
 	}
 
 	const showModal = () => {
-		if(!token){
+		if (!token) {
 			props.history.push('/entrar');
 			notification.info({
 				message: 'inicia sesión para poder realizar tus compras',
 				duration: 2
 			});
-		}else{
-			if (disponibilidad.length) {
-				notification.info({
-					message: 'No hay productos disponibles',
-					duration: 2
-				});
-			} else if (categoria === 'ropa' && !tallas.talla) {
+		} else {
+			if (categoria === 'ropa' && !tallas.talla) {
 				notification.info({
 					message: 'Selecciona una talla',
 					duration: 2
@@ -202,19 +201,13 @@ function TallasCantidades(props) {
 	};
 
 	function showConfirm() {
-		if (disponibilidad.length) {
-			setLoading(false);
-			notification.info({
-				message: 'No hay productos disponibles',
-				duration: 2
-			});
-		}else if(!token){
+		if (!token) {
 			props.history.push('/entrar');
 			notification.info({
 				message: 'inicia sesión para poder realizar tus compras',
 				duration: 2
 			});
-		}else{
+		} else {
 			if (categoria === 'calzado' && !numeros.numero) {
 				notification.info({
 					message: 'Selecciona una talla',
@@ -262,18 +255,11 @@ function TallasCantidades(props) {
 				});
 			}
 		}
-		
 	}
 
 	async function Carrito() {
 		////AGREGAR CARRITO
-		if (disponibilidad.length) {
-			setLoading(false);
-			notification.info({
-				message: 'No hay productos disponibles',
-				duration: 2
-			});
-		}else if(!token){
+		if (!token) {
 			props.history.push('/entrar');
 			notification.info({
 				message: 'inicia sesión para poder realizar tus compras',
@@ -290,7 +276,7 @@ function TallasCantidades(props) {
 					});
 				} else {
 					const talla = '';
-					if (AgregarCarrito(decoded._id, productos._id, cantidadFinal, talla, numeros.numero, token)){
+					if (AgregarCarrito(decoded._id, productos._id, cantidadFinal, talla, numeros.numero, token)) {
 						setActive(!active);
 					}
 					setLoading(false);
@@ -411,6 +397,7 @@ function TallasCantidades(props) {
 							}
 						>
 							<InputNumber
+								type="number"
 								size="large"
 								min={1}
 								max={categoria === 'ropa' ? tallas.cantidad : numeros.cantidad}
@@ -447,6 +434,7 @@ function TallasCantidades(props) {
 							size="large"
 							style={{ width: 200 }}
 							onClick={() => showConfirm()}
+							disabled={disabled}
 						>
 							<TagsOutlined style={{ fontSize: 20 }} />
 							Comprar ahora
@@ -456,11 +444,18 @@ function TallasCantidades(props) {
 							size="large"
 							style={{ width: 200 }}
 							onClick={() => showModal()}
+							disabled={disabled}
 						>
 							<BellOutlined style={{ fontSize: 20 }} />
 							Apartar
 						</Button>
-						<Button className="mt-3 d-block" size="large" style={{ width: 200 }} onClick={() => Carrito()}>
+						<Button
+							className="mt-3 d-block"
+							size="large"
+							style={{ width: 200 }}
+							disabled={disabled}
+							onClick={() => Carrito()}
+						>
 							<ShoppingCartOutlined style={{ fontSize: 20 }} />
 							Agregar al carrito
 						</Button>

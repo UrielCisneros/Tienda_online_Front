@@ -11,6 +11,7 @@ import 'antd/dist/antd.css';
 import './vistas.scss';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import DOMPurify from 'dompurify';
+import { withRouter } from 'react-router-dom';
 
 function VistaProductos(props) {
 	const [ productos, setProductos ] = useState([]);
@@ -34,21 +35,8 @@ function VistaProductos(props) {
 				setLoading(false);
 			})
 			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+				console.log(res)
+				props.history.push('/error500');
 			});
 	}
 
@@ -59,6 +47,7 @@ function VistaProductos(props) {
 			setReadMore('read-less');
 		}
 	};
+	console.log(productos)
 
 	return (
 		<Spin size="large" spinning={loading}>
@@ -111,12 +100,24 @@ function VistaProductos(props) {
 							</div>
 						)}
 						<Divider />
+						<div className="row">
+							<div className="col-4">
+								<p style={{fontSize: 20}}>Género:</p>
+								<p style={{fontSize: 15}}>{productos.genero}</p>
+							</div>
+							<div className="col-4">
+								<p style={{fontSize: 20}}>Color:</p>
+								<div style={{ height: 30, width: 30, backgroundColor: productos.color}}/>
+							</div>
+						</div>
+						<Divider />
+						<TallasCantidades producto={productos} /> {/* Componente tallas */}
+						<Divider />
 						<p>
 							<CreditCardOutlined style={{ fontSize: 20 }} className="mr-2" />
 							Formas de Pago
 						</p>
 						<Divider />
-						<TallasCantidades producto={productos} /> {/* Componente tallas */}
 						<div className="descripcion-sm">
 							<Divider />
 							<p className="titulos-vista-productos text-center">Descripcion:</p>
@@ -155,4 +156,4 @@ function VistaProductos(props) {
 	);
 }
 
-export default VistaProductos;
+export default withRouter(VistaProductos);
