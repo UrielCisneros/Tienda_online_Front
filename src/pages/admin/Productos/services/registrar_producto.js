@@ -353,7 +353,7 @@ function RegistrarProducto(props) {
 							placeholder="Seleciona una categoria"
 							onChange={onSelect}
 							dropdownRender={(menu) => (
-								<div>
+								<div >
 									{menu}
 									<Divider style={{ margin: '4px 0' }} />
 									<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
@@ -521,7 +521,7 @@ function RegistrarProducto(props) {
 										<Editor
 											disabled={disabledformProductos}
 											init={{
-												height: 200,
+												height: 300,
 												menubar: true,
 												plugins: [
 													'advlist autolink lists link image charmap print preview anchor',
@@ -607,9 +607,9 @@ function RegistrarProducto(props) {
 				</Spin>
 			</div>
 			<div className="steps-action d-flex justify-content-center align-items-center">
-				{current < steps.length - 1 && (
-					<Button type="primary" onClick={next} disabled={disabled}>
-						Next
+				{current > 0 && (
+					<Button style={{ margin: '0 8px' }} onClick={prev} disabled={disabledPrev}>
+						Previous
 					</Button>
 				)}
 				{current === steps.length - 1 && (
@@ -628,9 +628,9 @@ function RegistrarProducto(props) {
 						Done
 					</Button>
 				)}
-				{current > 0 && (
-					<Button style={{ margin: '0 8px' }} onClick={prev} disabled={disabledPrev}>
-						Previous
+				{current < steps.length - 1 && (
+					<Button type="primary" onClick={next} disabled={disabled}>
+						Next
 					</Button>
 				)}
 			</div>
