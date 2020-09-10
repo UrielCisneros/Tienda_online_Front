@@ -21,6 +21,10 @@ const layout = {
 	wrapperCol: { span: 16 }
 };
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 function RegistrarProducto(props) {
 	const formRef = useRef(null);
 	const [ form ] = Form.useForm();
@@ -41,7 +45,7 @@ function RegistrarProducto(props) {
 	const [ item, setItem ] = useState();
 	const [ buttonCat, setButtonCat ] = useState(true);
 	const [ categoriasBD, setCategoriasBD ] = useState([]);
-	const [ categoriasDefault, setCategoriasDefault ] = useState([ 'ropa', 'calzado' ]);
+	const [ categoriasDefault, setCategoriasDefault ] = useState([ 'Ropa', 'Calzado' ]);
 	const [ subcategoriasDefault, setSubcategoriasDefault ] = useState([]);
 	const [ subCategoriasBD, setSubCategoriasBD ] = useState([]);
 	const [ subCategoria, setSubCategoria ] = useState([]);
@@ -90,6 +94,7 @@ function RegistrarProducto(props) {
 
 	const handleChange = (color) => {
 		setColor(color.hex);
+		console.log(color)
 	};
 
 	const resetColor = () => {
@@ -318,13 +323,13 @@ function RegistrarProducto(props) {
 		setValueSelectSubCat(item);
 		setSubCategoria(item);
 	};
-	
+
 	const onSelectSubCategoria = (value) => {
 		setSubCategoria(value);
 	};
 	const onCategoriaChange = (e) => {
 		if (e.target.value.length !== 0) {
-			setItem(e.target.value);
+			setItem(e.target.value.capitalize());
 			setButtonCat(false);
 		} else {
 			setButtonCat(true);
@@ -332,7 +337,7 @@ function RegistrarProducto(props) {
 	};
 	const onSubCategoriaChange = (e) => {
 		if (e.target.value.length !== 0) {
-			setItem(e.target.value);
+			setItem(e.target.value.capitalize());
 			setButtonCat(false);
 		} else {
 			setButtonCat(true);
@@ -370,7 +375,7 @@ function RegistrarProducto(props) {
 								<Option />
 							) : (
 								categoriasBD.map((item) => {
-									if (item._id === 'ropa' || item._id === 'calzado') {
+									if (item._id === 'Ropa' || item._id === 'Calzado') {
 										return null;
 									} else {
 										return <Option key={item._id}>{item._id}</Option>;
