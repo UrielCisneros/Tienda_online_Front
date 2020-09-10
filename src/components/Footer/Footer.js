@@ -65,7 +65,7 @@ const FooterPage = () => {
        
          <Layout className="layout">
              <Footer >
-                <div id="foot"  className="row">  
+                <div end="xs" id="foot"  className="row">  
                     <div className="col-lg-9 text-lg-left text-center ">
                         <div className="m-4 footer-border">
                             {console.log(imagenCorp)}
