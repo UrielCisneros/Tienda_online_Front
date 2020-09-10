@@ -62,7 +62,7 @@ const Sugerencia = (props) => {
 			setVisible('ml-1 d-flex justify-content-center align-items-center');
 			setLoadingList(true);
 			await clienteAxios
-				.get(`/productos/search/${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}`)
 				.then((res) => {
 					setData(res.data.posts);
 					setLoadingList(false);
@@ -155,10 +155,16 @@ const Sugerencia = (props) => {
 		await clienteAxios
 			.get(`/sugerencia/${productoContext}`)
 			.then((res) => {
-				res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
+				console.log(res)
+				if(res.data.sugerencias){
+					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));	
+				}else {
+					setSugerencia('No hay sugerencia');
+				}
 				setLoading(false);
 			})
 			.catch((res) => {
+				console.log(res)
 				if (res.response.status === 404) {
 					setLoading(false);
 					setSugerencia('No hay sugerencia');

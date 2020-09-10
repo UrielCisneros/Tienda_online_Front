@@ -4,6 +4,7 @@ import { Layout } from 'antd';
 import Navegacion from '../components/Navegacion/Navegacion';
 import FooterPage from '../components/Footer/Footer';
 import './Layout.scss';
+import { MenuProvider } from '../context/carritoContext';
 
 export default function LayoutBasic(props) {
 	const { routes } = props;
@@ -13,6 +14,7 @@ export default function LayoutBasic(props) {
 		<div>
 			<Layout>
 				<Layout>
+					<MenuProvider >
 					<Navegacion />
 					<Content style={{ height: "auto" }}>
 						<div className="site-layout-content flex">
@@ -22,6 +24,7 @@ export default function LayoutBasic(props) {
 					<Footer style={{margin:0,padding: 0}} >
 						<FooterPage style={{margin:0,padding: 0}} />
 					</Footer>
+					</MenuProvider>
 				</Layout>
 				
 			</Layout>

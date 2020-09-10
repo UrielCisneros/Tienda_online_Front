@@ -155,6 +155,7 @@ function SistemaApartado(props) {
 							<Row gutter={16}>{
 								apartados.map((apartado) => (							
 									<MostrarDatosTargeta 
+										key={apartado._id}
 										setDetalleApartado={setDetalleApartado} 
 										showModal={showModal} 
 										apartado={apartado} 

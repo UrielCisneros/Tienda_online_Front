@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Tabs, Form, Input, Upload, Button, notification, Select, Spin } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Tabs, Form, Input, Upload, Button, notification, Select, Spin, Divider } from 'antd';
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import ActualizarGaleria from './actualizar_galeria';
 import ActualizarTalla from './actualizar_talla';
@@ -27,6 +27,12 @@ function ActualizarProducto(props) {
 	const reload = props.reloadProductos;
 	const [ upload, setUpload ] = useState(false);
 
+	const [ item, setItem ] = useState();
+	const [ buttonCat, setButtonCat ] = useState(true);
+	const [ subcategoriasDefault, setSubcategoriasDefault ] = useState([]);
+	const [ subCategoriasBD, setSubCategoriasBD] = useState([]);
+	const [ subCategoria, setSubCategoria] = useState([]);
+
 	const [ productos, setProductos ] = useState([
 		{
 			codigo: '',
@@ -39,15 +45,16 @@ function ActualizarProducto(props) {
 
 	useEffect(
 		() => {
-			if(reload){
+			if (reload) {
 				/* obtenerDatos(); */
 				form.resetFields();
-				setFiles([])
+				setFiles([]);
 				setUpload(false);
 			}
 			obtenerDatos();
+			obtenerSubcategorias();
 		},
-		[ productoID, reload, form ]
+		[ productoID, reload, form, select ]
 	);
 
 	///UPLOAD ANTD PRODUCTO
@@ -78,7 +85,7 @@ function ActualizarProducto(props) {
 				form.setFieldsValue({
 					codigo: res.data.codigo,
 					nombre: res.data.nombre,
-					categoria: res.data.categoria,
+					categoria: res.data.subCategoria,
 					precio: res.data.precio,
 					cantidad: res.data.cantidad,
 					descripcion: res.data.descripcion
@@ -107,9 +114,9 @@ function ActualizarProducto(props) {
 			});
 	};
 
-	const obtenerSelect = (value) => {
+	/* const obtenerSelect = (value) => {
 		setSelect(value);
-	};
+	}; */
 	const obtenerEditor = (value) => {
 		setEditor(value);
 	};
@@ -120,12 +127,59 @@ function ActualizarProducto(props) {
 		});
 	};
 
+	const addItemSubCategoria = () => {
+		setSubcategoriasDefault([ ...subcategoriasDefault, item ]);
+	};
+	const onSelectSubCategoria = (value) => {
+		setSubCategoria(value)
+	}
+	const onSubCategoriaChange = (e) => {
+		if (e.target.value.length !== 0) {
+			setItem(e.target.value);
+			setSubCategoria(e.target.value)
+			setButtonCat(false);
+		} else {
+			setButtonCat(true);
+		}
+	};
+
+	async function obtenerSubcategorias() {
+		if(!select){
+			return null
+		}
+		await clienteAxios
+			.get(`/productos/Subcategorias/${select}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setSubCategoriasBD(res.data);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	}
+
 	const subirDatos = async () => {
 		const formData = new FormData();
-		if (productos.categoria === 'otros') {
+		if (productos.tipoCategoria === 'otros') {
 			formData.append('codigo', productos.codigo);
 			formData.append('nombre', productos.nombre);
-			formData.append('categoria', select);
+			formData.append('categoria', productos.categoria);
+			formData.append('subCategoria', subCategoria);
 			formData.append('cantidad', productos.cantidad);
 			formData.append('precio', productos.precio);
 			formData.append('descripcion', editor);
@@ -133,7 +187,8 @@ function ActualizarProducto(props) {
 		} else {
 			formData.append('codigo', productos.codigo);
 			formData.append('nombre', productos.nombre);
-			formData.append('categoria', select);
+			formData.append('categoria', productos.categoria);
+			formData.append('subCategoria', subCategoria);
 			formData.append('precio', productos.precio);
 			formData.append('descripcion', editor);
 			formData.append('imagen', files);
@@ -198,20 +253,41 @@ function ActualizarProducto(props) {
 								<Input name="nombre" />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Categoria">
-							<Form.Item
-								rules={[ { required: true, message: 'Este campo es requerido' } ]}
-								noStyle
-								name="categoria"
-							>
-								<Select placeholder="Seleciona una categoria" onChange={obtenerSelect}>
-									<Option value="ropa">Ropa</Option>
-									<Option value="calzado">Calzado</Option>
-									<Option value="otros">Otros</Option>
+						<Form.Item label="Subcategoria" name="categoria"  onChange={obtenerValores}>
+							<Form.Item name="categoria">
+								<Select
+									style={{ width: 300 }}
+									placeholder="Seleciona una subcategoria"
+									onChange={onSelectSubCategoria}
+									dropdownRender={(menu) => (
+										<div>
+											{menu}
+											<Divider style={{ margin: '4px 0' }} />
+											<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
+												<Input style={{ flex: 'auto' }} onChange={onSubCategoriaChange} />
+												<Button disabled={buttonCat} onClick={addItemSubCategoria}>
+													<PlusOutlined style={{ fontSize: 20 }} /> Nueva
+												</Button>
+											</div>
+										</div>
+									)}
+								>
+									{subcategoriasDefault.map((item) => <Option key={item}>{item}</Option>)}
+									{subCategoriasBD.length === 0 ? (
+										<Option />
+									) : (
+										subCategoriasBD.map((item) => {
+											if (item._id === null) {
+												return null;
+											} else {
+												return <Option key={item._id}>{item._id}</Option>;
+											}
+										})
+									)}
 								</Select>
 							</Form.Item>
 						</Form.Item>
-						{productos.categoria === 'otros' ? (
+						{productos.tipoCategoria === 'otros' ? (
 							<Form.Item label="Cantidad" onChange={obtenerValores}>
 								<Form.Item
 									rules={[ { required: true, message: 'Este campo es requerido' } ]}
@@ -233,7 +309,7 @@ function ActualizarProducto(props) {
 								<Input type="number" name="precio" />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Descripcion del producto" name="descripcion" >
+						<Form.Item label="Descripcion del producto" name="descripcion">
 							<Form.Item
 								rules={[ { required: true, message: 'Este campo es requerido' } ]}
 								noStyle
@@ -241,8 +317,8 @@ function ActualizarProducto(props) {
 								valuePropName="Editor"
 							>
 								<Editor
-								value={editor}
-								name="descripcion"
+									value={editor}
+									name="descripcion"
 									init={{
 										height: 300,
 										menubar: true,
