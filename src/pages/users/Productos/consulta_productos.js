@@ -19,7 +19,11 @@ function ConsultaProductos(props) {
 
 	useEffect(
 		() => {
-			obtenerProductos(12, page);
+			if(window.screen.width < 768){
+				obtenerProductos(12, page);
+			}else{
+				obtenerProductos(40, page);
+			}
 		},
 		[ page ]
 	);
@@ -81,7 +85,7 @@ function ConsultaProductos(props) {
 	}
 
 	const render = productos.map((productos) => (
-		<Col span={4} key={productos._id}>
+		<Col span={window.screen.width < 768 ? 12 : 4} key={productos._id}>
 			<Link to={`/vista_producto/${productos._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card
