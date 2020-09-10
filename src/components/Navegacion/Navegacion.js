@@ -121,8 +121,8 @@ const Navegacion = (props) => {
 								{!tienda ? (
 									<></>
 								) : (
-									<Menu.Item key="/quienes_somos">
-										Quiénes somos<Link to="/quienes_somos" />
+									<Menu.Item key="/confirmacion_compra">
+										Quiénes somos<Link to="/confirmacion_compra" />
 									</Menu.Item>
 								)}
 								{!decoded ? (

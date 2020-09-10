@@ -7,7 +7,7 @@ import "./confirmacion.scss";
 export default function confirmacion_compra() {
     return (
         <div>
-        <h1>Termina de realizar tu compra:</h1>
+        <h1 className="text-center mt-4" >Termina de realizar tu compra:</h1>
         <div className="container prinpales">
             <div className="row">
                 <div className="col-lg-6">
