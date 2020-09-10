@@ -28,37 +28,38 @@ function ConsultaProductos(props) {
 
 	useEffect(
 		() => {
-			async function obtenerProductos(limit, page) {
-				setLoading(true);
-				await clienteAxios
-					.get(`/productos?limit=${limit}&page=${page}`)
-					.then((res) => {
-						setProductos(res.data.posts.docs);
-						setProductosPaginacion(res.data.posts);
-						setLoading(false);
-					})
-					.catch((res) => {
-						if (res.response.status === 404 || res.response.status === 500) {
-							setLoading(false);
-							notification.error({
-								message: 'Error',
-								description: res.response.data.message,
-								duration: 2
-							});
-						} else {
-							setLoading(false);
-							notification.error({
-								message: 'Error',
-								description: 'Hubo un error',
-								duration: 2
-							});
-						}
-					});
-			}
-			obtenerProductos(10, page);
+			obtenerProductos(40, page);
 		},
 		[ page ]
 	);
+	
+	async function obtenerProductos(limit, page) {
+		setLoading(true);
+		await clienteAxios
+			.get(`/productos?limit=${limit}&page=${page}`)
+			.then((res) => {
+				setProductos(res.data.posts.docs);
+				setProductosPaginacion(res.data.posts);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	}
 
 	function agregarPorcentaje(precio_descuento, precio_producto) {
 		var porcentaje = Math.round(precio_descuento / precio_producto * 100);
