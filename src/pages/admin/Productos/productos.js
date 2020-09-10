@@ -259,7 +259,7 @@ function RegistrarProductos(props) {
 				>
 					<div className="contenedor-titulos-productos">
 						<h1 className="titulo-producto">{productos.nombre}</h1>
-						<h2 className="h5">{formatoMexico(productos.precio)}</h2>
+						<h2 className="h5">$ {formatoMexico(productos.precio)}</h2>
 					</div>
 				</Card>
 			</Card.Grid>

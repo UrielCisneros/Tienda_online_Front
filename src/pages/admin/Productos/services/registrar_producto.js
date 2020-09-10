@@ -511,7 +511,7 @@ function RegistrarProducto(props) {
 												) : null}
 											</div>
 											<Button className="d-inline ml-2" size="middle" type="text" onClick={resetColor}>
-												reset color
+												Quitar color
 											</Button>
 										</div>
 									</Form.Item>
