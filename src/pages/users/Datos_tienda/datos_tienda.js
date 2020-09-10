@@ -9,11 +9,9 @@ import {FacebookFilled, InstagramFilled, TwitterCircleFilled } from '@ant-design
 
 export default function Datos_tienda() {
     
-    const [lat] = useState("19.767980")
-    const [lng] = useState("-104.358159")
-
     const [tienda, setTienda] = useState({})
     const [direccion, setDireccion] = useState({})
+    const [ubicacion, setUbicacion] = useState({})
 
     const [infor, setInfo] = useState('')
     
@@ -32,8 +30,8 @@ export default function Datos_tienda() {
 		clienteAxios.get('/tienda/')
 			.then((res) => {
                 setTienda(res.data[0]);
-                setInfo(res.data[0].nombre)
-
+                setInfo(res.data[0].nombre);
+                console.log((res.data[0].ubicacion[0]))
                 // if(res.data[0].nombre !== 'undefined' && res.data[0].nombre !== ''){
                 //    setInfo(res.data[0].nombre);
                 // }
@@ -49,51 +47,48 @@ export default function Datos_tienda() {
         peticionDireccion();
     }, []);
 
-
+    const [lat] = useState("19.767980")
+    const [lng] = useState("-104.358159")
 
     return (
         <div>
-            <div className="container-fluid">
+            <div className="container-fluid mt-5">
 
-            <div className="bg-dark" style={{height: '6 vh'}}>
+            {/* <div className="bg-dark" style={{height: '6 vh'}}>
                 <h1 className="text-white text-center h2 m-3">Localiza nuestra tienda</h1>
-            </div>
-
-                <div className="row">
-                    <div className="col-lg-8">
-                    <Geolocalizacion 
-                        height="48vh"
-                        width="100%"
-                        center={[lat, lng]}
-                        titleLayer={'map'}
-                        zoom={15}
-                        apikey = 'I0G4Jr6RUg71dsHIRF0qGzn0l39bAY1V'
-                        nombreMarcador = "AB soluciones Empresariales"
-                    />
-                    </div>
-
-                    <div className="col-lg-4 text-center caligra" >
-                    {infor !== '' ? 
+            </div> */}
+                {infor !== '' ? 
                     (
-                        <div> 
-                            <img
-                            className="logotipo"
-                            alt="imagen de base"
-                            src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
+                    <div className="row">
+                        <div className="col-lg-9">
+                            <Geolocalizacion 
+                                height="48vh"
+                                width="100%"
+                                center={[tienda.ubicacion[0].lat, tienda.ubicacion[0].lng]}
+                                titleLayer={'map'}
+                                zoom={15}
+                                apikey = 'I0G4Jr6RUg71dsHIRF0qGzn0l39bAY1V'
+                                nombreMarcador = "AB soluciones Empresariales"
                             />
-                               
+                        </div>
+
+                        <div className="col-lg-3 text-center caligra" >
+                            <img
+                                className="logotipo"
+                                alt="imagen de base"
+                                src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
+                            />
+                                
                             <p className="fonts font-weight-bold"> {tienda.nombre} </p>
                             <p className="fonts">Tel: <spam className="subs">{tienda.telefono}</spam></p>
                             <p className="fonts">Direccion: <spam className="fonts">{direccion.calle_numero}</spam></p>
                             <p className="fonts">Col. <spam className="fonts"> {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
                             <p className="fonts">CP: <spam>{direccion.cp}</spam></p> 
                         </div>
-                    ):('')
-                    }
-                       
-                      
+                        
                     </div>
-                </div>
+                ):('')
+                }
             </div>           
         </div>
     )
