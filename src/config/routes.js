@@ -1,6 +1,6 @@
 //layout
 import LayoutAdmin from '../components/LayoutAdmin'
-import LayoutBasic from '../components/Layout'
+import LayoutBasic from '../components/Layout/Layout'
 
 //Admin pages
 import AdminHome from '../pages/admin/Principal/principal'
