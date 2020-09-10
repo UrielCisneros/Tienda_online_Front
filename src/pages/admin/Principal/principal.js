@@ -25,8 +25,6 @@ function Admin(props) {
         props.history.push('/')
     }
 
-    console.log(token);
-
     return (
         <div>
             <Helmet>

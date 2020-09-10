@@ -19,6 +19,8 @@ export default function Home(props) {
                 zoom={15}
                 apikey = 'I0G4Jr6RUg71dsHIRF0qGzn0l39bAY1V'
                 nombreMarcador = "AB soluciones Empresariales"
+                tituloheader={true}
+                draggable={false}
             />
 		</div>
 	);
