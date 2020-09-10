@@ -31,7 +31,6 @@ export default function Datos_tienda() {
 			.then((res) => {
                 setTienda(res.data[0]);
                 setInfo(res.data[0].nombre);
-                console.log((res.data[0].ubicacion[0]))
                 // if(res.data[0].nombre !== 'undefined' && res.data[0].nombre !== ''){
                 //    setInfo(res.data[0].nombre);
                 // }
@@ -85,7 +84,6 @@ export default function Datos_tienda() {
                             <p className="fonts">Col. <spam className="fonts"> {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
                             <p className="fonts">CP: <spam>{direccion.cp}</spam></p> 
                         </div>
-                        
                     </div>
                 ):('')
                 }
