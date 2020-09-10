@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
-import { Divider, Row, Col, notification, Spin } from 'antd';
+import { Divider, Row, Col, Tag, Spin } from 'antd';
 import { CreditCardOutlined } from '@ant-design/icons';
 import Scroll from './subs/scroll';
 import Sugerencia from './subs/sugerencia';
@@ -100,14 +100,14 @@ function VistaProductos(props) {
 							</div>
 						)}
 						<Divider />
-						<div className="row">
-							<div className="col-4">
+						<div className="row justify-content-center">
+							<div className="col-3">
 								<p style={{fontSize: 20}}>Género:</p>
-								<p style={{fontSize: 15}}>{productos.genero}</p>
+								<Tag color="blue" style={{fontSize: 16}}>{productos.genero}</Tag>
 							</div>
-							<div className="col-4">
-								<p style={{fontSize: 20}}>Color:</p>
-								<div style={{ height: 30, width: 30, backgroundColor: productos.color}}/>
+							<div className="col-3">
+								<p style={{fontSize: 20, marginBottom: 15}}>Color:</p>
+								<div className="rounded-circle ml-2" style={{ height: 30, width: 30, backgroundColor: productos.color}}/>
 							</div>
 						</div>
 						<Divider />
