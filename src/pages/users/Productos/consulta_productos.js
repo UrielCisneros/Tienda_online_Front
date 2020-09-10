@@ -19,33 +19,6 @@ function ConsultaProductos(props) {
 
 	useEffect(
 		() => {
-			async function obtenerProductos(limit, page) {
-				setLoading(true);
-				await clienteAxios
-					.get(`/productos?limit=${limit}&page=${page}`)
-					.then((res) => {
-						setProductos(res.data.posts.docs);
-						setProductosPaginacion(res.data.posts);
-						setLoading(false);
-					})
-					.catch((res) => {
-						if (res.response.status === 404 || res.response.status === 500) {
-							setLoading(false);
-							notification.error({
-								message: 'Error',
-								description: res.response.data.message,
-								duration: 2
-							});
-						} else {
-							setLoading(false);
-							notification.error({
-								message: 'Error',
-								description: 'Hubo un error',
-								duration: 2
-							});
-						}
-					});
-			}
 			obtenerProductos(12, page);
 		},
 		[ page ]
@@ -156,7 +129,7 @@ function ConsultaProductos(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<div className="principal-productos">NUESTROS PRODUCTOS</div>
+			<div className="principal-productos"><p>NUESTROS PRODUCTOS</p></div>
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
 					<Row gutter={10} style={{ maxWidth: '90vw' }} className="mt-4">
