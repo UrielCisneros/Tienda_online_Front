@@ -14,18 +14,16 @@ const EstadoPedido = (props) => {
     const setReload = props.reload;
     const [ loading, setLoading ] = useState(false);
     const [ disabled, setDisabled ] = useState(false);
-    const [ datos, setDatos ] = useState({
-        estado_pedido: '',
-        mensaje_admin: ''
-    })
+    const [ datos, setDatos ] = useState({})
 
     useEffect(() => {
         obtenerPedido();
-        setDisabled(false);
+		setDisabled(false);
     }, [IDpedido])
 
 	const cambiarEstado = async () => {
 		setLoading(true);
+		console.log(datos);
 		await clienteAxios
 			.put(`/pedidos/info/${pedidoID._id}`, datos,  {
 				headers: {
@@ -59,7 +57,8 @@ const EstadoPedido = (props) => {
 					});
 				}
 			});
-    };
+	};
+	
     const obtenerPedido = async () => {
 		setLoading(true);
 		await clienteAxios
@@ -70,12 +69,21 @@ const EstadoPedido = (props) => {
 			})
 			.then((res) => {
 				setLoading(false);
-                setPedido(res.data);
+				setPedido(res.data);
+				console.log(res.data);
                 form.setFieldsValue({
-					mensaje_admin: res.data.mensaje_admin
-                });
+					estado_pedido: res.data.estado_pedido, 
+					mensaje_admin: res.data.mensaje_admin,
+					url: res.data.url,
+					paqueteria: res.data.paqueteria,
+					codigo_seguimiento: res.data.codigo_seguimiento,
+			   });
                 setDatos({
-                    ...datos, 'estado_pedido': res.data.estado_pedido, 'mensaje_admin': res.data.mensaje_admin
+					 estado_pedido: res.data.estado_pedido, 
+					 mensaje_admin: res.data.mensaje_admin,
+					 url: res.data.url,
+					 paqueteria: res.data.paqueteria,
+					 codigo_seguimiento: res.data.codigo_seguimiento,
                 });
 			})
 			.catch((res) => {
@@ -107,10 +115,10 @@ const EstadoPedido = (props) => {
     }
     function onChange(e) {
         setDatos({
-            ...datos, 'mensaje_admin': e.target.value
+            ...datos, [e.target.name]: e.target.value
         });
         setPedido({
-            ...pedido, mensaje_admin: e.target.value
+            ...pedido, [e.target.name]: e.target.value
         });
 	}
 
@@ -133,15 +141,29 @@ const EstadoPedido = (props) => {
 					{pedido.estado_pedido} <DownOutlined />
 				</Button>
 			</Dropdown>
-			<Divider orientation="left">Mensaje para el cliente</Divider>
-			<p style={{fontSize: 16}}>Si el producto ya fue enviado puedes mandarle un mensaje a tu cliente para notificarle</p>
+			<Divider orientation="left">Informacion de envio</Divider>
+			<p style={{fontSize: 16}}>Si el producto ya fue enviado puedes agregar la infoemacion de envio.</p>
+
 			<Form onFinish={cambiarEstado} form={form}>
+				<h6>Mensaje:</h6>
 				<Form.Item name="mensaje_admin">
-					<TextArea rows={4} name="mensaje_admin" onChange={onChange}/>
+					<TextArea rows={4} name="mensaje_admin" placeholder="Mensaje para el usuario"  onChange={onChange}/>
+				</Form.Item>
+				<h6>Url de vinculacion:</h6>
+				<Form.Item name="url" onChange={onChange}>
+					<Input name="url" placeholder="Url de vinculacion del paquete" />
+				</Form.Item>
+				<h6>Paqueteria:</h6>
+				<Form.Item name="paqueteria" onChange={onChange}>
+					<Input name="paqueteria" placeholder="Nombre del Autor" />
+				</Form.Item>
+				<h6>Codigo de seguimiento:</h6>
+				<Form.Item name="codigo_seguimiento" onChange={onChange}>
+					<Input name="codigo_seguimiento" placeholder="Nombre del Autor" />
 				</Form.Item>
 				<Form.Item >
 					<Button type="primary" htmlType="submit" className="float-right">
-						Enviar
+						Guardar
 					</Button>
 				</Form.Item>
 			</Form>
