@@ -4,19 +4,10 @@ import { Card, Col, Row, Spin, notification, Result } from 'antd';
 import Pagination from '../../../components/Pagination/pagination';
 import queryString from 'query-string';
 import { Link } from 'react-router-dom';
+import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import './productos.scss';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
-
-const formatoMexico = (number) => {
-	if (!number) {
-		return null;
-	} else {
-		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-		const rep = '$1,';
-		return number.toString().replace(exp, rep);
-	}
-};
 
 function ConsultaProductos(props) {
 	const { location, history } = props.propiedades;
@@ -55,23 +46,45 @@ function ConsultaProductos(props) {
 						}
 					});
 			}
-			obtenerProductos(10, page);
+			obtenerProductos(12, page);
 		},
 		[ page ]
 	);
 
-	function agregarPorcentaje(precio_descuento, precio_producto) {
-		var porcentaje = Math.round(precio_descuento / precio_producto * 100);
-		var descuento = 100 - porcentaje;
-		return descuento;
+	async function obtenerProductos(limit, page) {
+		setLoading(true);
+		await clienteAxios
+			.get(`/productos?limit=${limit}&page=${page}`)
+			.then((res) => {
+				setProductos(res.data.posts.docs);
+				setProductosPaginacion(res.data.posts);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
 	}
 
 	const render = productos.map((productos) => (
-		<Col span={32} key={productos._id}>
+		<Col span={4} key={productos._id}>
 			<Link to={`/vista_producto/${productos._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card
-						bodyStyle={{ padding: 22, backgroundColor: '#F7F7F7'}}
+						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7'}}
 						className="contenedor-card-body"
 						cover={
 							<div className="contenedor-imagen-producto-principal">
@@ -83,23 +96,24 @@ function ConsultaProductos(props) {
 							</div>
 						}
 					>
-						{!productos.todos.length ? (
-							<div className="contenedor-titulos-productos">
+						<div className="contenedor-titulos-productos titulo-elipsis">
 								<h1 className="titulo-producto">{productos.nombre}</h1>
+						</div>
+						{!productos.todos.length ? (
+							<div className="contenedor-precios-productos">
 								<h2 className="h5 precio-rebaja">${formatoMexico(productos.precio)}</h2>
 							</div>
 						) : (
 							productos.todos.map((promo) => {
 								return (
-									<div className="contenedor-titulos-productos" key={promo._id}>
-										<h1 className="titulo-producto">{productos.nombre}</h1>
-										<h2 className="h5 precio-producto d-inline mr-2">
+									<div className="contenedor-precios-productos" key={promo._id}>
+										<h2 className="h5 precio-producto rebajado mr-2">
 											${formatoMexico(productos.precio)}
 										</h2>
-										<h2 className="h5 precio-rebaja d-inline mr-2">
+										<h2 className="h5 precio-rebaja d-inline mr-1">
 											${formatoMexico(promo.precioPromocion)}
 										</h2>
-										<p className="h4 porcentaje-descuento d-inline mr-2">
+										<p className="h4 porcentaje-descuento d-inline">
 											{agregarPorcentaje(promo.precioPromocion, productos.precio)}%OFF
 										</p>
 									</div>
@@ -117,7 +131,7 @@ function ConsultaProductos(props) {
 			<div className="principal-productos">NUESTROS PRODUCTOS</div>
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
-					<Row gutter={32} style={{ maxWidth: '90vw' }} className="mt-4">
+					<Row gutter={10} style={{ maxWidth: '90vw' }} className="mt-4">
 						{productos.length ? (
 							render
 						) : (

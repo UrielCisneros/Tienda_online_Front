@@ -1,12 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Tabs, Form, Input, Upload, Button, notification, Select, Spin } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Tabs, Form, Input, Upload, Button, notification, Select, Spin, Divider } from 'antd';
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import ActualizarGaleria from './actualizar_galeria';
 import ActualizarTalla from './actualizar_talla';
 import ActualizarNumero from './actualizar_numero';
 import { Editor } from '@tinymce/tinymce-react';
+import { SketchPicker } from 'react-color';
+import reactCSS from 'reactcss';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -27,6 +29,14 @@ function ActualizarProducto(props) {
 	const reload = props.reloadProductos;
 	const [ upload, setUpload ] = useState(false);
 
+	const [ item, setItem ] = useState();
+	const [ buttonCat, setButtonCat ] = useState(true);
+	const [ subcategoriasDefault, setSubcategoriasDefault ] = useState([]);
+	const [ subCategoriasBD, setSubCategoriasBD ] = useState([]);
+	const [ subCategoria, setSubCategoria ] = useState([]);
+	const [ genero, setGenero ] = useState('');
+	const [ valueSelect, setValueSelect ] = useState();
+
 	const [ productos, setProductos ] = useState([
 		{
 			codigo: '',
@@ -36,18 +46,68 @@ function ActualizarProducto(props) {
 			imagen: ''
 		}
 	]);
+	const [ displayColorPicker, setDisplayColorPicker ] = useState(false);
+	const [ color, setColor ] = useState('FFFFFF');
+	const styles = reactCSS({
+		default: {
+			color: {
+				width: '36px',
+				height: '14px',
+				borderRadius: '2px',
+				background: color
+				/* background: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})` */
+			},
+			swatch: {
+				padding: '5px',
+				background: '#fff',
+				borderRadius: '1px',
+				boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+				display: 'inline-block',
+				cursor: 'pointer'
+			},
+			popover: {
+				position: 'absolute',
+				zIndex: '2'
+			},
+			cover: {
+				position: 'fixed',
+				top: '0px',
+				right: '0px',
+				bottom: '0px',
+				left: '0px'
+			}
+		}
+	});
+
+	const handleClick = () => {
+		setDisplayColorPicker(true);
+	};
+
+	const handleClose = () => {
+		setDisplayColorPicker(false);
+	};
+
+	const handleChange = (color) => {
+		setColor(color.hex);
+	};
+
+	const resetColor = () => {
+		setColor('');
+	};
 
 	useEffect(
 		() => {
-			if(reload){
+			if (reload) {
 				/* obtenerDatos(); */
 				form.resetFields();
-				setFiles([])
+				setFiles([]);
 				setUpload(false);
+				setColor('');
 			}
 			obtenerDatos();
+			obtenerSubcategorias();
 		},
-		[ productoID, reload, form ]
+		[ productoID, reload, form, select ]
 	);
 
 	///UPLOAD ANTD PRODUCTO
@@ -78,7 +138,8 @@ function ActualizarProducto(props) {
 				form.setFieldsValue({
 					codigo: res.data.codigo,
 					nombre: res.data.nombre,
-					categoria: res.data.categoria,
+					categoria: res.data.subCategoria,
+					genero: res.data.genero,
 					precio: res.data.precio,
 					cantidad: res.data.cantidad,
 					descripcion: res.data.descripcion
@@ -87,6 +148,9 @@ function ActualizarProducto(props) {
 				setEditor(res.data.descripcion);
 				setFiles(res.data.imagen);
 				setProductos(res.data);
+				setColor(res.data.color);
+				setGenero(res.data.genero);
+				setSubCategoria(res.data.subCategoria);
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -107,8 +171,8 @@ function ActualizarProducto(props) {
 			});
 	};
 
-	const obtenerSelect = (value) => {
-		setSelect(value);
+	const generoOnChange = (value) => {
+		setGenero(value);
 	};
 	const obtenerEditor = (value) => {
 		setEditor(value);
@@ -120,12 +184,63 @@ function ActualizarProducto(props) {
 		});
 	};
 
+	const addItemSubCategoria = () => {
+		setSubcategoriasDefault([ ...subcategoriasDefault, item ]);
+		setSubCategoria(item);
+		setValueSelect(item);
+	};
+	const onSelectSubCategoria = (value) => {
+		setSubCategoria(value);
+	};
+	const onSubCategoriaChange = (e) => {
+		if (e.target.value.length !== 0) {
+			setItem(e.target.value);
+			setSubCategoria(e.target.value);
+			setButtonCat(false);
+		} else {
+			setButtonCat(true);
+		}
+	};
+
+	async function obtenerSubcategorias() {
+		if (!select) {
+			return null;
+		}
+		await clienteAxios
+			.get(`/productos/Subcategorias/${select}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setSubCategoriasBD(res.data);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	}
+
 	const subirDatos = async () => {
 		const formData = new FormData();
-		if (productos.categoria === 'otros') {
+		if (productos.tipoCategoria === 'otros') {
 			formData.append('codigo', productos.codigo);
 			formData.append('nombre', productos.nombre);
-			formData.append('categoria', select);
+			formData.append('categoria', productos.categoria);
+			formData.append('subCategoria', subCategoria);
+			formData.append('genero', genero);
+			formData.append('color', color);
 			formData.append('cantidad', productos.cantidad);
 			formData.append('precio', productos.precio);
 			formData.append('descripcion', editor);
@@ -133,7 +248,10 @@ function ActualizarProducto(props) {
 		} else {
 			formData.append('codigo', productos.codigo);
 			formData.append('nombre', productos.nombre);
-			formData.append('categoria', select);
+			formData.append('categoria', productos.categoria);
+			formData.append('subCategoria', subCategoria);
+			formData.append('genero', genero);
+			formData.append('color', color);
 			formData.append('precio', productos.precio);
 			formData.append('descripcion', editor);
 			formData.append('imagen', files);
@@ -198,20 +316,78 @@ function ActualizarProducto(props) {
 								<Input name="nombre" />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Categoria">
-							<Form.Item
-								rules={[ { required: true, message: 'Este campo es requerido' } ]}
-								noStyle
-								name="categoria"
-							>
-								<Select placeholder="Seleciona una categoria" onChange={obtenerSelect}>
-									<Option value="ropa">Ropa</Option>
-									<Option value="calzado">Calzado</Option>
-									<Option value="otros">Otros</Option>
+						<Form.Item label="Subcategoria" name="categoria" onChange={obtenerValores}>
+							<Form.Item name="categoria">
+								<Select
+									style={{ width: 300 }}
+									placeholder="Seleciona una subcategoria"
+									value={valueSelect}
+									onChange={onSelectSubCategoria}
+									dropdownRender={(menu) => (
+										<div>
+											{menu}
+											<Divider style={{ margin: '4px 0' }} />
+											<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
+												<Input style={{ flex: 'auto' }} onChange={onSubCategoriaChange} />
+												<Button disabled={buttonCat} onClick={addItemSubCategoria}>
+													<PlusOutlined style={{ fontSize: 20 }} /> Nueva
+												</Button>
+											</div>
+										</div>
+									)}
+								>
+									{subcategoriasDefault.map((item) => <Option key={item}>{item}</Option>)}
+									{subCategoriasBD.length === 0 ? (
+										<Option />
+									) : (
+										subCategoriasBD.map((item) => {
+											if (item._id === null) {
+												return null;
+											} else {
+												return <Option key={item._id}>{item._id}</Option>;
+											}
+										})
+									)}
 								</Select>
 							</Form.Item>
 						</Form.Item>
-						{productos.categoria === 'otros' ? (
+						<Form.Item label="Género" onChange={obtenerValores}>
+							<Form.Item name="genero">
+								<Select
+									name="genero"
+									placeholder="Selecciona género"
+									style={{ width: 250 }}
+									onChange={generoOnChange}
+								>
+									<Option value="niño">Niño</Option>
+									<Option value="niña">Niña</Option>
+									<Option value="hombre">Hombre</Option>
+									<Option value="mujer">Mujer</Option>
+									<Option value="mixto">Mixto</Option>
+								</Select>
+							</Form.Item>
+						</Form.Item>
+						<Form.Item label="Color del producto" onChange={obtenerValores}>
+							<Form.Item name="color">
+								<div className="d-flex align-items-center">
+									<div className="d-inline">
+										<div style={styles.swatch} onClick={handleClick}>
+											<div style={styles.color} />
+										</div>
+										{displayColorPicker ? (
+											<div style={styles.popover}>
+												<div style={styles.cover} onClick={handleClose} />
+												<SketchPicker color={color} onChange={handleChange} />
+											</div>
+										) : null}
+									</div>
+									<Button className="d-inline ml-2" size="middle" type="text" onClick={resetColor}>
+										Quitar color
+									</Button>
+								</div>
+							</Form.Item>
+						</Form.Item>
+						{productos.tipoCategoria === 'otros' ? (
 							<Form.Item label="Cantidad" onChange={obtenerValores}>
 								<Form.Item
 									rules={[ { required: true, message: 'Este campo es requerido' } ]}
@@ -233,7 +409,7 @@ function ActualizarProducto(props) {
 								<Input type="number" name="precio" />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Descripcion del producto" name="descripcion" >
+						<Form.Item label="Descripcion del producto" name="descripcion">
 							<Form.Item
 								rules={[ { required: true, message: 'Este campo es requerido' } ]}
 								noStyle
@@ -241,8 +417,8 @@ function ActualizarProducto(props) {
 								valuePropName="Editor"
 							>
 								<Editor
-								value={editor}
-								name="descripcion"
+									value={editor}
+									name="descripcion"
 									init={{
 										height: 300,
 										menubar: true,

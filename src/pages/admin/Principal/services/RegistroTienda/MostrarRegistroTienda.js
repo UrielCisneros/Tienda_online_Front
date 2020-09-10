@@ -41,7 +41,6 @@ import {Link} from 'react-router-dom';
         setLoading(true);
         clienteAxios.get(`/tienda/`)
         .then((res) => {
-            console.log(res.data)
             setLoading(false);
             setDatosNegocio(res.data[0])
             if(res.data[0]){
@@ -82,7 +81,6 @@ import {Link} from 'react-router-dom';
             setLat("19.767980")
             setLng("-104.358159")
             setDatosNegocio({})
-            console.log(err)
             notification.error({
                 message: 'Error del servidor',
                 description:

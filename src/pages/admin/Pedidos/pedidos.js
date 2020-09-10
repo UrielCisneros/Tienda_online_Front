@@ -175,95 +175,97 @@ function Pedidos(props) {
 		setVisible(false);
 	};
 
-	const render = pedidos.map((pedidos) => (
-		<Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} key={pedidos._id}>
-			<Card
-				className="shadow-sm card-p-pedidos"
-				actions={[
-					<div className="d-flex justify-content-center align-items-center">
-						<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />
-						<p
-							onClick={() => {
-								setDetallePedido(pedidos);
-								showModal();
-							}}
-							className="d-inline"
-						>
-							Detalles del pedido
-						</p>
-					</div>,
-					<div className="d-flex justify-content-center align-items-center">
-						<EditOutlined className="mr-2" style={{ fontSize: 20 }} />
-						<p
-							onClick={() => {
-								setDetallePedido(pedidos);
-								showModalEstado();
-							}}
-							className="d-inline"
-						>
-							Cambiar estado
-						</p>
-					</div>
-				]}
-			>
-				<Meta
-                    className="contenedor-card-pedidos"
-					description={
-						<div>
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">ID del pedido: </h6>
-								<p className="data-info-pedidos">{pedidos._id}</p>
-							</div>
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">Creado el:</h6>
-								<p className="data-info-pedidos">{formatoFecha(pedidos.createdAt)}</p>
-							</div>
-							{pedidos.fecha_envio ? (
-								<div className="my-2">
-									<h6 className="titulos-info-pedidos">Enviado el:</h6>
-									<p className="data-info-pedidos">{formatoFecha(pedidos.fecha_envio)}</p>
-								</div>
-							) : (
-								<div />
-							)}
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">Cliente:</h6>
-								<p className="data-info-pedidos">{pedidos.cliente.nombre === null ? "" : pedidos.cliente.nombre}</p>
-							</div>
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">No. de productos:</h6>
-								<p className="data-info-pedidos">{pedidos.pedido.length}</p>
-							</div>
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">Estado:</h6>
-								<Tag
-									className="data-info-pedidos"
-									color={pedidos.estado_pedido === 'Enviado' ? '#5cb85c' : '#0275d8'}
-								>
-									{pedidos.estado_pedido}
-								</Tag>
-							</div>
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">Pagado:</h6>
-								<Tag
-									className="data-info-pedidos"
-									color={pedidos.pagado === true ? '#5cb85c' : '#f0ad4e'}
-								>
-									{pedidos.pagado === true ? 'Si' : 'No'}
-								</Tag>
-							</div>
-							<div className="my-2">
-								<h6 className="titulos-info-pedidos">Total:</h6>
-								<p className="precio-total-pedidos data-info-pedidos">
-									$ {formatoMexico(pedidos.total)}
-								</p>
-							</div>
+	const render = pedidos.map((pedidos) => {
+		return (
+			<Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} key={pedidos._id}>
+				<Card
+					className="shadow-sm card-p-pedidos"
+					actions={[
+						<div className="d-flex justify-content-center align-items-center">
+							<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />
+							<p
+								onClick={() => {
+									setDetallePedido(pedidos);
+									showModal();
+								}}
+								className="d-inline"
+							>
+								Detalles del pedido
+							</p>
+						</div>,
+						<div className="d-flex justify-content-center align-items-center">
+							<EditOutlined className="mr-2" style={{ fontSize: 20 }} />
+							<p
+								onClick={() => {
+									setDetallePedido(pedidos);
+									showModalEstado();
+								}}
+								className="d-inline"
+							>
+								Cambiar estado
+							</p>
 						</div>
-					}
-				/>
-			</Card>
-		</Col>
-	));
+					]}
+				>
+					<Meta
+						className="contenedor-card-pedidos"
+						description={
+							<div>
+								<div className="my-2">
+									<h6 className="titulos-info-pedidos">ID del pedido: </h6>
+									<p className="data-info-pedidos">{pedidos._id}</p>
+								</div>
+								<div className="my-2">
+									<h6 className="titulos-info-pedidos">Creado el:</h6>
+									<p className="data-info-pedidos">{formatoFecha(pedidos.createdAt)}</p>
+								</div>
+								{pedidos.fecha_envio ? (
+									<div className="my-2">
+										<h6 className="titulos-info-pedidos">Enviado el:</h6>
+										<p className="data-info-pedidos">{formatoFecha(pedidos.fecha_envio)}</p>
+									</div>
+								) : (
+									<div />
+								)}
+								<div className="my-2">
+									<h6 className="titulos-info-pedidos">Cliente:</h6>
+									<p className="data-info-pedidos">{pedidos.cliente.nombre}</p>
+								</div>
+								<div className="my-2">
+									<h6 className="titulos-info-pedidos">No. de productos:</h6>
+									<p className="data-info-pedidos">{pedidos.pedido.length}</p>
+								</div>
+								<div className="my-2">
+									<h6 className="titulos-info-pedidos">Estado:</h6>
+									<Tag
+										className="data-info-pedidos"
+										color={pedidos.estado_pedido === 'Enviado' ? '#5cb85c' : '#0275d8'}
+									>
+										{pedidos.estado_pedido}
+									</Tag>
+								</div>
+								<div className="my-2">
+									<h6 className="titulos-info-pedidos">Pagado:</h6>
+									<Tag
+										className="data-info-pedidos"
+										color={pedidos.pagado === true ? '#5cb85c' : '#f0ad4e'}
+									>
+										{pedidos.pagado === true ? 'Si' : 'No'}
+									</Tag>
+								</div>
+								<div className="my-2">
+									<h6 className="titulos-info-pedidos">Total:</h6>
+									<p className="precio-total-pedidos data-info-pedidos">
+										$ {formatoMexico(pedidos.total)}
+									</p>
+								</div>
+							</div>
+						}
+					/>
+				</Card>
+			</Col>
+		);
+	});
 
 	return (
 		<Spin size="large" spinning={loading}>
@@ -317,11 +319,7 @@ function Pedidos(props) {
 				title="Estado del pedido"
 				visible={estadoVisible}
 				onCancel={handleCancelEstado}
-				footer={[
-					<Button key="estado" type="primary" onClick={handleCancelEstado}>
-						Cerrar
-					</Button>
-				]}
+				footer={[""]}
 			>
 				<EstadoPedido datosPedido={detallePedido} reload={setReload} />
 			</Modal>
