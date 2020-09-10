@@ -7,6 +7,8 @@ import ActualizarGaleria from './actualizar_galeria';
 import ActualizarTalla from './actualizar_talla';
 import ActualizarNumero from './actualizar_numero';
 import { Editor } from '@tinymce/tinymce-react';
+import { SketchPicker } from 'react-color';
+import reactCSS from 'reactcss';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -30,8 +32,10 @@ function ActualizarProducto(props) {
 	const [ item, setItem ] = useState();
 	const [ buttonCat, setButtonCat ] = useState(true);
 	const [ subcategoriasDefault, setSubcategoriasDefault ] = useState([]);
-	const [ subCategoriasBD, setSubCategoriasBD] = useState([]);
-	const [ subCategoria, setSubCategoria] = useState([]);
+	const [ subCategoriasBD, setSubCategoriasBD ] = useState([]);
+	const [ subCategoria, setSubCategoria ] = useState([]);
+	const [ genero, setGenero ] = useState('');
+	const [ valueSelect, setValueSelect ] = useState();
 
 	const [ productos, setProductos ] = useState([
 		{
@@ -42,6 +46,54 @@ function ActualizarProducto(props) {
 			imagen: ''
 		}
 	]);
+	const [ displayColorPicker, setDisplayColorPicker ] = useState(false);
+	const [ color, setColor ] = useState('FFFFFF');
+	const styles = reactCSS({
+		default: {
+			color: {
+				width: '36px',
+				height: '14px',
+				borderRadius: '2px',
+				background: color
+				/* background: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})` */
+			},
+			swatch: {
+				padding: '5px',
+				background: '#fff',
+				borderRadius: '1px',
+				boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+				display: 'inline-block',
+				cursor: 'pointer'
+			},
+			popover: {
+				position: 'absolute',
+				zIndex: '2'
+			},
+			cover: {
+				position: 'fixed',
+				top: '0px',
+				right: '0px',
+				bottom: '0px',
+				left: '0px'
+			}
+		}
+	});
+
+	const handleClick = () => {
+		setDisplayColorPicker(true);
+	};
+
+	const handleClose = () => {
+		setDisplayColorPicker(false);
+	};
+
+	const handleChange = (color) => {
+		setColor(color.hex);
+	};
+
+	const resetColor = () => {
+		setColor('');
+	};
 
 	useEffect(
 		() => {
@@ -50,6 +102,7 @@ function ActualizarProducto(props) {
 				form.resetFields();
 				setFiles([]);
 				setUpload(false);
+				setColor('');
 			}
 			obtenerDatos();
 			obtenerSubcategorias();
@@ -86,6 +139,7 @@ function ActualizarProducto(props) {
 					codigo: res.data.codigo,
 					nombre: res.data.nombre,
 					categoria: res.data.subCategoria,
+					genero: res.data.genero,
 					precio: res.data.precio,
 					cantidad: res.data.cantidad,
 					descripcion: res.data.descripcion
@@ -94,6 +148,9 @@ function ActualizarProducto(props) {
 				setEditor(res.data.descripcion);
 				setFiles(res.data.imagen);
 				setProductos(res.data);
+				setColor(res.data.color);
+				setGenero(res.data.genero);
+				setSubCategoria(res.data.subCategoria);
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -114,9 +171,9 @@ function ActualizarProducto(props) {
 			});
 	};
 
-	/* const obtenerSelect = (value) => {
-		setSelect(value);
-	}; */
+	const generoOnChange = (value) => {
+		setGenero(value);
+	};
 	const obtenerEditor = (value) => {
 		setEditor(value);
 	};
@@ -129,14 +186,16 @@ function ActualizarProducto(props) {
 
 	const addItemSubCategoria = () => {
 		setSubcategoriasDefault([ ...subcategoriasDefault, item ]);
+		setSubCategoria(item);
+		setValueSelect(item);
 	};
 	const onSelectSubCategoria = (value) => {
-		setSubCategoria(value)
-	}
+		setSubCategoria(value);
+	};
 	const onSubCategoriaChange = (e) => {
 		if (e.target.value.length !== 0) {
 			setItem(e.target.value);
-			setSubCategoria(e.target.value)
+			setSubCategoria(e.target.value);
 			setButtonCat(false);
 		} else {
 			setButtonCat(true);
@@ -144,8 +203,8 @@ function ActualizarProducto(props) {
 	};
 
 	async function obtenerSubcategorias() {
-		if(!select){
-			return null
+		if (!select) {
+			return null;
 		}
 		await clienteAxios
 			.get(`/productos/Subcategorias/${select}`, {
@@ -180,6 +239,8 @@ function ActualizarProducto(props) {
 			formData.append('nombre', productos.nombre);
 			formData.append('categoria', productos.categoria);
 			formData.append('subCategoria', subCategoria);
+			formData.append('genero', genero);
+			formData.append('color', color);
 			formData.append('cantidad', productos.cantidad);
 			formData.append('precio', productos.precio);
 			formData.append('descripcion', editor);
@@ -189,6 +250,8 @@ function ActualizarProducto(props) {
 			formData.append('nombre', productos.nombre);
 			formData.append('categoria', productos.categoria);
 			formData.append('subCategoria', subCategoria);
+			formData.append('genero', genero);
+			formData.append('color', color);
 			formData.append('precio', productos.precio);
 			formData.append('descripcion', editor);
 			formData.append('imagen', files);
@@ -253,11 +316,12 @@ function ActualizarProducto(props) {
 								<Input name="nombre" />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Subcategoria" name="categoria"  onChange={obtenerValores}>
+						<Form.Item label="Subcategoria" name="categoria" onChange={obtenerValores}>
 							<Form.Item name="categoria">
 								<Select
 									style={{ width: 300 }}
 									placeholder="Seleciona una subcategoria"
+									value={valueSelect}
 									onChange={onSelectSubCategoria}
 									dropdownRender={(menu) => (
 										<div>
@@ -285,6 +349,42 @@ function ActualizarProducto(props) {
 										})
 									)}
 								</Select>
+							</Form.Item>
+						</Form.Item>
+						<Form.Item label="Género" onChange={obtenerValores}>
+							<Form.Item name="genero">
+								<Select
+									name="genero"
+									placeholder="Selecciona género"
+									style={{ width: 250 }}
+									onChange={generoOnChange}
+								>
+									<Option value="niño">Niño</Option>
+									<Option value="niña">Niña</Option>
+									<Option value="hombre">Hombre</Option>
+									<Option value="mujer">Mujer</Option>
+									<Option value="mixto">Mixto</Option>
+								</Select>
+							</Form.Item>
+						</Form.Item>
+						<Form.Item label="Color del producto" onChange={obtenerValores}>
+							<Form.Item name="color">
+								<div className="d-flex align-items-center">
+									<div className="d-inline">
+										<div style={styles.swatch} onClick={handleClick}>
+											<div style={styles.color} />
+										</div>
+										{displayColorPicker ? (
+											<div style={styles.popover}>
+												<div style={styles.cover} onClick={handleClose} />
+												<SketchPicker color={color} onChange={handleChange} />
+											</div>
+										) : null}
+									</div>
+									<Button className="d-inline ml-2" size="middle" type="text" onClick={resetColor}>
+										Quitar color
+									</Button>
+								</div>
 							</Form.Item>
 						</Form.Item>
 						{productos.tipoCategoria === 'otros' ? (

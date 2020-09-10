@@ -57,7 +57,7 @@ function Sugerencias(props) {
 			setVisibleReload('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`)
 				.then((res) => {
 					setProductosPaginacion(res.data.posts);
 					setProductos(res.data.posts);
@@ -171,7 +171,7 @@ function Sugerencias(props) {
 					<Search
 						placeholder="Busca un producto"
 						onSearch={(value) => obtenerProductosFiltrados(value)}
-						style={{ width: 300, height: 40, marginBottom: 10 }}
+						style={{ width: 350, height: 40, marginBottom: 10 }}
 						enterButton="Buscar"
 						size="large"
 					/>
