@@ -236,7 +236,7 @@ const RegistrarPromocion = (props) => {
 			setVisible('ml-1 d-flex justify-content-center align-items-center');
 			setLoadingList(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`)
 				.then((res) => {
 					setData(res.data.posts);
 					setLoadingList(false);
