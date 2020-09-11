@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import Ofertas from './Carusel_ofertas/ofertas'
-import ConsultaProductos from './Productos/consulta_productos'
-import Geolocalizacion from './geolocalizacion'
+import Carousel from './Carusel_ofertas/carousel';
+import ConsultaProductos from './Productos/consulta_productos';
+import Geolocalizacion from './geolocalizacion';
+import Ofertas from './Ofertas/ofertasHome';
 
 export default function Home(props) {
     const [lat] = useState("19.767980")
@@ -9,8 +10,9 @@ export default function Home(props) {
 
 	return (
 		<div>
-			<Ofertas />
+			<Carousel />
 			<ConsultaProductos propiedades={props} />
+            <Ofertas />
             <Geolocalizacion 
                 height="60vh"
                 width="100%"

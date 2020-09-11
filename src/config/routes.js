@@ -22,7 +22,7 @@ import ShoppingCart from '../pages/users/shopping_cart'
 import Productos from '../pages/users/Productos/productos'
 import Blog from '../pages/users/Blogs/blog';
 import PedidosUsuario from '../pages/users/pedidos'
-import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
+import Ofertas from '../pages/users/Ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
 import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
 import Perfiles from '../pages/users/Perfiles/perfiles'
