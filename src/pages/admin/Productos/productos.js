@@ -156,7 +156,7 @@ function RegistrarProductos(props) {
 			setVisibleButton('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`)
 				.then((res) => {
 					setProductosRender(res.data.posts);
 					setProductos(res.data.posts);
@@ -300,7 +300,7 @@ function RegistrarProductos(props) {
 				)}
 			</Drawer>
 			<Row justify="center">
-				<Col>
+				<div>
 					<Search
 						placeholder="Busca un producto"
 						onSearch={(value) => obtenerProductosFiltrados(value)}
@@ -308,8 +308,8 @@ function RegistrarProductos(props) {
 						enterButton="Buscar"
 						size="large"
 					/>
-				</Col>
-				<Col>
+				</div>
+				<div>
 					<Button
 							type="primary"
 							size="large"
@@ -321,8 +321,8 @@ function RegistrarProductos(props) {
 						>
 						Volver
 					</Button>
-				</Col>
-				<Col>
+				</div>
+				<div>
 					<Button
 						type="primary"
 						size="large"
@@ -332,7 +332,7 @@ function RegistrarProductos(props) {
 					>
 						Registrar un producto
 					</Button>
-				</Col>
+				</div>
 			</Row>
 
 			<Row gutter={8} style={{ maxWidth: '90vw' }} className="mt-4 d-flex justify-content-center">

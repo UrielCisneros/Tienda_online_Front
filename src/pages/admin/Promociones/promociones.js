@@ -231,7 +231,7 @@ function Promociones(props) {
 					En este apartado puedes agregar ofertas especiales a tu producto y aparecer en la pagina principal
 				</p>
 				<Row justify="center mt-5">
-					<Col>
+					<div >
 						<Search
 							placeholder="Busca un producto"
 							onChange={(e) => setSearch(e.target.value)}
@@ -239,8 +239,8 @@ function Promociones(props) {
 							size="large"
 							enterButton="Buscar"
 						/>
-					</Col>
-					<Col>
+					</div>
+					<div>
 						<Button
 							type="primary"
 							size="large"
@@ -250,7 +250,7 @@ function Promociones(props) {
 						>
 							Crear nueva promocion
 						</Button>
-					</Col>
+					</div>
 				</Row>
 				<div>
 					{productos.length === 0 || productosFiltrados.length === 0 ? (

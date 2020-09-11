@@ -99,6 +99,7 @@ function RegistrarProducto(props) {
 
 	const resetColor = () => {
 		setColor('');
+		form.setFieldsValue({color: ''})
 	};
 
 	useEffect(
@@ -206,7 +207,8 @@ function RegistrarProducto(props) {
 		formData.append('tipoCategoria', tipoCategoria);
 		formData.append('subCategoria', subCategoria);
 		formData.append('genero', genero);
-		formData.append('color', color);
+		formData.append('color', datos.color);
+		formData.append('colorHex', color);
 		formData.append('cantidad', datos.cantidad);
 		formData.append('precio', datos.precio);
 		formData.append('descripcion', editor);
@@ -497,7 +499,8 @@ function RegistrarProducto(props) {
 									</Form.Item>
 								</Form.Item>
 								<Form.Item label="Color del producto" onChange={datosForm}>
-									<Form.Item name="color">
+									<Input.Group compact>
+									<Form.Item name="colorHex">
 										<div className="d-flex align-items-center">
 											<div className="d-inline">
 												<div style={styles.swatch} onClick={handleClick}>
@@ -510,11 +513,17 @@ function RegistrarProducto(props) {
 													</div>
 												) : null}
 											</div>
-											<Button className="d-inline ml-2" size="middle" type="text" onClick={resetColor}>
-												Quitar color
-											</Button>
 										</div>
 									</Form.Item>
+									<Form.Item wrapperCol={{span: 22, offset: 0}} name="color">
+										<Input className="d-inline ml-2" type="text" disabled={disabledformProductos} name="color" placeholder="Escribe el color, por ejemplo: Verde"/>
+									</Form.Item>
+									<Form.Item>
+										<Button className="d-inline ml-2" size="middle" type="text" onClick={resetColor}>
+											Quitar color
+										</Button>
+									</Form.Item>
+									</Input.Group>
 								</Form.Item>
 								<Form.Item label="Descripcion del producto">
 									<Form.Item

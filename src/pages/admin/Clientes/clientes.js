@@ -186,7 +186,7 @@ function Clientes(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			<Row justify="center">
-				<Col>
+				<div>
 					<Search
 						placeholder="Buscar un cliente"
 						onSearch={(value) => obtenerClientesFiltrados(value)}
@@ -194,8 +194,8 @@ function Clientes(props) {
 						enterButton="Buscar"
 						size="large"
 					/>
-				</Col>
-				<Col>
+				</div>
+				<div>
 					<Button
 						type="primary"
 						size="large"
@@ -205,7 +205,7 @@ function Clientes(props) {
 					>
 						Volver
 					</Button>
-				</Col>
+				</div>
 			</Row>
 			<Table
 				className="tabla-inventario mt-5"

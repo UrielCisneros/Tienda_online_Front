@@ -165,15 +165,12 @@ function Inventario(props) {
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
             setVisible('d-none');
-            notification.info({
-                message: 'Escribe algo en el buscador',
-                duration: 4
-            });
+            obtenerProductos();
 		} else {
 			setVisible('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`)
 				.then((res) => {
 					setProductosRender(res.data.posts);
 					setProductos(res.data.posts);
@@ -232,7 +229,7 @@ function Inventario(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			<Row justify="center">
-				<Col>
+				<div>
 					<Search
 						placeholder="Busca un producto"
 						onSearch={(value) => obtenerProductosFiltrados(value)}
@@ -240,8 +237,8 @@ function Inventario(props) {
 						enterButton="Buscar"
 						size="large"
 					/>
-				</Col>
-				<Col>
+				</div>
+				<div>
 					<Button
 						type="primary"
 						size="large"
@@ -251,7 +248,7 @@ function Inventario(props) {
 					>
 						Volver
 					</Button>
-				</Col>
+				</div>
 			</Row>
 			<Table
 				className="tabla-inventario"

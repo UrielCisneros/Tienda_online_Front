@@ -93,6 +93,8 @@ function ActualizarProducto(props) {
 
 	const resetColor = () => {
 		setColor('');
+		form.setFieldsValue({color: ''})
+		productos.color = '';
 	};
 
 	useEffect(
@@ -141,6 +143,7 @@ function ActualizarProducto(props) {
 					categoria: res.data.subCategoria,
 					genero: res.data.genero,
 					precio: res.data.precio,
+					color: res.data.color,
 					cantidad: res.data.cantidad,
 					descripcion: res.data.descripcion
 				});
@@ -148,7 +151,7 @@ function ActualizarProducto(props) {
 				setEditor(res.data.descripcion);
 				setFiles(res.data.imagen);
 				setProductos(res.data);
-				setColor(res.data.color);
+				setColor(res.data.colorHex);
 				setGenero(res.data.genero);
 				setSubCategoria(res.data.subCategoria);
 			})
@@ -231,7 +234,7 @@ function ActualizarProducto(props) {
 				}
 			});
 	}
-
+console.log(productos.color)
 	const subirDatos = async () => {
 		const formData = new FormData();
 		if (productos.tipoCategoria === 'otros') {
@@ -240,7 +243,8 @@ function ActualizarProducto(props) {
 			formData.append('categoria', productos.categoria);
 			formData.append('subCategoria', subCategoria);
 			formData.append('genero', genero);
-			formData.append('color', color);
+			formData.append('color', productos.color);
+			formData.append('colorHex', color);
 			formData.append('cantidad', productos.cantidad);
 			formData.append('precio', productos.precio);
 			formData.append('descripcion', editor);
@@ -251,7 +255,8 @@ function ActualizarProducto(props) {
 			formData.append('categoria', productos.categoria);
 			formData.append('subCategoria', subCategoria);
 			formData.append('genero', genero);
-			formData.append('color', color);
+			formData.append('color', productos.color);
+			formData.append('colorHex', color);
 			formData.append('precio', productos.precio);
 			formData.append('descripcion', editor);
 			formData.append('imagen', files);
@@ -368,24 +373,36 @@ function ActualizarProducto(props) {
 							</Form.Item>
 						</Form.Item>
 						<Form.Item label="Color del producto" onChange={obtenerValores}>
-							<Form.Item name="color">
-								<div className="d-flex align-items-center">
-									<div className="d-inline">
-										<div style={styles.swatch} onClick={handleClick}>
-											<div style={styles.color} />
-										</div>
-										{displayColorPicker ? (
-											<div style={styles.popover}>
-												<div style={styles.cover} onClick={handleClose} />
-												<SketchPicker color={color} onChange={handleChange} />
+							<Input.Group compact>
+								<Form.Item name="colorHex">
+									<div className="d-flex align-items-center">
+										<div className="d-inline">
+											<div style={styles.swatch} onClick={handleClick}>
+												<div style={styles.color} />
 											</div>
-										) : null}
+											{displayColorPicker ? (
+												<div style={styles.popover}>
+													<div style={styles.cover} onClick={handleClose} />
+													<SketchPicker color={color} onChange={handleChange} />
+												</div>
+											) : null}
+										</div>
 									</div>
+								</Form.Item>
+								<Form.Item wrapperCol={{ span: 22, offset: 0 }} name="color">
+									<Input
+										className="d-inline ml-2"
+										type="text"
+										name="color"
+										placeholder="Escribe el color, por ejemplo: Verde"
+									/>
+								</Form.Item>
+								<Form.Item>
 									<Button className="d-inline ml-2" size="middle" type="text" onClick={resetColor}>
 										Quitar color
 									</Button>
-								</div>
-							</Form.Item>
+								</Form.Item>
+							</Input.Group>
 						</Form.Item>
 						{productos.tipoCategoria === 'otros' ? (
 							<Form.Item label="Cantidad" onChange={obtenerValores}>
