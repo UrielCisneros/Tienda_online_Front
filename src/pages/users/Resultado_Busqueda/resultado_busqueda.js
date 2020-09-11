@@ -25,7 +25,7 @@ function ResultadoBusqueda(props) {
 			async function obtenerProductosFiltrados() {
 				setLoading(true);
 				await clienteAxios
-					.get(`/productos/search?nombre=${url}&categoria=${url}&subCategoria=${url}&genero=${url}`)
+					.get(`/productos/search?nombre=${url}&categoria=${url}&subCategoria=${url}&genero=${url}&color=${url}`)
 					.then((res) => {
 						setProductos(res.data.posts);
 						setLoading(false);

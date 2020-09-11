@@ -102,12 +102,12 @@ function VistaProductos(props) {
 						<Divider />
 						<div className="row justify-content-center">
 							<div className="col-3">
-								<p style={{fontSize: 20}}>Género:</p>
+								<p style={{fontSize: 20, marginBottom: 10}}>Género:</p>
 								<Tag color="blue" style={{fontSize: 16}}>{productos.genero}</Tag>
 							</div>
 							<div className="col-3">
-								<p style={{fontSize: 20, marginBottom: 15}}>Color:</p>
-								<div className="rounded-circle ml-2" style={{ height: 30, width: 30, backgroundColor: productos.color}}/>
+								<p style={{fontSize: 20, marginBottom: 5}}>Color:</p>
+								<div className="rounded-circle ml-2" style={{ height: 30, width: 30, backgroundColor: productos.colorHex}}/>
 							</div>
 						</div>
 						<Divider />
