@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
 import jwt_decode from 'jwt-decode';
-import { withRouter } from 'react-router-dom';
 import DetallesPedido from './detalles';
-import {formatoFecha} from '../../../config/reuserFunction';
+import {formatoFecha,formatoMexico} from '../../../config/reuserFunction';
 import "./pedidos.scss";
 
 
 
-import { Card, Col, Row, Spin, Modal,  Tag, Button, Divider,List,Space,Result } from 'antd';
-import { ContainerOutlined, EditOutlined,DeleteOutlined } from '@ant-design/icons';
+import { Card, Spin, Modal,  Tag, Button,List,Result,Tabs } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
-
+const { TabPane } = Tabs;
 
 
 export default function PedidosUsuario(props) {
@@ -22,14 +21,11 @@ export default function PedidosUsuario(props) {
 	const [ showInfo, setshowInfo ] = useState(false);
 
     //modal del pedido
-    const [ detallePedido, setDetallePedido ] = useState([]);
+    const [ detallePedido, setDetallePedido ] = useState({});
 
-    const showModal = () => {
-        setVisible(true);
+    const showModal = (e) => {
+        setVisible(e);
     };
-    const handleCancel = () => {
-		setVisible(false);
-	};
 
 	const token = localStorage.getItem('token');
   	var decoded = Jwt(token);
@@ -83,35 +79,64 @@ export default function PedidosUsuario(props) {
     return(
 		<Spin size="large" spinning={loading}>
 			<div className= "container">
-				<h4>Compras</h4>
-				<div>
-					{showInfo !== true ? (
-						<Result
-							status="404"
-							title="Parece que aun no tienes compras"
-							subTitle="Ve y realiza tus compras para poder verlas"
-						/>
-					):(
-						<div>
-							<List
-								size="large"
-								dataSource={pedidos}
-								renderItem={pedido => <Pedido pedido={pedido} />}
+				<h4 className="text-center m-3">Mis Compras</h4>
+				<Tabs className="shadow bg-white rounded" defaultActiveKey="1" type="card" size="large">
+					<TabPane tab="Mis compras" key="1">
+					<div>
+						{showInfo !== true ? (
+							<Result
+								status="404"
+								title="Parece que aun no tienes compras"
+								subTitle="Ve y realiza tus compras para poder verlas"
 							/>
-						</div>
+						):(
+							<div>
+								<List
+									size="large"
+									dataSource={pedidos}
+									renderItem={pedido => <Pedido pedido={pedido} showModal={showModal}  setDetallePedido={setDetallePedido} />}
+								/>
+							</div>
+						)}
 						
-					)}
-					
-				</div>
+					</div>	
+					</TabPane>
+					<TabPane tab="Mis apartados" key="2">
+						Content of card tab 2
+					</TabPane>
+				</Tabs>
 			</div>
+			<Modal
+					key="detalle"
+					width={900}
+					style={{ top: 0 }}
+					title="Detalles de este pedido"
+					visible={visible}
+					onCancel={() => {
+						showModal(false)
+					}}
+					footer={[
+						<Button 											
+							style={{ fontSize: 16 }}
+							type="primary"
+							onClick={() => {
+								showModal(false)
+							}}
+						>
+							Cerrar
+						</Button>
+					]}
+				>
+					<DetallesPedido detallePedido={detallePedido}  />
+				</Modal>
 		</Spin>
     )
 }
 
-function Pedido(props){
-	const {pedido} = props;
 
-	console.log(pedido);
+
+function Pedido(props){
+	const {pedido,showModal,setDetallePedido} = props;
 	
 	return(
 		<div>
@@ -123,21 +148,40 @@ function Pedido(props){
 							className="d-flex justify-content-top align-items-top "
 							style={{ fontSize: 16 }}
 							type="primary"
+							onClick={() => {
+								showModal(true)
+								setDetallePedido(pedido)
+							}}
 						>
 							<EditOutlined />
 							Detalle del pedido
 						</Button>					
 				]}
-			>
+			>	
+			<div className="d-lg-none d-sm-block">
+				<p className="h6"><span className="font-weight-bold">Productos:</span><span className="text-primary"> x {pedido.pedido.length}</span></p>
+				<p className="h6"><span className="font-weight-bold">Total:</span> <span className="text-success"> $ {formatoMexico(pedido.total)}</span>  </p>
+				{/* <p className="h6"><span className="font-weight-bold">Pedido el:</span> {formatoFecha(pedido.createdAt)}</p> */}
+				<p className="m-0" style={{fontSize:"15px"}}>
+					<span className="font-weight-bold">Pedido:</span>
+					<Tag
+						className="ml-2"
+						color={pedido.estado_pedido === 'En proceso' ? '#f0ad4e' : '#5cb85c'}
+					>
+						{pedido.estado_pedido}
+					</Tag>
+				</p>
+			</div>
+			
 				<List.Item.Meta
 					avatar={
 						<div
-							className="d-flex justify-content-center align-items-center mr-2"
+							className="d-flex justify-content-center align-items-center my-3"
 							style={{ width: 100, height: 100 }}
 						>
 							<p>Pedido del producto sdsdsdsd</p>
 							<img
-								className="imagen-promocion-principal"
+								className="img-fluid"
 								alt="producto"
 								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.pedido[0].producto.imagen}`}
 							/>
@@ -147,8 +191,8 @@ function Pedido(props){
 					title={
 						<div className="titulo-producto row mostrar-pedido">
 
-							<div className="col-lg-6">
-								<p className="m-0 font-weight-bold" style={{fontSize:"15px"}} >Productos de la compra:  x {pedido.pedido.length} </p>
+							<div className="col-lg-6 col-sm-12">
+								<p className="m-0 font-weight-bold" style={{fontSize:"15px"}} >Productos de la compra: <span className="text-primary"> x {pedido.pedido.length}</span></p>
 								<p className="m-0" style={{fontSize:"15px"}}>
 									<span className="font-weight-bold">La compra esta:</span>
 										<Tag
@@ -159,25 +203,26 @@ function Pedido(props){
 										</Tag>
 									
 								</p>
-								<p className="m-0" style={{fontSize:"15px"}}><span className="font-weight-bold">Total de la compra: $</span>{pedido.total}  </p>
+								<p className="m-0" style={{fontSize:"15px"}}><span className="font-weight-bold">Total de la compra:</span><span className="text-success"> $ { formatoMexico(pedido.total)}</span>   </p>
 								<p className="m-0" style={{fontSize:"15px"}}><span className="font-weight-bold">Pedido el:</span> {formatoFecha(pedido.createdAt)}</p>
-								<p className="m-0" style={{fontSize:"15px"}}>{pedido.pagado === false ? 
-								(
-									<div>
-										<p className="text-danger">Pedido cancelado</p>
-										<Button
-											className="d-flex justify-content-center align-items-center"
-											style={{ fontSize: 16 }}
-											type="primary"
-										>
-										Comprar
-									</Button>
-									</div>
-								) : 
-								(<p className="text-success">Pedido realizado</p>)} </p>
+								<p className="m-0" style={{fontSize:"15px"}}>
+									{pedido.pagado === false ? 
+										(
+											<div>
+												<p className="text-danger">Pedido cancelado</p>
+												<Button
+													className="d-flex justify-content-center align-items-center"
+													style={{ fontSize: 16 }}
+													type="primary"
+												>
+												Comprar
+											</Button>
+											</div>
+										) : 
+										(<p className="text-success">Pedido realizado</p>)} </p>
 							</div>
-							<div className="col-lg-6">
-								<p className="m-0 font-weight-bold h3" style={{fontSize:"15px"}} >Mensaje de la tienda:</p>
+							<div className="col-lg-6 col-sm-12">
+								<p className="m-0 font-weight-bold h3 text-primary" style={{fontSize:"15px"}} >Mensaje de la tienda:</p>
 								<p className="mt-2" style={{fontSize:"15px"}}>{pedido.mensaje_admin ? pedido.mensaje_admin : "Tu pedido esta en procesado, si tienes alguna duda no dudes en contactarnos!!"}</p>
 							</div>
 						</div>

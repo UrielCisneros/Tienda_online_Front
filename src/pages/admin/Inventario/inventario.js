@@ -64,13 +64,13 @@ function Inventario(props) {
 			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
 		}, */
 		{
-			title: 'Categoria',
+			title: 'Categoría',
 			dataIndex: 'categoria',
 			key: 'categoria',
 			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
 		},
 		{
-			title: 'Subcategoria',
+			title: 'Sub categoría',
 			dataIndex: 'subCategoria',
 			key: 'subCategoria',
 			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
@@ -121,7 +121,7 @@ function Inventario(props) {
 			)
 		},
 		{
-			title: 'Numero y Cantidad',
+			title: 'Número y Cantidad',
 			dataIndex: 'numeros',
 			key: 'numeros',
 			render: (numeros) => (

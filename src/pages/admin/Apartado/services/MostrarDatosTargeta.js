@@ -72,7 +72,7 @@ export default function MostrarDatosTargeta(props) {
 									<p className="data-info-apartados">{apartado.producto[0].nombre}</p>
 								</div>
 								<div className="sistema-apartado m-2">
-									<h6 className="titulos-info-apartados">Cantidad de articulos:</h6>
+									<h6 className="titulos-info-apartados">Cantidad de artículos:</h6>
 									<p className="data-info-apartados">{apartado.cantidad}</p>	
 								</div>
 							</div>
