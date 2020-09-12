@@ -119,11 +119,11 @@ const DetallesPedido = (props) => {
 							<p className="data-info-pedidos">{pedido.producto.codigo}</p>
 						</div>
 						<div className="my-2 contenedor-info-pedidos">
-							<h6 className="titulos-info-pedidos">Articulo:</h6>
+							<h6 className="titulos-info-pedidos">Artículo:</h6>
 							<p className="data-info-pedidos">{pedido.producto.nombre}</p>
 						</div>
 						<div className="my-2 contenedor-info-pedidos">
-							<h6 className="titulos-info-pedidos">Categoria:</h6>
+							<h6 className="titulos-info-pedidos">Categoría:</h6>
 							<p className="data-info-pedidos">{pedido.producto.categoria}</p>
 						</div>
 						<div className="my-2 contenedor-info-pedidos">

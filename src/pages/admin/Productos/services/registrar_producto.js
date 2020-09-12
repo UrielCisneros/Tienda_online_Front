@@ -404,7 +404,7 @@ function RegistrarProducto(props) {
 								form={form}
 								ref={formRef.current}
 							>
-								<Form.Item label="Codigo de barras" onChange={datosForm}>
+								<Form.Item label="Código de barras" onChange={datosForm}>
 									<Input
 										name="codigo"
 										disabled={disabledformProductos}
@@ -525,7 +525,7 @@ function RegistrarProducto(props) {
 									</Form.Item>
 									</Input.Group>
 								</Form.Item>
-								<Form.Item label="Descripcion del producto">
+								<Form.Item label="Descripción del producto">
 									<Form.Item
 										rules={[ { required: true, message: 'Este campo es requerido' } ]}
 										noStyle
@@ -593,12 +593,12 @@ function RegistrarProducto(props) {
 			)
 		},
 		{
-			title: 'Galeria(opcional)',
+			title: 'Galería(opcional)',
 			content: (
 				<div className="contenedor-galeria d-flex justify-content-center align-items-center mt-4 mb-5">
 					<div className="text-center" style={{ width: '90%' }}>
-						<h2>Agrega mas imagenes para tu prodcuto</h2>
-						<p>Puedes agregar mas imagenes de tu producto para que tus clientes puedan verlas</p>
+						<h2>Agrega más imágenes para tu producto</h2>
+						<p>Puedes agregar más imágenes de tu producto para que tus clientes puedan verlas.</p>
 						<ProductoContext.Provider value={productoID}>
 							<RegistrarGaleria />
 						</ProductoContext.Provider>

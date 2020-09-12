@@ -128,23 +128,23 @@ export default function DetalleApartado(props) {
                         <div className="col-sm-12 col-lg-6 m-2">
                             <h6 className=" m-2">Nombre: </h6>
                             <p className=" m-2">{detalleApartado.cliente[0].nombre}</p>
-                            <h6 className=" m-2">Telefono: </h6>
+                            <h6 className=" m-2">Teléfono: </h6>
                             <p className=" m-2">{detalleApartado.cliente[0].telefono}</p>
                             <h6 className=" m-2">Calle: </h6>
                             {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].calle_numero}</p>}
                             <h6 className=" m-2">Calles referentes a las que vive: </h6>
                             {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].entre_calles}</p>}
-                            <h6 className=" m-2">Codigo Postal: </h6>
+                            <h6 className=" m-2">Código Postal: </h6>
                             {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].cp}</p>}
                         </div>
                         <div className="col-sm-12 col-lg-6 m-2">
                         <h6 className=" m-2">Colonia: </h6>
                             {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].colonia}</p>}
-                            <h6 className=" m-2">Cidudad: </h6>
+                            <h6 className=" m-2">Ciudad: </h6>
                             {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].ciudad}</p>}
                             <h6 className=" m-2">Estado: </h6>
                             {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].estado}</p>}
-                            <h6 className=" m-2">Pais: </h6>
+                            <h6 className=" m-2">País: </h6>
                             {<p className=" m-2">{detalleApartado.cliente[0].direccion[0].pais}</p>}
                         </div>
                     </Col>
@@ -161,9 +161,9 @@ export default function DetalleApartado(props) {
                             </div>
                             <h6 className=" m-2">Nombre: </h6>
                             <p className=" m-2">{detalleApartado.producto[0].nombre}</p>
-                            <h6 className=" m-2">Codigo de barras: </h6>
+                            <h6 className=" m-2">Código de barras: </h6>
                             {<p className=" m-2">{detalleApartado.producto[0].codigo}</p>}
-                            <h6 className=" m-2">Categoria: </h6>
+                            <h6 className=" m-2">Categoría: </h6>
                             {<p className=" m-2">{detalleApartado.producto[0].categoria}</p>}
                             {console.log(promocion.length)}
                             {promocion.length > 0 ? (
@@ -181,7 +181,7 @@ export default function DetalleApartado(props) {
                     <Col span={24} className="m-2">
                         <div>
                             <div>
-                            <p className="h3 text-center">Informacion a apartar</p>
+                            <p className="h3 text-center">Información por apartar</p>
                                 <h6 className=" m-2">{detalleApartado.producto[0].categoria === 'calzado' ? 'Numero a apartar:': detalleApartado.producto[0].categoria === 'ropa' ? 'Talla a apartar' : '' }</h6>
                                     {detalleApartado.producto[0].categoria === 'calzado' ? (
                                         <Badge className="m-2">
@@ -203,7 +203,7 @@ export default function DetalleApartado(props) {
                                         </Badge>
                                     ) : '' }
                             </div>
-                            <h6 className=" m-2">Cantidad de articulos por apartar: </h6>
+                            <h6 className=" m-2">Cantidad de artículos por apartar: </h6>
                             <p className=" m-2">{detalleApartado.cantidad}</p>
 
                             <h6 className=" m-2">Tipo de entrega:</h6>
@@ -246,15 +246,15 @@ export default function DetalleApartado(props) {
                                         <Form.Item  name="mensajeUser">
                                             <TextArea rows={4} name="mensajeUser" onChange={e => setdatosEnvio({ ...datosEnvio, mensajeUser: e.target.value })} />
                                         </Form.Item>
-                                        <h6>Paqueteria:</h6>
+                                        <h6>Paquetería:</h6>
                                         <Form.Item  name="paqueteria">
                                             <Input   name="paqueteria" placeholder="Paqueteria" onChange={e => setdatosEnvio({ ...datosEnvio, paqueteria: e.target.value })}/>
                                         </Form.Item>
-                                        <h6>Url de vinculacion:</h6>
+                                        <h6>Url de vinculación:</h6>
                                         <Form.Item  name="url">
                                             <Input   name="url" placeholder="Url de vinculacion del paquete" onChange={e => setdatosEnvio({ ...datosEnvio, url: e.target.value })}/>
                                         </Form.Item>
-                                        <h6>Numero de seguimiento:</h6>
+                                        <h6>Número de seguimiento:</h6>
                                         <Form.Item  name="codigo_seguimiento">
                                             <Input   name="codigo_seguimiento" placeholder="Numero de seguimiento del paquete" onChange={e => setdatosEnvio({ ...datosEnvio, codigo_seguimiento: e.target.value })}/>
                                         </Form.Item>
