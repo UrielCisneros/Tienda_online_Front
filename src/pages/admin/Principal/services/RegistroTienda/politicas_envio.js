@@ -161,33 +161,33 @@ export default function PoliticasEnvio(props) {
 
 	return (
 		<div className="row">
-			<Divider>Información de la tienda</Divider>
+			<Divider>Politicas de envío</Divider>
 			<Form onFinish={SendForm} form={form}>
 				<Form.Item
 					className="m-2"
-					label="Nombre"
+					label="Costo de envío"
 					onChange={(e) => setDatos({ ...datos, nombre: e.target.value })}
 				>
-					<Form.Item rules={[ { required: true, message: 'Nombre obligatorio' } ]} noStyle name="nombre">
-						<Input name="nombre" placeholder="Nombre del negocio" />
+					<Form.Item name="costoEnvio">
+						<Input name="costoEnvio" />
 					</Form.Item>
 				</Form.Item>
                 <Form.Item
 					className="m-2"
-					label="Nombre"
+					label="Promocion de envío"
 					onChange={(e) => setDatos({ ...datos, nombre: e.target.value })}
 				>
-					<Form.Item rules={[ { required: true, message: 'Nombre obligatorio' } ]} noStyle name="nombre">
-						<Input name="nombre" placeholder="Nombre del negocio" />
+					<Form.Item name="promocionEnvio">
+						<Input name="promocionEnvio" />
 					</Form.Item>
 				</Form.Item>
                 <Form.Item
 					className="m-2"
-					label="Nombre"
+					label="Descuento"
 					onChange={(e) => setDatos({ ...datos, nombre: e.target.value })}
 				>
-					<Form.Item rules={[ { required: true, message: 'Nombre obligatorio' } ]} noStyle name="nombre">
-						<Input name="nombre" placeholder="Nombre del negocio" />
+					<Form.Item name="descuento">
+						<Input name="descuento" />
 					</Form.Item>
 				</Form.Item>
 
