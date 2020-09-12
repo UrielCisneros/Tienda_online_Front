@@ -560,7 +560,7 @@ function RegistrarProducto(props) {
 									</Button>
 								</Form.Item>
 							</Form>
-							{select === 'ropa' ? (
+							{select === 'Ropa' ? (
 								<div className="d-flex justify-content-center">
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
 										<RegistrarTalla disabledButtons={setDisabled} />
@@ -569,7 +569,7 @@ function RegistrarProducto(props) {
 							) : (
 								<div />
 							)}
-							{select === 'calzado' ? (
+							{select === 'Calzado' ? (
 								<div>
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
 										<RegistrarNumero disabledButtons={setDisabled} />
