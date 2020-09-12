@@ -178,7 +178,7 @@ function Promociones(props) {
 						}}
 					>
 						<EditOutlined />
-						Actualizar
+						Editar
 					</Button>
 
 					<Button
@@ -227,7 +227,10 @@ function Promociones(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			<div>
-				<p style={{ fontSize: 20 }}>
+				<p className="text-center" style={{ fontSize: 20 }}>
+					SISTEMA DE PROMOCIONES
+				</p>
+				<p className="text-center" style={{ fontSize: 15 }}>
 					En este apartado puedes agregar ofertas especiales a tu producto y aparecer en la página principal
 				</p>
 				<Row justify="center mt-5">

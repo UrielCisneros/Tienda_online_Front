@@ -127,7 +127,7 @@ export default function RegistrarBlog(props) {
                 {...layout}
                 onFinish={processPost}
             >
-                <Form.Item label="Titulo del blog: "  onChange={ e => setBlogData({ ...blogData, nombre: e.target.value }) }>
+                <Form.Item label="Crea un título llamativo: "  onChange={ e => setBlogData({ ...blogData, nombre: e.target.value }) }>
                     <Form.Item rules={[{ required: true, message: 'Titulo obligatorio' }]}  noStyle name="nombre" >
                         <Input value={blogData.nombre} name="nombre" placeholder="Titulo del Blog"  />
                     </Form.Item>
@@ -175,7 +175,7 @@ export default function RegistrarBlog(props) {
                 </Form.Item>
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                     <Button type="primary" htmlType="submit" size="large" icon={<CheckOutlined />}>
-                        Registrar Blog
+                        Guardar
                     </Button>
                 </Form.Item>
             </Form>

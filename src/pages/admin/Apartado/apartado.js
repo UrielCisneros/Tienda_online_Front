@@ -116,7 +116,7 @@ function SistemaApartado(props) {
 			<Spin size="large" spinning={loading}>
 				<div>
 					<p className="text-center" style={{ fontSize: 20 }}>
-						Aqui puedes ver todas las solicitudes de productos por apartar.
+						SISTEMA DE CONTROL DE APARTADO
 					</p>
 					<Row justify="center mt-5">
 						<Col>

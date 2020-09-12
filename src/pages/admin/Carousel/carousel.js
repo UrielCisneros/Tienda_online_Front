@@ -189,7 +189,7 @@ function Carousel(props) {
 
 	function showDeleteConfirm(productoID) {
 		confirm({
-			title: 'Estás seguro de eliminar esto?',
+			title: '¿Quieres eliminarla?',
 			icon: <ExclamationCircleOutlined />,
 			okText: 'Si',
 			okType: 'danger',
@@ -227,7 +227,7 @@ function Carousel(props) {
 							}}
 						>
 							<EditOutlined />
-							Actualizar
+							Editar
 						</Button>
 					</Upload>
 					<Button
@@ -268,7 +268,8 @@ function Carousel(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<p>
+			<p className="text-center" style={{ fontSize: 20 }}>Publicidad</p>
+			<p className="text-center" style={{ fontSize: 15 }}>
 				En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso de que
 				no existan promociones, si no existen promociones apareceran esta imagen
 			</p>

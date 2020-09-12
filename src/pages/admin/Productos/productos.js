@@ -245,7 +245,7 @@ function RegistrarProductos(props) {
 							}}
 							className="text-decoration-none"
 						>
-							<EditOutlined style={{ fontSize: 22 }} />Actualizar
+							<EditOutlined style={{ fontSize: 22 }} />Editar
 						</Button>,
 
 						<Button

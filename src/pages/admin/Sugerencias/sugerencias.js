@@ -163,7 +163,10 @@ function Sugerencias(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<p style={{ fontSize: 20 }}>
+			<p className="text-center" style={{ fontSize: 20 }}>
+				PRODUCTOS SUGERIDOS
+			</p>
+			<p className="text-center" style={{ fontSize: 15 }}>
 				En este apartado puedes agregar sugerencias de compra de otro producto a un producto
 			</p>
 			<Row justify="center mt-5">
@@ -171,7 +174,7 @@ function Sugerencias(props) {
 					<Search
 						placeholder="Busca un producto"
 						onSearch={(value) => obtenerProductosFiltrados(value)}
-						style={{ width: 350, height: 40, marginBottom: 10 }}
+						style={{ width: 600, height: 40, marginBottom: 10 }}
 						enterButton="Buscar"
 						size="large"
 					/>

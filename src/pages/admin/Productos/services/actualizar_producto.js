@@ -451,7 +451,7 @@ function ActualizarProducto(props) {
 						</Form.Item>
 						<Form.Item className="d-flex justify-content-center align-items-center text-center">
 							<Button type="primary" htmlType="submit">
-								Actualizar
+								Guardar
 							</Button>
 						</Form.Item>
 					</Form>
