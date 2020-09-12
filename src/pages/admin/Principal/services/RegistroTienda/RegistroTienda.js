@@ -3,6 +3,7 @@ import {Form, Input,Divider, Button,Upload,notification} from 'antd';
 import {PlusCircleOutlined,EditOutlined,UploadOutlined } from '@ant-design/icons';
 import {Editor} from '@tinymce/tinymce-react';
 import clienteAxios from '../../../../../config/axios';
+import PoliticasEnvio from './politicas_envio';
 
 
 export default function RegistroTienda(props) {
@@ -399,15 +400,14 @@ export default function RegistroTienda(props) {
                             </Form.Item>
                     </div>
                 </div>
-                
 
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                     <Button className="text-center" size="large" type="primary" htmlType="submit" icon={control === false ? (<PlusCircleOutlined style={{ fontSize: 24 }} />):(<EditOutlined style={{ fontSize: 24 }} />)}>
                         {control === false ? "Registrar" : "Editar"}
                     </Button>
                 </Form.Item>
-
             </Form>
+            <PoliticasEnvio />
         </div>
     )
 }
