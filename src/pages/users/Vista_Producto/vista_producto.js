@@ -101,13 +101,16 @@ function VistaProductos(props) {
 						)}
 						<Divider />
 						<div className="row justify-content-center">
-							<div className="col-3">
+							<div className="col-4">
 								<p style={{fontSize: 20, marginBottom: 10}}>Género:</p>
-								<Tag color="blue" style={{fontSize: 16}}>{productos.genero}</Tag>
+								<Tag className="tag-genero-vista-producto" color="blue">{productos.genero}</Tag>
 							</div>
-							<div className="col-3">
-								<p style={{fontSize: 20, marginBottom: 10}}>Color:</p>
-								<Tag color={productos.colorHex} style={{fontSize: 16, WebkitTextStroke: '0.4px black', fontWeight: 'bold'}}>{productos.color}</Tag>
+							<div className="col-4">
+								<p style={{fontSize: 20, marginBottom: 10}}>Color: {productos.color}</p>
+								<div className="d-flex justify-content-center">
+									<div className="rounded-circle" style={{backgroundColor: productos.colorHex, height: 35, width: 35}} />
+								</div>
+								
 							</div>
 						</div>
 						<Divider />

@@ -53,6 +53,16 @@
 .contenedor-card-tamaño{
     min-width: 250px;
 }
+.tag-genero-vista-producto{
+    font-size: 20px;
+    padding: 5px;
+}
+.tag-color-vista-producto{
+    font-size: 26px;
+    padding: 2px 12px 10px 12px;
+    -webkit-text-stroke: .6px black;
+    font-weight: bold;
+}
 @media(max-width: 768px){
     .descripcion-sm{
         display: block;
