@@ -57,7 +57,7 @@ function CarouselImages(props) {
 			setVisible('ml-1 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			clienteAxios
-				.get(`/productos/search/${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}`)
 				.then((res) => {
 					setData(res.data.posts);
 					setLoading(false);

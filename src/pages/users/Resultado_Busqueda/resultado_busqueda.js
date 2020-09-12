@@ -25,7 +25,7 @@ function ResultadoBusqueda(props) {
 			async function obtenerProductosFiltrados() {
 				setLoading(true);
 				await clienteAxios
-					.get(`/productos/search?nombre=${url}&categoria=${url}&subCategoria=${url}&genero=${url}`)
+					.get(`/productos/search?nombre=${url}&categoria=${url}&subcategoria=${url}&genero=${url}&color=${url}`)
 					.then((res) => {
 						setProductos(res.data.posts);
 						setLoading(false);
@@ -60,7 +60,7 @@ function ResultadoBusqueda(props) {
 	}
 
 	const render = productos.map((productos) => (
-		<Col span={6} key={productos._id}>
+		<Col key={productos._id}>
 			<Link to={`/vista_producto/${productos._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card

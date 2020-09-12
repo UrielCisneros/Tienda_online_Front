@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import '../vistas.scss';
-import ImageScroller from 'react-image-scroller';
-import { Card, Col } from 'antd';
-import { Link } from 'react-router-dom';
+import { Card, Col, Spin } from 'antd';
+import { formatoMexico, agregarPorcentaje } from '../../../../config/reuserFunction'
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
-const properties = {
-	hideScrollbar: false,
-	scrollOnClick: false,
-	scrollWithArrows: true
-};
 
 function Scroll(props) {
 	const [ productos, setProductos ] = useState([]);
@@ -20,40 +14,23 @@ function Scroll(props) {
 	useEffect(() => {
 		setLoading(true);
 		clienteAxios
-			.get('/productos/')
+			.get(`/productos/search?nombre=${producto.nombre}&categoria=${producto.categoria}&subcategoria=${producto.subCategoria}`)
 			.then((res) => {
-				/* console.log(res); */
-				setProductos(res.data.posts.docs);
+				setProductos(res.data.posts);
 				setLoading(false);
 			})
 			.catch((err) => {
-				/* console.log(err); */
+				console.log(err);
 			});
-	}, []);
-
-	function agregarPorcentaje(precio_descuento, precio_producto) {
-		var porcentaje = Math.round(precio_descuento / precio_producto * 100);
-		var descuento = 100 - porcentaje;
-		return descuento;
-	}
-
-	const formatoMexico = (number) => {
-		if (!number) {
-			return null;
-		} else {
-			const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-			const rep = '$1,';
-			return number.toString().replace(exp, rep);
-		}
-	};
+	}, [producto]);
 
 	const render = productos.map((productos) => (
-		<Col span={32} key={productos._id}>
-			<Link to={`/vista_producto/${productos._id}`}>
+		<Col key={productos._id} className="d-inline-flex mr-2 contenedor-card-tamaño">
 				<Card.Grid hoverable style={gridStyle}>
 					<Card
-						bodyStyle={{ padding: 22, backgroundColor: '#F7F7F7' }}
-						style={{ maxHeight: 300, width: 300 }}
+						onClick={() => (window.location.href = `/vista_producto/${productos._id}`)}
+						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7' }}
+						style={{ maxHeight: '100%', width: '100%', cursor: 'pointer' }}
 						cover={
 							<div className="d-flex justify-content-center align-items-center" style={{ height: 220 }}>
 								<img
@@ -89,17 +66,18 @@ function Scroll(props) {
 						)}
 					</Card>
 				</Card.Grid>
-			</Link>
 		</Col>
 	));
 
 	return (
-		<div className="mt-5">
-			<p className="titulos-vista-productos">Tambien te pueden interesar:</p>
-			<div>
-				<ImageScroller {...properties}>{render}</ImageScroller>
+		<Spin spinning={loading}>
+			<div className="mt-5">
+				<p className="titulos-vista-productos">Tambien te pueden interesar:</p>
+				<div className="contenedor-scroller">
+					{render}
+				</div>
 			</div>
-		</div>
+		</Spin>
 	);
 }
 
