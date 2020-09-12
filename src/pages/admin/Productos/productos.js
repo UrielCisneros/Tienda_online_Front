@@ -156,7 +156,7 @@ function RegistrarProductos(props) {
 			setVisibleButton('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`)
 				.then((res) => {
 					setProductosRender(res.data.posts);
 					setProductos(res.data.posts);
@@ -259,7 +259,7 @@ function RegistrarProductos(props) {
 				>
 					<div className="contenedor-titulos-productos">
 						<h1 className="titulo-producto">{productos.nombre}</h1>
-						<h2 className="h5">{formatoMexico(productos.precio)}</h2>
+						<h2 className="h5">$ {formatoMexico(productos.precio)}</h2>
 					</div>
 				</Card>
 			</Card.Grid>

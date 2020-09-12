@@ -31,39 +31,52 @@ const Navegacion = (props) => {
 
 	const [ tienda, setTienda ] = useState([]);
 	const [ carrito, setCarrito ] = useState(0);
+	const [ ofertas, setOfertas ] = useState([]);
 
 	useEffect(() => {
-		const obtenerQuienesSomos = async () => {
-			await clienteAxios
-				.get('/tienda')
-				.then((res) => {
-					res.data.forEach((datos) => {
-						setTienda(datos);
-					});
-				})
-				.catch((res) => {
-					console.log(res);
-				});
-		};
-		const obtenerCarrito = async () => {
-			await clienteAxios
-				.get(`/carrito/${decoded._id}`, {
-					headers: {
-						Authorization: `bearer ${token}`
-					}
-				})
-				.then((res) => {
-					setCarrito(res.data.articulos.length);
-				})
-				.catch((res) => {
-					setCarrito(0);
-				});
-		};
+		obtenerOfertas();
 		obtenerQuienesSomos();
 		if (token) {
 			obtenerCarrito();
 		}
 	}, [ token, active]);
+
+	async function obtenerCarrito() {
+		await clienteAxios
+			.get(`/carrito/${decoded._id}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setCarrito(res.data.articulos.length);
+			})
+			.catch((res) => {
+				setCarrito(0);
+			});
+	};
+	async function obtenerQuienesSomos() {
+		await clienteAxios
+			.get('/tienda')
+			.then((res) => {
+				res.data.forEach((datos) => {
+					setTienda(datos);
+				});
+			})
+			.catch((res) => {
+				console.log(res);
+			});
+	};
+	async function obtenerOfertas() {
+		await clienteAxios
+			.get('/productos/promocion')
+			.then((res) => {
+				setOfertas(res.data);
+			})
+			.catch((res) => {
+				console.log(res);
+			});
+	};
 
 	const showDrawer = () => {
 		setVisible(true);
@@ -114,18 +127,22 @@ const Navegacion = (props) => {
 								<Menu.Item key="/productos">
 									Productos<Link to="/productos" />
 								</Menu.Item>
-								<Menu.Item key="/ofertas">
-									Ofertas<Link to="/ofertas" />
-								</Menu.Item>
+								{
+									ofertas.length ?
+									<Menu.Item key="/ofertas">
+										Ofertas<Link to="/ofertas" />
+									</Menu.Item>:
+									<></>
+								}
 								<Menu.Item key="/blog">
 									Blog<Link to="/blog" />
 								</Menu.Item>
-								{!tienda ? (
-									<></>
-								) : (
+								{tienda.length !== 0 ? (
 									<Menu.Item key="/quienes_somos">
 										Quiénes somos<Link to="/quienes_somos" />
 									</Menu.Item>
+								) : (
+									<></>
 								)}
 								{!decoded ? (
 									<></>

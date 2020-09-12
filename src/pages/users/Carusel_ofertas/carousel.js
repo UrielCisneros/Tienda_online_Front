@@ -5,7 +5,7 @@ import clienteAxios from '../../../config/axios';
 import { withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 
-function Ofertas(props) {
+function CarouselOfertas(props) {
 	const [ index, setIndex ] = useState(0);
 	const [ loading, setLoading ] = useState(false);
 	const [ carousels, setCarousels ] = useState([]);
@@ -84,4 +84,4 @@ function Ofertas(props) {
 	);
 }
 
-export default withRouter(Ofertas);
+export default withRouter(CarouselOfertas);

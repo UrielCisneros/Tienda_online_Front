@@ -146,10 +146,7 @@ function Clientes(props) {
 	const obtenerClientesFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisible('d-none');
-			notification.info({
-				message: 'Escribe algo en el buscador',
-				duration: 4
-			});
+			obtenerClientes(10, page);
 		} else {
 			setVisible('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);

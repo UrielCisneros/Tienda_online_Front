@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import {Form, Col, Row, Input,Divider, Button,Alert,Upload,notification} from 'antd';
+import {Form, Input,Divider, Button,Upload,notification} from 'antd';
 import {PlusCircleOutlined,EditOutlined,UploadOutlined } from '@ant-design/icons';
 import {Editor} from '@tinymce/tinymce-react';
 import clienteAxios from '../../../../../config/axios';
@@ -244,7 +244,7 @@ export default function RegistroTienda(props) {
                     </div>
                 </div>
                 <div className="row">
-                    <Divider>Informacion de la tienda</Divider>
+                    <Divider>Información de la tienda</Divider>
                     <div className="col-lg-6 col-sm-12">
                         <Form.Item className="m-2" label="Nombre"  onChange={ e => setDatos({ ...datos, nombre: e.target.value }) }>
                             <Form.Item rules={[{ required: true, message: 'Nombre obligatorio' }]}  noStyle name="nombre" >
@@ -270,8 +270,8 @@ export default function RegistroTienda(props) {
                         </Form.Item>
                      </div>
                      <div className="col-lg-4 col-sm-12">
-                        <Form.Item className="m-2" label="Codigo Postal "  onChange={ e => setDatos({ ...datos, cp: e.target.value }) }>
-                            <Form.Item rules={[{ required: true, message: 'Codigo Postal obligatorio' }]}  noStyle name="cp" >
+                        <Form.Item className="m-2" label="Código Postal "  onChange={ e => setDatos({ ...datos, cp: e.target.value }) }>
+                            <Form.Item rules={[{ required: true, message: 'Código Postal obligatorio' }]}  noStyle name="cp" >
                                 <Input name="cp" placeholder="Codigo Postal"  />
                             </Form.Item>
                         </Form.Item>
@@ -303,7 +303,7 @@ export default function RegistroTienda(props) {
                 </div>
                 
                 <div className="row d-flex justify-content-center align-items-center">
-                    <Divider>Ubicacion</Divider>
+                    <Divider>Ubicación</Divider>
                     <div className="row">
                         <div className="col-lg-6 col-sm-12">
                             <Form.Item className="m-2" label="Latitud "  onChange={ e => setDatos({ ...datos, lat: e.target.value }) }>
@@ -348,7 +348,7 @@ export default function RegistroTienda(props) {
                 </div>
                 
                 <div className="row">
-                <Divider>Informacion de Politicas de la empresa</Divider>
+                <Divider>Información de Políticas de la empresa</Divider>
                     <div className="col-12">
                         <Form.Item className="m-2" >
                                 <Form.Item rules={[{ required: true, message: 'Politicas de privacidad obligatorias' }]}  noStyle name="politicas" >
