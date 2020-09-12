@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
-import { Card, Spin, Result } from 'antd';
+import { Card, Spin, Result, Col, Row } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import './ofertas.scss'
@@ -31,9 +31,10 @@ function OfertasHome(props) {
 				props.history.push('/error500');
 			});
 	}
-
+{/* <div className="contenedor-card-ofertas" key={productos._id}> */}
 	const render = productos.map((productos) => (
-		<div className="contenedor-card-ofertas" key={productos._id}>
+		
+		<Col span={window.screen.width < 768 ? 12 : 4} key={productos._id}>
 			<Link to={`/vista_producto/${productos.productoPromocion._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card
@@ -63,7 +64,7 @@ function OfertasHome(props) {
 					</Card>
 				</Card.Grid>
 			</Link>
-		</div>
+		</Col>
 	));
 
 	return (
@@ -71,7 +72,7 @@ function OfertasHome(props) {
 			<div className="principal-ofertas">APROVECHA NUESTROS DESCUENTOS!</div>
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
-					<div className="row justify-content-center mt-4">
+					<Row gutter={8} style={{ maxWidth: '90vw' }} className=" mt-4">
 						{productos.length ? (
 							render
 						) : (
@@ -79,7 +80,7 @@ function OfertasHome(props) {
 								<Result status="404" title="Articulo no encontrado" />
 							</div>
 						)}
-					</div>
+					</Row>
 				</div>
 			</div>
             <div className="d-flex justify-content-center pb-5">
