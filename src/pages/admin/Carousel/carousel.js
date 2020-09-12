@@ -290,7 +290,7 @@ function Carousel(props) {
 						className="ml-3 mb-3 d-flex justify-content-center align-items-center"
 						icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
 					>
-						Crear nueva promocion
+						Nueva imagen de publicidad
 					</Button>
 				</Col>
 			</Row>
@@ -320,7 +320,7 @@ function Carousel(props) {
 			</Modal>
 
 			<Modal
-				title="Crear nueva promocion para el Carousel"
+				title="Crear nueva imagen publicitaria para el Carousel"
 				visible={modalCrearVisible}
 				onCancel={closeModalCrear}
 				footer={false}
