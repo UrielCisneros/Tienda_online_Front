@@ -304,7 +304,7 @@ function ActualizarProducto(props) {
 					)}
 					{productos.categoria === 'calzado' ? <div>{<ActualizarNumero />}</div> : <div />}
 					<Form {...layout} name="nest-messages" onFinish={subirDatos} form={form}>
-						<Form.Item name="codigo" label="Codigo de barras" onChange={obtenerValores}>
+						<Form.Item name="codigo" label="Código de barras" onChange={obtenerValores}>
 							<Input name="codigo" placeholder="Campo opcional" />
 						</Form.Item>
 						<Form.Item label="Nombre del producto" onChange={obtenerValores}>
@@ -409,7 +409,7 @@ function ActualizarProducto(props) {
 								<Input type="number" name="precio" />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Descripcion del producto" name="descripcion">
+						<Form.Item label="Descripción del producto" name="descripcion">
 							<Form.Item
 								rules={[ { required: true, message: 'Este campo es requerido' } ]}
 								noStyle
@@ -457,7 +457,7 @@ function ActualizarProducto(props) {
 					</Form>
 				</Spin>
 			</TabPane>
-			<TabPane tab="Actualizar galeria de imagenes" key="2">
+			<TabPane tab="Actualizar galería de imágenes" key="2">
 				<ActualizarGaleria />
 			</TabPane>
 		</Tabs>
