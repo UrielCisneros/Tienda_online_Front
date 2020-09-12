@@ -53,15 +53,15 @@ export default function Datos_tienda() {
         <div>
             <div className="container-fluid mt-5">
 
-            {/* <div className="bg-dark" style={{height: '6 vh'}}>
+            <div className="bg-dark" style={{height: '6 vh'}}>
                 <h1 className="text-white text-center h2 m-3">Localiza nuestra tienda</h1>
-            </div> */}
+            </div>
                 {infor !== '' ? 
                     (
                     <div className="row">
-                        <div className="col-lg-9">
+                        <div className="col-lg-10">
                             <Geolocalizacion 
-                                height="48vh"
+                                height="38vh"
                                 width="100%"
                                 center={[tienda.ubicacion[0].lat, tienda.ubicacion[0].lng]}
                                 titleLayer={'map'}
@@ -71,18 +71,18 @@ export default function Datos_tienda() {
                             />
                         </div>
 
-                        <div className="col-lg-3 text-center caligra" >
+                        <div className="col-lg-2 text-center caligra" >
                             <img
                                 className="logotipo"
                                 alt="imagen de base"
                                 src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
                             />
                                 
-                            <p className=" font-weight-bold"> {tienda.nombre} </p>
-                            <p className="">Tel: <spam className="subs">{tienda.telefono}</spam></p>
-                            <p className="">Direccion: <spam className="">{direccion.calle_numero}</spam></p>
-                            <p className="">Col. <spam className=""> {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
-                            <p className="">CP: <spam>{direccion.cp}</spam></p> 
+                            <p className="h6 font-weight-bold"> {tienda.nombre} </p>
+                            <p className="h6">Tel: <spam className="subs h6">{tienda.telefono}</spam></p>
+                            <p className="h6">Direccion: <spam className="h6">{direccion.calle_numero}</spam></p>
+                            <p className="h6">Col. <spam className="h6"> {direccion.colonia}, {direccion.ciudad}, {direccion.estado}</spam></p>
+                            <p className="h6">CP: <spam>{direccion.cp}</spam></p> 
                         </div>
                     </div>
                 ):('')
