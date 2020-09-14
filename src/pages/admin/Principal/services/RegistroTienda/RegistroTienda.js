@@ -407,7 +407,7 @@ export default function RegistroTienda(props) {
                     </Button>
                 </Form.Item>
             </Form>
-            <PoliticasEnvio />
+            <PoliticasEnvio datosNegocio={datosNegocio} />
         </div>
     )
 }

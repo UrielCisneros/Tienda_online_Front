@@ -3,197 +3,203 @@ import { Form, Input, Divider, Button, Upload, notification } from 'antd';
 import { PlusCircleOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import clienteAxios from '../../../../../config/axios';
+import jwt_decode from 'jwt-decode';
 
 export default function PoliticasEnvio(props) {
-	const { datosNegocio, token, setLoading, setReloadInfo } = props;
-
+	const { datosNegocio } = props;
 	const [ datos, setDatos ] = useState({});
-	const [ control, setControl ] = useState(false);
+    const [ control, setControl ] = useState(false);
+    const [ idTienda, setIdTienda ] = useState('');
 	const [ form ] = Form.useForm();
+	const [ loading, setLoading ] = useState(false);
+	const token = localStorage.getItem('token');
+	var decoded = Jwt(token);
 
-	const [ upload, setUpload ] = useState(false);
+	function Jwt(token) {
+		try {
+			return jwt_decode(token);
+		} catch (e) {
+			return null;
+		}
+	}
 
-	const monstrarInformacionBlog = (e) => {
-		form.setFieldsValue(e);
-	};
+	useEffect(() => {
+		obtenerDatos();
+	}, []);
 
-	useEffect(
-		() => {
-			if (datosNegocio !== undefined) {
-				monstrarInformacionBlog({
-					nombre: datosNegocio.nombre,
-					telefono: datosNegocio.telefono,
-					calle_numero: datosNegocio.direccion[0].calle_numero,
-					cp: datosNegocio.direccion[0].cp,
-					colonia: datosNegocio.direccion[0].colonia,
-					ciudad: datosNegocio.direccion[0].ciudad,
-					estado: datosNegocio.direccion[0].estado,
-					lat: datosNegocio.ubicacion[0].lat,
-					lng: datosNegocio.ubicacion[0].lng,
-					politicas: datosNegocio.politicas,
-					imagenCorp: datosNegocio.imagenCorp,
-					linkFace: datosNegocio.linkFace,
-					linkInsta: datosNegocio.linkInsta,
-					linkTweeter: datosNegocio.linkTweeter
-				});
-				setDatos({
-					nombre: datosNegocio.nombre,
-					telefono: datosNegocio.telefono,
-					calle_numero: datosNegocio.direccion[0].calle_numero,
-					cp: datosNegocio.direccion[0].cp,
-					colonia: datosNegocio.direccion[0].colonia,
-					ciudad: datosNegocio.direccion[0].ciudad,
-					estado: datosNegocio.direccion[0].estado,
-					lat: datosNegocio.ubicacion[0].lat,
-					lng: datosNegocio.ubicacion[0].lng,
-					politicas: datosNegocio.politicas,
-					imagenCorp: datosNegocio.imagenCorp,
-					linkFace: datosNegocio.linkFace,
-					linkInsta: datosNegocio.linkInsta,
-					linkTweeter: datosNegocio.linkTweeter
-				});
-				setControl(true);
-			} else {
-				setDatos({});
-				setControl(false);
-			}
-		},
-		[ datosNegocio ]
-	);
+	async function obtenerDatos() {
+		await clienteAxios
+			.get('/politicasEnvio/', {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setLoading(false);
+				if (!res.data) {
+					setControl(false);
+				} else {
+					setControl(true);
+					form.setFieldsValue({
+						costoEnvio: res.data.costoEnvio,
+						promocionEnvio: res.data.promocionEnvio,
+						descuento: res.data.descuento
+                    });
+                    setDatos({
+                        costoEnvio: res.data.costoEnvio,
+						promocionEnvio: res.data.promocionEnvio,
+						descuento: res.data.descuento
+                    })
+                    setIdTienda(res.data._id);
+				}
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+    }
 
 	const SendForm = async () => {
-		const formData = new FormData();
-		formData.append('nombre', datos.nombre);
-		formData.append('telefono', datos.telefono);
-		formData.append('calle_numero', datos.calle_numero);
-		formData.append('cp', datos.cp);
-		formData.append('colonia', datos.colonia);
-		formData.append('ciudad', datos.ciudad);
-		formData.append('estado', datos.estado);
-		formData.append('lat', datos.lat);
-		formData.append('lng', datos.lng);
-		formData.append('politicas', datos.politicas);
-		formData.append('imagenCorp', datos.imagenCorp);
-		formData.append('linkFace', datos.linkFace);
-		formData.append('linkInsta', datos.linkInsta);
-		formData.append('linkTweeter', datos.linkTweeter);
-
 		if (control === false) {
-			/* if (files.length === 0) {
-				notification.info({
-					message: 'Ups, algo salio mal',
-					description: 'La imagen es obligatoria'
-				});
-			} else {
-				setLoading(true);
-				formData.append('imagen', files);
-				await clienteAxios
-					.post('/tienda/', formData, {
+			await clienteAxios
+				.post(
+					'/politicasEnvio/',
+					{
+						idTienda: datosNegocio._id,
+						idAdministrador: decoded._id,
+						costoEnvio: datos.costoEnvio,
+						promocionEnvio: datos.promocionEnvio,
+						descuento: datos.descuento
+					},
+					{
 						headers: {
-							'Content-Type': 'multipart/form-data',
 							Authorization: `bearer ${token}`
 						}
-					})
-					.then((res) => {
-						setLoading(false);
-						setReloadInfo(true);
-						console.log(res);
-						notification.success({
-							message: 'Registro exitoso',
-							description: res.data.message
-						});
-					})
-					.catch((err) => {
-						setLoading(false);
-						console.log(err.response);
-						if (err.response.status === 500 || err.response.status === 404) {
-							notification.error({
-								message: 'Error de conexion',
-								description: err.response.data.message
-							});
-						} else {
-							notification.error({
-								message: 'Error de conexion',
-								description: 'Parece que algo salio mal, favor de intentarlo de nuevo'
-							});
-						}
-					});
-			}
-		} else {
-			setLoading(true);
-			if (files.length !== 0) {
-				console.log(files);
-				formData.append('imagen', files);
-			}
-			await clienteAxios
-				.put(`/tienda/${datosNegocio._id}`, formData, {
-					headers: {
-						'Content-Type': 'multipart/form-data',
-						Authorization: `bearer ${token}`
 					}
-				})
+				)
 				.then((res) => {
 					setLoading(false);
-					setReloadInfo(true);
-					console.log(res);
 					notification.success({
-						message: 'Registro exitoso',
-						description: res.data.message
+						message: 'Listo!',
+						description: res.data.message,
+						duration: 2
 					});
 				})
-				.catch((err) => {
-					setLoading(false);
-					console.log(err.response);
-					if (err.response.status === 500 || err.response.status === 404) {
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
 						notification.error({
-							message: 'Error de conexion',
-							description: err.response.data.message
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
 						});
 					} else {
+						setLoading(false);
 						notification.error({
-							message: 'Error de conexion',
-							description: 'Parece que algo salio mal, favor de intentarlo de nuevo'
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
 						});
 					}
-				}); */
+				});
+		} else {
+			await clienteAxios
+				.put(
+					`/politicasEnvio/${idTienda}`,
+					{
+						costoEnvio: datos.costoEnvio,
+						promocionEnvio: datos.promocionEnvio,
+						descuento: datos.descuento
+					},
+					{
+						headers: {
+							Authorization: `bearer ${token}`
+						}
+					}
+				)
+				.then((res) => {
+					setLoading(false);
+					notification.success({
+						message: 'Listo!',
+						description: res.data.message,
+						duration: 2
+					});
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
 		}
 	};
 
 	return (
-		<div className="row">
+		<div>
 			<Divider>Politicas de envío</Divider>
 			<Form onFinish={SendForm} form={form}>
 				<Form.Item
 					className="m-2"
 					label="Costo de envío"
-					onChange={(e) => setDatos({ ...datos, nombre: e.target.value })}
+					onChange={(e) => setDatos({ ...datos, costoEnvio: e.target.value })}
 				>
-					<Form.Item name="costoEnvio">
-						<Input name="costoEnvio" />
+					<Form.Item
+						name="costoEnvio"
+						wrapperCol={{ span: 12, offset: 1 }}
+						help="Costo de envío de la paqueteria"
+					>
+						<Input type="number" name="costoEnvio" suffix="$" />
 					</Form.Item>
 				</Form.Item>
-                <Form.Item
+				<Form.Item
 					className="m-2"
-					label="Promocion de envío"
-					onChange={(e) => setDatos({ ...datos, nombre: e.target.value })}
+					label="Promoción de envío"
+					onChange={(e) => setDatos({ ...datos, promocionEnvio: e.target.value })}
 				>
-					<Form.Item name="promocionEnvio">
-						<Input name="promocionEnvio" />
+					<Form.Item
+						name="promocionEnvio"
+						wrapperCol={{ span: 12, offset: 1 }}
+						help="Se aplica una promoción de envío a clientes que superen esta cantidad"
+					>
+						<Input type="number" name="promocionEnvio" suffix="$" />
 					</Form.Item>
 				</Form.Item>
-                <Form.Item
+				<Form.Item
 					className="m-2"
-					label="Descuento"
-					onChange={(e) => setDatos({ ...datos, nombre: e.target.value })}
+					label="Costo de envío con descuento"
+					onChange={(e) => setDatos({ ...datos, descuento: e.target.value })}
 				>
-					<Form.Item name="descuento">
-						<Input name="descuento" />
+					<Form.Item name="descuento" wrapperCol={{ span: 12, offset: 1 }} help="Costo de envío de la promoción">
+						<Input type="number" name="descuento" suffix="$" />
 					</Form.Item>
 				</Form.Item>
 
 				<Form.Item className="d-flex justify-content-center align-items-center text-center">
 					<Button
-						className="text-center"
 						size="large"
 						type="primary"
 						htmlType="submit"
@@ -205,7 +211,7 @@ export default function PoliticasEnvio(props) {
 							)
 						}
 					>
-						{control === false ? 'Registrar' : 'Editar'}
+						{control === false ? 'Registrar politicas de envío' : 'Actualizar politicas de envío'}
 					</Button>
 				</Form.Item>
 			</Form>
