@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
 import ImageGallery from 'react-image-gallery';
 import ReactImageMagnify from 'react-image-magnify';
-import { notification, Spin } from 'antd';
+import { Spin } from 'antd';
 import 'react-image-gallery/styles/scss/image-gallery.scss';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import './galeria_custom.scss';
@@ -22,8 +22,10 @@ function Galeria(props) {
 	const [ imagenZoom, setImagenZoom ] = useState();
 
 	function onLoad(imagen) {
-		const url = imagen.target.src.split('.com/');// se hace asi porque al poner la variable con la url saltaban warnings del src estaba undefind
-		setImagenZoom(url[1]);
+		if(imagen.target.src){
+			var url = imagen.target.src.split('.com/');// se hace asi porque al poner la variable con la url saltaban warnings del src estaba undefind
+			setImagenZoom(url[1]);
+		}
 	}
 
 	const galery = {
@@ -31,7 +33,8 @@ function Galeria(props) {
 		showNav: false,
 		showFullscreenButton: false,
 		renderItem: myRenderItem,
-		onThumbnailClick: onLoad
+		onThumbnailClick: onLoad,
+		disableKeyDown: true
 	};
 
 	if (count < galeria.length) {
@@ -60,21 +63,7 @@ function Galeria(props) {
 						setLoading(false);
 					})
 					.catch((res) => {
-						if (res.response.status === 404 || res.response.status === 500) {
-							setLoading(false);
-							notification.error({
-								message: 'Error',
-								description: res.response.data.message,
-								duration: 2
-							});
-						} else {
-							setLoading(false);
-							notification.error({
-								message: 'Error',
-								description: 'Hubo un error',
-								duration: 2
-							});
-						}
+						console.log(res)
 					});
 			}
 			obtenerImagen();
@@ -95,6 +84,15 @@ function Galeria(props) {
 		[ count, galeria, imagen ]
 	);
 
+	const [ zoomHeight, setZoomHeight ] = useState('');
+	const [ zoomWidth, setZoomWidth ] = useState('');
+	var img = new Image();
+	img.onload = function() {
+	setZoomWidth(img.naturalWidth);
+	setZoomHeight(img.naturalHeight);
+	}
+	img.src = `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenZoom}`;
+
 	const propiedadesImageMagnify= {
 		smallImage: {
 			alt: 'imagen-producto',
@@ -103,8 +101,8 @@ function Galeria(props) {
 		},
 		largeImage: {
 			src: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenZoom}`,
-			width: 1140,
-			height: 980
+			width: zoomWidth*1.5,
+			height: zoomHeight*1.5
 		},
 		enlargedImagePortalId: 'zoom-render'
 	}

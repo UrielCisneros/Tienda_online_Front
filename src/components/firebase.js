@@ -19,7 +19,7 @@ function Firebase() {
 		signInFlow: 'popup',
 		signInOptions: [ firebase.auth.GoogleAuthProvider.PROVIDER_ID, firebase.auth.FacebookAuthProvider.PROVIDER_ID ]
 	};
-
+ 
 	useEffect(() => {
 		let valores = {
 			nombre: '',
@@ -30,6 +30,7 @@ function Firebase() {
 		};
 		function onAuthStateChange() {
 			return firebase.auth().onAuthStateChanged(async (user) => {
+				console.log(user)
 				if (user) {
 					const displayname = user.displayName.split(' ');
 					valores = {

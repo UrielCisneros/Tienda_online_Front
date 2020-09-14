@@ -328,7 +328,7 @@ const ActualizarPromocion = (props) => {
 										name="precio"
 										label="Nuevo precio"
 										validateStatus={validateStatus}
-										help="La promocion no debe ser mayor al precio del producto"
+										help="La promoción no debe ser mayor al precio del producto"
 									>
 										<Input
 											prefix="$"
@@ -338,7 +338,7 @@ const ActualizarPromocion = (props) => {
 									</Form.Item>
 									<Form.Item className="text-center">
 										<Button disabled={disabledSumit} onClick={actualizarPromocion}>
-											Actualizar
+											Guardar
 										</Button>
 									</Form.Item>
 								</Form>
@@ -346,8 +346,8 @@ const ActualizarPromocion = (props) => {
 						</div>
 						<div>
 							<p className="mt-2 texto-imagen">
-								Actualizar imagen de promocion, recuerda que esta imagen aparecera en el carrucel de
-								promociones
+								Actualizar imagen de promoción, recuerda que esta imagen aparecerá en el carrucel de
+								promociónes
 							</p>
 							<Space className="mt-3 d-flex justify-content-center">
 								{!promocion.imagenPromocion ? (

@@ -20,7 +20,6 @@ function BlogAdmin(props) {
 
     //Tomar la paginacion actual
     const {location,history} = props;
-    console.log(location);
     const {page = 1} = queryString.parse(location.search);
     
     //Uses
@@ -51,7 +50,6 @@ function BlogAdmin(props) {
         setLoading(true);
         clienteAxios.get(`/blog?limit=${limit}&page=${page}`)
         .then((res) => {
-            console.log(res)
                 setBlogs(res.data.posts);
                 setLoading(false);
         })
@@ -61,7 +59,6 @@ function BlogAdmin(props) {
                 description:
                   'Paso algo en el servidor, al parecer la conexion esta fallando.',
               });
-            console.log(err);
         });
     }
     //Ejecutar funcion traer blogs
@@ -116,7 +113,6 @@ function BlogAdmin(props) {
                         </div>
                     }
                 >
-                    {console.log(infoBlog)}
                     { accion === true ? (
                         <BlogContext.Provider value={infoBlog}>
                             <ActualizarBlog setReloadBlog={setReloadBlog} setLoading={setLoading} token={token} setVisible={setVisible}  />
@@ -140,7 +136,7 @@ function BlogAdmin(props) {
                         }}
                         className="ml-3"
                         icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}>
-                            Agregar Blog
+                            Crear Blog
                     </Button>
                 </div>
                 <BlogsList 

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/Navegacion_Admin/Sidebar';
 import { Layout, Breadcrumb } from 'antd';
 import './layoutAdmin.scss';
 

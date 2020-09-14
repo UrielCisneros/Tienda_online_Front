@@ -18,8 +18,8 @@ export default function blogList(props) {
         confirm({
             title:"Eliminando Blog",
             icon: <ExclamationCircleOutlined />,
-            content: `Estas seguro que deseas eliminar el blog: ${blog.nombre}`,
-            okText: "Eliminar Blog",
+            content: `¿Estás seguro que deseas eliminar el blog ${blog.nombre}?`,
+            okText: "Eliminar",
             okType:"danger",
             cancelText:"Cancelar",
             onOk(){
@@ -55,7 +55,13 @@ export default function blogList(props) {
             <List
                 itemLayout="horizontal"
                 dataSource={blogs.docs}
-                renderItem={blog => <Blog blog={blog} deleteBlog={deleteBlog} showDrawer={showDrawer} setAccion={setAccion} setInfoBlog={setInfoBlog} />}
+                renderItem={blog => <Blog 
+                                        blog={blog} 
+                                        deleteBlog={deleteBlog} 
+                                        showDrawer={showDrawer} 
+                                        setAccion={setAccion} 
+                                        setInfoBlog={setInfoBlog} 
+                                    />}
             />
         </div>
     )
@@ -83,14 +89,14 @@ function Blog(props){
                 </Button>,
                 <Button type="dashed" danger onClick={() => deleteBlog(blog)}>
                     <DeleteOutlined /> Eliminar
-                </Button>,
+                </Button>
             ]}
             
         >
             <List.Item.Meta 
-            avatar={<Avatar src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${blog.imagen}`} />}
-            title={blog.nombre} 
-            description={blog.administrador}
+                avatar={<Avatar src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${blog.imagen}`} />}
+                title={blog.nombre} 
+                description={blog.administrador}
             />
         </List.Item>
     )

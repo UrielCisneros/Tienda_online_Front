@@ -13,7 +13,8 @@ import {
 	PercentageOutlined,
 	PictureOutlined,
 	EditOutlined,
-	HomeOutlined
+	HomeOutlined,
+	TeamOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -51,6 +52,9 @@ const Sidebar = () => {
 				<Menu.Item key="/admin" icon={<FundOutlined />}>
 					Panel principal<Link to="/admin" />
 				</Menu.Item>
+				<Menu.Item key="/admin/clientes" icon={<TeamOutlined />}>
+					Clientes<Link to="/admin/clientes" />
+				</Menu.Item>
 				<Menu.Item key="/admin/productos" icon={<AppstoreAddOutlined />}>
 					Productos<Link to="/admin/productos" />
 				</Menu.Item>
@@ -70,7 +74,7 @@ const Sidebar = () => {
 					Sugerencias de compra<Link to="/admin/sugerencias" />
 				</Menu.Item>
 				<Menu.Item key="/admin/carousel" icon={<PictureOutlined />}>
-					Galeria principal de Productos<Link to="/admin/carousel" />
+					Publicidad<Link to="/admin/carousel" />
 				</Menu.Item>
 				<Menu.Item key="/admin/blog" icon={<EditOutlined />}>
 					Blog<Link to="/admin/blog" />
