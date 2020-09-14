@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Divider, Button, Upload, notification } from 'antd';
+import { Form, Input, Divider, Button, Upload, notification, Spin } from 'antd';
 import { PlusCircleOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import clienteAxios from '../../../../../config/axios';
@@ -74,6 +74,7 @@ export default function PoliticasEnvio(props) {
 
 	const SendForm = async () => {
 		if (control === false) {
+			setLoading(true);
 			await clienteAxios
 				.post(
 					'/politicasEnvio/',
@@ -116,6 +117,7 @@ export default function PoliticasEnvio(props) {
 					}
 				});
 		} else {
+			setLoading(true);
 			await clienteAxios
 				.put(
 					`/politicasEnvio/${idTienda}`,
@@ -159,7 +161,7 @@ export default function PoliticasEnvio(props) {
 	};
 
 	return (
-		<div>
+		<Spin spinning={loading}>
 			<Divider>Politicas de envío</Divider>
 			<Form onFinish={SendForm} form={form}>
 				<Form.Item
@@ -215,6 +217,6 @@ export default function PoliticasEnvio(props) {
 					</Button>
 				</Form.Item>
 			</Form>
-		</div>
+		</Spin>
 	);
 }
