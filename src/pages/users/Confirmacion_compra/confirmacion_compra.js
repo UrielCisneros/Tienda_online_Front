@@ -65,16 +65,16 @@ export default function Confirmacion_compra() {
         <h1 className="text-center mt-4" >Termina de realizar tu compra:</h1>
         <div className="container prinpales" style={{background: "white"}}>
             <div className="row">
-                <div className="col-lg-6 mt-4">
+                <div className="col-lg-5 mt-4">
 
                     <Traer_datos datosUser={datosUser} decoded={decoded} token={token} setLoading={setLoading} setAccion={setAccion} />
                     
                 </div>
                 
-                <div className="col-lg-6 mt-4">
+                <div className="col-lg-7 mt-4">
                     
                     <Traer_pedido/>
-
+                    
                 </div>
             </div>
         </div>

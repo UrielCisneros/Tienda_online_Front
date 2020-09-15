@@ -28,6 +28,7 @@ export default function Traer_datos(props) {
             
             mostrarDatosUser({
                 nombre: datosUser.nombre,
+                telefono: datosUser.telefono,
                 calle_numero: direccion.calle_numero,
                 entre_calles: direccion.entre_calles,
                 cp: direccion.cp,
@@ -37,6 +38,8 @@ export default function Traer_datos(props) {
                 pais: direccion.pais, 
             })
             setdatosFormulario({
+                nombre: datosUser.nombre,
+                telefono: datosUser.telefono,
                 calle_numero: direccion.calle_numero,
                 entre_calles: direccion.entre_calles,
                 cp: direccion.cp,
@@ -53,7 +56,8 @@ export default function Traer_datos(props) {
         
         const formData = new FormData();
 
-     
+        formData.append('nombre', datosFormulario.nombre);
+        formData.append('telefono', datosFormulario.telefono);
         formData.append('calle_numero', datosFormulario.calle_numero);
         formData.append('entre_calles', datosFormulario.entre_calles);
         formData.append('cp', datosFormulario.cp);
@@ -118,15 +122,34 @@ export default function Traer_datos(props) {
    
     return (
         <div>
-            <h2 style={{fontSize: 18, textAlign: "center"}}>Hola, favor de verificar que tus datos esten correctos o de igual manera completar los restantes:</h2>
+            <h2 style={{fontSize: 25, textAlign: "center"}}>
+                Verifica que tu Información este completa:
+            </h2>
             
              <Form 
+                className="mt-5"
                 layout="horizontal"
-                size={"large"}
+                size={"middle"}
                 form={form}
                 onFinish={enviarDatosUser}
             >
-                <Divider className="mt-5" style={{fontSize: 22}}>Datos domiciliarios</Divider>
+                <Divider style={{fontSize: 19}}>Información Personal</Divider>
+                    
+                    <h5>Nombre Completo:</h5>
+                    <Form.Item name="nombre" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Nombre obligatorio' }]}  noStyle name="nombre" >
+                            <Input name="nombre" a placeholder="Nombre"  />
+                        </Form.Item>
+                    </Form.Item>
+
+                    <h5>Telefono:</h5>
+                    <Form.Item name="telefono" onChange={datosForm}>
+                        <Form.Item rules={[{ required: true, message: 'Telefono obligatorio' }]}  noStyle name="telefono" >
+                            <Input name="telefono" a placeholder="+52 3171234567"  />
+                        </Form.Item>
+                    </Form.Item>
+                    
+                <Divider className="mt-5" style={{fontSize: 19}}>Datos domiciliarios</Divider>
                     
                     <h5>Direccion:</h5>
                     <Form.Item name="calle_numero"  onChange={datosForm}>
@@ -179,11 +202,7 @@ export default function Traer_datos(props) {
                     </Form.Item>
 
             </Form>
-            <div className="d-flex justify-content-center pb-3">
-                <Button htmlType="submit" type="primary" size="large" style={{width: 150, fontSize: 20}}>
-                    Guardar
-                </Button>
-            </div>
+            
         </div>
     )
 }
