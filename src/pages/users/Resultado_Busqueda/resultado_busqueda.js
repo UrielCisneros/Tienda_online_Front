@@ -25,7 +25,7 @@ function ResultadoBusqueda(props) {
 			async function obtenerProductosFiltrados() {
 				setLoading(true);
 				await clienteAxios
-					.get(`/productos/search/${url}`)
+					.get(`/productos/search?nombre=${url}&categoria=${url}&subcategoria=${url}&genero=${url}&color=${url}`)
 					.then((res) => {
 						setProductos(res.data.posts);
 						setLoading(false);
@@ -60,14 +60,14 @@ function ResultadoBusqueda(props) {
 	}
 
 	const render = productos.map((productos) => (
-		<Col span={32} key={productos._id}>
+		<Col key={productos._id}>
 			<Link to={`/vista_producto/${productos._id}`}>
-				<Card.Grid hoverable style={gridStyle}>
+				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card
 						bodyStyle={{ padding: 22, backgroundColor: '#F7F7F7'}}
 						className="contenedor-card-body"
 						cover={
-							<div className="contenedor-imagen-producto-principal" style={{ height: 250 }}>
+							<div className="contenedor-imagen-producto-principal">
 								<img
 									className="imagen-producto-principal"
 									alt="producto"
@@ -76,23 +76,25 @@ function ResultadoBusqueda(props) {
 							</div>
 						}
 					>
-						{!productos.todos.length ? (
-							<div className="contenedor-titulos-productos">
+						<div className="contenedor-titulos-productos titulo-elipsis">
 								<h1 className="titulo-producto">{productos.nombre}</h1>
+						</div>
+						{!productos.todos.length ? (
+							<div className="contenedor-precios-productos">
 								<h2 className="h5 precio-rebaja">${formatoMexico(productos.precio)}</h2>
 							</div>
 						) : (
 							productos.todos.map((promo) => {
 								return (
-									<div className="contenedor-titulos-productos" key={promo._id}>
-										<h1 className="titulo-producto">{productos.nombre}</h1>
-										<h2 className="h5 precio-producto d-inline mr-2">${formatoMexico(productos.precio)}</h2>
-										<h2 className="h5 precio-rebaja d-inline mr-2">${formatoMexico(promo.precioPromocion)}</h2>
+									<div className="contenedor-precios-productos" key={promo._id}>
+										<h2 className="h5 precio-producto rebajado mr-2">
+											${formatoMexico(productos.precio)}
+										</h2>
+										<h2 className="h5 precio-rebaja d-inline mr-2">
+											${formatoMexico(promo.precioPromocion)}
+										</h2>
 										<p className="h4 porcentaje-descuento d-inline mr-2">
-											{agregarPorcentaje(
-												promo.precioPromocion,
-												productos.precio
-											)}%OFF
+											{agregarPorcentaje(promo.precioPromocion, productos.precio)}%OFF
 										</p>
 									</div>
 								);
@@ -111,7 +113,7 @@ function ResultadoBusqueda(props) {
 			</h3>
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
-					<Row gutter={32} style={{ maxWidth: '90vw' }} className="mt-4">
+					<Row gutter={4} style={{ maxWidth: '90vw' }} className="mt-4">
 						{productos.length ? (
 							render
 						) : (

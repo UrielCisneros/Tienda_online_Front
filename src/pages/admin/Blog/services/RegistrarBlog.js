@@ -127,7 +127,7 @@ export default function RegistrarBlog(props) {
                 {...layout}
                 onFinish={processPost}
             >
-                <Form.Item label="Titulo del blog: "  onChange={ e => setBlogData({ ...blogData, nombre: e.target.value }) }>
+                <Form.Item label="Crea un título llamativo: "  onChange={ e => setBlogData({ ...blogData, nombre: e.target.value }) }>
                     <Form.Item rules={[{ required: true, message: 'Titulo obligatorio' }]}  noStyle name="nombre" >
                         <Input value={blogData.nombre} name="nombre" placeholder="Titulo del Blog"  />
                     </Form.Item>
@@ -161,9 +161,7 @@ export default function RegistrarBlog(props) {
                                 'insertdatetime media table paste code help wordcount'
                             ],
                             toolbar:
-                                'undo redo | formatselect | bold italic backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist outdent indent | removeformat | help'
+                                'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
                         }}
                         onEditorChange={capturarInfoEditor}
                     />
@@ -177,7 +175,7 @@ export default function RegistrarBlog(props) {
                 </Form.Item>
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                     <Button type="primary" htmlType="submit" size="large" icon={<CheckOutlined />}>
-                        Registrar Blog
+                        Guardar
                     </Button>
                 </Form.Item>
             </Form>
