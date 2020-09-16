@@ -29,20 +29,18 @@ export default function Confirmacion_compra() {
 		}
     }
 
-  
-
       async function obtenerDatosUser() {
             if(token === null){
                 return null
             }
-            await clienteAxios.get(`/cliente/${decoded._id}`,{
+            await clienteAxios.get(`/pedidos/pedido/${decoded._id}`,{
                 headers:{
-                    'Content-Type': 'multipart/form-data',
                      Authorization: `bearer ${token}`
                 }
             })
             .then((res) => {
-                setDatosUser(res.data);
+                console.log(res.data.cliente);
+                setDatosUser(res.data.cliente);
             })
             .catch((err) => {
                 console.log(err);

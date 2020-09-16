@@ -186,8 +186,13 @@ const routes = [
 				exact: true
 			},
 			{
-				path: '/Confirmacion_compra/',
+				path: '/confirmacion_compra/',
 				component: Confirmacion_compra,
+				exact: true
+			},
+			{
+				path: '/error500/',
+				component: Error500,
 				exact: true
 			},
 			{

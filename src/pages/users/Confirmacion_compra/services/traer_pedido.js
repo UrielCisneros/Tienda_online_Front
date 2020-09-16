@@ -76,23 +76,22 @@ function Productos (props) {
           <List.Item.Meta style={{fontSize: 20}}
             avatar={<img src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/`} 
             height="80" width="80"/>}
-            title={<p>Playera de algodon</p>}
+            title={<p className="__subs">Playera de algodon</p>}
             description={<p>Esta es una playera de algodon de poliester</p>}
           />
         </div>
       
-        <div>
-          <p className=".__subs">Cantidad: <spam>2</spam></p>
-          <p>Talla: mediana</p>
-          <p>Color: naranja</p>
+        <div className=" col-lg-3 mt-2 __tupedido">
+          <p>Cantidad: </p> 
+          <p>Talla:</p>
+          <p>Color:</p>
         </div>
-        
+
       </div>
     </div> 
 
-    <div>
-      <p>Total</p>
-      <h4>MILES</h4>
+    <div className="d-flex flex-row-reverse mr-2" >
+      <p style={{fontSize: 25, fontWeight: "bold"}}>Precio</p>
     </div>
     
     </List.Item>

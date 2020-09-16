@@ -143,8 +143,6 @@ const Navegacion = (props) => {
 									<Menu.Item key="/Confirmacion_compra">
 										Quiénes somos<Link to="/Confirmacion_compra" />
 									</Menu.Item>
-								) : (
-									<></>
 								)}
 								{!decoded ? (
 									<></>
