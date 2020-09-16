@@ -21,9 +21,9 @@ const data = [
     },
   ];
 
-export default function Traer_pedido() {
-
-    const [pedido, setPedido] = useState([])
+export default function Traer_pedido(props) {
+    const {datosPedido} = props;
+    console.log(datosPedido);
 
     return (
         <div>
@@ -33,13 +33,13 @@ export default function Traer_pedido() {
                 className="p-3"
                 itemLayout="horizontal"
                 size="large"
-                dataSource={data}
-                renderItem={product => 
-                <Productos pedido={product}/> 
+                dataSource={datosPedido}
+                renderItem={producto => 
+                <Productos pedido={producto}/> 
                 }
             />
             </div>
-            <div className="d-flex flex-row-reverse mr-2" >
+            <div className="d-flex flex-row-reverse mr-2 mt-5" >
             <div>
               <h4>MilOchoMil</h4>
               <h4>Docientos</h4>
@@ -65,6 +65,7 @@ export default function Traer_pedido() {
 
 function Productos (props) {
     const {pedido} = props;
+    console.log(pedido);
 
     return(
 
@@ -74,24 +75,25 @@ function Productos (props) {
 
         <div className="col-lg-8 d-flex justify-content-lg-center" style={{fontSize: 18}} >
           <List.Item.Meta style={{fontSize: 20}}
-            avatar={<img src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/`} 
+            avatar={<img src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.producto.imagen}`} 
             height="80" width="80"/>}
-            title={<p className="__subs">Playera de algodon</p>}
-            description={<p>Esta es una playera de algodon de poliester</p>}
+            title={<p className="__subs">{pedido.producto.nombre}</p>}
+            description={<p>{pedido.producto.categoria}</p>}
           />
         </div>
       
         <div className=" col-lg-3 mt-2 __tupedido">
-          <p>Cantidad: </p> 
-          <p>Talla:</p>
-          <p>Color:</p>
+          <p>Cantidad: {pedido.cantidad}</p> 
+          {/* Condicionar si existen tallas, para sacar estos datos */}
+          <p>Talla: {pedido.talla}</p>
+          <p>Color: {pedido.producto.color}</p>
         </div>
 
       </div>
     </div> 
 
     <div className="d-flex flex-row-reverse mr-2" >
-      <p style={{fontSize: 25, fontWeight: "bold"}}>Precio</p>
+      <p style={{fontSize: 25, fontWeight: "bold"}}>{pedido.cantidad * pedido.producto.precio}</p>
     </div>
     
     </List.Item>

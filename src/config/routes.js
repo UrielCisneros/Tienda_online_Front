@@ -186,7 +186,7 @@ const routes = [
 				exact: true
 			},
 			{
-				path: '/confirmacion_compra/',
+				path: '/confirmacion_compra/:url',
 				component: Confirmacion_compra,
 				exact: true
 			},

@@ -7,7 +7,7 @@ import "../confirmacion.scss";
 
 export default function Traer_datos(props) {
 
-    const {datosUser,decoded,token,setLoading,setAccion} = props;
+    const {datosUser,decoded} = props;
     const [datosFormulario, setdatosFormulario] = useState({});
 
 
@@ -52,61 +52,62 @@ export default function Traer_datos(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [datosUser])
 
-    async function enviarDatosUser(){
+
+    // async function enviarDatosUser(){
         
-        const formData = new FormData();
+    //     const formData = new FormData();
 
-        formData.append('nombre', datosFormulario.nombre);
-        formData.append('telefono', datosFormulario.telefono);
-        formData.append('calle_numero', datosFormulario.calle_numero);
-        formData.append('entre_calles', datosFormulario.entre_calles);
-        formData.append('cp', datosFormulario.cp);
-        formData.append('colonia', datosFormulario.colonia);
-        formData.append('ciudad', datosFormulario.ciudad);
-        formData.append('estado', datosFormulario.estado);
-        formData.append('pais', datosFormulario.pais);
+    //     formData.append('nombre', datosFormulario.nombre);
+    //     formData.append('telefono', datosFormulario.telefono);
+    //     formData.append('calle_numero', datosFormulario.calle_numero);
+    //     formData.append('entre_calles', datosFormulario.entre_calles);
+    //     formData.append('cp', datosFormulario.cp);
+    //     formData.append('colonia', datosFormulario.colonia);
+    //     formData.append('ciudad', datosFormulario.ciudad);
+    //     formData.append('estado', datosFormulario.estado);
+    //     formData.append('pais', datosFormulario.pais);
 
 
-        setAccion(true);
-        await clienteAxios.put(`/cliente/${decoded._id}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                 Authorization: `bearer ${token}`
-            }
-        })
-        .then((res) => {
-            setTimeout(() => {
-                localStorage.removeItem('token');
-                localStorage.setItem('token', res.data.token);
-                window.location.reload();
-            },1000)
-            setLoading(false)
-            console.log(res);
-            notification.success({
-                message: 'Hecho!',
-                description: res.data.message,
-                duration: 2
-            });
-        })
-        .catch((res) => {
-            console.log(res.response);
-            setLoading(false);
-            if(res.response.status === 404 || res.response.status === 500){
-                notification.error({
-                    message: 'Error',
-                    description: `${res.response.data.message}`,
-                    duration: 2
-                });
-            }else{
-                notification.error({
-                    message: 'Error',
-                    description: 'Error de conexion',
-                    duration: 2
-                });
-            }
+    //     setAccion(true);
+    //     await clienteAxios.put(`/cliente/${decoded._id}`, formData, {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data',
+    //              Authorization: `bearer ${token}`
+    //         }
+    //     })
+    //     .then((res) => {
+    //         setTimeout(() => {
+    //             localStorage.removeItem('token');
+    //             localStorage.setItem('token', res.data.token);
+    //             window.location.reload();
+    //         },1000)
+    //         setLoading(false)
+    //         console.log(res);
+    //         notification.success({
+    //             message: 'Hecho!',
+    //             description: res.data.message,
+    //             duration: 2
+    //         });
+    //     })
+    //     .catch((res) => {
+    //         console.log(res.response);
+    //         setLoading(false);
+    //         if(res.response.status === 404 || res.response.status === 500){
+    //             notification.error({
+    //                 message: 'Error',
+    //                 description: `${res.response.data.message}`,
+    //                 duration: 2
+    //             });
+    //         }else{
+    //             notification.error({
+    //                 message: 'Error',
+    //                 description: 'Error de conexion',
+    //                 duration: 2
+    //             });
+    //         }
 
-        });
-    }
+    //     });
+    // }
 
       if(decoded === null){
           return null
@@ -131,7 +132,6 @@ export default function Traer_datos(props) {
                 layout="horizontal"
                 size={"middle"}
                 form={form}
-                onFinish={enviarDatosUser}
             >
                 <Divider style={{fontSize: 19}}>Información Personal</Divider>
                     

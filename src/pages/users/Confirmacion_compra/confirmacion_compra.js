@@ -12,14 +12,16 @@ import "./confirmacion.scss";
 
 export default function Confirmacion_compra() {
 
+    const {url} = useParams();
     const [datosUser, setDatosUser] = useState(null);
+    const [datosPedido, setPedido] = useState([]);
     const [loading, setLoading] = useState(false);
     const [accion, setAccion] = useState(false);
     
     //Obtener token de localStorage
     const token = localStorage.getItem('token')
     var decoded = Jwt(token) 
-    
+
     //Decodificar el JWT
 	function Jwt(token) {
 		try {
@@ -33,13 +35,12 @@ export default function Confirmacion_compra() {
             if(token === null){
                 return null
             }
-            await clienteAxios.get(`/pedidos/pedido/${decoded._id}`,{
+            await clienteAxios.get(`/pedidos/pedido/${url}`,{
                 headers:{
                      Authorization: `bearer ${token}`
                 }
             })
             .then((res) => {
-                console.log(res.data.cliente);
                 setDatosUser(res.data.cliente);
             })
             .catch((err) => {
@@ -48,11 +49,30 @@ export default function Confirmacion_compra() {
             setLoading(false)
       }
 
+      async function obtenerPedido() {
+        if(token === null){
+            return null
+        }
+        await clienteAxios.get(`/pedidos/pedido/${url}`,{
+            headers:{
+                 Authorization: `bearer ${token}`
+            }
+        })
+        .then((res) => {
+            setPedido(res.data.pedido);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        setLoading(false)
+  }
+
 
        
     useEffect(() => {
         setLoading(true)
         obtenerDatosUser();
+        obtenerPedido();
         setAccion(false);
       }, [accion])
 
@@ -65,13 +85,13 @@ export default function Confirmacion_compra() {
             <div className="row">
                 <div className="col-lg-5 mt-4">
 
-                    <Traer_datos datosUser={datosUser} decoded={decoded} token={token} setLoading={setLoading} setAccion={setAccion} />
+                    <Traer_datos datosUser={datosUser} decoded={decoded} />
                     
                 </div>
                 
                 <div className="col-lg-7 mt-4">
                     
-                    <Traer_pedido/>
+                    <Traer_pedido datosPedido={datosPedido} />
                     
                 </div>
             </div>
