@@ -136,7 +136,7 @@ function BlogAdmin(props) {
                         }}
                         className="ml-3"
                         icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}>
-                            Agregar Blog
+                            Crear Blog
                     </Button>
                 </div>
                 <BlogsList 

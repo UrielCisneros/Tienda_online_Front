@@ -347,7 +347,7 @@ function RegistrarProducto(props) {
 	////CONTENIDO DE LOS PASOS
 	const steps = [
 		{
-			title: 'Categoria',
+			title: 'Categoría',
 			content: (
 				<div className="d-flex justify-content-center align-items-center mt-4 mb-2">
 					<div className="text-center">
@@ -526,7 +526,7 @@ function RegistrarProducto(props) {
 										<Editor
 											disabled={disabledformProductos}
 											init={{
-												height: 300,
+												height: 450,
 												menubar: true,
 												plugins: [
 													'advlist autolink lists link image charmap print preview anchor',
@@ -560,7 +560,7 @@ function RegistrarProducto(props) {
 									</Button>
 								</Form.Item>
 							</Form>
-							{select === 'ropa' ? (
+							{select === 'Ropa' ? (
 								<div className="d-flex justify-content-center">
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
 										<RegistrarTalla disabledButtons={setDisabled} />
@@ -569,7 +569,7 @@ function RegistrarProducto(props) {
 							) : (
 								<div />
 							)}
-							{select === 'calzado' ? (
+							{select === 'Calzado' ? (
 								<div>
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
 										<RegistrarNumero disabledButtons={setDisabled} />

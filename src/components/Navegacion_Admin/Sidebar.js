@@ -74,7 +74,7 @@ const Sidebar = () => {
 					Sugerencias de compra<Link to="/admin/sugerencias" />
 				</Menu.Item>
 				<Menu.Item key="/admin/carousel" icon={<PictureOutlined />}>
-					Galeria principal de Productos<Link to="/admin/carousel" />
+					Publicidad<Link to="/admin/carousel" />
 				</Menu.Item>
 				<Menu.Item key="/admin/blog" icon={<EditOutlined />}>
 					Blog<Link to="/admin/blog" />

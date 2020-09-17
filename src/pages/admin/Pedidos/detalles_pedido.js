@@ -40,11 +40,11 @@ const DetallesPedido = (props) => {
 				<p className="data-info-pedidos">{pedido._id}</p>
 			</div>
 			<div className="my-2">
-				<h6 className="titulos-info-pedidos">fecha de creación:</h6>
+				<h6 className="titulos-info-pedidos">fecha de pedido:</h6>
 				<p className="data-info-pedidos">{formatoFecha(pedido.createdAt)}</p>
 			</div>
 			<div className="my-2">
-				<h6 className="titulos-info-pedidos">Hora de creación:</h6>
+				<h6 className="titulos-info-pedidos">Hora de pedido:</h6>
 				<p className="data-info-pedidos">{formatoHora(pedido.createdAt)}</p>
 			</div>
 			{pedido.fecha_envio ? (
@@ -62,7 +62,7 @@ const DetallesPedido = (props) => {
 				<div />
 			)}
 			<div className="my-2">
-				<h6 className="titulos-info-pedidos">No. de productos:</h6>
+				<h6 className="titulos-info-pedidos">Cantidad:</h6>
 				<p className="data-info-pedidos">{pedido.pedido.length}</p>
 			</div>
 			<div className="my-2">

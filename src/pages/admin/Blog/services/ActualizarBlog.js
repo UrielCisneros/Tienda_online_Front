@@ -216,7 +216,7 @@ export default function ActualizarBlog(props) {
                 </Form.Item>
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                     <Button type="primary" htmlType="submit">
-                        Actualizar blog
+                        Guardar
                     </Button>
                 </Form.Item>
             </Form>

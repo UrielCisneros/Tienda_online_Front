@@ -216,12 +216,12 @@ function Pedidos(props) {
 									<p className="data-info-pedidos">{pedidos._id}</p>
 								</div>
 								<div className="my-2">
-									<h6 className="titulos-info-pedidos">Creado el:</h6>
+									<h6 className="titulos-info-pedidos">Fecha de pedido:</h6>
 									<p className="data-info-pedidos">{formatoFecha(pedidos.createdAt)}</p>
 								</div>
 								{pedidos.fecha_envio ? (
 									<div className="my-2">
-										<h6 className="titulos-info-pedidos">Enviado el:</h6>
+										<h6 className="titulos-info-pedidos">Fecha de envío:</h6>
 										<p className="data-info-pedidos">{formatoFecha(pedidos.fecha_envio)}</p>
 									</div>
 								) : (
@@ -232,7 +232,7 @@ function Pedidos(props) {
 									<p className="data-info-pedidos">{pedidos.cliente.nombre}</p>
 								</div>
 								<div className="my-2">
-									<h6 className="titulos-info-pedidos">No. de productos:</h6>
+									<h6 className="titulos-info-pedidos">Cantidad:</h6>
 									<p className="data-info-pedidos">{pedidos.pedido.length}</p>
 								</div>
 								<div className="my-2">
@@ -270,7 +270,10 @@ function Pedidos(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			<div>
-				<p style={{ fontSize: 20 }}>
+				<p className="text-center" style={{ fontSize: 20 }}>
+						SISTEMA DE CONTROL DE PEDIDOS
+				</p>
+				<p className="text-center" style={{ fontSize: 15 }}>
 					En este apartado puedes ver todos los pedidos de tus clientes, filtrar por estados, si ya están
 					pagados o no y cambiar su estado.
 				</p>
@@ -278,13 +281,13 @@ function Pedidos(props) {
 					<p className="d-lg-inline d-block mr-5">Mostrar por:</p>
 					<Radio.Group name="radiogroup" defaultValue="todos" size="mediun">
 						<Radio className="d-lg-inline d-block mb-1" value="todos" onChange={onChange}>
-							Todos los pedidos
+							Todos
 						</Radio>
 						<Radio className="d-lg-inline d-block mb-1" value="proceso" onChange={onChange}>
-							Pedidos en Proceso
+							En Proceso
 						</Radio>
 						<Radio className="d-lg-inline d-block mb-1" value="enviados" onChange={onChange}>
-							Pedidos enviados
+							Enviados
 						</Radio>
 					</Radio.Group>
 				</div>
@@ -302,7 +305,7 @@ function Pedidos(props) {
 				key="detalle"
 				width={600}
 				style={{ top: 0 }}
-				title="Detalles de este pedido"
+				title=""
 				visible={visible}
 				onCancel={handleCancel}
 				footer={[
