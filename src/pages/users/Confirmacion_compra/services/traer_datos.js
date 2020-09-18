@@ -19,7 +19,6 @@ export default function Traer_datos(props) {
 
 
     useEffect(() => {
-        console.log(datosUser);
         if(datosUser !== null){
             let direccion = {};
             if(datosUser.direccion.length > 0){
