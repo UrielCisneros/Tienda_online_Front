@@ -4,24 +4,28 @@ import jwt_decode from 'jwt-decode';
 import DetallesPedido from './detalles';
 import {formatoFecha,formatoMexico} from '../../../config/reuserFunction';
 import "./pedidos.scss";
+import DetalleApartado from './detalleApartado';
 
 
 
-import { Card, Spin, Modal,  Tag, Button,List,Result,Tabs } from 'antd';
+
+import { Spin, Modal,  Tag, Button,List,Result,Tabs } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-
-const { Meta } = Card;
 const { TabPane } = Tabs;
 
 
 export default function PedidosUsuario(props) {
 	const [ pedidos, setPedidos ] = useState([]);
+	const [ apartados, setApartados ] = useState([]);
+	const [ promocion, setPromocion ] = useState({});
 	const [ visible, setVisible ] = useState(false);
+	const [ Elige, setElige ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
 	const [ showInfo, setshowInfo ] = useState(false);
 
     //modal del pedido
     const [ detallePedido, setDetallePedido ] = useState({});
+    const [ detalleApartado, setDetalleApartado ] = useState({});
 
     const showModal = (e) => {
         setVisible(e);
@@ -51,12 +55,10 @@ export default function PedidosUsuario(props) {
 		await clienteAxios
 			.get(`/pedidos/${decoded._id}`,{
 			headers: {
-				'Content-Type': 'multipart/form-data',
 				Authorization: `bearer ${token}`
 			}
 		})
 		.then((res) => {
-			console.log(res);
 			if(res.data.length > 0){
 				setPedidos(res.data);
 				setshowInfo(true);
@@ -68,11 +70,33 @@ export default function PedidosUsuario(props) {
 		});
 	}
 
+	async function obtenerApartados(){
+		/* setLoading(true); */
+		await clienteAxios
+			.get(`/apartado/cliente/apartados/${decoded._id}`,{
+			headers: {
+				Authorization: `bearer ${token}`
+			}
+		})
+		.then((res) => {
+			console.log(res);
+			if(res.data.length > 0){
+				setApartados(res.data);
+				setshowInfo(true);
+			}
+			setLoading(false);
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+	}
+
     useEffect(() => {
 		obtenerPedidos();
-		  setLoading(true);
-		  setPedidos([]);
-		  setshowInfo(false);
+		obtenerApartados();
+		setLoading(true);
+		setPedidos([]);
+		setshowInfo(false);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -82,27 +106,44 @@ export default function PedidosUsuario(props) {
 				<h4 className="text-center m-3">Mis Compras</h4>
 				<Tabs className="shadow bg-white rounded" defaultActiveKey="1" type="card" size="large">
 					<TabPane tab="Mis compras" key="1">
-					<div>
-						{showInfo !== true ? (
-							<Result
-								status="404"
-								title="Parece que aun no tienes compras"
-								subTitle="Ve y realiza tus compras para poder verlas"
-							/>
-						):(
-							<div>
-								<List
-									size="large"
-									dataSource={pedidos}
-									renderItem={pedido => <Pedido pedido={pedido} showModal={showModal}  setDetallePedido={setDetallePedido} />}
+						<div>
+							{showInfo !== true ? (
+								<Result
+									status="404"
+									title="Parece que aun no tienes compras"
+									subTitle="Ve y realiza tus compras. ¿Que esperas?"
 								/>
-							</div>
-						)}
-						
-					</div>	
+							):(
+								<div>
+									<List
+										size="large"
+										dataSource={pedidos}
+										renderItem={pedido => <Pedido pedido={pedido} showModal={showModal}  setDetallePedido={setDetallePedido} setElige={setElige} />}
+									/>
+								</div>
+							)}
+							
+						</div>	
 					</TabPane>
 					<TabPane tab="Mis apartados" key="2">
-						Content of card tab 2
+						<div>
+								{showInfo !== true ? (
+									<Result
+										status="404"
+										title="Parece que aun no tienes compras"
+										subTitle="Ve y realiza tus compras para poder verlas"
+									/>
+								):(
+									<div>
+										<List
+											size="large"
+											dataSource={apartados}
+											renderItem={apartado => <Apartado apartado={apartado} showModal={showModal}  setDetalleApartado={setDetalleApartado} setElige={setElige} />}
+										/>
+									</div>
+								)}
+								
+							</div>
 					</TabPane>
 				</Tabs>
 			</div>
@@ -110,7 +151,7 @@ export default function PedidosUsuario(props) {
 					key="detalle"
 					width={900}
 					style={{ top: 0 }}
-					title="Detalles de este pedido"
+					title=""
 					visible={visible}
 					onCancel={() => {
 						showModal(false)
@@ -127,7 +168,7 @@ export default function PedidosUsuario(props) {
 						</Button>
 					]}
 				>
-					<DetallesPedido detallePedido={detallePedido}  />
+					{Elige === true ? (<DetalleApartado detalleApartado={detalleApartado}  />):(<DetallesPedido detallePedido={detallePedido}  />)}	
 				</Modal>
 		</Spin>
     )
@@ -136,7 +177,7 @@ export default function PedidosUsuario(props) {
 
 
 function Pedido(props){
-	const {pedido,showModal,setDetallePedido} = props;
+	const {pedido,showModal,setDetallePedido,setElige} = props;
 	
 	return(
 		<div>
@@ -149,6 +190,7 @@ function Pedido(props){
 							style={{ fontSize: 16 }}
 							type="primary"
 							onClick={() => {
+								setElige(false)
 								showModal(true)
 								setDetallePedido(pedido)
 							}}
@@ -193,16 +235,19 @@ function Pedido(props){
 
 							<div className="col-lg-6 col-sm-12">
 								<p className="m-0 font-weight-bold" style={{fontSize:"15px"}} >Productos de la compra: <span className="text-primary"> x {pedido.pedido.length}</span></p>
-								<p className="m-0" style={{fontSize:"15px"}}>
-									<span className="font-weight-bold">La compra esta:</span>
-										<Tag
-											className="ml-2"
-											color={pedido.estado_pedido === 'En proceso' ? '#f0ad4e' : '#5cb85c'}
-										>
-											{pedido.estado_pedido}
-										</Tag>
-									
-								</p>
+								{pedido.pagado === false ? "":(
+									<p className="m-0" style={{fontSize:"15px"}}>
+										<span className="font-weight-bold">La compra esta:</span>
+											<Tag
+												className="ml-2"
+												color={pedido.estado_pedido === 'En proceso' ? '#f0ad4e' : '#5cb85c'}
+											>
+												{pedido.estado_pedido}
+											</Tag>
+										
+									</p>
+								)}
+
 								<p className="m-0" style={{fontSize:"15px"}}><span className="font-weight-bold">Total de la compra:</span><span className="text-success"> $ { formatoMexico(pedido.total)}</span>   </p>
 								<p className="m-0" style={{fontSize:"15px"}}><span className="font-weight-bold">Pedido el:</span> {formatoFecha(pedido.createdAt)}</p>
 								<p className="m-0" style={{fontSize:"15px"}}>
@@ -210,21 +255,155 @@ function Pedido(props){
 										(
 											<div>
 												<p className="text-danger">Pedido cancelado</p>
+													<Button
+														className="d-flex justify-content-center align-items-center"
+														style={{ fontSize: 16 }}
+														type="primary"
+													>
+														Comprar
+													</Button>
+											</div>
+										) : 
+										(
+										<div>
+											<p className="text-success">Pedido realizado</p>
+											<p>Seguimiento: {pedido.codigo_seguimiento} </p>
+											<a href={`${pedido.url}${pedido.codigo_seguimiento}`} target="_blank">
 												<Button
 													className="d-flex justify-content-center align-items-center"
 													style={{ fontSize: 16 }}
 													type="primary"
 												>
-												Comprar
-											</Button>
-											</div>
-										) : 
-										(<p className="text-success">Pedido realizado</p>)} </p>
+													Seguir envio
+												</Button>
+											</a>
+										</div>
+										)} 
+								</p>
 							</div>
+							{pedido.pagado === false ? "":(
+									<div className="col-lg-6 col-sm-12">
+										<p className="m-0 font-weight-bold h3 text-primary" style={{fontSize:"15px"}} >Mensaje de la tienda:</p>
+										<p className="mt-2" style={{fontSize:"15px"}}>{pedido.mensaje_admin ? pedido.mensaje_admin : "Tu pedido esta en procesado, si tienes alguna duda no dudes en contactarnos!!"}</p>
+									</div>
+								)}
+
+						</div>
+					}
+				/>
+			</List.Item>
+		</div>
+	)
+}
+
+function Apartado(props){
+	const {apartado,showModal,setDetalleApartado,setElige} = props;
+
+	console.log(apartado);
+	
+	return(
+		<div>
+			<List.Item
+				key={apartado._id}
+				className="d-flex justify-content-center align-items-center m-5"
+				actions={[
+						<Button
+							className="d-flex justify-content-top align-items-top "
+							style={{ fontSize: 16 }}
+							type="primary"
+							onClick={() => {
+								setElige(true)
+								showModal(true)
+								setDetalleApartado(apartado)
+							}}
+						>
+							<EditOutlined />
+							Detalle del apartado
+						</Button>					
+				]}
+			>	
+			<div className="d-lg-none d-sm-block">
+				<p className="h6"><span className="font-weight-bold">Producto:</span><span className="ml-1">{apartado.producto.nombre}</span></p>
+				<p className="h6"><span className="font-weight-bold">Precio:</span> <span className="text-success"> $ {formatoMexico(apartado.producto.precio)} </span>  </p>
+				
+				<p className="m-0" style={{fontSize:"15px"}}>
+					<span className="font-weight-bold">Tipo de entrega:</span>
+					<Tag
+						className=""
+						color={apartado.tipoEntrega === 'RECOGIDO' ? '#f0ad4e' : '#5cb85c'}
+					>
+						{apartado.tipoEntrega === "ENVIO" ? "Envio por paqueteria" : "Recoger a sucursal"}
+					</Tag>
+				</p>
+			</div>
+			
+				<List.Item.Meta
+					avatar={
+						<div
+							className="d-flex justify-content-center align-items-center my-3"
+							style={{ width: 100, height: 100 }}
+						>
+							<p>Pedido del producto sdsdsdsd</p>
+							<img
+								className="img-fluid"
+								alt="producto"
+								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${apartado.producto.imagen}`}
+							/>
+							
+						</div>
+					}
+					title={
+						<div className="titulo-producto row mostrar-pedido">
+
 							<div className="col-lg-6 col-sm-12">
-								<p className="m-0 font-weight-bold h3 text-primary" style={{fontSize:"15px"}} >Mensaje de la tienda:</p>
-								<p className="mt-2" style={{fontSize:"15px"}}>{pedido.mensaje_admin ? pedido.mensaje_admin : "Tu pedido esta en procesado, si tienes alguna duda no dudes en contactarnos!!"}</p>
+								<p className="h6"><span className="font-weight-bold">Producto:</span><span className=""> {apartado.producto.nombre}</span></p>
+								<p className="h6"><span className="font-weight-bold">Precio:</span> <span className="text-success"> $ {formatoMexico(apartado.producto.precio)} </span>  </p>
+								<p className="m-0" style={{fontSize:"15px"}}>
+									<span className="font-weight-bold">Tipo de entrega:</span>
+									<Tag
+										className="ml-2"
+										color={apartado.tipoEntrega === 'RECOGIDO' ? '#f0ad4e' : '#5cb85c'}
+									>
+										{apartado.tipoEntrega === "ENVIO" ? "Envio por paqueteria" : "Recoger a sucursal"}
+									</Tag>
+								</p>
+								
+								<p className="m-0" style={{fontSize:"15px"}}><span className="font-weight-bold m-0">Pedido el:</span> {formatoFecha(apartado.createdAt)}</p>
+								<p className="m-0" style={{fontSize:"15px"}}>
+								<span className="font-weight-bold">Estado:</span>
+									<Tag
+										className="ml-2"
+										color={apartado.estado === 'ACEPTADO' ?  '#5cb85c' : apartado.estado === 'PROCESANDO' ? '#f0ad4e' :  apartado.estado === 'ENVIADO' ? "#5cb85c": "#F75048"}
+									>
+										{apartado.estado === 'ACEPTADO' ?  'Apartado aceptado' : apartado.estado === 'PROCESANDO' ? 'Apartado en proceso' :  apartado.estado === 'ENVIADO' ? "Apartado enviado": "Apartado cancelado"}
+									</Tag>
+								</p>
+								<div>
+								{apartado.tipoEntrega === "ENVIO" ? (
+								<div className="">
+									<p style={{fontSize:"15px"}}> <span className="font-weight-bold">Seguimiento:</span>  {apartado.codigo_seguimiento} </p>
+									<a href={`${apartado.url}${apartado.codigo_seguimiento}`} target="_blank">
+										<Button
+											className="d-flex justify-content-center align-items-center"
+											style={{ fontSize: 16 }}
+											type="primary"
+										>
+											Seguir envio
+										</Button>
+									</a>
+								</div>
+							):""}
+
+								</div>
+
 							</div>
+							{apartado.tipoEntrega === "ENVIO" ? (
+								<div className="col-lg-6 col-sm-12">
+									<p className="m-0 font-weight-bold h3 text-primary" style={{fontSize:"15px"}} >Mensaje de la tienda:</p>
+									<p className="mt-2" style={{fontSize:"15px"}}>{apartado.mensaje_admin ? apartado.mensaje_admin : "Tu pedido esta en procesado, si tienes alguna duda no dudes en contactarnos!!"}</p>
+								</div>
+							):""}
+
 						</div>
 					}
 				/>

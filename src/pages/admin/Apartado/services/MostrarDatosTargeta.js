@@ -1,7 +1,8 @@
-import React,{useEffect,useState} from 'react'
+import React from 'react'
 import {Card, Col,Tag} from 'antd'
 import { ContainerOutlined } from '@ant-design/icons';
 import {formatoFecha} from '../../../../config/reuserFunction'
+
 
 import './MostrarDatosTargeta.scss';
 
@@ -45,7 +46,7 @@ export default function MostrarDatosTargeta(props) {
 								</div>
 								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Cliente:</h6>
-									<p className="data-info-apartados">{apartado.cliente[0].nombre}</p>
+									<p className="data-info-apartados">{`${apartado.cliente[0].nombre} ${apartado.cliente[0].apellido}`} </p>
 								</div>
 								<div className="sistema-apartado m-2">
 									<h6 className="titulos-info-apartados">Estado:</h6>
@@ -61,9 +62,9 @@ export default function MostrarDatosTargeta(props) {
 									<h6 className="titulos-info-apartados">Tipo de entrega:</h6>
 									<Tag
 										className="data-info-apartados"
-										color={apartado.tipoEntrega === 'Envio' ?  '#5cb85c' : '#0275d8'}
+										color={apartado.tipoEntrega === 'ENVIO' ?  '#5cb85c' : '#0275d8'}
 									>
-										{apartado.tipoEntrega === 'Envio' ? 'Envio a domicilio' : 'Pasaran por el'}
+										{apartado.tipoEntrega === 'ENVIO' ? 'Envio a domicilio' : 'Pasaran por el'}
 									</Tag>
 								</div>
 
