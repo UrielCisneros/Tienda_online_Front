@@ -1,6 +1,6 @@
 //layout
 import LayoutAdmin from '../components/LayoutAdmin'
-import LayoutBasic from '../components/Layout'
+import LayoutBasic from '../components/Layout/Layout'
 
 //Admin pages
 import AdminHome from '../pages/admin/Principal/principal'
@@ -22,7 +22,7 @@ import ShoppingCart from '../pages/users/Carrito/shopping_cart'
 import Productos from '../pages/users/Productos/productos'
 import Blog from '../pages/users/Blogs/blog';
 import PedidosUsuario from '../pages/users/Pedidos/pedidos'
-import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
+import Ofertas from '../pages/users/Ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
 import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
 import Perfiles from '../pages/users/Perfiles/perfiles'
@@ -35,6 +35,7 @@ import VistaProducto from '../pages/users/Vista_Producto/vista_producto'
 
 //other
 import Error404 from '../pages/users/error404'
+import Error500 from '../pages/users/error500'
 import Search404 from '../pages/users/Resultado_Busqueda/404'
 
 const routes = [
@@ -181,6 +182,11 @@ const routes = [
 			{
 				path: '/perfiles/',
 				component: Perfiles,
+				exact: true
+			},
+			{
+				path: '/error500/',
+				component: Error500,
 				exact: true
 			},
 			{

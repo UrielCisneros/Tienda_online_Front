@@ -19,10 +19,42 @@ function ConsultaProductos(props) {
 
 	useEffect(
 		() => {
-			obtenerProductos(10, page);
+			if(window.screen.width < 768){
+				obtenerProductos(12, page);
+			}else{
+				obtenerProductos(40, page);
+			}
 		},
 		[ page ]
 	);
+	
+	async function obtenerProductos(limit, page) {
+		setLoading(true);
+		await clienteAxios
+			.get(`/productos?limit=${limit}&page=${page}`)
+			.then((res) => {
+				setProductos(res.data.posts.docs);
+				setProductosPaginacion(res.data.posts);
+				setLoading(false);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+	}
 
 	async function obtenerProductos(limit, page) {
 		setLoading(true);
@@ -53,7 +85,7 @@ function ConsultaProductos(props) {
 	}
 
 	const render = productos.map((productos) => (
-		<Col span={4} key={productos._id}>
+		<Col span={window.screen.width < 768 ? 12 : 4} key={productos._id}>
 			<Link to={`/vista_producto/${productos._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card
@@ -101,7 +133,7 @@ function ConsultaProductos(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<div className="principal-productos">NUESTROS PRODUCTOS</div>
+			<div className="principal-productos"><p>NUESTROS PRODUCTOS</p></div>
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
 					<Row gutter={10} style={{ maxWidth: '90vw' }} className="mt-4">

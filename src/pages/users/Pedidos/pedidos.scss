@@ -7,12 +7,20 @@
     .data-info-pedidos{
         float: none!important;
     }
+    .mostrar-pedido{
+        display: none;
+    }
 }
 
 .contenedor-card-pedidos{
     height: 300px;
 }
 
-.border-sol{
-    border: 1px solid black;
+.botton-top{
+    margin-top: 0px!important;
+}
+
+.border-pedido{
+    border: 1px solid gray;
+    border-bottom: 1px solid gray;
 }

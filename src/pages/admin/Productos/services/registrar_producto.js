@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
 import { Form, Button, Input, Select, Steps, notification, Upload, Spin, Divider } from 'antd';
-import { UploadOutlined, PlusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import './registrar_producto.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
 import RegistrarGaleria from './registrar_galeria';
 import RegistrarTalla from './registrar_talla';
 import RegistrarNumero from './registrar_numero';
 import { Editor } from '@tinymce/tinymce-react';
+import { SketchPicker } from 'react-color';
+import reactCSS from 'reactcss';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -18,6 +20,10 @@ const layout = {
 	labelCol: { span: 6 },
 	wrapperCol: { span: 16 }
 };
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
 
 function RegistrarProducto(props) {
 	const formRef = useRef(null);
@@ -39,10 +45,61 @@ function RegistrarProducto(props) {
 	const [ item, setItem ] = useState();
 	const [ buttonCat, setButtonCat ] = useState(true);
 	const [ categoriasBD, setCategoriasBD ] = useState([]);
-	const [ categoriasDefault, setCategoriasDefault ] = useState([ 'ropa', 'calzado' ]);
+	const [ categoriasDefault, setCategoriasDefault ] = useState([ 'Ropa', 'Calzado' ]);
 	const [ subcategoriasDefault, setSubcategoriasDefault ] = useState([]);
-	const [ subCategoriasBD, setSubCategoriasBD] = useState([]);
-	const [ subCategoria, setSubCategoria] = useState([]);
+	const [ subCategoriasBD, setSubCategoriasBD ] = useState([]);
+	const [ subCategoria, setSubCategoria ] = useState([]);
+	const [ displayColorPicker, setDisplayColorPicker ] = useState(false);
+	const [ color, setColor ] = useState('FFFFFF');
+	const [ valueSelect, setValueSelect ] = useState();
+	const [ valueSelectSubCat, setValueSelectSubCat ] = useState();
+	
+	const styles = reactCSS({
+		default: {
+			color: {
+				width: '36px',
+				height: '14px',
+				borderRadius: '2px',
+				background: color
+			},
+			swatch: {
+				padding: '5px',
+				background: '#fff',
+				borderRadius: '1px',
+				boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+				display: 'inline-block',
+				cursor: 'pointer'
+			},
+			popover: {
+				position: 'absolute',
+				zIndex: '2'
+			},
+			cover: {
+				position: 'fixed',
+				top: '0px',
+				right: '0px',
+				bottom: '0px',
+				left: '0px'
+			}
+		}
+	});
+
+	const handleClick = () => {
+		setDisplayColorPicker(true);
+	};
+
+	const handleClose = () => {
+		setDisplayColorPicker(false);
+	};
+
+	const handleChange = (color) => {
+		setColor(color.hex);
+		console.log(color)
+	};
+
+	const resetColor = () => {
+		setColor('');
+	};
 
 	useEffect(
 		() => {
@@ -51,14 +108,14 @@ function RegistrarProducto(props) {
 				setCurrent(0);
 				setDisabledFormProductos(false);
 			}
+			setUpload(false)
+			setValueSelect();
 			setCurrent(0);
 			setDisabledFormProductos(false);
 			obtenerCategorias();
 		},
 		[ reload, form ]
 	);
-
-	
 
 	const next = () => {
 		setCurrent(current + 1);
@@ -107,10 +164,12 @@ function RegistrarProducto(props) {
 	});
 	//// Capturar valores de categoria
 	const [ select, setSelect ] = useState('');
+	const [ genero, setGenero ] = useState('');
 	const [ tipoCategoria, setTipoCategoria ] = useState('');
 
 	const onSelect = (value) => {
 		setSelect(value);
+		setValueSelect(value);
 		if (value === 'calzado' || value === 'ropa') {
 			setTipoCategoria(value);
 		} else {
@@ -121,6 +180,9 @@ function RegistrarProducto(props) {
 		} else {
 			setDisabled(true);
 		}
+	};
+	const generoOnChange = (value) => {
+		setGenero(value);
 	};
 	const obtenerEditor = (value) => {
 		setEditor(value);
@@ -143,6 +205,8 @@ function RegistrarProducto(props) {
 		formData.append('categoria', select);
 		formData.append('tipoCategoria', tipoCategoria);
 		formData.append('subCategoria', subCategoria);
+		formData.append('genero', genero);
+		formData.append('color', color);
 		formData.append('cantidad', datos.cantidad);
 		formData.append('precio', datos.precio);
 		formData.append('descripcion', editor);
@@ -167,6 +231,9 @@ function RegistrarProducto(props) {
 					description: res.data.message,
 					duration: 2
 				});
+				if(tipoCategoria === 'otros'){
+					next();
+				}
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -217,45 +284,52 @@ function RegistrarProducto(props) {
 				}
 			});
 	}
-	async function obtenerSubcategorias(){
+	async function obtenerSubcategorias() {
 		await clienteAxios
-				.get(`/productos/Subcategorias/${select}`, {
-					headers: {
-						Authorization: `bearer ${token}`
-					}
-				})
-				.then((res) => {
-					setSubCategoriasBD(res.data);
-				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						notification.error({
-							message: 'Error',
-							description: res.response.data.message,
-							duration: 2
-						});
-					} else {
-						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
-							duration: 2
-						});
-					}
-				});
+			.get(`/productos/Subcategorias/${select}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setSubCategoriasBD(res.data);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
 	}
 
 	const addItemCategoria = () => {
 		setCategoriasDefault([ ...categoriasDefault, item ]);
+		setSelect(item);
+		setTipoCategoria('otros');
+		setDisabled(false);
+		setValueSelect(item);
 	};
 	const addItemSubCategoria = () => {
 		setSubcategoriasDefault([ ...subcategoriasDefault, item ]);
+		setValueSelectSubCat(item);
+		setSubCategoria(item);
 	};
+
 	const onSelectSubCategoria = (value) => {
-		setSubCategoria(value)
-	}
+		setSubCategoria(value);
+	};
 	const onCategoriaChange = (e) => {
 		if (e.target.value.length !== 0) {
-			setItem(e.target.value);
+			setItem(e.target.value.capitalize());
 			setButtonCat(false);
 		} else {
 			setButtonCat(true);
@@ -263,7 +337,7 @@ function RegistrarProducto(props) {
 	};
 	const onSubCategoriaChange = (e) => {
 		if (e.target.value.length !== 0) {
-			setItem(e.target.value);
+			setItem(e.target.value.capitalize());
 			setButtonCat(false);
 		} else {
 			setButtonCat(true);
@@ -273,17 +347,18 @@ function RegistrarProducto(props) {
 	////CONTENIDO DE LOS PASOS
 	const steps = [
 		{
-			title: 'Categoria',
+			title: 'Categoría',
 			content: (
 				<div className="d-flex justify-content-center align-items-center mt-4 mb-2">
 					<div className="text-center">
 						<h2 className="mb-5">Selecciona una categoria para continuar</h2>
 						<Select
+							value={valueSelect}
 							style={{ width: 300 }}
 							placeholder="Seleciona una categoria"
 							onChange={onSelect}
 							dropdownRender={(menu) => (
-								<div>
+								<div >
 									{menu}
 									<Divider style={{ margin: '4px 0' }} />
 									<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
@@ -300,7 +375,7 @@ function RegistrarProducto(props) {
 								<Option />
 							) : (
 								categoriasBD.map((item) => {
-									if (item._id === 'ropa' || item._id === 'calzado') {
+									if (item._id === 'Ropa' || item._id === 'Calzado') {
 										return null;
 									} else {
 										return <Option key={item._id}>{item._id}</Option>;
@@ -327,7 +402,7 @@ function RegistrarProducto(props) {
 								form={form}
 								ref={formRef.current}
 							>
-								<Form.Item label="Codigo de barras" onChange={datosForm}>
+								<Form.Item label="Código de barras" onChange={datosForm}>
 									<Input
 										name="codigo"
 										disabled={disabledformProductos}
@@ -336,8 +411,10 @@ function RegistrarProducto(props) {
 								</Form.Item>
 								<Form.Item label="Subcategoria" onChange={datosForm}>
 									<Form.Item name="subCategoria">
+										{console.log()}
 										<Select
-											style={{ width: 300 }}
+											value={valueSelectSubCat}
+											style={{ width: 250 }}
 											placeholder="Seleciona una subcategoria"
 											onChange={onSelectSubCategoria}
 											dropdownRender={(menu) => (
@@ -345,7 +422,10 @@ function RegistrarProducto(props) {
 													{menu}
 													<Divider style={{ margin: '4px 0' }} />
 													<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
-														<Input style={{ flex: 'auto' }} onChange={onSubCategoriaChange} />
+														<Input
+															style={{ flex: 'auto' }}
+															onChange={onSubCategoriaChange}
+														/>
 														<Button disabled={buttonCat} onClick={addItemSubCategoria}>
 															<PlusOutlined style={{ fontSize: 20 }} /> Nueva
 														</Button>
@@ -365,6 +445,23 @@ function RegistrarProducto(props) {
 													}
 												})
 											)}
+										</Select>
+									</Form.Item>
+								</Form.Item>
+								<Form.Item label="Género" onChange={datosForm}>
+									<Form.Item name="genero">
+										<Select
+											name="genero"
+											placeholder="Selecciona un género"
+											style={{ width: 250 }}
+											disabled={disabledformProductos}
+											onChange={generoOnChange}
+										>
+											<Option value="niño">Niño</Option>
+											<Option value="niña">Niña</Option>
+											<Option value="hombre">Hombre</Option>
+											<Option value="mujer">Mujer</Option>
+											<Option value="mixto">Mixto</Option>
 										</Select>
 									</Form.Item>
 								</Form.Item>
@@ -399,7 +496,27 @@ function RegistrarProducto(props) {
 										<Input type="number" disabled={disabledformProductos} name="precio" />
 									</Form.Item>
 								</Form.Item>
-								<Form.Item label="Descripcion del producto">
+								<Form.Item label="Color del producto" onChange={datosForm}>
+									<Form.Item name="color">
+										<div className="d-flex align-items-center">
+											<div className="d-inline">
+												<div style={styles.swatch} onClick={handleClick}>
+													<div style={styles.color} />
+												</div>
+												{displayColorPicker ? (
+													<div style={styles.popover}>
+														<div style={styles.cover} onClick={handleClose} />
+														<SketchPicker color={color} onChange={handleChange} />
+													</div>
+												) : null}
+											</div>
+											<Button className="d-inline ml-2" size="middle" type="text" onClick={resetColor}>
+												Quitar color
+											</Button>
+										</div>
+									</Form.Item>
+								</Form.Item>
+								<Form.Item label="Descripción del producto">
 									<Form.Item
 										rules={[ { required: true, message: 'Este campo es requerido' } ]}
 										noStyle
@@ -409,7 +526,7 @@ function RegistrarProducto(props) {
 										<Editor
 											disabled={disabledformProductos}
 											init={{
-												height: 200,
+												height: 450,
 												menubar: true,
 												plugins: [
 													'advlist autolink lists link image charmap print preview anchor',
@@ -443,7 +560,7 @@ function RegistrarProducto(props) {
 									</Button>
 								</Form.Item>
 							</Form>
-							{select === 'ropa' ? (
+							{select === 'Ropa' ? (
 								<div className="d-flex justify-content-center">
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
 										<RegistrarTalla disabledButtons={setDisabled} />
@@ -452,7 +569,7 @@ function RegistrarProducto(props) {
 							) : (
 								<div />
 							)}
-							{select === 'calzado' ? (
+							{select === 'Calzado' ? (
 								<div>
 									<ProductoContext.Provider value={[ productoID, disabledform ]}>
 										<RegistrarNumero disabledButtons={setDisabled} />
@@ -467,12 +584,12 @@ function RegistrarProducto(props) {
 			)
 		},
 		{
-			title: 'Galeria(opcional)',
+			title: 'Galería(opcional)',
 			content: (
 				<div className="contenedor-galeria d-flex justify-content-center align-items-center mt-4 mb-5">
 					<div className="text-center" style={{ width: '90%' }}>
-						<h2>Agrega mas imagenes para tu prodcuto</h2>
-						<p>Puedes agregar mas imagenes de tu producto para que tus clientes puedan verlas</p>
+						<h2>Agrega más imágenes para tu producto</h2>
+						<p>Puedes agregar más imágenes de tu producto para que tus clientes puedan verlas.</p>
 						<ProductoContext.Provider value={productoID}>
 							<RegistrarGaleria />
 						</ProductoContext.Provider>
@@ -495,9 +612,9 @@ function RegistrarProducto(props) {
 				</Spin>
 			</div>
 			<div className="steps-action d-flex justify-content-center align-items-center">
-				{current < steps.length - 1 && (
-					<Button type="primary" onClick={next} disabled={disabled}>
-						Next
+				{current > 0 && (
+					<Button style={{ margin: '0 8px' }} onClick={prev} disabled={disabledPrev}>
+						Previous
 					</Button>
 				)}
 				{current === steps.length - 1 && (
@@ -516,9 +633,9 @@ function RegistrarProducto(props) {
 						Done
 					</Button>
 				)}
-				{current > 0 && (
-					<Button style={{ margin: '0 8px' }} onClick={prev} disabled={disabledPrev}>
-						Previous
+				{current < steps.length - 1 && (
+					<Button type="primary" onClick={next} disabled={disabled}>
+						Next
 					</Button>
 				)}
 			</div>

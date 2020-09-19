@@ -18,8 +18,8 @@ export default function blogList(props) {
         confirm({
             title:"Eliminando Blog",
             icon: <ExclamationCircleOutlined />,
-            content: `Estas seguro que deseas eliminar el blog: ${blog.nombre}`,
-            okText: "Eliminar Blog",
+            content: `¿Estás seguro que deseas eliminar el blog ${blog.nombre}?`,
+            okText: "Eliminar",
             okType:"danger",
             cancelText:"Cancelar",
             onOk(){

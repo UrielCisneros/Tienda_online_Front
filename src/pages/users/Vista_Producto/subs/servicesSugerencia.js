@@ -14,9 +14,10 @@ export async function AgregarPedido(
 	total,
 	token
 ) {
+	var pedido = [];
 	if (categoriaProducto === 'ropa' && categoriaSugerencia === 'ropa') {
 		// ambas tallas
-		var pedido = [
+		pedido = [
 			{
 				producto: producto,
 				cantidad: cantidadProducto,
@@ -30,7 +31,7 @@ export async function AgregarPedido(
 		];
 	} else if (categoriaProducto === 'ropa' && categoriaSugerencia === 'calzado') {
 		// talla producto y numero sugerencia
-		var pedido = [
+		pedido = [
 			{
 				producto: producto,
 				cantidad: cantidadProducto,
@@ -44,7 +45,7 @@ export async function AgregarPedido(
 		];
 	} else if (categoriaProducto === 'ropa' && categoriaSugerencia === 'otros') {
 		// talla producto y sin medida sugerencia
-		var pedido = [
+		pedido = [
 			{
 				producto: producto,
 				cantidad: cantidadProducto,
@@ -57,7 +58,7 @@ export async function AgregarPedido(
 		];
 	} else if (categoriaProducto === 'calzado' && categoriaSugerencia === 'calzado') {
 		// numero producto y numero sugerencia
-		var pedido = [
+		pedido = [
 			{
 				producto: producto,
 				cantidad: cantidadProducto,
@@ -71,7 +72,7 @@ export async function AgregarPedido(
 		];
 	} else if (categoriaProducto === 'calzado' && categoriaSugerencia === 'ropa') {
 		// numero producto y talla sugerencia
-		var pedido = [
+		pedido = [
 			{
 				producto: producto,
 				cantidad: cantidadProducto,
@@ -85,7 +86,7 @@ export async function AgregarPedido(
 		];
 	} else if (categoriaProducto === 'calzado' && categoriaSugerencia === 'otros') {
 		// numero producto y sin medida sugerencia
-		var pedido = [
+		pedido = [
 			{
 				producto: producto,
 				cantidad: cantidadProducto,
@@ -98,7 +99,7 @@ export async function AgregarPedido(
 		];
 	} else if (categoriaProducto === 'otros' && categoriaSugerencia === 'otros') {
 		// sin medida producto y sin medida sugerencia
-		var pedido = [
+		pedido = [
 			{
 				producto: producto,
 				cantidad: cantidadProducto
@@ -110,7 +111,7 @@ export async function AgregarPedido(
 		];
 	} else if (categoriaProducto === 'otros' && categoriaSugerencia === 'ropa') {
 		// sin medida producto y talla sugerencia
-		var pedido = [
+		pedido = [
 			{
 				producto: producto,
 				cantidad: cantidadProducto
@@ -123,7 +124,7 @@ export async function AgregarPedido(
 		];
 	} else if (categoriaProducto === 'otros' && categoriaSugerencia === 'calzado') {
 		// sin medida producto y numero sugerencia
-		var pedido = [
+		pedido = [
 			{
 				producto: producto,
 				cantidad: cantidadProducto
@@ -152,10 +153,7 @@ export async function AgregarPedido(
 			}
 		)
 		.then((res) => {
-			return notification.success({
-				message: res.data.message,
-				duration: 2
-			});
+			window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
 		})
 		.catch((res) => {
 			if (res.response.status === 404 || res.response.status === 500) {

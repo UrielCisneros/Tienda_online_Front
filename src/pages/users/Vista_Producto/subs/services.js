@@ -24,7 +24,6 @@ export async function AgregarCarrito(idcliente, idproducto, cantidad, talla, num
 				});
 			})
 			.catch((res) => {
-				console.log(res);
 				if (res.response.status === 404 || res.response.status === 500) {
 					return notification.error({
 						message: 'Error',
@@ -39,10 +38,11 @@ export async function AgregarCarrito(idcliente, idproducto, cantidad, talla, num
 					});
 				}
 			});
+			return true;
 }
 
 export async function AgregarApartado(idcliente, idproducto, cantidad, talla, numero, tipoEntrega, token) {
-	if (!numero) {
+	if (talla) {
 		await clienteAxios
 			.post(
 				`/apartado/nuevo/${idcliente}`,
@@ -81,10 +81,10 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 					});
 				}
 			});
-	} else if (!talla) {
+	} else if (numero) {
 		await clienteAxios
 			.post(
-				`/carrito/nuevo/${idcliente}`,
+				`/apartado/nuevo/${idcliente}`,
 				{
 					producto: idproducto,
 					cliente: idcliente,
@@ -123,7 +123,7 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 	} else if (!talla && !numero) {
 		await clienteAxios
 			.post(
-				`/carrito/nuevo/${idcliente}`,
+				`/apartado/nuevo/${idcliente}`,
 				{
 					producto: idproducto,
 					cliente: idcliente,
@@ -183,10 +183,7 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
 				}
 			)
 			.then((res) => {
-				return notification.success({
-					message: res.data.message,
-					duration: 2
-				});
+				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`				
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -224,10 +221,7 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
 				}
 			)
 			.then((res) => {
-				return notification.success({
-					message: res.data.message,
-					duration: 2
-				});
+				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -264,10 +258,7 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
 				}
 			)
 			.then((res) => {
-				return notification.success({
-					message: res.data.message,
-					duration: 2
-				});
+				window.location.href = `/confirmacion_compra/${res.data.pedido._id}`
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {

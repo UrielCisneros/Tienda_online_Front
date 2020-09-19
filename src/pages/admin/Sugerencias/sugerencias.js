@@ -57,7 +57,7 @@ function Sugerencias(props) {
 			setVisibleReload('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}`)
+				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`)
 				.then((res) => {
 					setProductosPaginacion(res.data.posts);
 					setProductos(res.data.posts);
@@ -163,7 +163,10 @@ function Sugerencias(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<p style={{ fontSize: 20 }}>
+			<p className="text-center" style={{ fontSize: 20 }}>
+				PRODUCTOS SUGERIDOS
+			</p>
+			<p className="text-center" style={{ fontSize: 15 }}>
 				En este apartado puedes agregar sugerencias de compra de otro producto a un producto
 			</p>
 			<Row justify="center mt-5">
@@ -171,7 +174,7 @@ function Sugerencias(props) {
 					<Search
 						placeholder="Busca un producto"
 						onSearch={(value) => obtenerProductosFiltrados(value)}
-						style={{ width: 300, height: 40, marginBottom: 10 }}
+						style={{ width: 600, height: 40, marginBottom: 10 }}
 						enterButton="Buscar"
 						size="large"
 					/>
