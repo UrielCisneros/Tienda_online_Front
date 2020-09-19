@@ -137,12 +137,12 @@ const Navegacion = (props) => {
 								<Menu.Item key="/blog">
 									Blog<Link to="/blog" />
 								</Menu.Item>
-								{tienda.length !== 0 ? (
+								{!tienda ? (
+									<></>
+								) : (
 									<Menu.Item key="/quienes_somos">
 										Quiénes somos<Link to="/quienes_somos" />
 									</Menu.Item>
-								) : (
-									<></>
 								)}
 								{!decoded ? (
 									<></>

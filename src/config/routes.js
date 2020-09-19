@@ -26,6 +26,7 @@ import Ofertas from '../pages/users/Ofertas/ofertas'
 import Articulo from '../pages/users/articulo'
 import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
 import Perfiles from '../pages/users/Perfiles/perfiles'
+import Confirmacion_compra from '../pages/users/Confirmacion_compra/confirmacion_compra'
 
 
 
@@ -182,6 +183,11 @@ const routes = [
 			{
 				path: '/perfiles/',
 				component: Perfiles,
+				exact: true
+			},
+			{
+				path: '/confirmacion_compra/:url',
+				component: Confirmacion_compra,
 				exact: true
 			},
 			{
