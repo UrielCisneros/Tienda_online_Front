@@ -169,7 +169,7 @@ function ListaCarrito(props) {
 								<div className="d-block d-lg-flex">
 									<Tag className="detalles-carrito">Categoria: {carrito.idarticulo.categoria}</Tag>
 									<Tag className="detalles-carrito">Género: {carrito.idarticulo.genero}</Tag>
-									<Tag className="detalles-carrito mt-1">Color: {carrito.idarticulo.color}</Tag>
+									<Tag className="detalles-carrito">Color: {carrito.idarticulo.color}</Tag>
 									<Tag
 										style={{ backgroundColor: carrito.idarticulo.colorHex, height: 30, width: 30 }}
 									/>
