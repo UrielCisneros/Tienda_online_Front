@@ -614,7 +614,7 @@ function RegistrarProducto(props) {
 			<div className="steps-action d-flex justify-content-center align-items-center">
 				{current > 0 && (
 					<Button style={{ margin: '0 8px' }} onClick={prev} disabled={disabledPrev}>
-						Previous
+						Atras
 					</Button>
 				)}
 				{current === steps.length - 1 && (
@@ -630,12 +630,12 @@ function RegistrarProducto(props) {
 							}, 2000);
 						}}
 					>
-						Done
+						Finalizar
 					</Button>
 				)}
 				{current < steps.length - 1 && (
 					<Button type="primary" onClick={next} disabled={disabled}>
-						Next
+						Siguiente
 					</Button>
 				)}
 			</div>

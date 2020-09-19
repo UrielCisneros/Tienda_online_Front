@@ -1,13 +1,16 @@
 import React,{useCallback,useEffect,useState} from 'react';
 import clienteAxios from '../../../../config/axios';
 
-import {Form, Input, Divider, Button, notification} from 'antd';
+import {Form, Input, Button,Result} from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
+
 
 import "../confirmacion.scss";
 
 export default function Traer_datos(props) {
 
-    const {datosUser,decoded} = props;
+    const {datosUser,decoded,setCurrent,current} = props;
     const [datosFormulario, setdatosFormulario] = useState({});
 
 
@@ -122,83 +125,106 @@ export default function Traer_datos(props) {
    
     return (
         <div>
-            <h2 style={{fontSize: 25, textAlign: "center"}}>
-                Verifica que tu Información este completa:
-            </h2>
-            
              <Form 
-                className="mt-5 "
+                className="mt-5"
                 layout="horizontal"
                 size={"middle"}
                 form={form}
             >
-                <Divider style={{fontSize: 19}}>Información Personal</Divider>
-                    
-                    <h5 className="__subs">Nombre Completo:</h5>
-                    <Form.Item name="nombre" onChange={datosForm}>
-                        <Form.Item rules={[{ required: true, message: 'Nombre obligatorio' }]}  noStyle name="nombre" >
-                            <Input name="nombre" a placeholder="Nombre"  />
-                        </Form.Item>
-                    </Form.Item>
-
-                    <h5  className="__subs">Telefono:</h5>
-                    <Form.Item name="telefono" onChange={datosForm}>
-                        <Form.Item rules={[{ required: true, message: 'Telefono obligatorio' }]}  noStyle name="telefono" >
-                            <Input name="telefono" a placeholder="+52 3171234567"  />
-                        </Form.Item>
-                    </Form.Item>
-                    
-                <Divider className="mt-5" style={{fontSize: 19}}>Datos domiciliarios</Divider>
-                    
-                    <h5 className="__subs">Direccion:</h5>
-                    <Form.Item name="calle_numero"  onChange={datosForm}>
-                        <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="calle_numero" >
-                            <Input name="calle_numero" a placeholder="Calle y numero de calle"  />
-                        </Form.Item>
-                    </Form.Item>
-
-
-                    <h5 className="__subs">Referencia:</h5>
-                    <Form.Item name="entre_calles" onChange={datosForm}>
-                        <Form.Item rules={[{ required: true, message: 'Referencia obligatoria' }]}  noStyle name="entre_calles" >
-                            <Input name="entre_calles" a placeholder="Calles de referencia"  />
-                        </Form.Item>
-                    </Form.Item>
-
-                    <h5 className="__subs">Codigo postal:</h5>
-                    <Form.Item name="cp" onChange={datosForm}>
-                        <Form.Item rules={[{ required: true, message: 'Codigo postal obligatorio' }]}  noStyle name="cp" >
-                            <Input name="cp" a placeholder="Codigo Postal"  />
-                        </Form.Item>
-                    </Form.Item>
-
-                    <h5 className="__subs">Colonia:</h5>
-                    <Form.Item name="colonia" onChange={datosForm}>
-                        <Form.Item rules={[{ required: true, message: 'Colonia obligatoria' }]}  noStyle name="colonia" >
-                            <Input name="colonia" a placeholder="Colonia"  />
-                        </Form.Item>
-                    </Form.Item>
-
-                    <h5 className="__subs">Ciudad: </h5>
-                    <Form.Item name="ciudad" onChange={datosForm}>
-                        <Form.Item rules={[{ required: true, message: 'Localidad obligatoria' }]}  noStyle name="ciudad" >
-                            <Input name="ciudad" a placeholder="Localidad"  />
-                        </Form.Item>
-                    </Form.Item>
-
-                    <h5 className="__subs">Estado:</h5>
-                    <Form.Item name="estado" onChange={datosForm}>
-                        <Form.Item rules={[{ required: true, message: 'Estado obligatoria' }]}  noStyle name="estado" >
-                            <Input name="estado" a placeholder="Estado"  />
-                        </Form.Item>
-                    </Form.Item>
-
-                    <h5 className="__subs">País:</h5>
-                    <Form.Item name="pais" onChange={datosForm}>
-                        <Form.Item rules={[{ required: true, message: 'País obligatoria' }]}  noStyle name="pais" >
-                            <Input name="pais" a placeholder="País"  />
-                        </Form.Item>
-                    </Form.Item>
+                    <Result
+                        className="m-0"
+                        icon={<FontAwesomeIcon icon={faUser} style={{fontSize:"100px"}} />}
+                        extra={
+                            <div className="row m-4">
+                            <div className="col-lg-12 col-sm-12">
+                                <div className="row">
+                                    <div className="col-lg-3 col-sm-12">
+                                        <p>Nombre:</p>
+                                        <Form.Item name="nombre" onChange={datosForm}>
+                                            <Form.Item rules={[{ required: true, message: 'Nombre obligatorio' }]}  noStyle name="nombre" >
+                                                <Input name="nombre" a placeholder="Nombre"  />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                    <div className="col-lg-2 col-sm-12">
+                                        <p>Telefono:</p>
+                                        <Form.Item name="telefono" onChange={datosForm}>
+                                            <Form.Item rules={[{ required: true, message: 'Telefono obligatorio' }]}  noStyle name="telefono" >
+                                                <Input name="telefono" a placeholder="+52 3171234567"  />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                    <div className="col-lg-3 col-sm-12">
+                                        <p>Direccion:</p>
+                                        <Form.Item name="calle_numero"  onChange={datosForm}>
+                                            <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="calle_numero" >
+                                                <Input name="calle_numero" a placeholder="Calle y numero de calle"  />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                    <div className="col-lg-4 col-sm-12">
+                                        <p>Referencia:</p>
+                                        <Form.Item name="entre_calles" onChange={datosForm}>
+                                            <Form.Item rules={[{ required: true, message: 'Referencia obligatoria' }]}  noStyle name="entre_calles" >
+                                                <Input name="entre_calles" a placeholder="Calles de referencia"  />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                </div>    
+    
+                                <div className="row">
+                                    <div className="col-lg-2 col-sm-12">
+                                        <p>Codigo postal:</p>
+                                        <Form.Item name="cp" onChange={datosForm}>
+                                            <Form.Item rules={[{ required: true, message: 'Codigo postal obligatorio' }]}  noStyle name="cp" >
+                                                <Input name="cp" a placeholder="Codigo Postal"  />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                    <div className="col-lg-2 col-sm-12">
+                                        <p>Colonia:</p>
+                                        <Form.Item name="colonia" onChange={datosForm}>
+                                            <Form.Item rules={[{ required: true, message: 'Colonia obligatoria' }]}  noStyle name="colonia" >
+                                                <Input name="colonia" a placeholder="Colonia"  />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                    <div className="col-lg-4 col-sm-12">
+                                        <p>Ciudad:</p>
+                                        <Form.Item name="ciudad" onChange={datosForm}>
+                                            <Form.Item rules={[{ required: true, message: 'Localidad obligatoria' }]}  noStyle name="ciudad" >
+                                                <Input name="ciudad" a placeholder="Localidad"  />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                    <div className="col-lg-2 col-sm-12">
+                                        <p>Estado:</p>
+                                        <Form.Item name="estado" onChange={datosForm}>
+                                            <Form.Item rules={[{ required: true, message: 'Estado obligatoria' }]}  noStyle name="estado" >
+                                                <Input name="estado" a placeholder="Estado"  />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                    <div className="col-lg-2 col-sm-12">
+                                        <p>País:</p>
+                                        <Form.Item name="pais" onChange={datosForm}>
+                                            <Form.Item rules={[{ required: true, message: 'País obligatoria' }]}  noStyle name="pais" >
+                                                <Input name="pais" a placeholder="País"  />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+                        }
+                    />
+                    <div className="steps-action d-flex justify-content-center align-items-center">
+                        <Button type="primary"  onClick={() => {
+                            setCurrent(current + 1);
+                        }}>
+                            Siguiente 
+                        </Button>
+                    </div>
 
             </Form>
             

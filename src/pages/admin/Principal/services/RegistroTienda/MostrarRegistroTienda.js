@@ -1,8 +1,7 @@
 import React,{useState,useEffect} from 'react'
-import {Button,Drawer,Row,Col,Alert,notification,Empty} from 'antd';
+import {Button,Drawer,Alert,notification,Empty} from 'antd';
 import clienteAxios from '../../../../../config/axios';
 import { withRouter } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
 import Geolocalizacion from '../../../../users/geolocalizacion'
 import './MostrarRegistroTienda.scss';
 import {PlusCircleOutlined,EditOutlined,EyeOutlined,FacebookFilled,InstagramFilled,TwitterCircleFilled } from '@ant-design/icons';
@@ -77,6 +76,7 @@ import {Link} from 'react-router-dom';
                 setLng("-104.358159")
             } */
         }).catch((err) => {
+            console.log(err);
             setLoading(false);
             setLat("19.767980")
             setLng("-104.358159")
