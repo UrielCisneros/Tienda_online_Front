@@ -103,7 +103,7 @@ function VistaProductos(props) {
 						<div className="row justify-content-center">
 							<div className="col-4">
 								<p style={{fontSize: 20}}>Género:</p>
-								<Tag color="blue" style={{fontSize: 16}}>{productos.genero}</Tag>
+								<Tag color="blue" style={{fontSize: 16, marginBottom: 10}}>{productos.genero}</Tag>
 							</div>
 							<div className="col-8">
 								<p style={{fontSize: 20, marginBottom: 15}}>Color: {productos.color}</p>
