@@ -2,9 +2,10 @@
 .blogList{
 
     text-decoration: none;
+    color: black;
 
     &__lista{
-        border-bottom: 3px solid gray !important;
+        border-bottom: 2px solid gray !important;
     }
 
     &__title{
@@ -23,6 +24,10 @@
         overflow:hidden;
         text-overflow: ellipsis;
     }
+}
+
+.blogList:hover{
+    color: gold;
 }
 
 .lienamientos{

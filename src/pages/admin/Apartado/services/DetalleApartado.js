@@ -209,9 +209,9 @@ export default function DetalleApartado(props) {
                             <h6 className=" m-2">Tipo de entrega:</h6>
                             <Tag
                                 style={{size:"50px"}}
-                                color={detalleApartado.tipoEntrega === 'Envio' ?  '#5cb85c' : '#0275d8'}
+                                color={detalleApartado.tipoEntrega === 'ENVIO' ?  '#5cb85c' : '#0275d8'}
                             >
-                                {detalleApartado.tipoEntrega === 'Envio' ? 'Envio a domicilio' : 'Pasaran por el'}
+                                {detalleApartado.tipoEntrega === 'ENVIO' ? 'Envio a domicilio' : 'Pasaran por el'}
                             </Tag>
                             <p></p>
 
@@ -223,7 +223,7 @@ export default function DetalleApartado(props) {
                             <Form.Item>
                                 <Select value={selectEstado} placeholder="Seleciona una categoria" onChange={handleonChange} style={{ width: 300 }}>
                                     <Option value="PROCESANDO">En proceso</Option>
-                                    {detalleApartado.tipoEntrega === 'Envio' ? (
+                                    {detalleApartado.tipoEntrega === "ENVIO" ? (
                                         <>
                                             <Option value="ENVIADO">Enviado</Option>
                                             <Option value="CANCELADO">Cancelado</Option>
@@ -239,7 +239,7 @@ export default function DetalleApartado(props) {
 
                                 </Select>
                             </Form.Item>
-                            {selectEstado === 'ENVIADO' ? detalleApartado.tipoEntrega === 'Envio' ? (
+                            {selectEstado === 'ENVIADO' ? detalleApartado.tipoEntrega === 'ENVIO' ? (
                                 <div className="row">
                                     <div className="col-lg-8">
                                         <h6>Mensaje:</h6>

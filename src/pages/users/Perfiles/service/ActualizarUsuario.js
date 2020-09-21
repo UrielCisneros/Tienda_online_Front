@@ -208,9 +208,9 @@ export default function ActualizarUsuario(props) {
 
 
                     <h5>Email:</h5>
-                    <Form.Item name="email" onChange={datosForm}>
+                    <Form.Item name="email" onChange={datosForm}  >
                         <Form.Item rules={[{ required: true, message: 'Correo electronico obligatorio' }]}  noStyle name="email" >
-                            <Input name="email" a placeholder="Correo electronico"  />
+                            <Input name="email" a placeholder="Correo electronico" disabled  />
                         </Form.Item>
                     </Form.Item>
 

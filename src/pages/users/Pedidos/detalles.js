@@ -1,7 +1,9 @@
 import React from 'react';
-import { Tag, Divider,Button,Col,Card } from 'antd';
+import { Tag, Divider,Col,Card,Result } from 'antd';
 import {formatoFecha,formatoMexico} from '../../../config/reuserFunction';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBus } from '@fortawesome/free-solid-svg-icons'
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 const { Meta } = Card;
@@ -35,16 +37,18 @@ const DetallesPedido = (props) => {
 			</div>
 
 			<div className="row">
-				<div className="my-2 col-lg-4">
-					<h6 className="titulos-info-pedidos">El pedido esta:</h6>
-					<p>										
-						<Tag
-							className="my-2"
-							color={detallePedido.estado_pedido === 'En proceso' ? '#f0ad4e' : '#5cb85c'}
-						>
-							{detallePedido.estado_pedido}
-						</Tag></p>
-				</div>
+				{detallePedido.pagado === false ? "":(
+					<div className="my-2 col-lg-4">
+						<h6 className="titulos-info-pedidos">El pedido esta:</h6>
+						<p>										
+							<Tag
+								className="my-2"
+								color={detallePedido.estado_pedido === 'En proceso' ? '#f0ad4e' : '#5cb85c'}
+							>
+								{detallePedido.estado_pedido}
+							</Tag></p>
+					</div>
+				)}
 				<div className="my-2 col-lg-4">
 					<h6 className="titulos-info-pedidos">Pagado:</h6>
 					<p>
@@ -69,6 +73,24 @@ const DetallesPedido = (props) => {
 				{detallePedido.pedido.map((producto) => <Producto producto={producto} />)}
 			</div>
 			
+			{detallePedido.pagado === false ? "": (
+				<div>
+					<Divider className="text-center">Seguimiento de pedido</Divider>
+						<Result
+							icon={<FontAwesomeIcon icon={faBus} style={{fontSize:"50px"}} />}
+							title={
+								<div>
+									<p className="font-weight-bold">Dirección de envio:</p>
+									<p> {`${detallePedido.cliente.direccion[0].calle_numero} Colonia ${detallePedido.cliente.direccion[0].colonia} ${detallePedido.cliente.direccion[0].ciudad} ${detallePedido.cliente.direccion[0].estado} ${detallePedido.cliente.direccion[0].pais}.`} </p>
+									<p> {`Referencia: ${detallePedido.cliente.direccion[0].entre_calles}. CP: ${detallePedido.cliente.direccion[0].cp}`} </p>
+									<p> <span className="font-weight-bold">Codigó de seguimiento: </span></p>
+									<p><a href={`${detallePedido.url}${detallePedido.codigo_seguimiento}`} target="_blank"> {detallePedido.codigo_seguimiento} </a></p>
+								</div>
+								}
+							
+						/>
+				</div>
+			)}
 			<div className="my-2">
 				<h6 className="titulos-info-pedidos h4 mt-3">Total: $ { formatoMexico(detallePedido.total)}</h6>
 			</div>
