@@ -66,8 +66,6 @@ function ListaCarrito(props) {
 		}
 	}, [ disponible, carrito, setValidacion ]);
 
-	console.log(disponible)
-
 	function medidaChange(medida) {
 		setCantidad(carrito.cantidad);
 		setMedida(medida);
