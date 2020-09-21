@@ -27,6 +27,7 @@ function ListaCarrito(props) {
 	const [ visible, setVisible ] = useState(false);
 
 	useEffect(() => {
+		setDisponible('')
 		setCantidad(carrito.cantidad);
 		if (carrito.idarticulo.tallas.length !== 0) {
 			carrito.idarticulo.tallas.forEach((tallas) => {
@@ -63,7 +64,9 @@ function ListaCarrito(props) {
 		if (disponible) {
 			setDisponible(disponible);
 		}
-	}, []);
+	}, [ disponible, carrito, setValidacion ]);
+
+	console.log(disponible)
 
 	function medidaChange(medida) {
 		setCantidad(carrito.cantidad);
@@ -109,7 +112,6 @@ function ListaCarrito(props) {
 	}
 
 	function eliminar() {
-		console.log(carrito);
 		confirm({
 			title: 'Eliminar articulo?',
 			icon: <ExclamationCircleOutlined />,

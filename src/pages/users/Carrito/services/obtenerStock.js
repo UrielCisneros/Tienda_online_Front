@@ -52,4 +52,5 @@ export function obtenerDisponibilidad(carrito){
             return 'disponibilidad-carrito';
         }
     }
+    return ''
 }
