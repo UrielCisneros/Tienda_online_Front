@@ -8,8 +8,8 @@ import "../confirmacion.scss";
 
 
 export default function Traer_pedido(props) {
-    const {datosPedido} = props;
-    console.log(datosPedido.length);
+    const {datosPedido,idPago} = props;
+    console.log(idPago);
 
     return (
         <div>
@@ -54,7 +54,7 @@ function Productos (props) {
     return(
 
     <List.Item >
-    <div className="container">
+    <div className="">
       <div className="row">
 
         <div className="col-lg-8 d-flex justify-content-lg-center">

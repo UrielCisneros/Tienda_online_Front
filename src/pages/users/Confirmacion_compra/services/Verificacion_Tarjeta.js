@@ -13,7 +13,7 @@ export default function Verificacion_Tarjeta(props) {
     return (
         <div>
             <Elements stripe={stripePromise}>
-                <CheckoutForm prev={prev} setCurrent={setCurrent} current={current} />
+                <CheckoutForm prev={prev} setCurrent={setCurrent} current={current} setIdPago={setIdPago} />
             </Elements>
         </div>
     )
@@ -21,17 +21,24 @@ export default function Verificacion_Tarjeta(props) {
 
 const CheckoutForm  = (props) => {
 
-    const {prev,setCurrent,current} = props;
+    const {prev,setCurrent,current,setIdPago} = props;
     const stripe = useStripe();
     const elements = useElements();
 
     const handlerSubmit = async (e) => {
         e.preventDefault();
-    
         const {error,paymentMethod} = await stripe.createPaymentMethod({
             type: "card",
-            card: elements.getElement(CardElement)
+            card: elements.getElement(CardElement),
         })
+
+        if(!error){
+            /* console.log(paymentMethod); */
+            setIdPago(paymentMethod)
+            setCurrent(current + 1);
+        }else{
+
+        }
         
     }
 
@@ -43,8 +50,8 @@ const CheckoutForm  = (props) => {
                     <button style={{ margin: '0 8px' }} onClick={prev} className="btn btn-primary">
                         Atras
                     </button>
-                    <button type="submit" className="btn btn-primary" onClick={() => {
-                        setCurrent(current + 1);
+                    <button type="submit" className="btn btn-primary" onClick={(e) => {
+                        handlerSubmit(e);
                     }} >
                         Siguiente
                     </button>

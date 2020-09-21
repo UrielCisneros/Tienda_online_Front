@@ -112,7 +112,7 @@ export default function Confirmacion_compra(pros) {
         title: 'Comprar',
         content: (
             <div className="col-lg-7 mt-4">
-                <Traer_pedido datosPedido={datosPedido} />
+                <Traer_pedido datosPedido={datosPedido} idPago={idPago} />
             </div>
         ),
         },
