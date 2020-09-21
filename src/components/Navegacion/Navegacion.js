@@ -10,6 +10,7 @@ import jwt_decode from 'jwt-decode';
 import clienteAxios from '../../config/axios';
 import RightMenu from './RightMenu';
 import { MenuContext } from '../../context/carritoContext';
+import { act } from 'react-dom/test-utils';
 
 const { Search } = Input;
 const { Header } = Layout;
