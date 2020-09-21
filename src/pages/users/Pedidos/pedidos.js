@@ -255,13 +255,13 @@ function Pedido(props){
 										(
 											<div>
 												<p className="text-danger">Pedido cancelado</p>
-													<Button
+{/* 													<Button
 														className="d-flex justify-content-center align-items-center"
 														style={{ fontSize: 16 }}
 														type="primary"
 													>
 														Comprar
-													</Button>
+													</Button> */}
 											</div>
 										) : 
 										(
