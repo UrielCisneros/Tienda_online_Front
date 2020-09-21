@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InputNumber, Button, Form, Badge, Divider, notification, Modal, Select, Spin } from 'antd';
+import { notification, Modal, Select } from 'antd';
 import { formatoMexico } from '../../../config/reuserFunction';
 import { AgregarApartado } from './services/consultas_individuales';
 
@@ -63,6 +63,7 @@ export default function ModalApartado(props) {
 										</p>
 									);
 								}
+								return null;
 							})}
 						</div>
 					) : (
@@ -86,7 +87,7 @@ export default function ModalApartado(props) {
 					)}
 					<div className="mb-3">
 						<h6>Elegir tipo de envío: </h6>
-						<Select style={{ width: 200 }} placeholder="Select a person" onChange={obtenerTipoEnvio}>
+						<Select style={{ width: 200 }} placeholder="Selecciona uno" onChange={obtenerTipoEnvio}>
 							<Option value="ENVIO">Envio por paqueteria</Option>
 							<Option value="REGOGIDO">Recoger a sucursal</Option>
 						</Select>

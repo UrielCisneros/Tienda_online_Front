@@ -29,6 +29,7 @@ export function obtenerStockCarrito(carrito){
                 return [];
             }
         }
+        return [];
     });
     return nuevo
 }

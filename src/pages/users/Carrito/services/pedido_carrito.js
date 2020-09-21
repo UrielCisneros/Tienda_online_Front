@@ -5,13 +5,14 @@ export async function AgregarPedidoCarrito(idcliente, carrito, total, token) {
 	/* idcliente, idproducto, categoria, cantidad, talla, precio, total, token */
 	var pedido = [];
 
-	carrito.map((carrito) => {
+	carrito.forEach((carrito) => {
 		const medida = carrito.medida.map((res) => {
 			if (res.talla) {
 				return res.talla;
 			} else if (res.numero) {
 				return res.numero;
-			}
+            }
+            return null;
         });
         var precio;
         if(!carrito.promocion){
@@ -52,7 +53,7 @@ export async function AgregarPedidoCarrito(idcliente, carrito, total, token) {
 				break;
 			default:
 				break;
-		}
+        }
     });
 
 	await clienteAxios

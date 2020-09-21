@@ -3,7 +3,7 @@ import clienteAxios from '../../../config/axios';
 import jwt_decode from 'jwt-decode';
 import { Link, withRouter } from 'react-router-dom';
 import './carrito.scss';
-import { List, Spin, Button, Select, message } from 'antd';
+import { List, Spin, Button, message, Result } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { formatoMexico } from '../../../config/reuserFunction';
 import { CarritoContext } from './context_carrito/context-carrito';
@@ -12,7 +12,6 @@ import { AgregarPedidoCarrito } from './services/pedido_carrito';
 import ListaCarrito from './lista_carrito';
 
 const styles = { fontSize: 20 };
-const { Option } = Select;
 
 function MostrarDatosProductos(props) {
 	const [ carrito, setCarrito ] = useState([]);
@@ -20,7 +19,7 @@ function MostrarDatosProductos(props) {
 	const [ loading, setLoading ] = useState(false);
 	const [ nuevoCarrito, setNuevoCarrito ] = useState([]);
 	const [ total, setTotal ] = useState(0);
-	const { activador, validacion } = useContext(CarritoContext);
+	const { activador, setActivador, validacion } = useContext(CarritoContext);
 
 	//toma del token para el usuario
 	const token = localStorage.getItem('token');
@@ -48,6 +47,7 @@ function MostrarDatosProductos(props) {
 				setLoading(false);
 			})
 			.catch((err) => {
+				setLoading(false);
 				console.log(err);
 			});
 	}
@@ -58,6 +58,7 @@ function MostrarDatosProductos(props) {
 				props.history.push('/entrar');
 			} else {
 				obtenerDatosCarrito();
+				setActivador(true);
 			}
 		},
 		[ activador ]
@@ -94,8 +95,19 @@ function MostrarDatosProductos(props) {
 		if (validacion) {
 			message.error('Aun no se ha modificado la cantidad');
 		} else {
-			AgregarPedidoCarrito(cliente._id, nuevoCarrito, total, token)
+			AgregarPedidoCarrito(cliente._id, nuevoCarrito, total, token);
 		}
+	}
+
+	if (carrito.length === 0) {
+		return (
+			<Result
+				className="mt-5"
+				status="404"
+				title="Aun no tienes articulos en tu carrito"
+				extra={<Link to="/productos">¡Empieza a comprar ahora!</Link>}
+			/>
+		);
 	}
 
 	return (

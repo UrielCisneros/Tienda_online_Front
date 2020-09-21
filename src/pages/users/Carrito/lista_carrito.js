@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './carrito.scss';
-import { List, InputNumber, Space, Button, Select, Form, Tag, Modal, Input } from 'antd';
+import { List, InputNumber, Button, Select, Form, Tag, Modal } from 'antd';
 import { ShoppingCartOutlined, ExportOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import { CarritoContext } from './context_carrito/context-carrito';
@@ -29,9 +29,9 @@ function ListaCarrito(props) {
 	useEffect(() => {
 		setCantidad(carrito.cantidad);
 		if (carrito.idarticulo.tallas.length !== 0) {
-			carrito.idarticulo.tallas.map((tallas) => {
+			carrito.idarticulo.tallas.forEach((tallas) => {
 				if (carrito.medida) {
-					carrito.medida.map((medida) => {
+					carrito.medida.forEach((medida) => {
 						if (medida.talla === tallas.talla) {
 							setMedida([ medida.talla, tallas.cantidad ]);
 						}
@@ -44,9 +44,9 @@ function ListaCarrito(props) {
 				}
 			});
 		} else if (carrito.idarticulo.numeros.length !== 0) {
-			carrito.idarticulo.numeros.map((numeros) => {
+			carrito.idarticulo.numeros.forEach((numeros) => {
 				if (carrito.medida) {
-					carrito.medida.map((medida) => {
+					carrito.medida.forEach((medida) => {
 						if (medida.numero === numeros.numero) {
 							setMedida([ medida.numero, numeros.cantidad ]);
 						}
@@ -90,10 +90,11 @@ function ListaCarrito(props) {
 		}
 	}
 	function comprar() {
+		var precio
 		if (carrito.promocion) {
-			var precio = carrito.promocion.precioPromocion;
+			precio = carrito.promocion.precioPromocion;
 		} else {
-			var precio = carrito.idarticulo.precio;
+			precio = carrito.idarticulo.precio;
 		}
 		AgregarPedido(
 			cliente._id,
@@ -134,6 +135,7 @@ function ListaCarrito(props) {
 				<div className="col-lg-3">
 					<div className="contenedor-imagen-vista-carrito">
 						<img
+							alt="articulo producto"
 							className="imagen-vista-carrito"
 							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${carrito.idarticulo
 								.imagen}`}
@@ -182,12 +184,12 @@ function ListaCarrito(props) {
 							</div>
 						</div>
 						<div className="col-lg-4">
-							<div className="row justify-content-center">
+							<div className="justify-content-center">
 								<div className="col">
-									<Form initialValues={{ cantidad: carrito.cantidad }}>
+									<Form initialValues={{ cantidad: carrito.cantidad }} className="row">
 										<Form.Item
-											className="inputs-carrito"
-											labelCol={{ offset: 1, span: 10 }}
+											className="inputs-carrito col-6 col-lg-12"
+											labelCol={{ span: 7 }}
 											label="Cantidad"
 											name="cantidad"
 											id={carrito.idarticulo._id}
@@ -214,9 +216,9 @@ function ListaCarrito(props) {
 										</Form.Item>
 										{carrito.idarticulo.tipoCategoria !== 'otros' ? (
 											<Form.Item
-												className="inputs-carrito-talla"
+												className="inputs-carrito-talla col-6 col-lg-12"
 												label="Talla"
-												labelCol={{ offset: 1, span: 10 }}
+												labelCol={{ span: 7 }}
 												validateStatus={validateStatus}
 											>
 												<Select
@@ -265,30 +267,25 @@ function ListaCarrito(props) {
 										) : (
 											<Form.Item className="d-none" />
 										)}
-										<Form.Item
-											wrapperCol={{ offset: 10, span: 10 }}
-											className="inputs-carrito text-center"
-										>
-											<Button
-												type="primary" 
-												ghost
-												size="large"
-												onClick={() =>
-													actualizar(carrito._id, carrito.idarticulo.tipoCategoria)}
-											>
-												Modificar
-											</Button>
-										</Form.Item>
+										{/* <Form.Item className="inputs-carrito" />
 										<Form.Item
 											label="Subtotal"
 											labelCol={{ offset: 1, span: 10 }}
 											className="inputs-carrito"
-										>
-											<p className="precio-vista-carrito">${formatoMexico(carrito.subtotal)}</p>
-										</Form.Item>
+										/> */}
 									</Form>
-
-									<div className="float-right" />
+									<div className="text-center">
+										<Button
+											type="primary"
+											ghost
+											size="large"
+											onClick={() => actualizar(carrito._id, carrito.idarticulo.tipoCategoria)}
+										>
+											Modificar
+										</Button>
+										<p className="precio-vista-carrito">${formatoMexico(carrito.subtotal)}</p>
+									</div>
+									{/* <div className="float-right" /> */}
 								</div>
 							</div>
 						</div>
@@ -297,39 +294,33 @@ function ListaCarrito(props) {
 			</div>
 			<div className="d-flex justify-content-center">
 				{disponible.length !== 0 ? (
-					<Space
-						size={window.screen.width > 768 ? 'middle' : 'small'}
-						direction={window.screen.width > 768 ? 'horizontal' : 'vertical'}
-					>
+					<div>
 						<Button type="link" className="d-block d-lg-inline" onClick={() => eliminar()}>
 							<DeleteOutlined style={styles} />Eliminar producto
 						</Button>
-					</Space>
+					</div>
 				) : (
-					<Space
-						size={window.screen.width > 768 ? 'middle' : 'small'}
-						direction={window.screen.width > 768 ? 'horizontal' : 'vertical'}
-					>
+					<div className="d-flex justify-content-center">
 						<Button
 							type="link"
-							className="d-block d-lg-inline"
+							className=""
 							onClick={() => comprar()}
 							disabled={medidaDisponible !== '' ? true : false}
 						>
-							<ShoppingCartOutlined style={styles} />Comprar ahora
+							<ShoppingCartOutlined style={styles} />Comprar
 						</Button>
-						<Button type="link" className="d-block d-lg-inline" onClick={() => eliminar()}>
-							<DeleteOutlined style={styles} />Eliminar producto
+						<Button type="link" className="" onClick={() => eliminar()}>
+							<DeleteOutlined style={styles} />Eliminar
 						</Button>
 						<Button
 							type="link"
-							className="d-block d-lg-inline"
+							className=""
 							onClick={() => apartado()}
 							disabled={medidaDisponible !== '' ? true : false}
 						>
 							<ExportOutlined style={styles} />Apartar
 						</Button>
-					</Space>
+					</div>
 				)}
 			</div>
 			<ModalApartado visible={[ visible, setVisible ]} carrito={carrito} cliente={cliente} token={token} />

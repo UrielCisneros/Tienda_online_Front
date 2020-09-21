@@ -10,6 +10,7 @@ export async function AgregarPedido(idcliente, idproducto, categoria, cantidad, 
 		} else if (res.numero) {
 			return res.numero;
 		}
+		return null;
 	});
 
 	switch (categoria) {
@@ -90,6 +91,7 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, ti
 		} else if (res.numero) {
 			return res.numero;
 		}
+		return null
 	});
 	switch (categoria) {
 		case 'ropa':
