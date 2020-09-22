@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import Registro from './registro'
-import Login from './login'
+import Registro from './Registro/registro'
+import Login from './Login/login'
 import Firebase from '../../components/firebase'
 import { Tabs, Divider } from 'antd'
 import './entrar.scss'

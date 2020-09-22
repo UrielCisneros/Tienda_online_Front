@@ -60,7 +60,7 @@ function CarouselOfertas(props) {
 					}}/>
 					<div className="contenedor-imagen-principal">
 						<img
-							onClick={() => props.history.push(`/vistaProductos/${esPromocion
+							onClick={() => props.history.push(`/vista_producto/${esPromocion
 								? carousel.productoPromocion._id
 								: carousel.producto._id}`)}
 							className="imagen-carousel-promociones-principal"
@@ -68,6 +68,7 @@ function CarouselOfertas(props) {
 								? carousel.imagenPromocion
 								: carousel.imagen}`}
 							alt="img-oferta"
+							style={{cursor: 'pointer'}}
 						/>
 					</div>
 				</div>

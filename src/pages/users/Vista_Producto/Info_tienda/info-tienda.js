@@ -36,7 +36,12 @@ const InfoTienda = (props) => {
 			<div className="contenedor-info-tienda">
 			<p className="titulos-vista-productos text-center">Encuentra nuestra tienda</p>
 			<div className="text-center">
-				<Avatar size={64} src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`} />
+				<div className="contenedor-imagen-info">
+					<div className="contenedor-imagen-info-tienda">
+						<img alt="logo-tienda" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`} className="imagen-info-tienda"/>
+					</div>
+				</div>
+				{/* <Avatar size={64} src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`} /> */}
 				<div className="text-center">
 					<p style={{fontSize: 20}}>{tienda.nombre}</p>
 				</div>
