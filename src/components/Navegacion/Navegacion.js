@@ -17,7 +17,7 @@ const { Header } = Layout;
 const { SubMenu } = Menu;
 
 const Navegacion = (props) => {
-	const {active} = useContext(MenuContext)
+	const {active, setActive} = useContext(MenuContext)
 	const [ visible, setVisible ] = useState(false);
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
@@ -35,6 +35,7 @@ const Navegacion = (props) => {
 	const [ ofertas, setOfertas ] = useState([]);
 
 	useEffect(() => {
+		setActive(true);
 		obtenerOfertas();
 		obtenerQuienesSomos();
 		if (token) {

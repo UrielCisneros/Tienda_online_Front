@@ -47,7 +47,6 @@ function VistaProductos(props) {
 			setReadMore('read-less');
 		}
 	};
-	console.log(productos)
 
 	return (
 		<Spin size="large" spinning={loading}>
@@ -105,7 +104,7 @@ function VistaProductos(props) {
 								<p style={{fontSize: 20, marginBottom: 10}}>Género:</p>
 								<Tag className="tag-genero-vista-producto" color="blue">{productos.genero}</Tag>
 							</div>
-							<div className="col-4">
+							<div className="col-5">
 								<p style={{fontSize: 20, marginBottom: 10}}>Color: {productos.color}</p>
 								<div className="d-flex justify-content-center">
 									<div className="rounded-circle" style={{backgroundColor: productos.colorHex, height: 35, width: 35}} />
