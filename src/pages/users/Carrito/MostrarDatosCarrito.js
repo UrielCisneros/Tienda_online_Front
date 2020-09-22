@@ -101,12 +101,14 @@ function MostrarDatosProductos(props) {
 
 	if (carrito.length === 0) {
 		return (
-			<Result
-				className="mt-5"
-				status="404"
-				title="Aun no tienes articulos en tu carrito"
-				extra={<Link to="/productos">¡Empieza a comprar ahora!</Link>}
-			/>
+			<Spin size="large" spinning={loading}>
+				<Result
+					className="mt-5"
+					status="404"
+					title="Aun no tienes articulos en tu carrito"
+					extra={<Link to="/productos">¡Empieza a comprar ahora!</Link>}
+				/>
+			</Spin>
 		);
 	}
 
