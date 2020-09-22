@@ -24,7 +24,6 @@ export async function actualizarCantidad(cliente, articulo, categoria, cantidad,
 		default:
 			break;
     }
-    console.log(datos)
 	await clienteAxios
 		.put(`/carrito/${cliente}/articulo/${articulo}`, datos, {
 			headers: {
@@ -32,7 +31,6 @@ export async function actualizarCantidad(cliente, articulo, categoria, cantidad,
 			}
 		})
 		.then((res) => {
-            console.log(res);
             message.success(res.data.message);
 		})
 		.catch((err) => {

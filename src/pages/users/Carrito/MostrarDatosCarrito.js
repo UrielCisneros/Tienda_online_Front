@@ -95,7 +95,7 @@ function MostrarDatosProductos(props) {
 		if (validacion) {
 			message.error('Aun no se ha modificado la cantidad');
 		} else {
-			AgregarPedidoCarrito(cliente._id, nuevoCarrito, total, token);
+			AgregarPedidoCarrito(cliente._id, token);
 		}
 	}
 
