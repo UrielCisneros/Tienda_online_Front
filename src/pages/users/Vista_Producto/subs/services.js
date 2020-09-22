@@ -161,7 +161,7 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 	}
 }
 
-export async function AgregarPedido(idcliente, idproducto, cantidad, talla, numero, total, token) {
+export async function AgregarPedido(idcliente, idproducto, cantidad, talla, numero, precio, total, token) {
 	if (!numero) {
 		await clienteAxios
 			.post(
@@ -171,7 +171,8 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
                     pedido:[{
                         producto: idproducto,
                         cantidad: cantidad,
-                        talla: talla
+						talla: talla,
+						precio: precio
                     }],
                     total: total,
                     estado_pedido: 'En proceso',
@@ -209,7 +210,8 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
                     pedido:[{
                         producto: idproducto,
                         cantidad: cantidad,
-                        numero: numero
+						numero: numero,
+						precio: precio
                     }],
                     total: total,
                     estado_pedido: 'En proceso',
@@ -246,7 +248,8 @@ export async function AgregarPedido(idcliente, idproducto, cantidad, talla, nume
                     cliente: idcliente,
                     pedido:[{
                         producto: idproducto,
-                        cantidad: cantidad
+						cantidad: cantidad,
+						precio: precio
                     }],
                     total: total,
                     estado_pedido: 'En proceso',

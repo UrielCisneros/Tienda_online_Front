@@ -10,13 +10,14 @@ import jwt_decode from 'jwt-decode';
 import clienteAxios from '../../config/axios';
 import RightMenu from './RightMenu';
 import { MenuContext } from '../../context/carritoContext';
+import { act } from 'react-dom/test-utils';
 
 const { Search } = Input;
 const { Header } = Layout;
 const { SubMenu } = Menu;
 
 const Navegacion = (props) => {
-	const {active} = useContext(MenuContext)
+	const {active, setActive} = useContext(MenuContext)
 	const [ visible, setVisible ] = useState(false);
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
@@ -34,6 +35,7 @@ const Navegacion = (props) => {
 	const [ ofertas, setOfertas ] = useState([]);
 
 	useEffect(() => {
+		setActive(true);
 		obtenerOfertas();
 		obtenerQuienesSomos();
 		if (token) {
