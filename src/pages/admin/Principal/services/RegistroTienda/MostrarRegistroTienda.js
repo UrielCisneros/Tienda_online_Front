@@ -26,6 +26,7 @@ import {Link} from 'react-router-dom';
     const [twitter, setTwitter] = useState('')
 
     const [ reloadInfo, setReloadInfo ] = useState(false);
+    const [ politicasEnvio, setPoliticasEnvio ] = useState([]);
 
     const [lat,setLat] = useState("")
     const [lng,setLng] = useState("")
@@ -89,8 +90,39 @@ import {Link} from 'react-router-dom';
         })
     }
 
+    async function obtenerPoliticasEnvio() {
+		await clienteAxios
+			.get('/politicasEnvio/', {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setLoading(false);
+				setPoliticasEnvio(res.data);
+			})
+			.catch((res) => {
+				if (res.response.status === 404 || res.response.status === 500) {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: res.response.data.message,
+						duration: 2
+					});
+				} else {
+					setLoading(false);
+					notification.error({
+						message: 'Error',
+						description: 'Hubo un error',
+						duration: 2
+					});
+				}
+			});
+    }
+
     useEffect(() => {
         peticionDatosTienda();
+        obtenerPoliticasEnvio();
         setReloadInfo(false)
     }, [reloadInfo])
 
@@ -238,7 +270,19 @@ import {Link} from 'react-router-dom';
                     </div>
 
                     <div className="row">
-                        <div className="col-lg-6 col-sm-12">
+                        <div className="col-lg-4 col-sm-12">
+                            <p className="m-3 h3">Políticas de envío</p>
+                            {politicasEnvio.length === 0 ? (
+                                <Empty description={<p className="h6">Aún no hay información</p>} />
+                            ):(
+                                <div className="politicas-p mt-4">
+                                    <p>Costo por envío de paqueteria: <strong>${politicasEnvio.costoEnvio}</strong></p>
+                                    <p>Promoción de envío: <strong>${politicasEnvio.promocionEnvio}</strong></p>
+                                    <p>Costo de promocion de envío: <strong>${politicasEnvio.descuento}</strong></p>
+                                </div>
+                            )}
+                        </div>
+                        <div className="col-lg-4 col-sm-12">
                             <p className="m-3 h3">Políticas de privacidad</p>
                             {action === false ? (
                                 <Empty description={<p className="h6">Aún no hay información</p>} />
@@ -252,7 +296,7 @@ import {Link} from 'react-router-dom';
                                 </Empty>
                             )}
                         </div>
-                        <div className="col-lg-6 col-sm-12">
+                        <div className="col-lg-4 col-sm-12">
                             <p className="m-3 h3">Imagen corporativa</p>
                             {action === false ? (
                                 <Empty description={<p className="h6">Aún no hay información</p>} />
