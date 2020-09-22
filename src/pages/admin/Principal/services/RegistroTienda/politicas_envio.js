@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Divider, Button, Upload, notification, Spin } from 'antd';
-import { PlusCircleOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
-import { Editor } from '@tinymce/tinymce-react';
+import { Form, Input, Divider, Button, Alert, notification, Spin } from 'antd';
+import { PlusCircleOutlined, EditOutlined } from '@ant-design/icons';
 import clienteAxios from '../../../../../config/axios';
 import jwt_decode from 'jwt-decode';
 
 export default function PoliticasEnvio(props) {
 	const { datosNegocio } = props;
+	const [ disabled, setDisabled ] = useState(false);
 	const [ datos, setDatos ] = useState({});
-    const [ control, setControl ] = useState(false);
-    const [ idTienda, setIdTienda ] = useState('');
+	const [ control, setControl ] = useState(false);
+	const [ idTienda, setIdTienda ] = useState('');
 	const [ form ] = Form.useForm();
 	const [ loading, setLoading ] = useState(false);
 	const token = localStorage.getItem('token');
@@ -25,7 +25,12 @@ export default function PoliticasEnvio(props) {
 
 	useEffect(() => {
 		obtenerDatos();
-	}, []);
+		if (!datosNegocio) {
+			setDisabled(true);
+		}else{
+			setDisabled(false);
+		}
+	}, [ datosNegocio]);
 
 	async function obtenerDatos() {
 		await clienteAxios
@@ -44,13 +49,13 @@ export default function PoliticasEnvio(props) {
 						costoEnvio: res.data.costoEnvio,
 						promocionEnvio: res.data.promocionEnvio,
 						descuento: res.data.descuento
-                    });
-                    setDatos({
-                        costoEnvio: res.data.costoEnvio,
+					});
+					setDatos({
+						costoEnvio: res.data.costoEnvio,
 						promocionEnvio: res.data.promocionEnvio,
 						descuento: res.data.descuento
-                    })
-                    setIdTienda(res.data._id);
+					});
+					setIdTienda(res.data._id);
 				}
 			})
 			.catch((res) => {
@@ -70,7 +75,7 @@ export default function PoliticasEnvio(props) {
 					});
 				}
 			});
-    }
+	}
 
 	const SendForm = async () => {
 		if (control === false) {
@@ -162,7 +167,18 @@ export default function PoliticasEnvio(props) {
 
 	return (
 		<Spin spinning={loading}>
-			<Divider>Politicas de envío</Divider>
+			<Divider className="mt-5">Politicas de envío</Divider>
+			{disabled ? (
+				<Alert
+					message="Nota:"
+					description="No puedes registrar las políticas de envió sin antes registrar los datos de la tienda"
+					type="info"
+					showIcon
+					className="m-5"
+				/>
+			) : (
+				<div />
+			)}
 			<Form onFinish={SendForm} form={form}>
 				<Form.Item
 					className="m-2"
@@ -174,7 +190,7 @@ export default function PoliticasEnvio(props) {
 						wrapperCol={{ span: 12, offset: 1 }}
 						help="Costo de envío de la paqueteria"
 					>
-						<Input type="number" name="costoEnvio" suffix="$" />
+						<Input type="number" name="costoEnvio" suffix="$" disabled={disabled} />
 					</Form.Item>
 				</Form.Item>
 				<Form.Item
@@ -187,7 +203,7 @@ export default function PoliticasEnvio(props) {
 						wrapperCol={{ span: 12, offset: 1 }}
 						help="Se aplica una promoción de envío a clientes que superen esta cantidad"
 					>
-						<Input type="number" name="promocionEnvio" suffix="$" />
+						<Input type="number" name="promocionEnvio" suffix="$" disabled={disabled} />
 					</Form.Item>
 				</Form.Item>
 				<Form.Item
@@ -195,13 +211,18 @@ export default function PoliticasEnvio(props) {
 					label="Costo de envío con descuento"
 					onChange={(e) => setDatos({ ...datos, descuento: e.target.value })}
 				>
-					<Form.Item name="descuento" wrapperCol={{ span: 12, offset: 1 }} help="Costo de envío de la promoción">
-						<Input type="number" name="descuento" suffix="$" />
+					<Form.Item
+						name="descuento"
+						wrapperCol={{ span: 12, offset: 1 }}
+						help="Costo de envío de la promoción"
+					>
+						<Input type="number" name="descuento" suffix="$" disabled={disabled} />
 					</Form.Item>
 				</Form.Item>
 
 				<Form.Item className="d-flex justify-content-center align-items-center text-center">
 					<Button
+						disabled={disabled}
 						size="large"
 						type="primary"
 						htmlType="submit"
