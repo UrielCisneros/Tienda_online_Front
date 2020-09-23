@@ -31,7 +31,7 @@ export default function Datos_tienda() {
 	return (
 		<div>
 			{infor !== '' ? (
-				<div className="container-fluid mt-5">
+				<div className="mt-5">
 					<div className="principal-productos">ENCUENTRA NUESTRA TIENDA</div>
 					<div className="row">
 						<div className="col-lg-10">
@@ -47,11 +47,13 @@ export default function Datos_tienda() {
 						</div>
 
 						<div className="col-lg-2 text-center caligra">
-							<img
-								className="logotipo"
-								alt="imagen de base"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
-							/>
+							<div className="m-3">
+								<img
+									className="logotipo"
+									alt="imagen de base"
+									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
+								/>
+							</div>
 
 							<p className="h6 font-weight-bold"> {tienda.nombre} </p>
 							<p className="h6">

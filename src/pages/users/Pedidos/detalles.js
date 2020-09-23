@@ -13,8 +13,6 @@ const DetallesPedido = (props) => {
 
 	const {detallePedido} = props;
 
-	console.log(detallePedido);
-
 	return (
 		<div className="card-p-pedidos">
 			<Divider className="text-center">Detalles del pedido</Divider>
@@ -103,17 +101,26 @@ function Producto(props){
 	const {producto} = props;
 
 	return(
-		<div>
-			<Col span={4} key={producto.producto._id} className="col-lg-4 col-sm-12">
+		<div className="d-flex justify-content-center">
+			<Col span={4} key={producto.producto._id} className="col-lg-4 col-sm-12 mb-3">
 				<Link to={`/vista_producto/${producto.producto._id}`}>
 					<Card
 						hoverable
 						style={{ width: 250 }}
-						cover={<img alt="example" className="img-fluid" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.producto.imagen}`} />}
+						cover={
+							<div className="contenedor-imagen-pedido">
+								<img alt="example" className="imagen-detalle-pedido" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.producto.imagen}`} />
+							</div>
+						}
 					>
 						<Meta 
 							title={producto.producto.nombre} 
-							description={<h2 className="h5 precio-rebaja">${formatoMexico(producto.precio)}</h2>} />
+							description={
+								<div>
+									<h6 className="precio-rebaja">Cantidad de articulos: {producto.cantidad}</h6>
+									<h2 className="h5 precio-rebaja">${formatoMexico(producto.producto.precio)}</h2>
+								</div>
+							} />
 					</Card>
 				</Link>
 			</Col>

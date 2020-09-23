@@ -10,7 +10,6 @@ import jwt_decode from 'jwt-decode';
 import clienteAxios from '../../config/axios';
 import RightMenu from './RightMenu';
 import { MenuContext } from '../../context/carritoContext';
-import { act } from 'react-dom/test-utils';
 
 const { Search } = Input;
 const { Header } = Layout;
@@ -54,6 +53,7 @@ const Navegacion = (props) => {
 				setCarrito(res.data.articulos.length);
 			})
 			.catch((res) => {
+				console.log(res);
 				setCarrito(0);
 			});
 	};
@@ -90,12 +90,12 @@ const Navegacion = (props) => {
 	return (
 		<Layout className="layout">
 			<Header>
-				<div className="menuCon" style={{ backgroundColor: 'white' }}>
-					<div className="top-menu row">
+				<div className="menuCon navbar-menu-general">
+					<div className="top-menu row ">
 						<div className="col-lg-6">
 							<div className="row">
 								{!tienda.imagenLogo ? (
-									<></>
+									<div className="d-none" />
 								) : (
 									<div className="col-3 contenedor-logo">
 										<img
@@ -117,8 +117,8 @@ const Navegacion = (props) => {
 						</div>
 						<div className="col-lg-6 nav-menu-enlaces">
 							<Menu
-								className="float-right"
-								theme="light"
+								className="float-right navbar-menu-general"
+								/* theme="light" */
 								mode="horizontal"
 								defaultSelectedKeys={[ window.location.pathname ]}
 								inlineIndent={0}
@@ -134,7 +134,7 @@ const Navegacion = (props) => {
 									<Menu.Item key="/ofertas">
 										Ofertas<Link to="/ofertas" />
 									</Menu.Item>:
-									<></>
+									<Menu.Item className="d-none" />
 								}
 								<Menu.Item key="/blog">
 									Blog<Link to="/blog" />
@@ -144,17 +144,17 @@ const Navegacion = (props) => {
 										Quiénes somos<Link to="/quienes_somos" />
 									</Menu.Item>
 								) : (
-									<></>
+									<Menu.Item className="d-none" />
 								)}
 								{!decoded ? (
-									<></>
+									<Menu.Item className="d-none" />
 								) : (
 									<Menu.Item key="/pedidos">
 										Pedidos<Link to="/pedidos" />
 									</Menu.Item>
 								)}
 								{!decoded ? (
-									<></>
+									<Menu.Item className="d-none" />
 								) : (
 									<Menu.Item key="/shopping_cart">
 										<Badge count={carrito}>
@@ -224,7 +224,7 @@ const Navegacion = (props) => {
 										</Menu.Item>
 									</SubMenu>
 								) : (
-									<></>
+									<Menu.Item className="d-none" />
 								)}
 
 								{token === '' || token === null ? (
@@ -232,7 +232,7 @@ const Navegacion = (props) => {
 										Entrar<Link to="/entrar" />
 									</Menu.Item>
 								) : (
-									<></>
+									<Menu.Item className="d-none" />
 								)}
 							</Menu>
 						</div>
@@ -248,7 +248,7 @@ const Navegacion = (props) => {
 							style={{ width: 270 }}
 						/>
 						{!decoded ? (
-							<></>
+							<div className="d-none" />
 						) : (
 							<Badge count={carrito}>
 								<ShoppingCartOutlined style={{ fontSize: 28 }} />
@@ -256,8 +256,20 @@ const Navegacion = (props) => {
 							</Badge>
 						)}
 					</div>
-					<Drawer title="LOGO" placement="left" closable={false} onClose={onClose} visible={visible}>
-						<RightMenu />
+					<Drawer title={
+						!tienda.imagenLogo ? (
+							<div className="d-none" />
+						) : (
+							<div className="contenedor-logo">
+								<img
+									className="imagen-logo-principal"
+									alt="logotipo-tienda"
+									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
+								/>
+							</div>
+						)
+					} placement="left" closable={false} onClose={onClose} visible={visible} >
+						<RightMenu ofertas={ofertas} tienda={tienda}/>
 					</Drawer>
 				</div>
 			</Header>

@@ -67,13 +67,13 @@ function Inventario(props) {
 			title: 'Categoría',
 			dataIndex: 'categoria',
 			key: 'categoria',
-			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
+			render: (text) => (!text ? <p>-</p> : <p>{text.toLowerCase()}</p>)
 		},
 		{
 			title: 'Sub categoría',
 			dataIndex: 'subCategoria',
 			key: 'subCategoria',
-			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
+			render: (text) => (!text ? <p>-</p> : <p>{text.toLowerCase()}</p>)
 		},
 		{
 			title: 'Cantidad',
@@ -164,23 +164,25 @@ function Inventario(props) {
 
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
-            setVisible('d-none');
-            notification.info({
-                message: 'Escribe algo en el buscador',
-                duration: 4
-            });
+			setVisible('d-none');
+			notification.info({
+				message: 'Escribe algo en el buscador',
+				duration: 4
+			});
 		} else {
 			setVisible('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`)
+				.get(
+					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`
+				)
 				.then((res) => {
 					setProductosRender(res.data.posts);
 					setProductos(res.data.posts);
 					setLoading(false);
 				})
 				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500 ) {
+					if (res.response.status === 404 || res.response.status === 500) {
 						setLoading(false);
 						notification.error({
 							message: 'Error',
@@ -232,26 +234,24 @@ function Inventario(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			<Row justify="center">
-				<Col>
-					<Search
-						placeholder="Busca un producto"
-						onSearch={(value) => obtenerProductosFiltrados(value)}
-						style={{ width: 350, height: 40, marginBottom: 10 }}
-						enterButton="Buscar"
-						size="large"
-					/>
-				</Col>
-				<Col>
-					<Button
-						type="primary"
-						size="large"
-						className={visible}
-						onClick={() => obtenerProductos(20, page)}
-						icon={<RollbackOutlined style={{ fontSize: 24 }} />}
-					>
-						Volver
-					</Button>
-				</Col>
+				<Search
+					className="search-width"
+					placeholder="Busca un producto"
+					onSearch={(value) => obtenerProductosFiltrados(value)}
+					style={{ height: 40, marginBottom: 10 }}
+					enterButton="Buscar"
+					size="large"
+				/>
+
+				<Button
+					type="primary"
+					size="large"
+					className={`${visible} mb-5`}
+					onClick={() => obtenerProductos(20, page)}
+					icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+				>
+					Volver
+				</Button>
 			</Row>
 			<Table
 				className="tabla-inventario"

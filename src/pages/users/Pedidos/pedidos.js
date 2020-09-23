@@ -66,7 +66,6 @@ export default function PedidosUsuario(props) {
 				}
 			})
 			.then((res) => {
-				console.log(res);
 				if (res.data.length > 0) {
 					setApartados(res.data);
 					setshowInfo(true);
@@ -322,8 +321,6 @@ function Pedido(props) {
 
 function Apartado(props) {
 	const { apartado, showModal, setDetalleApartado, setElige } = props;
-
-	console.log(apartado);
 
 	return (
 		<div>

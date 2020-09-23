@@ -43,7 +43,7 @@ function Ofertas(props) {
 	const render = productos.map((productos) => (
 		<Col span={window.screen.width < 768 ? 12 : 4} key={productos._id}>
 			<Link to={`/vista_producto/${productos.productoPromocion._id}`}>
-				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
+				<Card.Grid hoverable style={gridStyle} className="contenedor-card-producto-principal">
 					<Card
 						bodyStyle={{ padding: 10, backgrounddivor: '#F7F7F7' }}
 						className="contenedor-card-body"

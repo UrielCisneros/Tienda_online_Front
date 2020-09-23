@@ -5,7 +5,6 @@ import jwt_decode from 'jwt-decode';
 import './categorias.scss';
 import clienteAxios from '../../config/axios';
 
-const { Header } = Layout;
 const { SubMenu } = Menu;
 
 const Categorias = (props) => {

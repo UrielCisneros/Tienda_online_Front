@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import CarouselImages from './services/carousel';
+import './carousel.scss';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -44,10 +45,13 @@ function Carousel(props) {
 		props.history.push('/');
 	}
 
-	useEffect(() => {
-		obtenerCarouseles();
-		setReload(false);
-	}, [ reload ]);
+	useEffect(
+		() => {
+			obtenerCarouseles();
+			setReload(false);
+		},
+		[ reload ]
+	);
 
 	useEffect(
 		() => {
@@ -268,39 +272,36 @@ function Carousel(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<p className="text-center" style={{ fontSize: 20 }}>Publicidad</p>
+			<p className="text-center" style={{ fontSize: 20 }}>
+				Publicidad
+			</p>
 			<p className="text-center" style={{ fontSize: 15 }}>
 				En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso de que
 				no existan promociones, si no existen promociones apareceran esta imagen
 			</p>
 			<Row justify="center mt-5">
-				<Col>
-					<Search
-						placeholder="Busca un producto"
-						onChange={(e) => setSearch(e.target.value)}
-						style={{ width: 350, height: 40, marginBottom: 10 }}
-						size="large"
-						enterButton="Buscar"
-					/>
-				</Col>
-				<Col>
-					<Button
-						onClick={showModalCrear}
-						type="primary"
-						size="large"
-						className="ml-3 mb-3 d-flex justify-content-center align-items-center"
-						icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
-					>
-						Nueva imagen de publicidad
-					</Button>
-				</Col>
+				<Search
+					placeholder="Busca un producto"
+					onChange={(e) => setSearch(e.target.value)}
+					style={{ height: 40, marginBottom: 10 }}
+					size="large"
+					enterButton="Buscar"
+					className="search-width"
+				/>
+
+				<Button
+					onClick={showModalCrear}
+					type="primary"
+					size="large"
+					className="ml-3 mb-3 d-flex justify-content-center align-items-center"
+					icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
+				>
+					Nueva imagen de publicidad
+				</Button>
 			</Row>
 			{productosFiltrados.length === 0 ? (
 				<div className="w-100 d-flex justify-content-center align-items-center">
-					<Result
-						status="404"
-						title="No hay resultados"
-					/>
+					<Result status="404" title="No hay resultados" />
 				</div>
 			) : (
 				<List>{render}</List>

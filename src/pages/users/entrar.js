@@ -18,7 +18,7 @@ function Entrar(props) {
     })
 
     return(
-        <div className="lienamientos">
+        <div>
             <p className="text-center mb-4 mt-4">
                 Si aun no tienes cuenta regístrate dando click en <strong>Crear cuenta</strong>
             </p>

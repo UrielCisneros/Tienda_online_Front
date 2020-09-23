@@ -11,9 +11,10 @@ import clienteAxios from '../../config/axios';
 
 const { SubMenu } = Menu;
 
-function RightMenu() {
+function RightMenu(props) {
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
+	const { ofertas, tienda } = props;
 
 	function Jwt(token) {
 		try {
@@ -23,24 +24,6 @@ function RightMenu() {
 		}
 	}
 
-	const [ tienda, setTienda ] = useState([]);
-
-	useEffect(() => {
-		const obtenerQuienesSomos = async () => {
-			await clienteAxios
-				.get('/tienda')
-				.then((res) => {
-					res.data.forEach((datos) => {
-						setTienda(datos);
-					});
-				})
-				.catch((res) => {
-					console.log(res);
-				});
-		};
-		obtenerQuienesSomos();
-	}, []);
-
 	return (
 		<Menu defaultSelectedKeys={[ window.location.pathname ]}>
 			<Menu.Item key="/">
@@ -49,21 +32,25 @@ function RightMenu() {
 			<Menu.Item key="/productos">
 				Productos<Link to="/productos" />
 			</Menu.Item>
-			<Menu.Item key="/ofertas">
-				Ofertas<Link to="/ofertas" />
-			</Menu.Item>
+			{ofertas.length ? (
+				<Menu.Item key="/ofertas">
+					Ofertas<Link to="/ofertas" />
+				</Menu.Item>
+			) : (
+				<Menu.Item className="d-none" />
+			)}
 			<Menu.Item key="/blog">
 				Blog<Link to="/blog" />
 			</Menu.Item>
 			{!tienda ? (
-				<span />
+				<Menu.Item className="d-none" />
 			) : (
 				<Menu.Item key="/quienes_somos">
 					Quiénes somos<Link to="/quienes_somos" />
 				</Menu.Item>
 			)}
 			{!decoded ? (
-				<span />
+				<Menu.Item className="d-none" />
 			) : (
 				<Menu.Item key="/pedidos">
 					Pedidos<Link to="/pedidos" />
@@ -76,11 +63,14 @@ function RightMenu() {
 							<Avatar size="large" style={{ backgroundColor: '#87d068' }}>
 								<p>{decoded.nombre.charAt(0)}</p>
 							</Avatar>
-							) : decoded.imagenFireBase ? (
+						) : decoded.imagenFireBase ? (
 							<Avatar size="large" src={decoded.imagenFireBase} />
-							 ) : (
-							<Avatar size="large" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${decoded.imagen}`} />
-							 )
+						) : (
+							<Avatar
+								size="large"
+								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${decoded.imagen}`}
+							/>
+						)
 					}
 				>
 					<Menu.Item>
@@ -107,7 +97,10 @@ function RightMenu() {
 								<p>{decoded.nombre.charAt(0)}</p>
 							</Avatar>
 						) : (
-							<Avatar size="large" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${decoded.imagen}`}>
+							<Avatar
+								size="large"
+								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${decoded.imagen}`}
+							>
 								{/* <p>{decoded.nombre.charAt(0)}</p> */}
 							</Avatar>
 						)
@@ -130,7 +123,7 @@ function RightMenu() {
 					</Menu.Item>
 				</SubMenu>
 			) : (
-				<span />
+				<Menu.Item className="d-none" />
 			)}
 
 			{token === '' || token === null ? (
@@ -138,7 +131,7 @@ function RightMenu() {
 					Entrar<Link to="/entrar" />
 				</Menu.Item>
 			) : (
-				<span />
+				<Menu.Item className="d-none" />
 			)}
 		</Menu>
 	);

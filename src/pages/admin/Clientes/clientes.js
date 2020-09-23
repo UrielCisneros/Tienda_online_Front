@@ -5,6 +5,7 @@ import { Table, Input, notification, Avatar, Spin, Col, Row, Button } from 'antd
 import { RollbackOutlined, UserOutlined } from '@ant-design/icons';
 import Pagination from '../../../components/Pagination/pagination';
 import queryString from 'query-string';
+import './clientes.scss'
 
 const { Search } = Input;
 
@@ -99,10 +100,10 @@ function Clientes(props) {
 				return ciudad.map((res) => {
 					return (
 						<div key={res._id}>
-                            <p>
-                                {res.ciudad}, {res.estado}, {res.pais}
-                            </p>
-                        </div>
+							<p>
+								{res.ciudad}, {res.estado}, {res.pais}
+							</p>
+						</div>
 					);
 				});
 			}
@@ -141,7 +142,7 @@ function Clientes(props) {
 					});
 				}
 			});
-	};
+	}
 
 	const obtenerClientesFiltrados = async (busqueda) => {
 		if (!busqueda) {
@@ -152,11 +153,11 @@ function Clientes(props) {
 			setLoading(true);
 			await clienteAxios
 				.get(`/cliente/filtrados?nombre=${busqueda}&apellido=${busqueda}&direccion=${busqueda}`, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `bearer ${token}`
-                    }
-                })
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						Authorization: `bearer ${token}`
+					}
+				})
 				.then((res) => {
 					console.log(res);
 					setClientesPaginados(res.data.posts);
@@ -186,26 +187,24 @@ function Clientes(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			<Row justify="center">
-				<Col>
-					<Search
-						placeholder="Buscar un cliente"
-						onSearch={(value) => obtenerClientesFiltrados(value)}
-						style={{ width: 350, height: 40, marginBottom: 10 }}
-						enterButton="Buscar"
-						size="large"
-					/>
-				</Col>
-				<Col>
-					<Button
-						type="primary"
-						size="large"
-						className={visible}
-						onClick={() => obtenerClientes(10, page)}
-						icon={<RollbackOutlined style={{ fontSize: 24 }} />}
-					>
-						Volver
-					</Button>
-				</Col>
+				<Search
+					placeholder="Buscar un cliente"
+					onSearch={(value) => obtenerClientesFiltrados(value)}
+					style={{ height: 40, marginBottom: 10 }}
+					enterButton="Buscar"
+					size="large"
+					className="search-width"
+				/>
+
+				<Button
+					type="primary"
+					size="large"
+					className={visible}
+					onClick={() => obtenerClientes(10, page)}
+					icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+				>
+					Volver
+				</Button>
 			</Row>
 			<Table
 				className="tabla-inventario mt-5"

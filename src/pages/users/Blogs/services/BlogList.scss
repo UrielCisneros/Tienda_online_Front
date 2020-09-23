@@ -4,9 +4,9 @@
     text-decoration: none;
     color: black;
 
-    &__lista{
-        border-bottom: 2px solid gray !important;
-    }
+    /* &__lista{
+        border-bottom: 1px solid gray !important;
+    } */
 
     &__title{
         font-size: 25px;
@@ -27,13 +27,14 @@
 }
 
 .blogList:hover{
-    color: gold;
+    color: rgb(0, 162, 255);
 }
 
 .lienamientos{
     width: 100vw;
     height: 100vh;
-    aling-items: center;
+    display: flex;
+    align-items: center;
     justify-content: center;
     
 }
