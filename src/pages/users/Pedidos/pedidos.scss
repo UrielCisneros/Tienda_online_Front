@@ -24,3 +24,13 @@
     border: 1px solid gray;
     border-bottom: 1px solid gray;
 }
+.contenedor-imagen-pedido{
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.imagen-detalle-pedido{
+    max-width: 100%;
+    max-height: 100%;
+}

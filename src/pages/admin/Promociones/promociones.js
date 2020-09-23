@@ -234,26 +234,23 @@ function Promociones(props) {
 					En este apartado puedes agregar ofertas especiales a tu producto y aparecer en la página principal
 				</p>
 				<Row justify="center mt-5">
-					<Col>
 						<Search
+							className="search-width"
 							placeholder="Busca un producto"
 							onChange={(e) => setSearch(e.target.value)}
-							style={{ width: 350, height: 40, marginBottom: 10 }}
+							style={{ height: 40, marginBottom: 10 }}
 							size="large"
 							enterButton="Buscar"
 						/>
-					</Col>
-					<Col>
 						<Button
 							type="primary"
 							size="large"
-							className="ml-3 mb-3 d-flex justify-content-center align-items-center"
+							className="ml-3 mb-3 d-flex justify-content-center align-items-center mb-3"
 							onClick={setRegistrar}
 							icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
 						>
 							Crear nueva promocion
 						</Button>
-					</Col>
 				</Row>
 				<div>
 					{productos.length === 0 || productosFiltrados.length === 0 ? (

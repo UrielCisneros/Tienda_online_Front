@@ -1,5 +1,5 @@
 import React from 'react';
-import clienteAxios from '../../config/axios';
+import clienteAxios from '../../../config/axios';
 import { withRouter } from 'react-router-dom';
 import { notification, Form, Input, Button } from 'antd';
 

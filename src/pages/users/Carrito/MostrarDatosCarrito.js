@@ -95,18 +95,20 @@ function MostrarDatosProductos(props) {
 		if (validacion) {
 			message.error('Aun no se ha modificado la cantidad');
 		} else {
-			AgregarPedidoCarrito(cliente._id, nuevoCarrito, total, token);
+			AgregarPedidoCarrito(cliente._id, token);
 		}
 	}
 
 	if (carrito.length === 0) {
 		return (
-			<Result
-				className="mt-5"
-				status="404"
-				title="Aun no tienes articulos en tu carrito"
-				extra={<Link to="/productos">¡Empieza a comprar ahora!</Link>}
-			/>
+			<Spin size="large" spinning={loading}>
+				<Result
+					className="mt-5"
+					status="404"
+					title="Aun no tienes articulos en tu carrito"
+					extra={<Link to="/productos">¡Empieza a comprar ahora!</Link>}
+				/>
+			</Spin>
 		);
 	}
 

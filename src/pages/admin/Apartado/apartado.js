@@ -7,10 +7,9 @@ import queryString from 'query-string';
 import MostrarDatosTargeta from './services/MostrarDatosTargeta'
 import DetalleApartado from './services/DetalleApartado';
 import Pagination from '../../../components/Pagination/pagination'
+import './apartado.scss';
 
 const { Search } = Input;
-
-
 
 function SistemaApartado(props) {
 
@@ -117,7 +116,6 @@ function SistemaApartado(props) {
 						SISTEMA DE CONTROL DE APARTADO
 					</p>
 					<Row justify="center mt-5">
-						<Col>
 							<Search
 								placeholder="Buscar apartados"
 								onSearch={(value) => {
@@ -127,13 +125,11 @@ function SistemaApartado(props) {
 										obtenerProductosFiltrados(value)
 									}
 								}}
-								style={{ width: 600, height: 40, marginBottom: 10 }}
+								style={{ height: 40, marginBottom: 10 }}
+								className="search-width"
 								enterButton="Buscar"
 								size="large"
 							/>
-						</Col>
-						<Col>
-						</Col>
 					</Row>
 					<div className="mt-4">
 						{apartados.length === 0 ? (

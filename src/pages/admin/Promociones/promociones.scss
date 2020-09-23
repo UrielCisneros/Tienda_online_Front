@@ -6,6 +6,12 @@
         display: flex;
         justify-content: center;
     }
+    .search-width{
+        width: 100%;
+    }
+}
+.search-width{
+    width: 50%;
 }
 .contenedor:hover{
     transition: .2s;

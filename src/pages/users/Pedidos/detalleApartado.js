@@ -96,7 +96,7 @@ export default function detalleApartado(props) {
 
 function Producto(props){
 
-	const {producto} = props;
+    const {producto} = props;
 
 	return(
 		<div >

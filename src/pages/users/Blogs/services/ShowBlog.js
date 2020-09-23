@@ -1,53 +1,58 @@
-import React ,{useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react';
 import clienteAxios from '../../../../config/axios';
-import {Spin} from 'antd';
-import {formatoFecha} from '../../../../config/reuserFunction';
+import { Spin } from 'antd';
+import { formatoFecha } from '../../../../config/reuserFunction';
 
 import './ShowBlog.scss';
 
 export default function ShowBlog(props) {
+	const { url } = props;
+	const [ infoBlog, setInfoBlog ] = useState({});
+	const [ loading, setLoading ] = useState(false);
 
-    const {url} = props;
-    const [infoBlog, setInfoBlog] = useState({})
-    const [loading, setLoading] = useState(false)
+	async function ObtenerBlog() {
+		await clienteAxios
+			.get(`/blog/${url}`)
+			.then((res) => {
+				setLoading(false);
+				setInfoBlog(res.data.post);
+			})
+			.catch((err) => {
+				setLoading(false);
+				console.log(err.response);
+			});
+	}
 
-    async function ObtenerBlog(){
-        await clienteAxios.get(`/blog/${url}`)
-        .then((res) => {
-            setLoading(false)
-            console.log(res);
-            setInfoBlog(res.data.post)
-        })
-        .catch((err) => {
-            setLoading(false)
-            console.log(err.response);
-        })
-    }
+	useEffect(
+		() => {
+			setLoading(true);
+			ObtenerBlog();
+		},
+		[ url ]
+	);
 
-    useEffect(() => {
-        setLoading(true)
-        ObtenerBlog()
-    }, [url])
+	var styleDivImagen = {
+		height: '400px',
+		backgroundImage: `url(https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${infoBlog.imagen})`,
+		backgroundSize: 'cover cover',
+		backgroundRepeat: 'no-repeat',
+		backgroundPosition: '50% 50%'
+	};
 
-    var styleDivImagen = {
-        height: "400px",
-        backgroundImage: `url(https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${infoBlog.imagen})`,
-        backgroundSize: "cover cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "50% 50%"
-    }
+	return (
+		<Spin size="large" spinning={loading}>
+			<div className="info-blog bg-white shadow">
+				<div className="info-blog__div-imagen" style={styleDivImagen} />
+				<div className="p-5">
+					<h1 className="info-blog__titulo m-3"> {infoBlog.nombre} </h1>
+					<div className="info-blog__fecha m-3"> {formatoFecha(infoBlog.createdAt)} </div>
 
-
-    return (
-        <Spin size="large" spinning={loading} >
-            <div className="info-blog">
-                <div className="info-blog__div-imagen" style={styleDivImagen}>
-                </div>
-                <h1 className="info-blog__titulo m-3"> {infoBlog.nombre} </h1>
-                <div className="info-blog__fecha m-3"> {formatoFecha(infoBlog.createdAt)} </div>
-
-                <div className="info-blog__descripcion" dangerouslySetInnerHTML={{__html: infoBlog.descripcion}} />
-            </div>
-        </Spin>
-    )
+					<div
+						className="info-blog__descripcion"
+						dangerouslySetInnerHTML={{ __html: infoBlog.descripcion }}
+					/>
+				</div>
+			</div>
+		</Spin>
+	);
 }

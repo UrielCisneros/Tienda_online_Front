@@ -1,8 +1,50 @@
 import clienteAxios from '../../../../config/axios';
 import { notification } from 'antd';
 
-export async function AgregarPedidoCarrito(idcliente, carrito, total, token) {
+function onlyUnique(value, index, self) {
+	return self.indexOf(value) === index;
+}
+
+export async function AgregarPedidoCarrito(idcliente, token) {
 	/* idcliente, idproducto, categoria, cantidad, talla, precio, total, token */
+	const res = await clienteAxios
+        .get(`/carrito/${idcliente}`, {
+            headers: {
+                Authorization: `bearer ${token}`
+            }
+		})
+	
+	const nuevo = res.data.articulos.map((res) => {
+		if (res.idarticulo.tipoCategoria !== 'otros') {
+			if (res.idarticulo.tallas.length !== 0) {
+				const cantidad = res.idarticulo.tallas.map((res) => res.cantidad);
+				const unique = cantidad.filter(onlyUnique);
+				if (unique.length > 1) {
+					return res;
+				} else {
+					return [];
+				}
+			} else if (res.idarticulo.numeros.length !== 0) {
+				const cantidad = res.idarticulo.numeros.map((res) => res.cantidad);
+				const unique = cantidad.filter(onlyUnique);
+				if (unique.length > 1) {
+					return res;
+				} else {
+					return [];
+				}
+			}
+		} else {
+			if (res.idarticulo.cantidad !== 0) {
+				return res;
+			} else {
+				return [];
+			}
+		}
+		return [];
+	});
+
+	var carrito = nuevo.filter((arr) => arr.length !== 0);
+
 	var pedido = [];
 
 	carrito.forEach((carrito) => {
@@ -54,7 +96,12 @@ export async function AgregarPedidoCarrito(idcliente, carrito, total, token) {
 			default:
 				break;
         }
-    });
+	});
+	
+	var total = 0;
+		carrito.forEach((res) => {
+		total += res.subtotal;
+	});
 
 	await clienteAxios
 		.post(
@@ -72,10 +119,9 @@ export async function AgregarPedidoCarrito(idcliente, carrito, total, token) {
 			}
 		)
 		.then((res) => {
-			window.location.href = `/confirmacion_compra/${res.data.pedido._id}`;
+			/* window.location.href = `/confirmacion_compra/${res.data.pedido._id}`; */
 		})
 		.catch((res) => {
-			console.log(res.response);
 			if (res.response.status === 404 || res.response.status === 500) {
 				return notification.error({
 					message: 'Error',
