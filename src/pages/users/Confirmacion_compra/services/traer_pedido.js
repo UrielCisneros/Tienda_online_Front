@@ -8,12 +8,13 @@ import "../confirmacion.scss";
 
 
 export default function Traer_pedido(props) {
-    const {datosPedido,idPago} = props;
-    console.log(idPago);
+    const {datosPedido,pedidoCompleto} = props;
+
+    console.log(pedidoCompleto);
 
     return (
         <div>
-            <h1 className="text-center">Tu pedido:</h1>
+            {/* <h1 className="text-center">Tu pedido:</h1> */}
             <div>
             <List 
                 className="p-3"
@@ -27,10 +28,7 @@ export default function Traer_pedido(props) {
             </div>
             <div className="d-flex flex-row-reverse px-4 mr-2 mt-3" >
             <div className="__cargos">
-              <p>MilOchoMil</p>
-              <p>Docientos</p>
-              <p className="mt-4">$1001</p>
-              <br/><br/>
+              <p className="mt-4"> {pedidoCompleto.total} </p>
             </div>
             <div className="px-5 __subs">
               <p>Productos ({datosPedido.length})</p>
@@ -38,11 +36,7 @@ export default function Traer_pedido(props) {
               <p className="mt-4">Total: </p>
             </div>
             </div>
-            <div className="d-flex flex-row-reverse pb-3 mr-5" >
-              <Button size="large" type="primary" style={{width: 200, textAlign: "center"}}> 
-                <ShoppingCartOutlined /> Comprar
-              </Button>
-            </div>
+
     
         </div>
     )

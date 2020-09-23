@@ -6,9 +6,10 @@ import clienteAxios from '../../../config/axios';
 import {useParams} from 'react-router-dom'
 import {Spin,Steps, Button, message,notification} from 'antd';
 
-import Traer_pedido from "./services/traer_pedido";
+
 import Traer_datos from "./services/traer_datos";
 import Verificacion_tarjeta from "./services/Verificacion_Tarjeta";
+import Confirmacion_Final from './services/Confirmacion_Final';
 
 
 import "./confirmacion.scss";
@@ -21,9 +22,11 @@ export default function Confirmacion_compra(pros) {
     const [datosUser, setDatosUser] = useState(null);
     const [ disabled, setDisabled ] = useState(true);
     const [datosPedido, setPedido] = useState([]);
+    const [pedidoCompleto, setPedidoCompleto] = useState([]);
     const [loading, setLoading] = useState(false);
     const [accion, setAccion] = useState(false);
-    const [idPago, setIdPago] = useState([])
+    const [datosActualizados, setDatosActualizados] = useState([]);
+    const [idPago, setIdPago] = useState([]);
     const [ disabledPrev, setDisabledPrev ] = useState(false);
 
     	/// Declaracion de variables para los pasos
@@ -44,9 +47,6 @@ export default function Confirmacion_compra(pros) {
     }
 
     const next = () => {
-        if(current + 1 === 2){
-            
-        }
         setCurrent(current + 1);
 	};
 
@@ -56,7 +56,7 @@ export default function Confirmacion_compra(pros) {
 	};
 
     async function obtenerDatosUser() {
-        if(token === null){
+            if(token === null){
                 return null
             }
             await clienteAxios.get(`/pedidos/pedido/${url}`,{
@@ -65,7 +65,10 @@ export default function Confirmacion_compra(pros) {
                 }
             })
             .then((res) => {
+                console.log(res.data);
                 setDatosUser(res.data.cliente);
+                setPedido(res.data.pedido);
+                setPedidoCompleto(res.data)
             })
             .catch((err) => {
                 console.log(err);
@@ -73,30 +76,19 @@ export default function Confirmacion_compra(pros) {
             setLoading(false)
         }
 
-        async function obtenerPedido() {
-        if(token === null){
-            return null
-        }
-        await clienteAxios.get(`/pedidos/pedido/${url}`,{
-            headers:{
-                    Authorization: `bearer ${token}`
-            }
-        })
-        .then((res) => {
-            setPedido(res.data.pedido);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-        setLoading(false)
-    }
-
     const steps = [
         {
         title: 'Datos de envio',
         content: (
             <div className="">
-                <Traer_datos datosUser={datosUser} decoded={decoded} setCurrent={setCurrent} current={current} />
+                 <Traer_datos 
+                    datosUser={datosUser} 
+                    decoded={decoded} 
+                    setCurrent={setCurrent} 
+                    current={current} 
+                    setDatosActualizados={setDatosActualizados} 
+                    token={token} 
+                />
             </div>
         ),
         },
@@ -104,7 +96,12 @@ export default function Confirmacion_compra(pros) {
         title: 'Datos de compra',
         content: (
             <div>
-                <Verificacion_tarjeta setIdPago={setIdPago} prev={prev} setCurrent={setCurrent} current={current}  />
+                <Verificacion_tarjeta 
+                    setIdPago={setIdPago} 
+                    prev={prev} 
+                    setCurrent={setCurrent} 
+                    current={current}  
+                />
             </div>
         ),
         },
@@ -112,7 +109,12 @@ export default function Confirmacion_compra(pros) {
         title: 'Comprar',
         content: (
             <div className="col-lg-7 mt-4">
-                <Traer_pedido datosPedido={datosPedido} idPago={idPago} />
+                <Confirmacion_Final 
+                    idPago={idPago} 
+                    datosPedido={datosPedido} 
+                    pedidoCompleto={pedidoCompleto}
+                    token={token} 
+                /> 
             </div>
         ),
         },
@@ -123,7 +125,7 @@ export default function Confirmacion_compra(pros) {
     useEffect(() => {
         setLoading(true)
         obtenerDatosUser();
-        obtenerPedido();
+
         setAccion(false);
         setDisabled(false);
       // eslint-disable-next-line react-hooks/exhaustive-deps

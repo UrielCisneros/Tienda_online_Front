@@ -3,6 +3,7 @@ import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import { Button,Form } from 'antd';
 
+
 import {CardElement,useStripe,useElements} from '@stripe/react-stripe-js';
 
 export default function Verificacion_Tarjeta(props) {
@@ -37,7 +38,7 @@ const CheckoutForm  = (props) => {
             setIdPago(paymentMethod)
             setCurrent(current + 1);
         }else{
-
+            
         }
         
     }
