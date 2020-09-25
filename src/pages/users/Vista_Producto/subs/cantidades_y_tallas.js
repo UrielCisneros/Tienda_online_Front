@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { InputNumber, Button, Form, Badge, Divider, notification, Modal, Select, Spin } from 'antd';
+import { InputNumber, Button, Form, Badge, Divider, notification, Modal, Select, Spin, Alert } from 'antd';
 import { ShoppingCartOutlined, TagsOutlined, BellOutlined } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import { AgregarCarrito, AgregarApartado, AgregarPedido } from './services';
 import { formatoMexico } from '../../../../config/reuserFunction';
 import { withRouter } from 'react-router-dom';
 import { MenuContext } from '../../../../context/carritoContext';
+import DatosCliente from './datos_cliente';
+import clienteAxios from '../../../../config/axios';
 
 function onlyUnique(value, index, self) {
 	return self.indexOf(value) === index;
@@ -38,6 +40,7 @@ function TallasCantidades(props) {
 	const [ loading, setLoading ] = useState(false);
 	const [ visible, setVisible ] = useState(false);
 	const [ disabled, setDisabled ] = useState(false);
+	const [ datosUser, setDatosUser ] = useState([]);
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
 	var total = 0;
@@ -50,6 +53,25 @@ function TallasCantidades(props) {
 			return null;
 		}
 	}
+
+	async function obtenerDatosUser() {
+		await clienteAxios
+			.get(`/cliente/${decoded._id}`, {
+				headers: {
+					Authorization: `bearer ${token}`
+				}
+			})
+			.then((res) => {
+				setDatosUser(res.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
+	
+	useEffect(() => {
+		obtenerDatosUser()
+	}, [])
 
 	useEffect(
 		() => {
@@ -188,6 +210,7 @@ function TallasCantidades(props) {
 			}
 		}
 	};
+
 	const handleOk = (e) => {
 		if (!tipoEnvio) {
 			notification.info({
@@ -195,8 +218,16 @@ function TallasCantidades(props) {
 				duration: 2
 			});
 		} else {
-			setVisible(false);
-			Apartado();
+			if(datosUser.telefono.length === 0 || datosUser.direccion.length === 0) {
+				notification.info({
+					message: 'Completa tus datos',
+					duration: 2
+				});
+			}else{
+				setVisible(false);
+				Apartado();
+			}
+			
 		}
 	};
 
@@ -456,6 +487,7 @@ function TallasCantidades(props) {
 				onCancel={handleCancel}
 				cancelText="Cancelar"
 				okText="Apartar"
+				width={700}
 			>
 				<div className="row">
 					<div className="col-12 col-lg-6">
@@ -498,11 +530,16 @@ function TallasCantidades(props) {
 						)}
 						<div className="mb-3">
 							<h6>Elegir tipo de envío: </h6>
-							<Select style={{ width: 200 }} placeholder="Select a person" onChange={obtenerTipoEnvio}>
+							<Select style={{ width: 200 }} placeholder="Selecciona un tipo" onChange={obtenerTipoEnvio}>
 								<Option value="ENVIO">Envio por paqueteria</Option>
 								<Option value="REGOGIDO">Recoger a sucursal</Option>
 							</Select>
 						</div>
+						<Alert
+							description="Para apartar un producto necesitas tener completos tus datos"
+							type="info"
+							showIcon
+						/>
 					</div>
 					<div className="col-12 col-lg-6">
 						<div className="d-flex justify-content-center align-items-center" style={{ height: 220 }}>
@@ -514,6 +551,8 @@ function TallasCantidades(props) {
 						</div>
 					</div>
 				</div>
+				<Divider>Tus datos</Divider>
+				{ decoded && decoded._id ? <DatosCliente token={token} clienteID={decoded._id} tipoEnvio={tipoEnvio} /> : <div />}
 			</Modal>
 		</Spin>
 	);

@@ -19,7 +19,7 @@ export default function LayoutBasic(props) {
 					<MenuProvider >
 					<Navegacion />
 					<Categorias />
-					<Content style={{ height: "auto" }} className="bg-white">
+					<Content style={{ height: "auto" }} style={{ backgroundColor: 'white'}}>
 						<div className="site-layout-content flex">
 							<LoadRoutes routes={routes} />
 						</div>

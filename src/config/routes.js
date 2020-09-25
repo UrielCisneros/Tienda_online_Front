@@ -37,6 +37,8 @@ import VistaProducto from '../pages/users/Vista_Producto/vista_producto'
 import Error404 from '../pages/users/error404'
 import Error500 from '../pages/users/error500'
 import Search404 from '../pages/users/Resultado_Busqueda/404'
+import Success from '../pages/users/Success/success';
+import ErrorPago from '../pages/users/Success/error';
 
 const routes = [
 	{
@@ -187,6 +189,16 @@ const routes = [
 			{
 				path: '/error500/',
 				component: Error500,
+				exact: true
+			},
+			{
+				path: '/success/:id',
+				component: Success,
+				exact: true
+			},
+			{
+				path: '/error/:id',
+				component: ErrorPago,
 				exact: true
 			},
 			{
