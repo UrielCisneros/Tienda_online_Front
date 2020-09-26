@@ -197,7 +197,7 @@ const routes = [
 				exact: true
 			},
 			{
-				path: '/error/:id',
+				path: '/error/:id/:error',
 				component: ErrorPago,
 				exact: true
 			},

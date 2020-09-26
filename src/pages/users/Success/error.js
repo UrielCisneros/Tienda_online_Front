@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function ErrorPago(props) {
 	const pedidoID = props.match.params.id;
+	const error = props.match.params.error;
 
 	return (
 		<div className="contenedor-bgcolor-error">
@@ -19,7 +20,7 @@ export default function ErrorPago(props) {
 						</div>
 					}
 					title="Tu pago no ha sido aprovado"
-					subTitle="Parece que hubo un error al realizar el pago. Por favor vuelve a intentarlo"
+					subTitle={error}
 					extra={[
 						<Link to="/">
 							<Button type="primary">
