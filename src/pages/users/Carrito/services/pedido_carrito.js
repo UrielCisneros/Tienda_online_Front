@@ -110,7 +110,8 @@ export async function AgregarPedidoCarrito(idcliente, token) {
 				cliente: idcliente,
 				pedido: pedido,
 				total: total,
-				estado_pedido: 'En proceso'
+				estado_pedido: 'En proceso',
+				carrito: true,
 			},
 			{
 				headers: {
@@ -119,7 +120,7 @@ export async function AgregarPedidoCarrito(idcliente, token) {
 			}
 		)
 		.then((res) => {
-			/* window.location.href = `/confirmacion_compra/${res.data.pedido._id}`; */
+			window.location.href = `/confirmacion_compra/${res.data.pedido._id}`;
 		})
 		.catch((res) => {
 			if (res.response.status === 404 || res.response.status === 500) {

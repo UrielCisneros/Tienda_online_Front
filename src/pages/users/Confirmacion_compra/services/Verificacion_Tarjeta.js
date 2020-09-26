@@ -1,16 +1,24 @@
-import React from 'react'
-import {Elements} from '@stripe/react-stripe-js';
+import React,{useState,useEffect} from 'react'
+import {  CardNumberElement,
+    CardCvcElement,
+    CardExpiryElement,
+    Elements,
+    useElements,
+    useStripe,} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
-import { Button,Form } from 'antd';
+
+import {Form,Button,notification} from 'antd'
 
 
-import {CardElement,useStripe,useElements} from '@stripe/react-stripe-js';
+import './Animacion_Tarjeta.scss';
+
+import img_visa from '../img/logos/visa.png';
+import img_mastercard from '../img/logos/mastercard.png';
+import chip_tarjeta from '../img/chip-tarjeta.png';
 
 export default function Verificacion_Tarjeta(props) {
-
     const {setIdPago,prev,setCurrent,current} = props;
     const stripePromise = loadStripe('pk_test_51HSsW6EfBIdXK7zjZWtgTBxFdNPEFBGjLuEyDzXOV0ioU2ioEroyct2vkAbTvLjJhiSfgCLrc374gjqp1xEO7yCq00bq3GftdJ');
-
     return (
         <div>
             <Elements stripe={stripePromise}>
@@ -20,44 +28,237 @@ export default function Verificacion_Tarjeta(props) {
     )
 }
 
-const CheckoutForm  = (props) => {
 
+
+const CheckoutForm  = (props) => {
     const {prev,setCurrent,current,setIdPago} = props;
     const stripe = useStripe();
     const elements = useElements();
 
-    const handlerSubmit = async (e) => {
-        e.preventDefault();
-        const {error,paymentMethod} = await stripe.createPaymentMethod({
-            type: "card",
-            card: elements.getElement(CardElement),
-        })
 
-        if(!error){
-            /* console.log(paymentMethod); */
-            setIdPago(paymentMethod)
-            setCurrent(current + 1);
+    const [name, setName] = useState('');
+    const [postal, setPostal] = useState('');
+
+    const [typeCard, setTypeCard] = useState('visa')
+    const [numbrerCard, setNumbrerCard] = useState('');
+    const [dateCard1, setDateCard1] = useState('');
+    const [dateCard2, setDateCard2] = useState('');
+    const [activeCard, setActiveCard] = useState('')
+    const [controlClick, setcontrolClick] = useState(false);
+    const [cvvCard, setCvvCard] = useState("---");
+
+
+
+    useEffect(() => {
+        setTypeCard('visa');
+        setNumbrerCard('');
+        setActiveCard("");
+    }, [])
+
+    const rotartarjeta = () => {
+        if(!controlClick){
+            setActiveCard("active");
+            setcontrolClick(true)
         }else{
-            
-        }
-        
+            setActiveCard("");
+            setcontrolClick(false)
+        }   
     }
+
+    const cardOnChage = (e) => {
+        setActiveCard("");
+        if(e.brand === 'visa'){
+            setTypeCard('visa')
+        }else{
+            setTypeCard('mastercard')
+        }
+        console.log("tarjeta");
+        if(!e.complete){
+            setNumbrerCard('#### ### - incomplet')
+        }else{
+            setNumbrerCard('#### #### #### ####')
+        }
+    }
+
+    const cardDateOnChange = (e) => {
+        setActiveCard("");
+        if(e.complete){
+            setDateCard2("AA")
+        }else{
+            setDateCard1("MM")
+        }
+    }
+
+    const cvvChange = (e) => {
+        console.log(e);
+        setActiveCard("active");
+        if(e.complete){
+            setCvvCard("###");
+        }else{
+            setCvvCard("##-");
+        }
+    }
+
+    const handleSubmit = async () => {
+
+    
+        if (!stripe || !elements) {
+          // Stripe.js has not loaded yet. Make sure to disable
+          // form submission until Stripe.js has loaded.
+          return;
+        }
+    
+        const cardElement = elements.getElement(CardNumberElement);
+    
+        const payload = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+          billing_details: {
+            name,
+            address: {
+              postal_code: postal,
+            },
+          },
+        });
+       
+        if (payload.error) {
+            notification.error({
+                message: 'Error de conexion',
+                description: "Parece que hubo un error con tu tarjeta.",
+              })
+        } else {
+          setIdPago(payload.paymentMethod)
+          setCurrent(current + 1);
+        }
+      };
 
     return(
         <div>
-            <form onSubmit={handlerSubmit} className="p-3" style={{width:"600px",margin:"0 auto"}}>
-                <CardElement />
-                <div className="steps-action d-flex justify-content-center align-items-center">
-                    <button style={{ margin: '0 8px' }} onClick={prev} className="btn btn-primary">
-                        Atras
-                    </button>
-                    <button type="submit" className="btn btn-primary" onClick={(e) => {
-                        handlerSubmit(e);
-                    }} >
-                        Siguiente
-                    </button>
+                <div className="contenedor">
+                    <section className={`tarjeta ${activeCard}`} id="tarjeta" onClick={rotartarjeta}>
+
+                        <div className="delantera">
+                            <div className="logo-marca" id="logo-marca">
+                                <img src={typeCard === 'visa' ? img_visa : img_mastercard} alt="" /> 
+                            </div>
+                            <img src={chip_tarjeta} className="chip" alt="" />
+                            <div className="datos">
+                                <div className="grupo" id="numero">
+                                    <p className="label">Número Tarjeta</p>
+                                    <p className="numero"> {numbrerCard} </p>
+                                </div>
+                                <div className="flexbox">
+                                    <div className="grupo" id="nombre">
+                                        <p className="label">Nombre Tarjeta</p>
+                                        <p className="nombre"> {name} </p>
+                                    </div>
+
+                                    <div className="grupo" id="expiracion">
+                                        <p className="label">Expiracion</p>
+                                        <p className="expiracion"><span className="mes"> {dateCard1} </span> {dateCard1 ? "/" : ""} <span className="year"> {dateCard2} </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="trasera">
+                            <div className="barra-magnetica"></div>
+                            <div className="datos">
+                                <div className="grupo" id="firma">
+                                    <p className="label">Firma</p>
+                                    <div className="firma"><p>{name}</p></div>
+                                </div>
+                                <div className="grupo" id="ccv">
+                                    <p className="label">CCV</p>
+                                    <p className="ccv"> {cvvCard} </p>
+                                </div>
+                            </div>
+                            <p className="leyenda">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus exercitationem, voluptates illo.</p>
+                            <a href="#" className="link-banco"></a>
+                        </div>
+
+                    </section>
+
+                    <Form onFinish={handleSubmit} className="active mt-5">
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <label htmlFor="cardNumber">Número Tarjeta</label>
+                                <CardNumberElement
+                                    id="cardNumber"
+                                    onChange={(e) => cardOnChage(e)}
+                                    style={{        
+                                        fontSize: '18px',
+                                        color: '#424770',
+                                        letterSpacing: '0.025em',
+                                        '::placeholder': {
+                                        color: '#aab7c4',
+                                        }}}
+                                    className="form-control"
+                                    onFocus={() => setActiveCard("")}
+                                />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <label htmlFor="name">Nombre</label>
+                                <input
+                                    id="name"
+                                    placeholder="Nombre del propietario"
+                                    value={name}
+                                    onChange={(e) => {
+                                    setName(e.target.value);
+                                    setActiveCard("");
+                                    }}
+                                    className="form-control"
+                                    onFocus={() => setActiveCard("")}
+                                />
+                            </div>
+                        </div>
+                        <div className="row mt-3">
+                            <div className="col-lg-4 col-sm-12">
+                                <label htmlFor="expiry">Expiracion</label>
+                                <CardExpiryElement
+                                    id="expiry"
+                                    onChange={(e) => cardDateOnChange(e)}
+                                    className="form-control mt-0"
+                                    onFocus={() => setActiveCard("")}
+                                />
+                            </div>
+                            <div className="col-lg-4 col-sm-12">
+                                <label htmlFor="cvc">CVC</label>
+                                <CardCvcElement
+                                    id="cvc"
+                                    onChange={(e) => {cvvChange(e)}}
+                                    className="form-control mt-0"
+                                    onFocus={() => setActiveCard("active")}
+                                />
+                            </div>
+                            <div className="col-lg-4 col-sm-12">
+                                <label htmlFor="postal">Codigo postal</label>
+                                <input
+                                    id="postal"
+                                    className="form-control mt-0"
+                                    placeholder="12345"
+                                    value={postal}
+                                    onFocus={() => setActiveCard("")}
+                                    onChange={(e) => {
+                                    setPostal(e.target.value);
+                                    setActiveCard("");
+                                    
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className="steps-action d-flex justify-content-center align-items-center">
+                            <Button type="primary" htmlType="submit" onClick={prev}  size="large" disabled={!stripe} className="m-1" >
+                                Volver 
+                            </Button>
+                            <Button type="primary" htmlType="submit" size="large" disabled={!stripe} className="m-1" >
+                                Siguiente 
+                            </Button>
+                        </div>
+                    </Form>
+                  
                 </div>
-            </form>
         </div>
     )
 }

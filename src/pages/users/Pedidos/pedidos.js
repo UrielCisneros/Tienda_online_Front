@@ -269,7 +269,7 @@ function Pedido(props) {
 								<p className="m-0" style={{ fontSize: '15px' }}>
 									{pedido.pagado === false ? (
 										<div>
-											<p className="text-danger">Pedido cancelado</p>
+											<p className="text-danger">Pedido no realizado	</p>
 											{/* <Button
 												className="d-flex justify-content-center align-items-center"
 												style={{ fontSize: 16 }}
@@ -281,16 +281,21 @@ function Pedido(props) {
 									) : (
 										<div>
 											<p className="text-success">Pedido realizado</p>
-											<p>Seguimiento: {pedido.codigo_seguimiento} </p>
-											<a href={`${pedido.url}${pedido.codigo_seguimiento}`} target="_blank">
-												<Button
-													className="d-flex justify-content-center align-items-center"
-													style={{ fontSize: 16 }}
-													type="primary"
-												>
-													Seguir envio
-												</Button>
-											</a>
+											{pedido.codigo_seguimiento ? (
+												<div>
+													<p>Seguimiento: {pedido.codigo_seguimiento} </p>
+													<a href={`${pedido.url}${pedido.codigo_seguimiento}`} target="_blank">
+														<Button
+															className="d-flex justify-content-center align-items-center"
+															style={{ fontSize: 16 }}
+															type="primary"
+														>
+															Seguir envio
+														</Button>
+													</a>
+												</div>
+											): ""}
+
 										</div>
 									)}
 								</p>
