@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import Traer_pedido from "./traer_pedido";
 import {Button} from 'antd';
 import {ShoppingCartOutlined} from '@ant-design/icons';
@@ -10,8 +10,13 @@ import './Confirnacion_Final.scss';
 export default function Confirmacion_Final(props) {
 
     const {datosPedido,idPago,pedidoCompleto,token} = props;
+    const [direccion, setDireccion] = useState({});
 
     console.log(pedidoCompleto);
+
+    useEffect(() => {
+        setDireccion(pedidoCompleto.cliente.direccion[0]);
+    }, [])
 
     const crearPago = () => {
 
@@ -41,8 +46,15 @@ export default function Confirmacion_Final(props) {
         <div className="confirmacion_final" >
             <div className="row">
                 <div className="col-lg-6">
-                    <div>
-                        <p>Datos del usuario</p>
+                    <div className="mt-3">
+                        <p className="text-center h3">Direccion de envio</p>
+                        <div className="text-center row">
+                            <div>
+                                
+                            </div>
+                            <p> {direccion.calle_numero}, {direccion.entre_calles}, {direccion.colonia}  </p>
+                        </div>
+                        
                     </div>
                     <div>
                         <p>Datos de la tarjeta</p>
