@@ -14,7 +14,7 @@ export default function LayoutBasic(props) {
 	return (
 		<div className="body">
 			<Layout >
-			<div className="cuerpo"> 
+			<div className="cuerpo bg-white"> 
 				<Layout>
 					<MenuProvider >
 					<Navegacion />

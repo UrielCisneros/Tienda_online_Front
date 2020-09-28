@@ -70,7 +70,11 @@ function TallasCantidades(props) {
 	}
 	
 	useEffect(() => {
-		obtenerDatosUser()
+		if (token === '' || token === null) {
+			return null
+		} else {
+			obtenerDatosUser()
+		}
 	}, [])
 
 	useEffect(
@@ -142,16 +146,23 @@ function TallasCantidades(props) {
 				const unique = cantidad.filter(onlyUnique);
 				if (unique.length === 1) {
 					setDisabled(true);
+				}else{
+					setDisabled(false);
 				}
 			} else if (productos && productos.tipoCategoria === 'calzado') {
 				const cantidad = productos.numeros.map((res) => res.cantidad);
 				const unique = cantidad.filter(onlyUnique);
+				console.log(unique)
 				if (unique.length === 1) {
 					setDisabled(true);
+				}else{
+					setDisabled(false);
 				}
 			} else if (productos && productos.tipoCategoria === 'otros') {
 				if (productos.cantidad <= 0) {
 					setDisabled(true);
+				}else{
+					setDisabled(false);
 				}
 			}
 		},

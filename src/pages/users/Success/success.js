@@ -11,7 +11,6 @@ export default function Success(props) {
 	const [ pedido, setPedido ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
 	const token = localStorage.getItem('token');
-	console.log(pedido);
 
 	const obtenerPedido = async () => {
 		setLoading(true);
@@ -24,8 +23,10 @@ export default function Success(props) {
 			.then((res) => {
 				setPedido(res.data);
 				setLoading(false);
+				console.log(res)
 			})
 			.catch((res) => {
+				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
 					notification.error({
@@ -45,7 +46,11 @@ export default function Success(props) {
 	};
 
 	useEffect(() => {
-		obtenerPedido();
+		if (!token) {
+			props.history.push('/');
+		} else {
+			obtenerPedido();
+		}
 	}, []);
 
 	if (pedido.pedido) {
