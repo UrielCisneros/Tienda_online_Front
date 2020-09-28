@@ -5,11 +5,13 @@ import {Button} from 'antd';
 import {ShoppingCartOutlined} from '@ant-design/icons';
 import clienteAxios from '../../../../config/axios';
 
+import './Confirnacion_Final.scss';
+
 export default function Confirmacion_Final(props) {
 
     const {datosPedido,idPago,pedidoCompleto,token} = props;
 
-    console.log(idPago);
+    console.log(pedidoCompleto);
 
     const crearPago = () => {
 
@@ -30,15 +32,27 @@ export default function Confirmacion_Final(props) {
         }).then((res) => {
             console.log(res);
         }).catch((error) => {
-            console.log(error);
+            console.log(error.response);
         })
 
     }
 
     return (
-        <div>
-            <h3>Confirmacion final..</h3>
-            <Traer_pedido datosPedido={datosPedido} pedidoCompleto={pedidoCompleto}  />
+        <div className="confirmacion_final" >
+            <div className="row">
+                <div className="col-lg-6">
+                    <div>
+                        <p>Datos del usuario</p>
+                    </div>
+                    <div>
+                        <p>Datos de la tarjeta</p>
+                    </div>
+                </div>
+                <div className="col-lg-6">
+                    <Traer_pedido datosPedido={datosPedido} pedidoCompleto={pedidoCompleto}  />
+                </div>
+            </div>
+           
 
             <div className="d-flex flex-row-reverse pb-3 mr-5" >
               <Button 

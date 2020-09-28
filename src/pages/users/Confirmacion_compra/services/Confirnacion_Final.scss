@@ -1,0 +1,13 @@
+
+
+.confirmacion_final{
+    border: 1px solid black;
+    width: 1200px;
+}
+
+@media(max-width: 768px){
+    .confirmacion_final{
+        border: 1px solid black;
+        width: 300px;
+    }
+}
