@@ -28,9 +28,7 @@ const FooterPage = () => {
     function peticionRedes(){
 		clienteAxios.get('/tienda/')
 			.then((res) => {
-                console.log(res)
                 if(res.data[0]){
-                    console.log("entro");
                     setImagenCorp(res.data[0].imagenCorp)
                     setNombreCorp(res.data[0].nombre)
                     setPoliticas(res.data[0].politicas)
@@ -69,7 +67,6 @@ const FooterPage = () => {
                 <div end="xs" id="foot"  className="row footer-font-color">  
                     <div className="col-lg-9 text-lg-left text-center footer-font-color">
                         <div className="footer-border footer-font-color">
-                            {console.log(imagenCorp)}
                             {imagenCorp !== '' ? (
                                 <Link  to="/quienes_somos" >
                                     <Button className="footer-font-color" id="is" type="link" style={Style} ><UserOutlined className="footer-font-color" style={{fontSize: 17}}/>

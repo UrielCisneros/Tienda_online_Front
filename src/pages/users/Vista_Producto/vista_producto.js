@@ -118,7 +118,7 @@ function VistaProductos(props) {
 								<p style={{ fontSize: 20 }}><FontAwesomeIcon icon={faTruck} style={{fontSize: 20, marginRight: 10}} />Envío: <strong>${costoEnvio.costoEnvio}</strong></p>
 								{costoEnvio.promocionEnvio ? (
 									<Alert
-										message={`Si supera $${costoEnvio.promocionEnvio} en una compra su envío será de $${costoEnvio.descuento}`}
+										message={`Si supera $${costoEnvio.promocionEnvio} en su compra, se le descontraran $${costoEnvio.descuento} en su compra`}
 										type="success"
 										showIcon
 									/>
