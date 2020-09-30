@@ -133,8 +133,8 @@ const CheckoutForm  = (props) => {
 
     return(
         <Spin spinning={!stripe} size="large">
-            <div>
-                    <div className="contenedor">
+            <div className="">
+                    <div className="contenedor ">
                         <section className={`tarjeta ${activeCard} d-none d-md-none d-lg-block`} id="tarjeta" onClick={rotartarjeta}>
 
                             <div className="delantera">

@@ -29,18 +29,28 @@ export default function Traer_pedido(props) {
             <div className="px-5 __subs">
               <p className="h5">Productos ({datosPedido.length})</p>
               {datosEnvio.costoEnvio ? <p className="h5">Costo envio: $ {datosEnvio.costoEnvio} </p> : ""}
-              {datosEnvio.descuento ? (
+              {datosEnvio.descuento ? 
+                pedidoCompleto.total >= datosEnvio.promocionEnvio ? (
                 <div>
                   <p className="h5">Descuento de: $ {datosEnvio.descuento}</p>
                   <p className="h5">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
+                  <p className="text-success h6">El descuento si aplica</p>
                 </div>
-              ) : (
+              ): 
+              (
                 <div>
                   <p className="h5">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
+                  <p className="text-danger h6">El descuento no aplica</p>
+                </div>
+              )
+              : (
+                <div>
+                  <p className="h5">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
+                  <p className="text-danger h6">El descuento no aplica</p>
                 </div>
               )}
               
-              <p className="mt-4 h4 text-success">Total: $ {datosEnvio.descuento ?  formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio - datosEnvio.descuento) : formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)}</p>
+              <p className="mt-4 h4 text-success">Total: $ {datosEnvio.descuento ? pedidoCompleto.total >= datosEnvio.promocionEnvio ? formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio - datosEnvio.descuento) : formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio) : formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)}</p>
             </div>
             </div>
         </div>

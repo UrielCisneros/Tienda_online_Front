@@ -122,7 +122,7 @@ export default function Traer_datos(props) {
    
     return (
         <Spin spinning={loading} size="large" >
-            <div>
+            <div className="shadow-lg bg-white rounded">
                 <Form 
                     className="mt-5"
                     layout="horizontal"
@@ -225,7 +225,7 @@ export default function Traer_datos(props) {
                             </div>
                             }
                         />
-                        <div className="steps-action d-flex justify-content-center align-items-center">
+                        <div className="steps-action d-flex justify-content-center align-items-center p-3">
                             <Button type="primary" htmlType="submit" size="large" >
                                 Siguiente 
                             </Button>

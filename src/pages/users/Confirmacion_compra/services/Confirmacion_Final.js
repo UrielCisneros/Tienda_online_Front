@@ -30,10 +30,15 @@ export default function Confirmacion_Final(props) {
         .then((res) => {
             setLoading(false);
             setDatosEnvio(res.data)
+            console.log(res.data);
             if(res.data.descuento){
-                console.log(pedidoCompleto.total);
-                console.log(res.data.costoEnvio);
-              setTotal(parseFloat(pedidoCompleto.total) + parseFloat(res.data.costoEnvio) - parseFloat(res.data.descuento));
+                if(pedidoCompleto.total >= res.data.promocionEnvio){
+                    console.log(pedidoCompleto.total);
+                    console.log(res.data.costoEnvio);
+                    setTotal(parseFloat(pedidoCompleto.total) + parseFloat(res.data.costoEnvio) - parseFloat(res.data.descuento));
+                }else{
+                    setTotal(parseFloat(pedidoCompleto.total) + parseFloat(res.data.costoEnvio));
+                }
             }else{
               setTotal(parseFloat(pedidoCompleto.total) + parseFloat(res.data.costoEnvio));
             }
@@ -77,7 +82,7 @@ export default function Confirmacion_Final(props) {
             .catch((error) => {
                 setLoading(false);
                 console.log(error.response);
-                history.push(`/error/${pedidoCompleto._id}`)
+                history.push(`/error/${pedidoCompleto._id}/${error.response.data.err.code}`)
             })
 
         })
@@ -90,7 +95,7 @@ export default function Confirmacion_Final(props) {
 
     return (
         <Spin spinning={loading} size="large" >
-            <div className="confirmacion_final" >
+            <div className="shadow-lg bg-white rounded confirmacion_final" >
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="mt-3">
