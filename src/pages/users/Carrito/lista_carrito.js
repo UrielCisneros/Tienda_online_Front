@@ -6,8 +6,8 @@ import { ShoppingCartOutlined, ExportOutlined, DeleteOutlined, ExclamationCircle
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import { CarritoContext } from './context_carrito/context-carrito';
 import { MenuContext } from '../../../context/carritoContext';
-import { obtenerDisponibilidad } from './services/obtenerStock';
 import { actualizarCantidad } from './services/consultasCarrito';
+import { obtenerSubtotal } from './services/obtenerStock';
 import { AgregarPedido, EliminarArticuloCarrito } from './services/consultas_individuales';
 import ModalApartado from './modal_apartado';
 
@@ -25,6 +25,7 @@ function ListaCarrito(props) {
 	const { activador, setActivador, setValidacion } = useContext(CarritoContext);
 	const { active, setActive } = useContext(MenuContext);
 	const [ visible, setVisible ] = useState(false);
+	const [ precio, setPrecio ] = useState(0);
 
 	useEffect(() => {
 		setDisponible('')
@@ -36,11 +37,6 @@ function ListaCarrito(props) {
 						if (medida.talla === tallas.talla) {
 							setMedida([ medida.talla, tallas.cantidad ]);
 						}
-						if (medida.talla === tallas.talla && tallas.cantidad === 0) {
-							setValidateStatus('error');
-							setMedidaDisponible('No esta disponible');
-							setValidacion(true);
-						}
 					});
 				}
 			});
@@ -51,20 +47,22 @@ function ListaCarrito(props) {
 						if (medida.numero === numeros.numero) {
 							setMedida([ medida.numero, numeros.cantidad ]);
 						}
-						if (medida.numero === numeros.numero && numeros.cantidad === 0) {
-							setValidateStatus('error');
-							setMedidaDisponible('No esta disponible');
-							setValidacion(true);
-						}
 					});
 				}
 			});
 		}
-		const disponible = obtenerDisponibilidad(carrito);
-		if (disponible) {
-			setDisponible(disponible);
+		if (carrito.idarticulo.activo === false) {
+			setValidateStatus('error');
+			setMedidaDisponible('No esta disponible');
+/* 			setValidacion(true); */
+			setDisponible('disponibilidad-carrito');
 		}
-	}, [ disponible, carrito, setValidacion ]);
+		if (carrito.promocion) {
+			setPrecio(carrito.promocion.precioPromocion);
+		} else {
+			setPrecio(carrito.idarticulo.precio);
+		}
+	}, [ carrito, setValidacion ]);
 
 	function medidaChange(medida) {
 		setCantidad(carrito.cantidad);
@@ -91,12 +89,6 @@ function ListaCarrito(props) {
 		}
 	}
 	function comprar() {
-		var precio
-		if (carrito.promocion) {
-			precio = carrito.promocion.precioPromocion;
-		} else {
-			precio = carrito.idarticulo.precio;
-		}
 		AgregarPedido(
 			cliente._id,
 			carrito.idarticulo._id,
@@ -283,7 +275,7 @@ function ListaCarrito(props) {
 										>
 											Modificar
 										</Button>
-										<p className="precio-vista-carrito">${formatoMexico(carrito.subtotal)}</p>
+										<p className="precio-vista-carrito">${formatoMexico(obtenerSubtotal(carrito.cantidad, precio))}</p>
 									</div>
 									{/* <div className="float-right" /> */}
 								</div>

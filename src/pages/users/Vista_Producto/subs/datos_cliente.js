@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { InputNumber, Button, Form, Badge, Divider, notification, Modal, Select, Spin, Input, Row, Col } from 'antd';
-import { ShoppingCartOutlined, TagsOutlined, BellOutlined } from '@ant-design/icons';
-import jwt_decode from 'jwt-decode';
+import React, { useState, useEffect } from 'react';
+import { Button, Form, Divider, notification, Spin, Input, Row, Col } from 'antd';
 import clienteAxios from '../../../../config/axios';
 
 const layout = {
@@ -17,7 +15,7 @@ export default function DatosCliente(props) {
 	const [ loading, setLoading ] = useState(false);
 	const [ form ] = Form.useForm();
 	const { token, clienteID } = props;
-    const [ controlBoton, setControlBoton ] = useState(true);
+	const [ controlBoton, setControlBoton ] = useState(true);
 
 	async function obtenerDatosUser() {
 		setLoading(true);
