@@ -183,6 +183,8 @@ export default function PedidosUsuario(props) {
 function Pedido(props) {
 	const { pedido, showModal, setDetallePedido, setElige } = props;
 
+	console.log(pedido)
+
 	return (
 		<div>
 			<List.Item

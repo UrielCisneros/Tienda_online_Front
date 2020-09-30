@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { notification } from 'antd';
-import firebaseConfig from '../config/firebase';
+import firebaseConfig from '../../config/firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import clienteAxios from '../config/axios';
+import clienteAxios from '../../config/axios';
 import * as firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';
 import 'firebase/auth';
