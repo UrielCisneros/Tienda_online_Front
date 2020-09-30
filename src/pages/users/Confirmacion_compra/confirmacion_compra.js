@@ -16,7 +16,9 @@ import "./confirmacion.scss";
 
 const { Step } = Steps;
 
-export default function Confirmacion_compra(pros) {
+export default function Confirmacion_compra(props) {
+
+    const {history} = props;
 
     const {url} = useParams();
     const [datosUser, setDatosUser] = useState(null);
@@ -114,6 +116,7 @@ export default function Confirmacion_compra(pros) {
                     datosPedido={datosPedido} 
                     pedidoCompleto={pedidoCompleto}
                     token={token} 
+                    history={history}
                 /> 
             </div>
         ),

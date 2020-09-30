@@ -55,6 +55,9 @@ function TallasCantidades(props) {
 	}
 
 	async function obtenerDatosUser() {
+		if(!decoded){
+			return null
+		}
 		await clienteAxios
 			.get(`/cliente/${decoded._id}`, {
 				headers: {

@@ -7,7 +7,7 @@ import {  CardNumberElement,
     useStripe,} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 
-import {Form,Button,notification} from 'antd'
+import {Form,Button,notification,Spin} from 'antd'
 
 
 import './Animacion_Tarjeta.scss';
@@ -28,8 +28,6 @@ export default function Verificacion_Tarjeta(props) {
     )
 }
 
-
-
 const CheckoutForm  = (props) => {
     const {prev,setCurrent,current,setIdPago} = props;
     const stripe = useStripe();
@@ -38,6 +36,7 @@ const CheckoutForm  = (props) => {
 
     const [name, setName] = useState('');
     const [postal, setPostal] = useState('');
+    const [loading, setLoading] = useState(false)
 
     const [typeCard, setTypeCard] = useState('visa')
     const [numbrerCard, setNumbrerCard] = useState('');
@@ -133,132 +132,134 @@ const CheckoutForm  = (props) => {
       };
 
     return(
-        <div>
-                <div className="contenedor">
-                    <section className={`tarjeta ${activeCard}`} id="tarjeta" onClick={rotartarjeta}>
+        <Spin spinning={!stripe} size="large">
+            <div>
+                    <div className="contenedor">
+                        <section className={`tarjeta ${activeCard} d-none d-md-none d-lg-block`} id="tarjeta" onClick={rotartarjeta}>
 
-                        <div className="delantera">
-                            <div className="logo-marca" id="logo-marca">
-                                <img src={typeCard === 'visa' ? img_visa : img_mastercard} alt="" /> 
-                            </div>
-                            <img src={chip_tarjeta} className="chip" alt="" />
-                            <div className="datos">
-                                <div className="grupo" id="numero">
-                                    <p className="label">Número Tarjeta</p>
-                                    <p className="numero"> {numbrerCard} </p>
+                            <div className="delantera">
+                                <div className="logo-marca" id="logo-marca">
+                                    <img src={typeCard === 'visa' ? img_visa : img_mastercard} alt="" /> 
                                 </div>
-                                <div className="flexbox">
-                                    <div className="grupo" id="nombre">
-                                        <p className="label">Nombre Tarjeta</p>
-                                        <p className="nombre"> {name} </p>
+                                <img src={chip_tarjeta} className="chip" alt="" />
+                                <div className="datos">
+                                    <div className="grupo" id="numero">
+                                        <p className="label">Número Tarjeta</p>
+                                        <p className="numero"> {numbrerCard} </p>
                                     </div>
+                                    <div className="flexbox">
+                                        <div className="grupo" id="nombre">
+                                            <p className="label">Nombre Tarjeta</p>
+                                            <p className="nombre"> {name} </p>
+                                        </div>
 
-                                    <div className="grupo" id="expiracion">
-                                        <p className="label">Expiracion</p>
-                                        <p className="expiracion"><span className="mes"> {dateCard1} </span> {dateCard1 ? "/" : ""} <span className="year"> {dateCard2} </span></p>
+                                        <div className="grupo" id="expiracion">
+                                            <p className="label">Expiracion</p>
+                                            <p className="expiracion"><span className="mes"> {dateCard1} </span> {dateCard1 ? "/" : ""} <span className="year"> {dateCard2} </span></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="trasera">
-                            <div className="barra-magnetica"></div>
-                            <div className="datos">
-                                <div className="grupo" id="firma">
-                                    <p className="label">Firma</p>
-                                    <div className="firma"><p>{name}</p></div>
+                            <div className="trasera">
+                                <div className="barra-magnetica"></div>
+                                <div className="datos">
+                                    <div className="grupo" id="firma">
+                                        <p className="label">Firma</p>
+                                        <div className="firma"><p>{name}</p></div>
+                                    </div>
+                                    <div className="grupo" id="ccv">
+                                        <p className="label">CCV</p>
+                                        <p className="ccv"> {cvvCard} </p>
+                                    </div>
                                 </div>
-                                <div className="grupo" id="ccv">
-                                    <p className="label">CCV</p>
-                                    <p className="ccv"> {cvvCard} </p>
+                                <p className="leyenda">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus exercitationem, voluptates illo.</p>
+                                <a href="#" className="link-banco"></a>
+                            </div>
+
+                        </section>
+
+                        <Form onFinish={handleSubmit} className="active mt-5">
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <label htmlFor="cardNumber">Número Tarjeta</label>
+                                    <CardNumberElement
+                                        id="cardNumber"
+                                        onChange={(e) => cardOnChage(e)}
+                                        style={{        
+                                            fontSize: '18px',
+                                            color: '#424770',
+                                            letterSpacing: '0.025em',
+                                            '::placeholder': {
+                                            color: '#aab7c4',
+                                            }}}
+                                        className="form-control"
+                                        onFocus={() => setActiveCard("")}
+                                    />
                                 </div>
                             </div>
-                            <p className="leyenda">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus exercitationem, voluptates illo.</p>
-                            <a href="#" className="link-banco"></a>
-                        </div>
-
-                    </section>
-
-                    <Form onFinish={handleSubmit} className="active mt-5">
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <label htmlFor="cardNumber">Número Tarjeta</label>
-                                <CardNumberElement
-                                    id="cardNumber"
-                                    onChange={(e) => cardOnChage(e)}
-                                    style={{        
-                                        fontSize: '18px',
-                                        color: '#424770',
-                                        letterSpacing: '0.025em',
-                                        '::placeholder': {
-                                        color: '#aab7c4',
-                                        }}}
-                                    className="form-control"
-                                    onFocus={() => setActiveCard("")}
-                                />
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <label htmlFor="name">Nombre</label>
+                                    <input
+                                        id="name"
+                                        placeholder="Nombre del propietario"
+                                        value={name}
+                                        onChange={(e) => {
+                                        setName(e.target.value);
+                                        setActiveCard("");
+                                        }}
+                                        className="form-control"
+                                        onFocus={() => setActiveCard("")}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <label htmlFor="name">Nombre</label>
-                                <input
-                                    id="name"
-                                    placeholder="Nombre del propietario"
-                                    value={name}
-                                    onChange={(e) => {
-                                    setName(e.target.value);
-                                    setActiveCard("");
-                                    }}
-                                    className="form-control"
-                                    onFocus={() => setActiveCard("")}
-                                />
+                            <div className="row mt-3">
+                                <div className="col-lg-4 col-sm-12">
+                                    <label htmlFor="expiry">Expiracion</label>
+                                    <CardExpiryElement
+                                        id="expiry"
+                                        onChange={(e) => cardDateOnChange(e)}
+                                        className="form-control mt-0"
+                                        onFocus={() => setActiveCard("")}
+                                    />
+                                </div>
+                                <div className="col-lg-4 col-sm-12">
+                                    <label htmlFor="cvc">CVC</label>
+                                    <CardCvcElement
+                                        id="cvc"
+                                        onChange={(e) => {cvvChange(e)}}
+                                        className="form-control mt-0"
+                                        onFocus={() => setActiveCard("active")}
+                                    />
+                                </div>
+                                <div className="col-lg-4 col-sm-12">
+                                    <label htmlFor="postal">Codigo postal</label>
+                                    <input
+                                        id="postal"
+                                        className="form-control mt-0"
+                                        placeholder="12345"
+                                        value={postal}
+                                        onFocus={() => setActiveCard("")}
+                                        onChange={(e) => {
+                                        setPostal(e.target.value);
+                                        setActiveCard("");
+                                        
+                                        }}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="row mt-3">
-                            <div className="col-lg-4 col-sm-12">
-                                <label htmlFor="expiry">Expiracion</label>
-                                <CardExpiryElement
-                                    id="expiry"
-                                    onChange={(e) => cardDateOnChange(e)}
-                                    className="form-control mt-0"
-                                    onFocus={() => setActiveCard("")}
-                                />
+                            <div className="steps-action d-flex justify-content-center align-items-center">
+                                <Button type="primary" htmlType="submit" onClick={prev}  size="large" disabled={!stripe} className="m-1" >
+                                    Volver 
+                                </Button>
+                                <Button type="primary" htmlType="submit" size="large" disabled={!stripe} className="m-1" >
+                                    Siguiente 
+                                </Button>
                             </div>
-                            <div className="col-lg-4 col-sm-12">
-                                <label htmlFor="cvc">CVC</label>
-                                <CardCvcElement
-                                    id="cvc"
-                                    onChange={(e) => {cvvChange(e)}}
-                                    className="form-control mt-0"
-                                    onFocus={() => setActiveCard("active")}
-                                />
-                            </div>
-                            <div className="col-lg-4 col-sm-12">
-                                <label htmlFor="postal">Codigo postal</label>
-                                <input
-                                    id="postal"
-                                    className="form-control mt-0"
-                                    placeholder="12345"
-                                    value={postal}
-                                    onFocus={() => setActiveCard("")}
-                                    onChange={(e) => {
-                                    setPostal(e.target.value);
-                                    setActiveCard("");
-                                    
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div className="steps-action d-flex justify-content-center align-items-center">
-                            <Button type="primary" htmlType="submit" onClick={prev}  size="large" disabled={!stripe} className="m-1" >
-                                Volver 
-                            </Button>
-                            <Button type="primary" htmlType="submit" size="large" disabled={!stripe} className="m-1" >
-                                Siguiente 
-                            </Button>
-                        </div>
-                    </Form>
-                  
-                </div>
-        </div>
+                        </Form>
+                    
+                    </div>
+            </div>
+        </Spin>
     )
 }

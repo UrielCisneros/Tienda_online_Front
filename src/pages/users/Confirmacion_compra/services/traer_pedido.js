@@ -1,16 +1,15 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
 import clienteAxios from '../../../../config/axios';
-
 import {List, InputNumber, Button} from 'antd'
 import {ShoppingCartOutlined} from '@ant-design/icons';
+import {formatoMexico} from '../../../../config/reuserFunction'
 
 import "../confirmacion.scss";
 
 
 export default function Traer_pedido(props) {
-    const {datosPedido,pedidoCompleto} = props;
-
-    console.log(pedidoCompleto);
+    const {datosPedido,pedidoCompleto,datosEnvio,setTotal} = props;
 
     return (
         <div>
@@ -27,31 +26,35 @@ export default function Traer_pedido(props) {
             />
             </div>
             <div className="d-flex flex-row-reverse px-4 mr-2 mt-3" >
-            <div className="__cargos">
-              <p className="mt-4"> {pedidoCompleto.total} </p>
-            </div>
             <div className="px-5 __subs">
-              <p>Productos ({datosPedido.length})</p>
-              <p>Costo envio</p>
-              <p className="mt-4">Total: </p>
+              <p className="h5">Productos ({datosPedido.length})</p>
+              {datosEnvio.costoEnvio ? <p className="h5">Costo envio: $ {datosEnvio.costoEnvio} </p> : ""}
+              {datosEnvio.descuento ? (
+                <div>
+                  <p className="h5">Descuento de: $ {datosEnvio.descuento}</p>
+                  <p className="h5">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
+                </div>
+              ) : (
+                <div>
+                  <p className="h5">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
+                </div>
+              )}
+              
+              <p className="mt-4 h4 text-success">Total: $ {datosEnvio.descuento ?  formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio - datosEnvio.descuento) : formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)}</p>
             </div>
             </div>
-
-    
         </div>
     )
 }
 
 function Productos (props) {
     const {pedido} = props;
-    console.log(pedido);
     return(
 
     <List.Item >
-    <div className="">
       <div className="row">
 
-        <div className="col-lg-8 d-flex justify-content-lg-center">
+        <div className="col-lg-7 d-flex justify-content-lg-center">
           <List.Item.Meta 
             avatar={<img src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.producto.imagen}`} 
             height="80" width="80"/>}
@@ -60,12 +63,12 @@ function Productos (props) {
           />
         </div>
       
-        <div className=" col-lg-3 mt-2 ">
-          <p className="__tupedido mt-3">Cantidad:  {pedido.cantidad}</p> 
+        <div className=" col-lg-3">
+          <p className="__tupedido">Cantidad:  {pedido.cantidad}</p> 
 
           {pedido.producto.tipoCategoria === 'calzado' ? (
             <div>
-            <p className="__tupedido">Numero: {pedido.numero}</p>
+            <p className="__tupedido">Medida: {pedido.numero}</p>
             <p className="__tupedido">Color: {pedido.producto.color}</p>
             </div>
             ): ""}
@@ -76,22 +79,11 @@ function Productos (props) {
             <p className="__tupedido">Color: {pedido.producto.color}</p>
             </div>
             ): ""}
-
-          {/* {pedido.producto.tipoCategoria === 'otros' ? (
-            <div>
-            <p className="__tupedido">{pedido.pedido.categoria}</p>
-            </div>
-            ): ""} */}
-          
+        </div> 
+        <div className=" col-lg-2 d-flex flex-row-reverse" >
+          <p style={{fontSize: "20px", fontWeight: "bold"}}>$ {formatoMexico(pedido.cantidad * pedido.producto.precio)}</p>
         </div>
-
       </div>
-    </div> 
-
-    <div className="d-flex flex-row-reverse mr-2" >
-      <p style={{fontSize: 28, fontWeight: "bold"}}>{pedido.cantidad * pedido.producto.precio}</p>
-    </div>
-    
     </List.Item>
 
     )

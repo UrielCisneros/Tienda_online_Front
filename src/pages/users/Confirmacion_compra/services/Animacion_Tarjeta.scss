@@ -9,6 +9,16 @@ body {
 	font-family: 'Lato', sans-serif;
 }
 
+@media(max-width: 768px){
+	.ocultar{
+		display: none;
+	}
+	
+}
+.ocultar{
+	display: block;
+}
+
 .contenedor {
 	width: 90%;
 	max-width: 1000px;
