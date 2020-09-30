@@ -66,7 +66,7 @@ function Productos (props) {
 
         <div className="col-lg-7 d-flex justify-content-lg-center">
           <List.Item.Meta 
-            avatar={<img src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.producto.imagen}`} 
+            avatar={<img className="img-fluid" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.producto.imagen}`} 
             height="80" width="80"/>}
             title={<p className="__nombres">{pedido.producto.nombre}</p>}
             description={<p className="__categ">{pedido.producto.categoria}</p>}
