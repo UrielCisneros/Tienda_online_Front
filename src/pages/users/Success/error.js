@@ -27,7 +27,7 @@ export default function ErrorPago(props) {
 								Ir a pagina principal
 							</Button>
 						</Link>,
-                        <Link to={`/confirmacion/${pedidoID}`}>
+                        <Link to={`/confirmacion_compra/${pedidoID}`}>
                             <Button type="primary" ghost className="mb-3">
                                 Reintentar
                             </Button>
