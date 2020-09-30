@@ -57,6 +57,7 @@ export default function Traer_pedido(props) {
     )
 }
 
+
 function Productos (props) {
     const {pedido} = props;
     return(
