@@ -10,10 +10,12 @@ const { SubMenu } = Menu;
 const Categorias = (props) => {
 	const token = localStorage.getItem('token');
 	const [ categorias, setCategorias ] = useState([]);
+	const [ generos, setGeneros ] = useState([]);
 	const [ loading, setLoading ] = useState(false);
 
 	useEffect(() => {
 		obtenerCategorias();
+		obtenerGeneros();
 	}, []);
 
 	async function obtenerCategorias() {
@@ -34,22 +36,49 @@ const Categorias = (props) => {
 			});
 	}
 
-	const render = categorias.map((categoria) => {
+	async function obtenerGeneros() {
+		await clienteAxios
+			.get('/productos/agrupar/generos')
+			.then((res) => {
+				setGeneros(res.data);
+			})
+			.catch((res) => {
+				console.log(res);
+			});
+	}
+
+	const categorias_nav = categorias.map((categoria) => {
 		return (
 			<SubMenu
 				key={categoria.categoria}
 				title={categoria.categoria}
-				className="submenu-categoria"
+				className="submenu-categoria nav-font-color-categorias"
 				onTitleClick={() => props.history.push(`/searching/${categoria.categoria}`)}
 			>
 				{categoria.subcCategoria.map((sub) => {
 					return (
-						<Menu.Item key={sub._id} onClick={() => props.history.push(`/searching/${sub._id}`)}>
+						<Menu.Item
+							className="nav-font-color-categorias"
+							key={sub._id}
+							onClick={() => props.history.push(`/searching/${sub._id}`)}
+						>
 							{sub._id}
 						</Menu.Item>
 					);
 				})}
 			</SubMenu>
+		);
+	});
+
+	const categorias_generos = generos.map((generos) => {
+		return (
+			<Menu.Item
+				className="nav-font-color-categorias"
+				key={generos._id}
+				onClick={() => props.history.push(`/searching/${generos._id}`)}
+			>
+				{generos._id}
+			</Menu.Item>
 		);
 	});
 
@@ -62,7 +91,14 @@ const Categorias = (props) => {
 				mode="horizontal"
 				defaultSelectedKeys={[ window.location.pathname ]}
 			>
-				{render}
+				{categorias_nav}
+				{loading === false ? (
+					<SubMenu title="Género" className="submenu-categoria nav-font-color-categorias">
+						{categorias_generos}
+					</SubMenu>
+				) : (
+					<Menu.Item className="d-none" />
+				)}
 			</Menu>
 		</div>
 	);

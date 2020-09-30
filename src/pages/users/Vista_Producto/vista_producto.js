@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
-import { Divider, Row, Col, Tag, Spin } from 'antd';
+import { Divider, Row, Col, Tag, Spin, Alert } from 'antd';
 import { CreditCardOutlined } from '@ant-design/icons';
 import Scroll from './subs/scroll';
 import Sugerencia from './subs/sugerencia';
@@ -12,6 +12,8 @@ import './vistas.scss';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import DOMPurify from 'dompurify';
 import { withRouter } from 'react-router-dom';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faTruck} from '@fortawesome/free-solid-svg-icons'
 
 function VistaProductos(props) {
 	const [ productos, setProductos ] = useState([]);
@@ -19,15 +21,28 @@ function VistaProductos(props) {
 	const [ loading, setLoading ] = useState(false);
 	const [ readMore, setReadMore ] = useState('read-less');
 	const producto = props.match.params.url;
+	const [ costoEnvio, setCostoEnvio ] = useState([]);
 
 	useEffect(() => {
 		obtenerProducto();
-		window.scrollTo(0, 0)
+		obtenerPoliticasEnvio();
+		window.scrollTo(0, 0);
 	}, []);
 
-	function obtenerProducto() {
+	async function obtenerPoliticasEnvio() {
+		await clienteAxios
+			.get('/politicasEnvio/')
+			.then((res) => {
+				setCostoEnvio(res.data);
+			})
+			.catch((res) => {
+				console.log(res);
+			});
+	}
+
+	async function obtenerProducto() {
 		setLoading(true);
-		clienteAxios
+		await clienteAxios
 			.get(`/productos/${producto}`)
 			.then((res) => {
 				setProductos(res.data);
@@ -35,7 +50,7 @@ function VistaProductos(props) {
 				setLoading(false);
 			})
 			.catch((res) => {
-				console.log(res)
+				console.log(res);
 				props.history.push('/error500');
 			});
 	}
@@ -50,7 +65,7 @@ function VistaProductos(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<div className="container mt-5 border caracteristicas">
+			<div className="container mt-5 shadow caracteristicas ">
 				<div className="row mt-5">
 					<div className="col-lg-8 imagen-gallery-vista zoom">
 						<div id="zoom-render" />
@@ -98,26 +113,41 @@ function VistaProductos(props) {
 								</p>
 							</div>
 						)}
-						<Divider />
-						<div className="row justify-content-center">
-							<div className="col-4">
-								<p style={{fontSize: 20, marginBottom: 10}}>Género:</p>
-								<Tag className="tag-genero-vista-producto" color="blue">{productos.genero}</Tag>
+						{costoEnvio ? (
+							<div>
+								<p style={{ fontSize: 20 }}><FontAwesomeIcon icon={faTruck} style={{fontSize: 20, marginRight: 10}} />Envío: <strong>${costoEnvio.costoEnvio}</strong></p>
+								{costoEnvio.promocionEnvio ? (
+									<Alert
+										message={`Si supera $${costoEnvio.promocionEnvio} en una compra su envío será de $${costoEnvio.descuento}`}
+										type="success"
+										showIcon
+									/>
+								) : (
+									<div />
+								)}
 							</div>
-							<div className="col-5">
-								<p style={{fontSize: 20, marginBottom: 10}}>Color: {productos.color}</p>
-								<div className="d-flex justify-content-center">
-									<div className="rounded-circle" style={{backgroundColor: productos.colorHex, height: 35, width: 35}} />
-								</div>
-							</div>
-						</div>
+						) : (
+							<div className="d-none" />
+						)}
 						<Divider />
 						<TallasCantidades producto={productos} /> {/* Componente tallas */}
 						<Divider />
-						<p>
-							<CreditCardOutlined style={{ fontSize: 20 }} className="mr-2" />
+						<p className="mb-3" style={{ fontSize: 20 }}>
+							<CreditCardOutlined style={{ fontSize: 25 }} className="mr-2" />
 							Formas de Pago
 						</p>
+						<div className="contenedor-img-tarjetas">
+							<img
+								alt="tarjetas de credito"
+								className="img-tarjetas"
+								src="https://www.paymentmedia.com/gallery/5b927b5d6fc472000px-Mastercard-logo.svg.jpg"
+							/>
+							<img
+								alt="tarjetas de credito"
+								className="img-tarjetas"
+								src="https://logos-marcas.com/wp-content/uploads/2020/04/Visa-Logo.png"
+							/>
+						</div>
 						<Divider />
 						<div className="descripcion-sm">
 							<Divider />
@@ -149,7 +179,7 @@ function VistaProductos(props) {
 				{/* ### Componenete de productos similares */}
 				<Row className="mt-5">
 					<Col span={24}>
-						<Scroll productos={productos}/>
+						<Scroll productos={productos} />
 					</Col>
 				</Row>
 			</div>

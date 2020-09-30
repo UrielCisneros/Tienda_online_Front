@@ -73,7 +73,9 @@ function TallasCantidades(props) {
 	}
 	
 	useEffect(() => {
-		obtenerDatosUser()
+		if (token) {
+			obtenerDatosUser()
+		}
 	}, [])
 
 	useEffect(
@@ -140,22 +142,8 @@ function TallasCantidades(props) {
 			} else if (productos.tipoCategoria === 'otros') {
 				setCategoria('otros');
 			}
-			if (productos && productos.tipoCategoria === 'ropa') {
-				const cantidad = productos.tallas.map((res) => res.cantidad);
-				const unique = cantidad.filter(onlyUnique);
-				if (unique.length === 1) {
-					setDisabled(true);
-				}
-			} else if (productos && productos.tipoCategoria === 'calzado') {
-				const cantidad = productos.numeros.map((res) => res.cantidad);
-				const unique = cantidad.filter(onlyUnique);
-				if (unique.length === 1) {
-					setDisabled(true);
-				}
-			} else if (productos && productos.tipoCategoria === 'otros') {
-				if (productos.cantidad <= 0) {
-					setDisabled(true);
-				}
+			if (productos && productos.activo === false) {
+				setDisabled(true);
 			}
 		},
 		[ productos ]

@@ -1,3 +1,69 @@
-
-
 $color-blog: #ffff;
+
+/* NAVBAR VARIABLES */
+$bg-color-navbar: rgb(255, 255, 255);
+$border-color-navbar: rgb(255, 129, 129);
+$font-color-navbar: rgb(0, 0, 0);
+$font-color-navbar-hover: rgb(0, 89, 255);
+
+/* NAVBAR CATEGORIAS VARIABLES */
+$bg-color-navbar-categorias: rgb(255, 255, 255);
+$font-color-navbar-categorias: rgb(0, 0, 0);
+$font-color-navbar-categorias-hover: rgb(0, 89, 255);
+
+/* FOOTER VARIABLES */
+$bg-color-footer: rgb(248, 248, 248);
+$font-color-footer: rgb(0, 0, 0);
+
+/* BACKGROUND LAYOUT */
+$bg-layout: rgb(255, 255, 255);
+
+/* FONT FAMILY STYLES */
+h1, h2, h3, h4, h5, h6, p, a, li{
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* LAYOUT */
+.bg-layout{
+    background-color: $bg-layout;
+}
+
+/* NAVBAR STYLES */
+.navbar-menu-general{
+    background-color: $bg-color-navbar;
+  }
+.nav-font-color{
+    color: $font-color-navbar;
+} 
+.nav-border-color{
+    border-color: $border-color-navbar;
+}
+.nav-font-color:hover{
+    color: $font-color-navbar-hover!important;
+}
+
+/* NAVBAR CATEGORIAS STYLES */
+.container-subcategorias-nav{
+    background-color: $bg-color-navbar-categorias;
+}
+.nav-font-color-categorias{
+    color: $font-color-navbar-categorias;
+} 
+.nav-font-color-categorias:hover{
+    color: $font-color-navbar-categorias-hover!important;
+}
+
+/*  FOOTER STYLES */
+.bg-footer{
+    background-color: $bg-color-footer;
+}
+.footer-font-color {
+    color: $font-color-footer;
+}
+.footer-font-color:hover {
+    color: $font-color-footer;
+}
+.footer-border {
+    border-color: $font-color-footer;
+}
+

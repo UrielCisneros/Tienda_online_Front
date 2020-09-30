@@ -57,6 +57,13 @@
 .contenedor-card-tamaño{
     min-width: 250px;
 }
+.contenedor-img-tarjetas{
+    height: 50px;
+}
+.img-tarjetas{
+    max-width: 100%;
+    max-height: 100%;
+}
 @media(max-width: 768px){
     .descripcion-sm{
         display: block;

@@ -1,10 +1,6 @@
 import clienteAxios from '../../../../config/axios';
 import { notification } from 'antd';
 
-function onlyUnique(value, index, self) {
-	return self.indexOf(value) === index;
-}
-
 export async function AgregarPedidoCarrito(idcliente, token) {
 	/* idcliente, idproducto, categoria, cantidad, talla, precio, total, token */
 	const res = await clienteAxios
@@ -15,32 +11,11 @@ export async function AgregarPedidoCarrito(idcliente, token) {
 		})
 	
 	const nuevo = res.data.articulos.map((res) => {
-		if (res.idarticulo.tipoCategoria !== 'otros') {
-			if (res.idarticulo.tallas.length !== 0) {
-				const cantidad = res.idarticulo.tallas.map((res) => res.cantidad);
-				const unique = cantidad.filter(onlyUnique);
-				if (unique.length > 1) {
-					return res;
-				} else {
-					return [];
-				}
-			} else if (res.idarticulo.numeros.length !== 0) {
-				const cantidad = res.idarticulo.numeros.map((res) => res.cantidad);
-				const unique = cantidad.filter(onlyUnique);
-				if (unique.length > 1) {
-					return res;
-				} else {
-					return [];
-				}
-			}
-		} else {
-			if (res.idarticulo.cantidad !== 0) {
-				return res;
-			} else {
-				return [];
-			}
-		}
-		return [];
+		if(res.idarticulo.activo === false){
+            return [];
+        }else{
+            return res;
+        }
 	});
 
 	var carrito = nuevo.filter((arr) => arr.length !== 0);

@@ -121,47 +121,15 @@ const Sugerencia = (props) => {
 	}
 	function obtenerDisponibilidad() {
 		///disponibilidad Productos
-		if (producto && producto.tipoCategoria === 'ropa') {
-			const cantidad = producto.tallas.map((res) => res.cantidad);
-			const unique = cantidad.filter(onlyUnique);
-			if (unique.length === 1) {
-				setDisponibilidad('Producto no disponible');
-				setDisabled(true);
-			}
-		} else if (producto && producto.tipoCategoria === 'calzado') {
-			const cantidad = producto.numeros.map((res) => res.cantidad);
-			const unique = cantidad.filter(onlyUnique);
-			if (unique.length === 1) {
-				setDisponibilidad('Producto no disponible');
-				setDisabled(true);
-			}
-		} else if (producto && producto.tipoCategoria === 'otros') {
-			if (producto.cantidad <= 0) {
-				setDisponibilidad('Producto no disponible');
-				setDisabled(true);
-			}
+		if (producto && producto.activo === false) {
+			setDisponibilidad('Producto no disponible');
+			setDisabled(true);
 		}
 
 		//// Disponibilidad Sugerencias
-		if (sugerencia && sugerencia.tipoCategoria === 'ropa') {
-			const cantidad = sugerencia.tallas.map((res) => res.cantidad);
-			const unique = cantidad.filter(onlyUnique);
-			if (unique.length === 1) {
-				setDisponibilidadSugerencia('Producto no disponible');
-				setDisabled(true);
-			}
-		} else if (sugerencia && sugerencia.tipoCategoria === 'calzado') {
-			const cantidad = sugerencia.numeros.map((res) => res.cantidad);
-			const unique = cantidad.filter(onlyUnique);
-			if (unique.length === 1) {
-				setDisponibilidadSugerencia('Producto no disponible');
-				setDisabled(true);
-			}
-		} else if (sugerencia && sugerencia.tipoCategoria === 'otros') {
-			if (sugerencia.cantidad <= 0) {
-				setDisponibilidadSugerencia('Producto no disponible');
-				setDisabled(true);
-			}
+		if (sugerencia && sugerencia.activo === false) {
+			setDisponibilidadSugerencia('Producto no disponible');
+			setDisabled(true);
 		}
 	}
 

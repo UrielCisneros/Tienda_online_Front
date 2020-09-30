@@ -71,11 +71,6 @@ function MostrarDatosProductos(props) {
 				const result = nuevo.filter((arr) => arr.length !== 0);
 				setNuevoCarrito(result);
 			}
-			var suma = 0;
-			nuevoCarrito.forEach((res) => {
-				suma += res.subtotal;
-				setTotal(suma);
-			});
 		},
 		[ carrito ]
 	);
@@ -84,7 +79,13 @@ function MostrarDatosProductos(props) {
 		() => {
 			var suma = 0;
 			nuevoCarrito.forEach((res) => {
-				suma += res.subtotal;
+				var total;
+				if(res.promocion){
+					total = res.promocion.precioPromocion;
+				}else{
+					total = res.idarticulo.precio;
+				}
+				suma += total;
 				setTotal(suma);
 			});
 		},

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { notification, Modal, Select } from 'antd';
+import { notification, Modal, Select, Divider } from 'antd';
 import { formatoMexico } from '../../../config/reuserFunction';
 import { AgregarApartado } from './services/consultas_individuales';
+import DatosCliente from '../Vista_Producto/subs/datos_cliente';
 
 const { Option } = Select;
 
@@ -38,6 +39,7 @@ export default function ModalApartado(props) {
 			onCancel={handleCancel}
 			cancelText="Cancelar"
 			okText="Apartar"
+			width={700}
 		>
 			<div className="row">
 				<div className="col-12 col-lg-6">
@@ -104,6 +106,8 @@ export default function ModalApartado(props) {
 					</div>
 				</div>
 			</div>
+			<Divider>Tus datos</Divider>
+				<DatosCliente token={token} clienteID={cliente._id} tipoEnvio={tipoEnvio} /> : <div />
 		</Modal>
 	);
 }

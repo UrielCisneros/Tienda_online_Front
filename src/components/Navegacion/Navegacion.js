@@ -123,40 +123,40 @@ const Navegacion = (props) => {
 								defaultSelectedKeys={[ window.location.pathname ]}
 								inlineIndent={0}
 							>
-								<Menu.Item key="/">
+								<Menu.Item className="nav-font-color nav-border-color" key="/">
 									Home<Link to="/" />
 								</Menu.Item>
-								<Menu.Item key="/productos">
+								<Menu.Item className="nav-font-color nav-border-color" key="/productos">
 									Productos<Link to="/productos" />
 								</Menu.Item>
 								{
 									ofertas.length ?
-									<Menu.Item key="/ofertas">
+									<Menu.Item className="nav-font-color nav-border-color" key="/ofertas">
 										Ofertas<Link to="/ofertas" />
 									</Menu.Item>:
 									<Menu.Item className="d-none" />
 								}
-								<Menu.Item key="/blog">
+								<Menu.Item className="nav-font-color nav-border-color" key="/blog">
 									Blog<Link to="/blog" />
 								</Menu.Item>
 								{!tienda ? (
 									<></>
 								) : (
-									<Menu.Item key="/quienes_somos">
+									<Menu.Item className="nav-font-color nav-border-color" key="/quienes_somos">
 										Quiénes somos<Link to="/quienes_somos" />
 									</Menu.Item>
 								)}
 								{!decoded ? (
 									<Menu.Item className="d-none" />
 								) : (
-									<Menu.Item key="/pedidos">
+									<Menu.Item className="nav-font-color nav-border-color" key="/pedidos">
 										Pedidos<Link to="/pedidos" />
 									</Menu.Item>
 								)}
 								{!decoded ? (
 									<Menu.Item className="d-none" />
 								) : (
-									<Menu.Item key="/shopping_cart">
+									<Menu.Item className="nav-font-color nav-border-color" key="/shopping_cart">
 										<Badge count={carrito}>
 											<ShoppingCartOutlined style={{ fontSize: 25 }} />
 											<Link to="/shopping_cart" />
@@ -165,6 +165,7 @@ const Navegacion = (props) => {
 								)}
 								{token && decoded['rol'] === false ? (
 									<SubMenu
+										className="nav-font-color nav-border-color"
 										icon={
 											!decoded.imagen && !decoded.imagenFireBase ? (
 											<Avatar size="large" style={{ backgroundColor: '#87d068' }}>
@@ -177,7 +178,7 @@ const Navegacion = (props) => {
 											 )
 										}
 									>
-										<Menu.Item>
+										<Menu.Item className="nav-font-color nav-border-color">
 											<SettingOutlined />Mi cuenta<Link to="/perfiles" />
 										</Menu.Item>
 										<Menu.Item>
@@ -195,6 +196,7 @@ const Navegacion = (props) => {
 									</SubMenu>
 								) : decoded && decoded['rol'] === true ? (
 									<SubMenu
+										className="nav-font-color nav-border-color"
 										icon={
 											!decoded.imagen ? (
 												<Avatar size="large" style={{ backgroundColor: '#87d068' }}>
@@ -207,10 +209,10 @@ const Navegacion = (props) => {
 											)
 										}
 									>
-										<Menu.Item>
+										<Menu.Item className="nav-font-color nav-border-color">
 											<SettingOutlined />Panel de administrador<Link to="/admin" />
 										</Menu.Item>
-										<Menu.Item>
+										<Menu.Item className="nav-font-color nav-border-color">
 											<p
 												className="text-danger"
 												onClick={() => {
@@ -228,7 +230,7 @@ const Navegacion = (props) => {
 								)}
 
 								{token === '' || token === null ? (
-									<Menu.Item>
+									<Menu.Item className="nav-font-color nav-border-color">
 										Entrar<Link to="/entrar" />
 									</Menu.Item>
 								) : (
