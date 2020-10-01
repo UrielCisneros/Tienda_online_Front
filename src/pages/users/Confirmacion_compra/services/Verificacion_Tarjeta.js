@@ -119,6 +119,7 @@ const CheckoutForm  = (props) => {
             },
           },
         });
+        
        
         if (payload.error) {
             notification.error({
