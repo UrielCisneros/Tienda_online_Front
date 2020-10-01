@@ -12,8 +12,8 @@ import './vistas.scss';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import DOMPurify from 'dompurify';
 import { withRouter } from 'react-router-dom';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { faTruck} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTruck } from '@fortawesome/free-solid-svg-icons';
 
 function VistaProductos(props) {
 	const [ productos, setProductos ] = useState([]);
@@ -115,7 +115,10 @@ function VistaProductos(props) {
 						)}
 						{costoEnvio ? (
 							<div>
-								<p style={{ fontSize: 20 }}><FontAwesomeIcon icon={faTruck} style={{fontSize: 20, marginRight: 10}} />Envío: <strong>${costoEnvio.costoEnvio}</strong></p>
+								<p style={{ fontSize: 20 }}>
+									<FontAwesomeIcon icon={faTruck} style={{ fontSize: 20, marginRight: 10 }} />Envío:{' '}
+									<strong>${costoEnvio.costoEnvio}</strong>
+								</p>
 								{costoEnvio.promocionEnvio ? (
 									<Alert
 										message={`Si supera $${costoEnvio.promocionEnvio} en su compra, se le descontraran $${costoEnvio.descuento} en su compra`}
@@ -129,6 +132,17 @@ function VistaProductos(props) {
 						) : (
 							<div className="d-none" />
 						)}
+						<Divider />
+						<div className="row justify-content-center">
+							<div className="col-4">
+								<p style={{fontSize: 20, marginBottom: 10}}>Género:</p>
+								<Tag color="blue" style={{fontSize: 16}}>{productos.genero}</Tag>
+							</div>
+							<div className="col-6">
+								<p style={{fontSize: 20, marginBottom: 5}}>Color: {productos.color}</p>
+								<div className="rounded-circle ml-2" style={{ height: 30, width: 30, backgroundColor: productos.colorHex}}/>
+							</div>
+						</div>
 						<Divider />
 						<TallasCantidades producto={productos} /> {/* Componente tallas */}
 						<Divider />
