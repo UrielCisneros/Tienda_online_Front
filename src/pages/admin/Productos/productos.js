@@ -157,7 +157,7 @@ function RegistrarProductos(props) {
 			setLoading(true);
 			await clienteAxios
 				.get(
-					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`
+					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}`
 				)
 				.then((res) => {
 					setProductosRender(res.data.posts);
