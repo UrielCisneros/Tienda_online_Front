@@ -302,12 +302,12 @@ console.log(productos.color)
 		<Tabs defaultActiveKey="1">
 			<TabPane tab="Actualizar datos del producto" key="1">
 				<Spin size="large" spinning={loading}>
-					{productos.categoria === 'ropa' ? (
+					{productos.categoria === 'Ropa' ? (
 						<div className="d-flex justify-content-center">{<ActualizarTalla />}</div>
 					) : (
 						<div />
 					)}
-					{productos.categoria === 'calzado' ? <div>{<ActualizarNumero />}</div> : <div />}
+					{productos.categoria === 'Calzado' ? <div>{<ActualizarNumero />}</div> : <div />}
 					<Form {...layout} name="nest-messages" onFinish={subirDatos} form={form}>
 						<Form.Item name="codigo" label="Código de barras" onChange={obtenerValores}>
 							<Input name="codigo" placeholder="Campo opcional" />
