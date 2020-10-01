@@ -11,6 +11,10 @@ const { Option } = Select;
 const { Meta } = Card;
 const { confirm } = Modal;
 
+function onlyUnique(value, index, self) {
+	return self.indexOf(value) === index;
+}
+
 const Sugerencia = (props) => {
 	const [ loading, setLoading ] = useState(false);
 	const [ total, setTotal ] = useState(0);
@@ -117,47 +121,15 @@ const Sugerencia = (props) => {
 	}
 	function obtenerDisponibilidad() {
 		///disponibilidad Productos
-		if (producto && producto.tipoCategoria === 'ropa') {
-			producto.tallas.forEach((tallas, index) => {
-				if (tallas.cantidad === 0 && tallas.cantidad === index) {
-					setDisponibilidad('Producto no disponible');
-					setDisabled(true);
-				}
-			});
-		} else if (producto && producto.tipoCategoria === 'calzado') {
-			producto.numeros.forEach((numeros, index) => {
-				if (numeros.cantidad === 0 && numeros.cantidad === index) {
-					setDisponibilidad('Producto no disponible');
-					setDisabled(true);
-				}
-			});
-		} else if (producto && producto.tipoCategoria === 'otros') {
-			if (producto.cantidad === 0) {
-				setDisponibilidad('Producto no disponible');
-				setDisabled(true);
-			}
+		if (producto && producto.activo === false) {
+			setDisponibilidad('Producto no disponible');
+			setDisabled(true);
 		}
 
 		//// Disponibilidad Sugerencias
-		if (sugerencia && sugerencia.tipoCategoria === 'ropa') {
-			sugerencia.tallas.forEach((tallas, index) => {
-				if (tallas.cantidad === 0 && tallas.cantidad === index) {
-					setDisponibilidadSugerencia('Producto no disponible');
-					setDisabled(true);
-				}
-			});
-		} else if (sugerencia && sugerencia.tipoCategoria === 'calzado') {
-			sugerencia.numeros.forEach((numeros, index) => {
-				if (numeros.cantidad === 0 && numeros.cantidad === index) {
-					setDisponibilidadSugerencia('Producto no disponible');
-					setDisabled(true);
-				}
-			});
-		} else if (sugerencia && sugerencia.tipoCategoria === 'otros') {
-			if (sugerencia.cantidad === 0) {
-				setDisponibilidadSugerencia('Producto no disponible');
-				setDisabled(true);
-			}
+		if (sugerencia && sugerencia.activo === false) {
+			setDisponibilidadSugerencia('Producto no disponible');
+			setDisabled(true);
 		}
 	}
 
@@ -166,7 +138,6 @@ const Sugerencia = (props) => {
 		await clienteAxios
 			.get(`/sugerencia/${idproducto}`)
 			.then((res) => {
-				console.log(res)
 				setProducto(res.data.producto);
 				if (res.data.sugerencias) {
 					res.data.sugerencias.forEach((element) => setSugerencia(element.producto));
@@ -182,7 +153,6 @@ const Sugerencia = (props) => {
 				setLoading(false);
 			})
 			.catch((res) => {
-				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
 					notification.error({

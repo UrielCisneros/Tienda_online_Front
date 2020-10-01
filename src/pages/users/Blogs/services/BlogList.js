@@ -24,7 +24,6 @@ export default function BlogList(props) {
         setLoading(true);
         clienteAxios.get(`/blog?limit=${limit}&page=${page}`)
         .then((res) => {
-            console.log(res)
                 setBlogs(res.data.posts);
                 setLoading(false);
         })
@@ -47,8 +46,8 @@ export default function BlogList(props) {
     return (
         <Spin size="large" spinning={loading} >
             <div  id="blog" className="container">
-                <h1 className="text-center">Bienvenidos a nuestro Blog!</h1>
-                <div className="container-fluid">
+                <h1 className="text-center p-3">Nuestro Blog!</h1>
+                <div className="container-fluid bg-white shadow-lg">
                     <div id="cards">
                         <BlogsList2 
                             blogs={blogs} 
@@ -91,9 +90,9 @@ function Blog(props){
     const {blog} = props;
 
     return(
-        <Link to={`/blog/${blog.url}`} className="blogList">
+        <Link to={`/blog/${blog.url}`} className="blogList ">
             <List.Item 
-                className="blogList__lista m-3"
+                className="blogList__lista m-3 shadow-sm"
                 key={blog.nombre}
                 extra={
                 <img
@@ -112,7 +111,6 @@ function Blog(props){
                             />
                             <p>Leer mas</p>
                         </div>
-
                     }
             </List.Item>
         </Link>

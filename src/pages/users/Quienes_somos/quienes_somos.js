@@ -33,7 +33,7 @@ export default function QuienesSomos() {
 
     return (
         <Spin size="large" spinning={loading}>
-            <div className="container">
+            <div className="container shadow mb-5">
                 <div style={{lineHeight: "35px",color:"black"}} dangerouslySetInnerHTML={{__html: imagenCorp}} className='mt-5 px-4' />
             </div>
         </Spin>

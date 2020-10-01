@@ -64,6 +64,7 @@ function Galeria(props) {
 					})
 					.catch((res) => {
 						console.log(res)
+						setLoading(false);
 					});
 			}
 			obtenerImagen();

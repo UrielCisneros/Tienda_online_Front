@@ -8,6 +8,7 @@ import jwt_decode from 'jwt-decode';
 import Sugerencia from './services/sugerencia';
 import Pagination from '../../../components/Pagination/pagination';
 import queryString from 'query-string';
+import './sugerencias.scss';
 
 const { Search } = Input;
 
@@ -54,7 +55,9 @@ function Sugerencias(props) {
 			setVisibleReload('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`)
+				.get(
+					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`
+				)
 				.then((res) => {
 					setProductosPaginacion(res.data.posts);
 					setProductos(res.data.posts);
@@ -160,30 +163,31 @@ function Sugerencias(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<p style={{ fontSize: 20 }}>
+			<p className="text-center" style={{ fontSize: 20 }}>
+				PRODUCTOS SUGERIDOS
+			</p>
+			<p className="text-center" style={{ fontSize: 15 }}>
 				En este apartado puedes agregar sugerencias de compra de otro producto a un producto
 			</p>
 			<Row justify="center mt-5">
-				<div>
-					<Search
-						placeholder="Busca un producto"
-						onSearch={(value) => obtenerProductosFiltrados(value)}
-						style={{ width: 350, height: 40, marginBottom: 10 }}
-						enterButton="Buscar"
-						size="large"
-					/>
-				</div>
-				<div>
-					<Button
-						type="primary"
-						size="large"
-						className={visibleReload}
-						onClick={() => obtenerProductos(20, page)}
-						icon={<RollbackOutlined style={{ fontSize: 24 }} />}
-					>
-						Volver
-					</Button>
-				</div>
+				<Search
+					placeholder="Busca un producto"
+					onSearch={(value) => obtenerProductosFiltrados(value)}
+					style={{ height: 40, marginBottom: 10 }}
+					className="search-width"
+					enterButton="Buscar"
+					size="large"
+				/>
+
+				<Button
+					type="primary"
+					size="large"
+					className={visibleReload}
+					onClick={() => obtenerProductos(20, page)}
+					icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+				>
+					Volver
+				</Button>
 			</Row>
 			{productos.length === 0 ? (
 				<div className="w-100 d-flex justify-content-center align-items-center">

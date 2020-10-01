@@ -156,7 +156,9 @@ function RegistrarProductos(props) {
 			setVisibleButton('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`)
+				.get(
+					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`
+				)
 				.then((res) => {
 					setProductosRender(res.data.posts);
 					setProductos(res.data.posts);
@@ -220,7 +222,6 @@ function RegistrarProductos(props) {
 		[ page, reload, reloadData ]
 	);
 
-
 	const render = productosRender.map((productos) => (
 		<Col span={32} key={productos._id}>
 			<Card.Grid hoverable style={gridStyle}>
@@ -245,7 +246,7 @@ function RegistrarProductos(props) {
 							}}
 							className="text-decoration-none"
 						>
-							<EditOutlined style={{ fontSize: 22 }} />Actualizar
+							<EditOutlined style={{ fontSize: 22 }} />Editar
 						</Button>,
 
 						<Button
@@ -300,39 +301,34 @@ function RegistrarProductos(props) {
 				)}
 			</Drawer>
 			<Row justify="center">
-				<div>
-					<Search
-						placeholder="Busca un producto"
-						onSearch={(value) => obtenerProductosFiltrados(value)}
-						style={{ width: 350, height: 40, marginBottom: 10 }}
-						enterButton="Buscar"
-						size="large"
-					/>
-				</div>
-				<div>
-					<Button
-							type="primary"
-							size="large"
-							className={visibleButton}
-							onClick={() => {
-								obtenerProductos(20, page);
-							}}
-							icon={<RollbackOutlined style={{ fontSize: 24 }} />}
-						>
-						Volver
-					</Button>
-				</div>
-				<div>
-					<Button
-						type="primary"
-						size="large"
-						className="ml-3 d-flex justify-content-center align-items-center"
-						onClick={setRegistrar}
-						icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
-					>
-						Registrar un producto
-					</Button>
-				</div>
+				<Search
+					placeholder="Busca un producto"
+					onSearch={(value) => obtenerProductosFiltrados(value)}
+					style={{ height: 40, marginBottom: 10 }}
+					enterButton="Buscar"
+					className="search-width"
+					size="large"
+				/>
+				<Button
+					type="primary"
+					size="large"
+					className={`${visibleButton} mb-1`}
+					onClick={() => {
+						obtenerProductos(20, page);
+					}}
+					icon={<RollbackOutlined style={{ fontSize: 24 }} />}
+				>
+					Volver
+				</Button>
+				<Button
+					type="primary"
+					size="large"
+					className="ml-3 d-flex justify-content-center align-items-center"
+					onClick={setRegistrar}
+					icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
+				>
+					Registrar un producto
+				</Button>
 			</Row>
 
 			<Row gutter={8} style={{ maxWidth: '90vw' }} className="mt-4 d-flex justify-content-center">

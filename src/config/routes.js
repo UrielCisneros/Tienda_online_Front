@@ -1,5 +1,5 @@
 //layout
-import LayoutAdmin from '../components/LayoutAdmin'
+import LayoutAdmin from '../components/Layout_admin/LayoutAdmin'
 import LayoutBasic from '../components/Layout/Layout'
 
 //Admin pages
@@ -16,16 +16,16 @@ import Clientes from '../pages/admin/Clientes/clientes'
 
 //Users pages
 import Home from '../pages/users/home'
-import Entrar from '../pages/users/entrar'
+import Entrar from '../pages/users//Inicio_sesion/entrar'
 import QuienesSomos from '../pages/users/Quienes_somos/quienes_somos';
-import ShoppingCart from '../pages/users/shopping_cart'
+import ShoppingCart from '../pages/users/Carrito/shopping_cart'
 import Productos from '../pages/users/Productos/productos'
 import Blog from '../pages/users/Blogs/blog';
-import PedidosUsuario from '../pages/users/pedidos'
-import Ofertas from '../pages/users/Carusel_ofertas/ofertas'
-import Articulo from '../pages/users/articulo'
+import PedidosUsuario from '../pages/users/Pedidos/pedidos'
+import Ofertas from '../pages/users/Ofertas/ofertas'
 import ResultadoBusqueda from '../pages/users/Resultado_Busqueda/resultado_busqueda'
 import Perfiles from '../pages/users/Perfiles/perfiles'
+import Confirmacion_compra from '../pages/users/Confirmacion_compra/confirmacion_compra'
 
 
 
@@ -37,6 +37,8 @@ import VistaProducto from '../pages/users/Vista_Producto/vista_producto'
 import Error404 from '../pages/users/error404'
 import Error500 from '../pages/users/error500'
 import Search404 from '../pages/users/Resultado_Busqueda/404'
+import Success from '../pages/users/Success/success';
+import ErrorPago from '../pages/users/Success/error';
 
 const routes = [
 	{
@@ -155,11 +157,6 @@ const routes = [
 				exact: true
 			},
 			{
-				path: '/articulo',
-				component: Articulo,
-				exact: true
-			},
-			{
 				path: '/vista_producto/:url',
 				component: VistaProducto,
 				exact: true
@@ -185,8 +182,23 @@ const routes = [
 				exact: true
 			},
 			{
+				path: '/confirmacion_compra/:url',
+				component: Confirmacion_compra,
+				exact: true
+			},
+			{
 				path: '/error500/',
 				component: Error500,
+				exact: true
+			},
+			{
+				path: '/success/:id',
+				component: Success,
+				exact: true
+			},
+			{
+				path: '/error/:id/:error',
+				component: ErrorPago,
 				exact: true
 			},
 			{

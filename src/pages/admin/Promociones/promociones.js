@@ -178,7 +178,7 @@ function Promociones(props) {
 						}}
 					>
 						<EditOutlined />
-						Actualizar
+						Editar
 					</Button>
 
 					<Button
@@ -227,30 +227,30 @@ function Promociones(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			<div>
-				<p style={{ fontSize: 20 }}>
-					En este apartado puedes agregar ofertas especiales a tu producto y aparecer en la pagina principal
+				<p className="text-center" style={{ fontSize: 20 }}>
+					SISTEMA DE PROMOCIONES
+				</p>
+				<p className="text-center" style={{ fontSize: 15 }}>
+					En este apartado puedes agregar ofertas especiales a tu producto y aparecer en la página principal
 				</p>
 				<Row justify="center mt-5">
-					<div >
 						<Search
+							className="search-width"
 							placeholder="Busca un producto"
 							onChange={(e) => setSearch(e.target.value)}
-							style={{ width: 350, height: 40, marginBottom: 10 }}
+							style={{ height: 40, marginBottom: 10 }}
 							size="large"
 							enterButton="Buscar"
 						/>
-					</div>
-					<div>
 						<Button
 							type="primary"
 							size="large"
-							className="ml-3 mb-3 d-flex justify-content-center align-items-center"
+							className="ml-3 mb-3 d-flex justify-content-center align-items-center mb-3"
 							onClick={setRegistrar}
 							icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
 						>
 							Crear nueva promocion
 						</Button>
-					</div>
 				</Row>
 				<div>
 					{productos.length === 0 || productosFiltrados.length === 0 ? (
@@ -267,7 +267,7 @@ function Promociones(props) {
 				</div>
 
 				<Drawer
-					title={accion === true ? 'Actualizar promocion' : 'Registrar nueva promocion'}
+					title={accion === true ? 'Actualizar promoción' : 'Registrar nueva promoción'}
 					width={window.screen.width > 768 ? 1000 : window.screen.width}
 					placement={'right'}
 					onClose={drawnerClose}

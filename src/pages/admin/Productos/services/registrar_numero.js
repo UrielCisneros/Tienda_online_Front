@@ -153,7 +153,7 @@ function RegistrarNumero(props) {
 			{disabledForm === false ? (
 				<p className="mensaje-tallas-success">Ya puedes registrar numero de calzado.</p>
 			) : (
-				<p className="mensaje-tallas">Podrás registrar el numero de calzado despues de registrar tu producto</p>
+				<p className="mensaje-tallas">Podrás registrar el numero de calzado después de registrar tu producto</p>
 			)}
 			<p className="text-center mb-1">
 				Escribe la talla del calzado y la cantidad de productos disponibles de esa talla.

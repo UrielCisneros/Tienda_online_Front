@@ -1,8 +1,9 @@
 import React,{useState,useEffect} from 'react'
-import {Form, Col, Row, Input,Divider, Button,Alert,Upload,notification} from 'antd';
+import {Form, Input,Divider, Button,Upload,notification} from 'antd';
 import {PlusCircleOutlined,EditOutlined,UploadOutlined } from '@ant-design/icons';
 import {Editor} from '@tinymce/tinymce-react';
 import clienteAxios from '../../../../../config/axios';
+import PoliticasEnvio from './politicas_envio';
 
 
 export default function RegistroTienda(props) {
@@ -244,16 +245,16 @@ export default function RegistroTienda(props) {
                     </div>
                 </div>
                 <div className="row">
-                    <Divider>Informacion de la tienda</Divider>
-                    <div className="col-lg-6 col-sm-12">
-                        <Form.Item className="m-2" label="Nombre"  onChange={ e => setDatos({ ...datos, nombre: e.target.value }) }>
+                    <Divider>Información de la tienda</Divider>
+                    <div className="col-lg-6 col-12">
+                        <Form.Item className="m-2" label="Nombre" labelCol={{offset: 1, span: 5}} onChange={ e => setDatos({ ...datos, nombre: e.target.value }) }>
                             <Form.Item rules={[{ required: true, message: 'Nombre obligatorio' }]}  noStyle name="nombre" >
                                 <Input name="nombre" placeholder="Nombre del negocio"  />
                             </Form.Item>
                         </Form.Item>
                     </div>
-                    <div className="col-lg-6 col-sm-12">
-                        <Form.Item className="m-2" label="Telefono "  onChange={ e => setDatos({ ...datos, telefono: e.target.value }) }>
+                    <div className="col-lg-6 col-12">
+                        <Form.Item className="m-2" label="Telefono " labelCol={{offset: 1, span: 5}} onChange={ e => setDatos({ ...datos, telefono: e.target.value }) }>
                             <Form.Item rules={[{ required: true, message: 'Telefono obligatorio' }]}  noStyle name="telefono" >
                                 <Input name="telefono" placeholder="Telefono"  />
                             </Form.Item>
@@ -270,8 +271,8 @@ export default function RegistroTienda(props) {
                         </Form.Item>
                      </div>
                      <div className="col-lg-4 col-sm-12">
-                        <Form.Item className="m-2" label="Codigo Postal "  onChange={ e => setDatos({ ...datos, cp: e.target.value }) }>
-                            <Form.Item rules={[{ required: true, message: 'Codigo Postal obligatorio' }]}  noStyle name="cp" >
+                        <Form.Item className="m-2" label="Código Postal "  onChange={ e => setDatos({ ...datos, cp: e.target.value }) }>
+                            <Form.Item rules={[{ required: true, message: 'Código Postal obligatorio' }]}  noStyle name="cp" >
                                 <Input name="cp" placeholder="Codigo Postal"  />
                             </Form.Item>
                         </Form.Item>
@@ -285,16 +286,16 @@ export default function RegistroTienda(props) {
                      </div>
                 </div>
 
-                <div className="row">
-                    <div className="col-lg-6 col-sm-12">
-                        <Form.Item className="m-2" label="Ciudad"  onChange={ e => setDatos({ ...datos, ciudad: e.target.value }) }>
+                <div className="row mt-3 justify-content-center">
+                    <div className="col-lg-5 col-sm-12">
+                        <Form.Item className="m-2" label="Ciudad" labelCol={{offset: 1, span: 4}} wrapperCol={{offset: 1, span: 15}} onChange={ e => setDatos({ ...datos, ciudad: e.target.value }) }>
                             <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="ciudad" >
-                                <Input name="ciudad" placeholder="Calle y Numero"  />
+                                <Input name="ciudad" placeholder="Ciudad"  />
                             </Form.Item>
                         </Form.Item>
                     </div>
-                    <div className="col-lg-6 col-sm-12">
-                        <Form.Item className="m-2" label="Estado"  onChange={ e => setDatos({ ...datos, estado: e.target.value }) }>
+                    <div className="col-lg-5 col-sm-12">
+                        <Form.Item className="m-2" label="Estado" labelCol={{offset: 1, span: 4}} wrapperCol={{offset: 1, span: 15}} onChange={ e => setDatos({ ...datos, estado: e.target.value }) }>
                             <Form.Item rules={[{ required: true, message: 'Estado obligatorio' }]}  noStyle name="estado" >
                                 <Input name="estado" placeholder="Estado donde vives"  />
                             </Form.Item>
@@ -303,17 +304,17 @@ export default function RegistroTienda(props) {
                 </div>
                 
                 <div className="row d-flex justify-content-center align-items-center">
-                    <Divider>Ubicacion</Divider>
-                    <div className="row">
-                        <div className="col-lg-6 col-sm-12">
-                            <Form.Item className="m-2" label="Latitud "  onChange={ e => setDatos({ ...datos, lat: e.target.value }) }>
+                    <Divider>Ubicación</Divider>
+                    <div className="row justify-content-center">
+                        <div className="col-lg-4 col-12">
+                            <Form.Item className="m-2" label="Latitud " labelCol={{offset: 1, span: 4}} wrapperCol={{offset: 1, span: 12}}  onChange={ e => setDatos({ ...datos, lat: e.target.value }) }>
                                 <Form.Item rules={[{ required: true, message: 'Latitud obligatoria' }]} noStyle name="lat" >
                                     <Input name="lat" placeholder="Latitud"  />
                                 </Form.Item>
                             </Form.Item>
                         </div>
-                        <div className="col-lg-6 col-sm-12">
-                            <Form.Item className="m-2" label="Longitud"  onChange={ e => setDatos({ ...datos, lng: e.target.value }) }>
+                        <div className="col-lg-4 col-12">
+                            <Form.Item className="m-2" label="Longitud" labelCol={{offset: 1, span: 4}} wrapperCol={{offset: 1, span: 12}} onChange={ e => setDatos({ ...datos, lng: e.target.value }) }>
                                 <Form.Item rules={[{ required: true, message: 'Longitud obligatoria' }]} noStyle name="lng" >
                                     <Input name="lng" placeholder="Latitud"  />
                                 </Form.Item>
@@ -348,9 +349,9 @@ export default function RegistroTienda(props) {
                 </div>
                 
                 <div className="row">
-                <Divider>Informacion de Politicas de la empresa</Divider>
+                <Divider>Información de Políticas de la empresa</Divider>
                     <div className="col-12">
-                        <Form.Item className="m-2" >
+                        <Form.Item className="m-2" valuePropName="Editor">
                                 <Form.Item rules={[{ required: true, message: 'Politicas de privacidad obligatorias' }]}  noStyle name="politicas" >
                                     <Editor
                                         disabled={false}
@@ -399,15 +400,14 @@ export default function RegistroTienda(props) {
                             </Form.Item>
                     </div>
                 </div>
-                
 
                 <Form.Item className="d-flex justify-content-center align-items-center text-center">
                     <Button className="text-center" size="large" type="primary" htmlType="submit" icon={control === false ? (<PlusCircleOutlined style={{ fontSize: 24 }} />):(<EditOutlined style={{ fontSize: 24 }} />)}>
-                        {control === false ? "Registrar" : "Editar"}
+                        {control === false ? "Registrar informacion de la tienda" : "Editar informacion de la tienda"}
                     </Button>
                 </Form.Item>
-
             </Form>
+            <PoliticasEnvio datosNegocio={datosNegocio}/>
         </div>
     )
 }

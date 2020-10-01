@@ -5,9 +5,10 @@ import {  Button,  Layout} from 'antd';
 
 import {FacebookFilled, InstagramFilled, TwitterCircleFilled, UserOutlined, KeyOutlined } from '@ant-design/icons';
 import './footer.scss';
+import '../../scss/variables.scss'
 
  const { Footer } = Layout;
-const Style = {fontSize:15, color: "black"};
+const Style = {fontSize:15};
 
 
 
@@ -27,9 +28,7 @@ const FooterPage = () => {
     function peticionRedes(){
 		clienteAxios.get('/tienda/')
 			.then((res) => {
-                console.log(res)
                 if(res.data[0]){
-                    console.log("entro");
                     setImagenCorp(res.data[0].imagenCorp)
                     setNombreCorp(res.data[0].nombre)
                     setPoliticas(res.data[0].politicas)
@@ -64,14 +63,13 @@ const FooterPage = () => {
     return(
        
          <Layout className="layout">
-             <Footer >
-                <div end="xs" id="foot"  className="row">  
-                    <div className="col-lg-9 text-lg-left text-center ">
-                        <div className="m-4 footer-border">
-                            {console.log(imagenCorp)}
+             <Footer className="bg-footer" >
+                <div end="xs" id="foot"  className="row footer-font-color">  
+                    <div className="col-lg-9 text-lg-left text-center footer-font-color">
+                        <div className="footer-border footer-font-color">
                             {imagenCorp !== '' ? (
                                 <Link  to="/quienes_somos" >
-                                    <Button id="is" type="link" style={Style} ><UserOutlined style={{fontSize: 17}}/>
+                                    <Button className="footer-font-color" id="is" type="link" style={Style} ><UserOutlined className="footer-font-color" style={{fontSize: 17}}/>
                                         Conocenos
                                     </Button>
                                 </Link>
@@ -79,16 +77,16 @@ const FooterPage = () => {
 
                             {politicas !== '' ? (
                                 <Link  to="/politicas">
-                                    <Button id="is" type="link" style={Style} ><KeyOutlined style={{fontSize: 17}}/>
+                                    <Button className="footer-font-color" id="is" type="link" style={Style} ><KeyOutlined className="footer-font-color" style={{fontSize: 17}}/>
                                         Aviso de Privacidad
                                     </Button>
                                 </Link>
                             ): ""}
                         </div>
 
-                        <div className="mt-2 p-3">
-                            <h2 style={{fontSize: 18}} >{nombreCorp !== '' ? nombreCorp : ""}</h2>
-                            {telefono !== '' ? (<p>Telefono: {telefono} </p>): ""}
+                        <div className="mt-2 p-3 font-color-footer">
+                            <h2 className="footer-font-color" style={{fontSize: 18}} >{nombreCorp !== '' ? nombreCorp : ""}</h2>
+                            {telefono !== '' ? (<p className="footer-font-color">Telefono: {telefono} </p>): ""}
                         </div>
                     </div>
 

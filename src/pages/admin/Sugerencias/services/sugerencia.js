@@ -351,7 +351,7 @@ const Sugerencia = (props) => {
 						setProductoSugerido(productos);
 					}}
 				>
-					Seleccionar
+					Agregar
 				</Button>
 			]}
 		>
@@ -387,7 +387,7 @@ const Sugerencia = (props) => {
 				]}
 			>
 				<Spin size="large" spinning={loading}>
-					<p>Elige un producto que quieres sugerir</p>
+					<p className="text-center my-3">Elige un producto que quieres sugerir.</p>
 					<div className="row justify-content-center">
 						<Search
 							placeholder="Busca un producto"
@@ -433,21 +433,25 @@ const Sugerencia = (props) => {
 				</Spin>
 			</Modal>
 			<div>
-				<p className="text-center" style={{ fontSize: 20 }}>
-					En esta sección puedes agregar una de otro producto a tu producto
-				</p>
 				{sugerencia === 'No hay sugerencia' ? (
 					<p className="text-center" style={{ fontSize: 18 }}>
-						En este momento no tienes sugerencia para este producto
+						¡Que esperas, crea una sugerencia ahora mismo!.
 					</p>
 				) : (
-					<p />
+					<div>
+						<p className="text-center" style={{ fontSize: 20 }}>
+							Crea sugerencias de productos para tu tienda.
+						</p>
+						<p className="text-center" style={{ fontSize: 15 }}>
+							Estas sugerencias aparecerán en la vista del producto.
+						</p>
+					</div>
 				)}
 			</div>
 
 			{sugerencia === 'No hay sugerencia' ? (
 				<div className="d-flex justify-content-center align-items-center mt-3">
-					<Button onClick={showModal}>Nueva sugerencia</Button>
+					<Button onClick={showModal}>Crear sugerencia</Button>
 				</div>
 			) : (
 				<div className="d-flex justify-content-center align-items-center mt-3">
@@ -457,7 +461,7 @@ const Sugerencia = (props) => {
 								showModal('actualizar');
 							}}
 						>
-							Actualizar sugerencia
+							Editar sugerencia
 						</Button>
 						<Button onClick={showDeleteConfirm}>Quitar sugerencia</Button>
 					</Space>

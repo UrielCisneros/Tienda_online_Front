@@ -10,3 +10,12 @@
 .ant-scroll-number, .ant-badge-count, .ant-badge-multiple-words{
     z-index: 1;
 }
+.search-width{
+    width: 50%;
+}
+
+@media(max-width: 768px){
+    .search-width{
+        width: 100%;
+    }
+}

@@ -14,12 +14,12 @@ export default function LayoutBasic(props) {
 	return (
 		<div className="body">
 			<Layout >
-			<div className="cuerpo"> 
+			<div className="cuerpo bg-layout"> 
 				<Layout>
 					<MenuProvider >
 					<Navegacion />
 					<Categorias />
-					<Content style={{ height: "auto" }}>
+					<Content style={{ height: "auto" }} className="bg-layout">
 						<div className="site-layout-content flex">
 							<LoadRoutes routes={routes} />
 						</div>

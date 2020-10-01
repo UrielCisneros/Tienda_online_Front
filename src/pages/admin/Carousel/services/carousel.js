@@ -202,12 +202,12 @@ function CarouselImages(props) {
 		<Spin size="large" spinning={loading}>
 			<div className="row d-sm-block d-lg-flex">
 				<div className="col-12 col-lg-6">
-					<p>Elige un producto y despues una imagen</p>
+					<p className="text-center my-3">Elige un producto y después una imagen</p>
 					<div className="row justify-content-center mt-1">
 						<Search
 							placeholder="Busca un producto"
 							onSearch={(value) => obtenerProductosFiltrados(value)}
-							style={{ width: 250, height: 40, marginBottom: 10 }}
+							style={{ width: 350, height: 40, marginBottom: 10 }}
 							enterButton="Buscar"
 							size="large"
 						/>

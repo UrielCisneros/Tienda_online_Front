@@ -327,7 +327,7 @@ const RegistrarPromocion = (props) => {
 														</Button>
 													) : (
 														<Button className="button-disabled-promocion" disabled>
-															Ya tiene promoción
+															Promoción activa
 														</Button>
 													)
 												]}
@@ -351,7 +351,7 @@ const RegistrarPromocion = (props) => {
 				</div>
 				{content === false ? (
 					<div className="col-12 col-lg-6 d-flex justify-content-center mt-5">
-						<h5>Selecciona un producto</h5>
+						
 					</div>
 				) : (
 					<div className="col-12 col-lg-6">
@@ -412,7 +412,7 @@ const RegistrarPromocion = (props) => {
 										<Form.Item
 											name="precio"
 											validateStatus={validateStatus}
-											help="La promocion no debe ser mayor al precio del producto"
+											help="La promoción no debe ser mayor al precio del producto"
 										>
 											<Input
 												prefix="$"
@@ -433,7 +433,7 @@ const RegistrarPromocion = (props) => {
 							</div>
 							<div className="row">
 								<p className="mt-2 texto-imagen">
-									Sube una imagen para la promocion, esta imagen aparecera en el carrucel de
+									Sube una imagen para la promoción, esta imagen aparecerá en el carrucel de
 									promociones
 								</p>
 								<Upload {...propsUpload} className="d-flex justify-content-center mt-3 mr-3">

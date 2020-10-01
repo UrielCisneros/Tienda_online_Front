@@ -1,0 +1,19 @@
+
+
+.confirmacion_final{
+    width: 1200px;
+}
+
+.imagen-card{
+    text-align: right
+}
+
+@media(max-width: 768px){
+    .confirmacion_final{
+        border: 1px solid black;
+        width: 300px;
+    }
+}
+.visa{
+    color: rgba(68, 68, 253, 0.877);
+}

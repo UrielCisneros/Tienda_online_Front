@@ -2,13 +2,14 @@
     color: white;
     text-align: center;
     background-color: rgb(48, 48, 48);
-    padding: 40px;
-    font-size: 40px;
+    padding: 15px;
+    font-size: 25px;
     letter-spacing: 20px;
     font-weight: bold;
+    width: 100%;
 }
 .titulo-elipsis{
-    height: 30px;
+    height: 28px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
