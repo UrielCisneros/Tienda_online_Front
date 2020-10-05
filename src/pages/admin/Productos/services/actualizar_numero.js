@@ -212,44 +212,54 @@ function ActualizarNumero() {
 			<div className="ml-4">
 				<div className="d-flex justify-content-center">
 					<Form form={form} ref={formRef.current} onFinish={actualizarNumero}>
-						<Input.Group>
-							<Row gutter={8}>
-								<Col span={5}>
-									<Form.Item name="numero" label="numero" onChange={datosForm}>
-										<Input name="numero" />
-									</Form.Item>
-								</Col>
-								<Col span={8}>
-									<Form.Item name="cantidad" label="Cantidad" onChange={datosForm}>
-										<Input name="cantidad" />
-									</Form.Item>
-								</Col>
-								<Col>
-									{idNumero ? (
-										<div>
-											<Space>
-												<Button type="dafault" htmlType="submit">
-													Actualizar
-												</Button>
-												<Button
-													type="dafault"
-													onClick={() => {
-														setIdNumero('');
-														form.resetFields();
-													}}
-												>
-													Cancelar
-												</Button>
-											</Space>
-										</div>
-									) : (
-										<Button type="dafault" onClick={nuevoNumero}>
-											Agregar
-										</Button>
-									)}
-								</Col>
-							</Row>
-						</Input.Group>
+						<Row gutter={8}>
+							<Col span={5}>
+								<Form.Item
+									name="numero"
+									label="numero"
+									onChange={datosForm}
+									labelCol={{ offset: 1, span: 6 }}
+									wrapperCol={{ offset: 1, span: 16 }}
+								>
+									<Input name="numero" />
+								</Form.Item>
+							</Col>
+							<Col span={8}>
+								<Form.Item
+									name="cantidad"
+									label="Cantidad"
+									onChange={datosForm}
+									labelCol={{ offset: 1, span: 6 }}
+									wrapperCol={{ offset: 1, span: 12 }}
+								>
+									<Input name="cantidad" />
+								</Form.Item>
+							</Col>
+							<Col>
+								{idNumero ? (
+									<div>
+										<Space>
+											<Button type="dafault" htmlType="submit">
+												Actualizar
+											</Button>
+											<Button
+												type="dafault"
+												onClick={() => {
+													setIdNumero('');
+													form.resetFields();
+												}}
+											>
+												Cancelar
+											</Button>
+										</Space>
+									</div>
+								) : (
+									<Button type="dafault" onClick={nuevoNumero}>
+										Agregar
+									</Button>
+								)}
+							</Col>
+						</Row>
 					</Form>
 				</div>
 				<h6 className="mensaje">Para eliminar manten presionado</h6>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Select, Steps, notification, Upload, Spin, Divider } from 'antd';
+import { Form, Button, Input, Select, Steps, notification, Upload, Spin, Divider, Alert } from 'antd';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import './registrar_producto.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
@@ -171,7 +171,7 @@ function RegistrarProducto(props) {
 	const onSelect = (value) => {
 		setSelect(value);
 		setValueSelect(value);
-		if (value === 'calzado' || value === 'ropa') {
+		if (value === 'Calzado' || value === 'Ropa') {
 			setTipoCategoria(value);
 		} else {
 			setTipoCategoria('otros');
@@ -483,7 +483,7 @@ function RegistrarProducto(props) {
 											noStyle
 											name="cantidad"
 										>
-											<Input type="number" name="cantidad" disabled={disabledformProductos} />
+											<Input min="1" type="number" name="cantidad" disabled={disabledformProductos} />
 										</Form.Item>
 									</Form.Item>
 								) : (
@@ -495,7 +495,7 @@ function RegistrarProducto(props) {
 										noStyle
 										name="precio"
 									>
-										<Input type="number" disabled={disabledformProductos} name="precio" />
+										<Input min="1" type="number" disabled={disabledformProductos} name="precio" />
 									</Form.Item>
 								</Form.Item>
 								<Form.Item label="Color del producto" onChange={datosForm}>
@@ -549,6 +549,9 @@ function RegistrarProducto(props) {
 										/>
 									</Form.Item>
 								</Form.Item>
+								<div className="d-flex justify-content-center m-2">
+									<Alert message="Tamaño recomendado para la imagen es: 850x550px" type="info" showIcon />
+								</div>
 								<Form.Item label="Imagen principal">
 									<Form.Item
 										rules={[ { required: true, message: 'Este campo es requerido' } ]}
@@ -599,6 +602,9 @@ function RegistrarProducto(props) {
 					<div className="text-center" style={{ width: '90%' }}>
 						<h2>Agrega más imágenes para tu producto</h2>
 						<p>Puedes agregar más imágenes de tu producto para que tus clientes puedan verlas.</p>
+						<div className="d-flex justify-content-center m-2">
+							<Alert className="info-recomended-sizes" message="Tamaño recomendado para la imagen es: 850x550px" type="info" showIcon />
+						</div>
 						<ProductoContext.Provider value={productoID}>
 							<RegistrarGaleria />
 						</ProductoContext.Provider>

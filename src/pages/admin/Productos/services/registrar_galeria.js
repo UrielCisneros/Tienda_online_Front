@@ -169,7 +169,7 @@ function RegistrarGaleria() {
 	return (
 		<Spin size="large" spinning={loading}>
 			<div className="responsive">
-				<div className="col-sm-4 col-lg-6 imgUploads">
+				<div className="col-sm-12 col-lg-6 imgUploads">
 					<Upload {...props}>
 						<Button>
 							<UploadOutlined /> Upload
@@ -177,7 +177,7 @@ function RegistrarGaleria() {
 					</Upload>
 					<div className="padre">{render}</div>
 				</div>
-				<div className="col-sm-4 col-lg-6">
+				<div className="col-sm-12 col-lg-6">
 					<p className="text-center">Visualización de la imagen</p>
 					<div className="shadow rounded imgPreview-registrar-galeria d-flex justify-content-center align-items-center">
 						{prev === '' || galeria.length === 0 ? (

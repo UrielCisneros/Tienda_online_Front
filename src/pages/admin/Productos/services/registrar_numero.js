@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Form, Button, Input, Row, Col, Badge, notification, Spin } from 'antd';
+import { Form, Button, Input, Row, Col, Badge, notification, Spin, Alert } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import './registrar_talla.scss';
 import { ProductoContext } from '../../contexts/ProductoContext';
@@ -151,34 +151,50 @@ function RegistrarNumero(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			{disabledForm === false ? (
-				<p className="mensaje-tallas-success">Ya puedes registrar numero de calzado.</p>
+				<div className="d-flex justify-content-center m-2">
+					<Alert style={{ width: '60%'}} message="Ya puedes registrar numero de calzado" type="info" showIcon />
+				</div>
 			) : (
-				<p className="mensaje-tallas">Podrás registrar el numero de calzado después de registrar tu producto</p>
+				<div className="d-flex justify-content-center m-2">
+					<Alert style={{ width: '60%'}} message="Podrás registrar el numero de calzado después de registrar tu producto" type="info" showIcon />
+				</div>
 			)}
 			<p className="text-center mb-1">
 				Escribe la talla del calzado y la cantidad de productos disponibles de esa talla.
 			</p>
 			<div className="d-flex justify-content-center">
 				<Form onFinish={subirNumero} form={form}>
-					<Input.Group>
-						<Row gutter={8}>
-							<Col span={5}>
-								<Form.Item name="numero" label="Numero" onChange={datosForm}>
-									<Input name="numero" disabled={disabledForm} />
-								</Form.Item>
-							</Col>
-							<Col span={8}>
-								<Form.Item name="cantidad" label="Cantidad" onChange={datosForm}>
-									<Input name="cantidad" disabled={disabledForm} />
-								</Form.Item>
-							</Col>
-							<Col>
+					<Row gutter={8}>
+						<Col span={5}>
+							<Form.Item
+								name="numero"
+								label="Numero"
+								onChange={datosForm}
+								labelCol={{ offset: 1, span: 6 }}
+								wrapperCol={{ offset: 1, span: 16 }}
+							>
+								<Input name="numero" disabled={disabledForm} />
+							</Form.Item>
+						</Col>
+						<Col span={8}>
+							<Form.Item
+								name="cantidad"
+								label="Cantidad"
+								onChange={datosForm}
+								labelCol={{ offset: 1, span: 8 }}
+								wrapperCol={{ offset: 1, span: 12 }}
+							>
+								<Input name="cantidad" disabled={disabledForm} />
+							</Form.Item>
+						</Col>
+						<Col>
+							<Form.Item labelCol={{ offset: 1, span: 4 }} wrapperCol={{ offset: 1, span: 12 }}>
 								<Button type="dafault" htmlType="submit" disabled={disabledForm} loading={loading}>
 									Agregar
 								</Button>
-							</Col>
-						</Row>
-					</Input.Group>
+							</Form.Item>
+						</Col>
+					</Row>
 				</Form>
 			</div>
 			<h6 className="mensaje">Para eliminar manten presionado</h6>

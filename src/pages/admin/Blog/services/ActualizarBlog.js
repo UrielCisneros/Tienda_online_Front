@@ -1,6 +1,6 @@
 import React,{ useContext,useState,useEffect } from 'react'
 import { BlogContext } from '../../contexts/BlogContext';
-import {Form,Input,Button,notification,Upload} from 'antd'
+import {Form,Input,Button,notification,Upload, Alert} from 'antd'
 import { Editor } from '@tinymce/tinymce-react';
 import { UploadOutlined } from '@ant-design/icons';
 import clienteAxios from '../../../../config/axios';
@@ -199,6 +199,9 @@ export default function ActualizarBlog(props) {
                         onEditorChange={capturarInfoEditor}
                     />
                 </Form.Item>
+                <div className="d-flex justify-content-center m-2">
+					<Alert message="No hay un tamaño recomendado para esta imagen" type="info" showIcon />
+				</div>
                 <Form.Item label="Imagen principal del Blog:">
                     <Upload {...propss} name="imagen">
                         <Button disabled={upload}>

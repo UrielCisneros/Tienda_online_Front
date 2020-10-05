@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../config/axios';
-import { Button, Input, Space, Modal, List, Row, Col, Upload, Result, notification, Spin } from 'antd';
+import { Button, Input, Space, Modal, List, Row, Col, Upload, Result, notification, Spin, Alert } from 'antd';
 import {
 	EyeOutlined,
 	EditOutlined,
@@ -279,6 +279,9 @@ function Carousel(props) {
 				En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso de que
 				no existan promociones, si no existen promociones apareceran esta imagen
 			</p>
+			<div className="d-flex justify-content-center m-2">
+				<Alert message="Tamaño recomendado para la imagen es: 1650x565px" type="info" showIcon />
+			</div>
 			<Row justify="center mt-5">
 				<Search
 					placeholder="Busca un producto"

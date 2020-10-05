@@ -10,7 +10,7 @@ import { IdProductoContext } from '../contexts/ProductoContext';
 import {
 	ExclamationCircleOutlined,
 	EditOutlined,
-	DeleteOutlined,
+/* 	DeleteOutlined, */
 	PlusCircleOutlined,
 	RollbackOutlined
 } from '@ant-design/icons';
@@ -100,7 +100,7 @@ function RegistrarProductos(props) {
 		}
 	};
 
-	function showDeleteConfirm(idproducto) {
+	/* function showDeleteConfirm(idproducto) {
 		confirm({
 			title: 'Estas seguro de eliminar este articulo?',
 			icon: <ExclamationCircleOutlined />,
@@ -118,7 +118,7 @@ function RegistrarProductos(props) {
 					})
 					.then((res) => {
 						setLoading(false);
-						obtenerProductos(20, page);
+						obtenerProductos(10, page);
 						notification.success({
 							message: res.data.message,
 							duration: 2
@@ -143,15 +143,12 @@ function RegistrarProductos(props) {
 					});
 			}
 		});
-	}
+	} */
 
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisibleButton('d-none');
-			notification.info({
-				message: 'Escribe algo en el buscador',
-				duration: 4
-			});
+			obtenerProductos(10, page)
 		} else {
 			setVisibleButton('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
@@ -216,14 +213,14 @@ function RegistrarProductos(props) {
 
 	useEffect(
 		() => {
-			obtenerProductos(20, page);
+			obtenerProductos(10, page);
 			setReload(false);
 		},
 		[ page, reload, reloadData ]
 	);
 
 	const render = productosRender.map((productos) => (
-		<Col span={32} key={productos._id}>
+		<Col span={window.screen.width < 768 ? 32 : 6} key={productos._id}>
 			<Card.Grid hoverable style={gridStyle}>
 				<Card
 					style={{ width: 300, maxHeight: 400 }}
@@ -247,7 +244,7 @@ function RegistrarProductos(props) {
 							className="text-decoration-none"
 						>
 							<EditOutlined style={{ fontSize: 22 }} />Editar
-						</Button>,
+						</Button>/* ,
 
 						<Button
 							type="link"
@@ -255,7 +252,7 @@ function RegistrarProductos(props) {
 							className="text-decoration-none"
 						>
 							<DeleteOutlined style={{ fontSize: 22 }} />Eliminar
-						</Button>
+						</Button> */
 					]}
 				>
 					<div className="contenedor-titulos-productos">
@@ -314,7 +311,7 @@ function RegistrarProductos(props) {
 					size="large"
 					className={`${visibleButton} mb-1`}
 					onClick={() => {
-						obtenerProductos(20, page);
+						obtenerProductos(10, page);
 					}}
 					icon={<RollbackOutlined style={{ fontSize: 24 }} />}
 				>
@@ -331,7 +328,7 @@ function RegistrarProductos(props) {
 				</Button>
 			</Row>
 
-			<Row gutter={8} style={{ maxWidth: '90vw' }} className="mt-4 d-flex justify-content-center">
+			<Row gutter={16} className="mt-4 d-flex justify-content-center">
 				{productos.length === 0 ? (
 					<div className="w-100 d-flex justify-content-center align-items-center">
 						<Result

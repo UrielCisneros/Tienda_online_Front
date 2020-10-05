@@ -16,7 +16,7 @@ export default function MostrarDatosTargeta(props) {
     return (
             <Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} key={apartado._id}>
 				<Card
-					className="shadow-sm"
+					className="shadow-sm card-body-apartados"
 					actions={[
 						<div className="d-flex justify-content-center align-items-center">
 							<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />

@@ -230,7 +230,7 @@ import {Link} from 'react-router-dom';
                                 <p className="m-2" >Redes sociales:</p>
                                 {face !== '' ? 
                                     (
-                                    <a href={`https://${face}`} className="m-2" target="_blank">
+                                    <a href={face} className="m-2" target="_blank">
                                         <FacebookFilled style={{fontSize: 45, color:"gray"}} />
                                     </a>
                                     ):('')
@@ -238,7 +238,7 @@ import {Link} from 'react-router-dom';
                                 }
                                 {insta !== '' ? 
                                     (
-                                    <a href={`https://${insta}`} className="m-2" target="_blank">
+                                    <a href={insta} className="m-2" target="_blank">
                                         <InstagramFilled style={{fontSize: 45, color:"gray"}} />
                                     </a>
                                     ):('')
@@ -246,7 +246,7 @@ import {Link} from 'react-router-dom';
                                 
                                 {twitter !== '' ? 
                                     (
-                                    <a href={`https://${twitter}`} className="m-2" target="_blank">
+                                    <a href={twitter} className="m-2" target="_blank">
                                         <TwitterCircleFilled style={{fontSize: 45, color:"gray"}} />
                                     </a>
                                     ):('')
@@ -288,7 +288,7 @@ import {Link} from 'react-router-dom';
                                 <Empty description={<p className="h6">Aún no hay información</p>} />
                             ):(
                                 <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<p className="h6">Información existente</p>} >
-                                    <Link to={`/`} target="_blank">
+                                    <Link to={`/politicas`} target="_blank">
                                         <Button type="dashed">
                                             <EyeOutlined /> Ver
                                         </Button>
@@ -302,7 +302,7 @@ import {Link} from 'react-router-dom';
                                 <Empty description={<p className="h6">Aún no hay información</p>} />
                             ):(
                                 <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<p className="h6">Información existente</p>} >
-                                    <Link to={`/`} target="_blank">
+                                    <Link to={`/quienes_somos`} target="_blank">
                                         <Button type="dashed">
                                             <EyeOutlined /> Ver
                                         </Button>

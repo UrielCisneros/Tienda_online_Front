@@ -54,10 +54,9 @@ const Sugerencia = (props) => {
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisible('d-none');
-			notification.info({
-				message: 'Escribe algo en el buscador',
-				duration: 4
-			});
+			setPage(1);
+			setHasMore(true);
+			setReloadData(true);
 		} else {
 			setVisible('ml-1 d-flex justify-content-center align-items-center');
 			setLoadingList(true);
@@ -92,7 +91,7 @@ const Sugerencia = (props) => {
 		setVisible('d-none');
 		setLoadingList(true);
 		clienteAxios
-			.get(`/productos?limit=${10}&page=${page}`)
+			.get(`/productos?limit=${12}&page=${page}`)
 			.then((res) => {
 				callback(res);
 				setLoadingList(false);
@@ -203,6 +202,9 @@ const Sugerencia = (props) => {
 				}
 			})
 			.then((res) => {
+				setPage(1);
+				setHasMore(true);
+				setReloadData(true);
 				setModalVisible(false);
 				obtenerSugerencia();
 				setLoading(false);
@@ -248,6 +250,9 @@ const Sugerencia = (props) => {
 				}
 			})
 			.then((res) => {
+				setPage(1);
+				setHasMore(true);
+				setReloadData(true);
 				setModalVisible(false);
 				obtenerSugerencia();
 				setLoading(false);

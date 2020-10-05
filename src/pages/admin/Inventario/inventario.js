@@ -165,16 +165,13 @@ function Inventario(props) {
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisible('d-none');
-			notification.info({
-				message: 'Escribe algo en el buscador',
-				duration: 4
-			});
+			obtenerProductos(20, page)
 		} else {
 			setVisible('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			await clienteAxios
 				.get(
-					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subCategoria=${busqueda}&genero=${busqueda}`
+					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}`
 				)
 				.then((res) => {
 					setProductosRender(res.data.posts);

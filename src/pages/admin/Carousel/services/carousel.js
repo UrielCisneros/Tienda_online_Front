@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, List, Avatar, Input, Space, Result, notification, Spin } from 'antd';
+import { Upload, Button, List, Avatar, Input, Space, Result, notification, Spin, Alert } from 'antd';
 import { UploadOutlined, PictureOutlined, RollbackOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroller';
 import './carousel.scss';
@@ -49,10 +49,9 @@ function CarouselImages(props) {
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisible('d-none');
-			notification.info({
-				message: 'Escribe algo en el buscador',
-				duration: 4
-			});
+			setPage(1);
+			setHasMore(true);
+			setReloadData(true);
 		} else {
 			setVisible('ml-1 d-flex justify-content-center align-items-center');
 			setLoading(true);
@@ -88,7 +87,7 @@ function CarouselImages(props) {
 		setVisible('d-none');
 		setLoadingList(true);
 		clienteAxios
-			.get(`/productos?limit=${10}&page=${page}`)
+			.get(`/productos?limit=${12}&page=${page}`)
 			.then((res) => {
 				callback(res);
 				setLoadingList(false);
@@ -205,9 +204,10 @@ function CarouselImages(props) {
 					<p className="text-center my-3">Elige un producto y después una imagen</p>
 					<div className="row justify-content-center mt-1">
 						<Search
+							className="search-width-modal"
 							placeholder="Busca un producto"
 							onSearch={(value) => obtenerProductosFiltrados(value)}
-							style={{ width: 350, height: 40, marginBottom: 10 }}
+							style={{ height: 40, marginBottom: 10 }}
 							enterButton="Buscar"
 							size="large"
 						/>
@@ -267,6 +267,9 @@ function CarouselImages(props) {
 								Crear
 							</Button>
 						</Space>
+					</div>
+					<div className="d-flex justify-content-center m-2">
+						<Alert message="Tamaño recomendado para la imagen es: 1650x565px" type="info" showIcon />
 					</div>
 					<div className="shadow imagen-preview-carousel d-flex justify-content-center align-items-center">
 						{imagenPreview === '' ? (

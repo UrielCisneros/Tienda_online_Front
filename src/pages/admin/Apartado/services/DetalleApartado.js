@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import {Col,Row,Badge,Select,Form, Button,Spin,notification,Typography,Tag,Input} from 'antd'
 import './DetalleApartado.scss';
 import clienteAxios from '../../../../config/axios';
+import { formatoMexico } from '../../../../config/reuserFunction';
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -169,10 +170,10 @@ export default function DetalleApartado(props) {
                             {promocion.length > 0 ? (
                                 <div className="">
                                     <h6 className="">Precio:</h6>
-                                    <Text className="h4 color-precio-apartado" delete >$ {detalleApartado.producto[0].precio}</Text> 
-                                    <p className="h4">$ {promocion[0].precioPromocion}</p>
+                                    <Text className="h4 color-precio-apartado" delete >$ {formatoMexico(detalleApartado.producto[0].precio)}</Text> 
+                                    <p className="h4">$ {formatoMexico(promocion[0].precioPromocion)}</p>
                                 </div>
-                            ):(<p className=" m-2">$ {detalleApartado.producto[0].precio}</p>)}
+                            ):(<p className=" m-2">$ {formatoMexico(detalleApartado.producto[0].precio)}</p>)}
 
 
 
@@ -208,7 +209,7 @@ export default function DetalleApartado(props) {
 
                             <h6 className=" m-2">Tipo de entrega:</h6>
                             <Tag
-                                style={{size:"50px"}}
+                                style={{size:"50px",marginBottom: 10}}
                                 color={detalleApartado.tipoEntrega === 'ENVIO' ?  '#5cb85c' : '#0275d8'}
                             >
                                 {detalleApartado.tipoEntrega === 'ENVIO' ? 'Envio a domicilio' : 'Pasaran por el'}
@@ -263,8 +264,8 @@ export default function DetalleApartado(props) {
                             ) : "" : "" }
 
 
-                            <Form.Item>
-                                 <Button className=" d-flex justify-content-center align-items-center" type="primary" htmlType="submit" >
+                            <Form.Item wrapperCol={{offset: 10, span: 8}}>
+                                 <Button className="d-flex justify-content-center align-items-center" type="primary" htmlType="submit" >
                                     Guardar
                                 </Button>
                             </Form.Item>

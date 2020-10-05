@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Button, Input, Slider, Upload, List, Avatar, notification, Result, Spin, Form, Col } from 'antd';
+import { Button, Input, Slider, Upload, List, Avatar, notification, Result, Spin, Form, Col, Alert } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 import './registrar_promocion.scss';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -69,7 +69,7 @@ const RegistrarPromocion = (props) => {
 		setVisible('d-none');
 		setLoadingList(true);
 		clienteAxios
-			.get(`/productos?limit=${10}&page=${page}`)
+			.get(`/productos?limit=${12}&page=${page}`)
 			.then((res) => {
 				callback(res);
 				setLoadingList(false);
@@ -205,6 +205,9 @@ const RegistrarPromocion = (props) => {
 					description: res.data.message,
 					duration: 2
 				});
+				setPage(1);
+				setHasMore(true);
+				setReloadData(true);
 			})
 			.catch((res) => {
 				if (res.response.status === 404 || res.response.status === 500) {
@@ -228,10 +231,9 @@ const RegistrarPromocion = (props) => {
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisible('d-none');
-			notification.info({
-				message: 'Escribe algo en el buscador',
-				duration: 4
-			});
+			setPage(1);
+			setHasMore(true);
+			setReloadData(true);
 		} else {
 			setVisible('ml-1 d-flex justify-content-center align-items-center');
 			setLoadingList(true);
@@ -436,6 +438,9 @@ const RegistrarPromocion = (props) => {
 									Sube una imagen para la promoción, esta imagen aparecerá en el carrucel de
 									promociones
 								</p>
+								<div className="d-flex justify-content-center m-2">
+									<Alert message="Tamaño recomendado para la imagen es: 1650x565px" type="info" showIcon />
+								</div>
 								<Upload {...propsUpload} className="d-flex justify-content-center mt-3 mr-3">
 									<Button disabled={disabled}>Subir</Button>
 								</Upload>

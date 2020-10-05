@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, notification, Spin, Modal } from 'antd';
+import { Upload, Button, notification, Spin, Modal, Alert } from 'antd';
 import {
 	UploadOutlined,
 	EyeOutlined,
@@ -236,6 +236,9 @@ function RegistrarGaleria() {
 
 	return (
 		<Spin size="large" spinning={loading}>
+			<div className="d-flex justify-content-center m-2">
+				<Alert message="Tamaño recomendado para la imagen es: 850x550px" type="info" showIcon />
+			</div>
 			<div className="responsive">
 				<div className="col-sm-4 col-lg-6 imgUploads">
 					<Upload {...antprops}>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Button, Input, Space, Upload, Spin, notification, Form, Col, Slider, List } from 'antd';
+import { Button, Input, Space, Upload, Spin, notification, Form, Col, Slider, List, Alert } from 'antd';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import './registrar_promocion.scss';
 
@@ -349,6 +349,9 @@ const ActualizarPromocion = (props) => {
 								Actualizar imagen de promoción, recuerda que esta imagen aparecerá en el carrucel de
 								promociónes
 							</p>
+							<div className="d-flex justify-content-center m-2">
+								<Alert message="Tamaño recomendado para la imagen es: 1650x565px" type="info" showIcon />
+							</div>
 							<Space className="mt-3 d-flex justify-content-center">
 								{!promocion.imagenPromocion ? (
 									<Upload {...antDprops}>

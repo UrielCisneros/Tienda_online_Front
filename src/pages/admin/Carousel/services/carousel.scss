@@ -10,6 +10,9 @@
 /* p{
     font-size: 20px;
 } */
+.search-width-modal{
+    max-width: 70%;
+}
 .contenedor-imagen{
     display: flex;
     justify-content: center;
@@ -40,7 +43,6 @@
     display: flex;
     justify-content: space-around;
 }
-
 /* For upload antd */
 .ant-upload-list-item-info::before{
     left: 0!important;

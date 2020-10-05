@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Tabs, Form, Input, Upload, Button, notification, Select, Spin, Divider } from 'antd';
+import { Tabs, Form, Input, Upload, Button, notification, Select, Spin, Divider, Alert } from 'antd';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import ActualizarGaleria from './actualizar_galeria';
@@ -451,6 +451,9 @@ console.log(productos.color)
 								/>
 							</Form.Item>
 						</Form.Item>
+						<div className="d-flex justify-content-center m-2">
+							<Alert message="Tamaño recomendado para la imagen es: 850x550px" type="info" showIcon />
+						</div>
 						<Form.Item label="Imagen principal" name="imagen" valuePropName="filelist">
 							<Upload {...antprops} name="imagen">
 								<Button disabled={upload}>

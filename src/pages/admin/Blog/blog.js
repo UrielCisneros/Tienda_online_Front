@@ -63,7 +63,7 @@ function BlogAdmin(props) {
     }
     //Ejecutar funcion traer blogs
     useEffect(() => {
-        getBlogsApi(10,page);
+        getBlogsApi(20,page);
         setReloadBlog(false);
 	}, [page,reloadBlog]);
 

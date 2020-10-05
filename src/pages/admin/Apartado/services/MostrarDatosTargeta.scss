@@ -7,11 +7,13 @@
     .data-info-apartados{
         float: none!important;
     }
+    .contenedor-card-apartados{
+        height: 270px!important;
+    }
 }
 .sistema-apartado p{
     margin: 0;  
 }
-
 .titulos-info-apartados{
     line-height: 0;
     display: inline;
@@ -27,7 +29,6 @@
     font-size: 18px!important;
 }
 
-
 .contenedor-card-apartados{
-    height: auto;
+    height: 240px;
 }

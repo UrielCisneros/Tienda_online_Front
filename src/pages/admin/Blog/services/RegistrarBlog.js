@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import {Form,Input,Button,notification,Upload,message} from 'antd'
+import {Form,Input,Button,notification,Upload,message, Alert} from 'antd'
 import {Editor} from '@tinymce/tinymce-react';
 import { UploadOutlined,CheckOutlined } from '@ant-design/icons';
 import clienteAxios from '../../../../config/axios';
@@ -166,6 +166,9 @@ export default function RegistrarBlog(props) {
                         onEditorChange={capturarInfoEditor}
                     />
                 </Form.Item>
+                <div className="d-flex justify-content-center m-2">
+					<Alert message="No hay un tamaño recomendado para esta imagen" type="info" showIcon />
+				</div>
                 <Form.Item label="Imagen principal del Blog:">
                     <Upload {...propss} name="imagen">
                         <Button disabled={upload}>
