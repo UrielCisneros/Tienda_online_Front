@@ -1,2 +1,2 @@
 [build]
-publish = "tienda_online_front/public/"
+publish = "public/"
