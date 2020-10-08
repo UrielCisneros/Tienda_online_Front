@@ -3,7 +3,7 @@ import {Pagination} from 'antd';
 import './pagination.scss'
 
 export default function pagination(props) {
-    const {blogs, location, history} = props;
+    const {blogs, location, history, limite} = props;
     const currentPage = parseInt(blogs.page);
 
     const onChangePage = newPage => {
@@ -16,7 +16,7 @@ export default function pagination(props) {
                 defaultCurrent={currentPage}
                 total={blogs.totalDocs}
                 onChange={newPage => onChangePage(newPage)}
-                
+                defaultPageSize={limite}
             />
         </div>
 

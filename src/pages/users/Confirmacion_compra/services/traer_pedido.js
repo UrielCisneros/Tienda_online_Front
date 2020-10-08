@@ -92,7 +92,7 @@ function Productos (props) {
             ): ""}
         </div> 
         <div className=" col-lg-2 d-flex flex-row-reverse" >
-          <p style={{fontSize: "20px", fontWeight: "bold"}}>$ {formatoMexico(pedido.cantidad * pedido.producto.precio)}</p>
+          <p style={{fontSize: "20px", fontWeight: "bold"}}>$ {formatoMexico(pedido.cantidad * pedido.precio)}</p>
         </div>
       </div>
     </List.Item>

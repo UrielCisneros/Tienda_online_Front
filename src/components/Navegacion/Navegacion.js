@@ -98,11 +98,13 @@ const Navegacion = (props) => {
 									<div className="d-none" />
 								) : (
 									<div className="col-3 contenedor-logo">
-										<img
-											className="imagen-logo-principal"
-											alt="logotipo-tienda"
-											src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
-										/>
+										<Link to="/" >
+											<img
+												className="imagen-logo-principal"
+												alt="logotipo-tienda"
+												src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
+											/>
+										</Link>
 									</div>
 								)}
 								<div className="col-9">
@@ -139,7 +141,7 @@ const Navegacion = (props) => {
 								<Menu.Item className="nav-font-color nav-border-color" key="/blog">
 									Blog<Link to="/blog" />
 								</Menu.Item>
-								{!tienda ? (
+								{tienda.length === 0 ? (
 									<></>
 								) : (
 									<Menu.Item className="nav-font-color nav-border-color" key="/quienes_somos">
@@ -187,7 +189,10 @@ const Navegacion = (props) => {
 												onClick={() => {
 													localStorage.removeItem('token');
 													firebase.auth().signOut();
-													window.location.reload();
+													setTimeout(() => {
+														window.location.reload();
+													}, 1000);
+													
 												}}
 											>
 												<LogoutOutlined />Cerrar Sesión
@@ -218,7 +223,9 @@ const Navegacion = (props) => {
 												onClick={() => {
 													localStorage.removeItem('token');
 													firebase.auth().signOut();
-													window.location.reload();
+													setTimeout(() => {
+														window.location.reload();
+													}, 1000);
 												}}
 											>
 												<LogoutOutlined />Cerrar Sesión
@@ -246,15 +253,16 @@ const Navegacion = (props) => {
 						<Search
 							className="search"
 							placeholder="input search text"
-							onSearch={(value) => console.log(value)}
+							onSearch={(value) => props.history.push(`/searching/${value}`)}
 							style={{ width: 270 }}
 						/>
 						{!decoded ? (
 							<div className="d-none" />
 						) : (
 							<Badge count={carrito}>
-								<ShoppingCartOutlined style={{ fontSize: 28 }} />
-								<Link to="/shopping_cart" />
+								<Link to="/shopping_cart">
+									<ShoppingCartOutlined style={{ fontSize: 28 }} />
+								</Link>
 							</Badge>
 						)}
 					</div>
@@ -263,11 +271,13 @@ const Navegacion = (props) => {
 							<div className="d-none" />
 						) : (
 							<div className="contenedor-logo">
-								<img
-									className="imagen-logo-principal"
-									alt="logotipo-tienda"
-									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
-								/>
+								<Link to="/" >
+									<img
+										className="imagen-logo-principal"
+										alt="logotipo-tienda"
+										src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`}
+									/>
+								</Link>
 							</div>
 						)
 					} placement="left" closable={false} onClose={onClose} visible={visible} >

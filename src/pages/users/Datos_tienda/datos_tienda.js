@@ -33,7 +33,7 @@ export default function Datos_tienda() {
 			{infor !== '' ? (
 				<div className="mt-5">
 					<div className="principal-productos">ENCUENTRA NUESTRA TIENDA</div>
-					<div className="row">
+					<div className="row w-100">
 						<div className="col-lg-10">
 							<Geolocalizacion
 								height="38vh"

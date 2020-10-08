@@ -5,7 +5,7 @@ import * as firebase from 'firebase/app';
 import './navegacion.scss';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { LogoutOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import clienteAxios from '../../config/axios';
 
@@ -42,7 +42,7 @@ function RightMenu(props) {
 			<Menu.Item key="/blog">
 				Blog<Link to="/blog" />
 			</Menu.Item>
-			{!tienda ? (
+			{tienda.length === 0 ? (
 				<Menu.Item className="d-none" />
 			) : (
 				<Menu.Item key="/quienes_somos">
@@ -56,8 +56,9 @@ function RightMenu(props) {
 					Pedidos<Link to="/pedidos" />
 				</Menu.Item>
 			)}
-			{token ? (
+			{token && decoded['rol'] === false ? (
 				<SubMenu
+					className="nav-font-color nav-border-color"
 					icon={
 						!decoded.imagen && !decoded.imagenFireBase ? (
 							<Avatar size="large" style={{ backgroundColor: '#87d068' }}>
@@ -73,8 +74,8 @@ function RightMenu(props) {
 						)
 					}
 				>
-					<Menu.Item>
-						Mi cuenta<Link to="/" />
+					<Menu.Item className="nav-font-color nav-border-color">
+						<SettingOutlined />Mi cuenta<Link to="/perfiles" />
 					</Menu.Item>
 					<Menu.Item>
 						<p
@@ -82,7 +83,9 @@ function RightMenu(props) {
 							onClick={() => {
 								localStorage.removeItem('token');
 								firebase.auth().signOut();
-								window.location.reload();
+								setTimeout(() => {
+									window.location.reload();
+								}, 1000);
 							}}
 						>
 							<LogoutOutlined />Cerrar Sesión
@@ -91,6 +94,7 @@ function RightMenu(props) {
 				</SubMenu>
 			) : decoded && decoded['rol'] === true ? (
 				<SubMenu
+					className="nav-font-color nav-border-color"
 					icon={
 						!decoded.imagen ? (
 							<Avatar size="large" style={{ backgroundColor: '#87d068' }}>
@@ -106,16 +110,18 @@ function RightMenu(props) {
 						)
 					}
 				>
-					<Menu.Item>
-						Panel de administrador<Link to="/admin" />
+					<Menu.Item className="nav-font-color nav-border-color">
+						<SettingOutlined />Panel de administrador<Link to="/admin" />
 					</Menu.Item>
-					<Menu.Item>
+					<Menu.Item className="nav-font-color nav-border-color">
 						<p
 							className="text-danger"
 							onClick={() => {
 								localStorage.removeItem('token');
 								firebase.auth().signOut();
-								window.location.reload();
+								setTimeout(() => {
+									window.location.reload();
+								}, 1000);
 							}}
 						>
 							<LogoutOutlined />Cerrar Sesión

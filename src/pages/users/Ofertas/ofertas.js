@@ -41,7 +41,7 @@ function Ofertas(props) {
 	}
 {/* <div className="contenedor-card-ofertas" key={productos._id}> */}
 	const render = productos.map((productos) => (
-		<Col span={window.screen.width < 768 ? 12 : 4} key={productos._id}>
+		<Col key={productos._id} className="size-col col-lg-2 col-6">
 			<Link to={`/vista_producto/${productos.productoPromocion._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card
@@ -79,7 +79,7 @@ function Ofertas(props) {
 			<div className="principal-ofertas">APROVECHA NUESTROS DESCUENTOS!</div>
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
-					<Row gutter={8} style={{ maxWidth: '90vw' }} className=" mt-4">
+					<Row gutter={10} style={{ maxWidth: '95vw' }} className=" mt-4">
 						{productos.length ? (
 							render
 						) : (

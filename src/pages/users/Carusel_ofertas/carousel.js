@@ -3,29 +3,23 @@ import Carousel from 'react-bootstrap/Carousel';
 import './ofertas.scss';
 import clienteAxios from '../../../config/axios';
 import { withRouter } from 'react-router-dom';
-import { Spin } from 'antd';
 
 function CarouselOfertas(props) {
 	const [ index, setIndex ] = useState(0);
-	const [ loading, setLoading ] = useState(false);
 	const [ carousels, setCarousels ] = useState([]);
 	const [ esPromocion, setEsPromocion ] = useState(false);
 
 	useEffect(() => {
 		const obtenerCarousel = async () => {
-			setLoading(true);
 			await clienteAxios
 				.get('/carousel/limite')
 				.then((res) => {
-					setLoading(false);
 					setCarousels(res.data);
 				})
 				.catch((res) => {
-					setLoading(false);
 				});
 		};
 		const obtenerPromociones = async () => {
-			setLoading(true);
 			await clienteAxios
 				.get('/productos/promocion/carousel')
 				.then((res) => {
@@ -34,12 +28,12 @@ function CarouselOfertas(props) {
 						obtenerCarousel();
 					} else {
 						setEsPromocion(true);
-						setLoading(false);
+
 						setCarousels(res.data);
 					}
 				})
 				.catch((res) => {
-					setLoading(false);
+					console.log(res)
 				});
 		};
 		obtenerPromociones();
@@ -58,7 +52,7 @@ function CarouselOfertas(props) {
 							? carousel.imagenPromocion
 							: carousel.imagen})`
 					}}/>
-					<div className="contenedor-imagen-principal">
+					<div className="contenedor-imagen-principal-promociones">
 						<img
 							onClick={() => props.history.push(`/vista_producto/${esPromocion
 								? carousel.productoPromocion._id
@@ -77,11 +71,9 @@ function CarouselOfertas(props) {
 	});
 
 	return (
-		<Spin spinning={loading} size="large">
-			<Carousel activeIndex={index} onSelect={handleSelect}>
-				{render}
-			</Carousel>
-		</Spin>
+		<Carousel activeIndex={index} onSelect={handleSelect}>
+			{render}
+		</Carousel>
 	);
 }
 

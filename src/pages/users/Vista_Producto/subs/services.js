@@ -19,7 +19,7 @@ export async function AgregarCarrito(idcliente, idproducto, cantidad, talla, num
 		)
 		.then((res) => {
 			return notification.success({
-				message: res.data.message,
+				message: 'Se añadio un articulo a tu carrito',
 				duration: 2
 			});
 		})
@@ -27,7 +27,7 @@ export async function AgregarCarrito(idcliente, idproducto, cantidad, talla, num
 			if (res.response.status === 404 || res.response.status === 500) {
 				return notification.error({
 					message: 'Error',
-					description: 'Se añadio un articulo a tu carrito',
+					description: 'Hubo un error al añadir un articulo a su carrito',
 					duration: 2
 				});
 			} else {

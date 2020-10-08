@@ -63,11 +63,6 @@ export default function DatosCliente(props) {
 				setLoading(false);
 			});
 	}
-    
-    
-    function controlbotones(){
-        setControlBoton(false)
-    }
 
 	async function editarDatos(valores) {
 		if (controlBoton) {
@@ -229,7 +224,7 @@ export default function DatosCliente(props) {
 					</Col>
 				</Row>
 				<Form.Item {...tailLayout}>
-					<Button htmlType="submit" type="primary" size="large" style={{ width: 150 }} onClick={() => controlbotones()}>
+					<Button htmlType="submit" type="primary" size="large" style={{ width: 150 }} >
 						{controlBoton ? 'Editar' : 'Guardar'}
 					</Button>
 				</Form.Item>

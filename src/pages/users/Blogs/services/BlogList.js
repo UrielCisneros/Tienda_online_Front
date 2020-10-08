@@ -90,19 +90,21 @@ function Blog(props){
     const {blog} = props;
 
     return(
-        <Link to={`/blog/${blog.url}`} className="blogList ">
+        <Link to={`/blog/${blog.url}`} className="blogList">
             <List.Item 
-                className="blogList__lista m-3 shadow-sm"
+                className="blogList__lista list-hover  mb-5"
                 key={blog.nombre}
                 extra={
-                <img
-                    width={272}
-                    alt={blog.nombre}
-                    src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${blog.imagen}`}
-                />
+                <div className="contenedor-imagen-blog-list">
+                    <img
+                        className="imagen-blog-list"
+                        alt={blog.nombre}
+                        src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${blog.imagen}`}
+                    />
+                </div>
                 }
             >
-                <List.Item.Meta title={<p className="blogList__title">{blog.nombre}</p>} description={<p className="blogList__author">Autor: {blog.administrador}</p>}/>
+                <List.Item.Meta title={<p className="blogList__title titulo-blog">{blog.nombre}</p>} description={<p className="blogList__author">Autor: {blog.administrador}</p>}/>
                     {
                         <div>
                             <div

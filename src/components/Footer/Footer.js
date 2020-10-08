@@ -96,7 +96,7 @@ const FooterPage = () => {
 
                         {face !== '' ? 
                             (
-                            <a href={`https://${face}`} target="_blank">
+                            <a href={face} target="_blank">
                                 <FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')
@@ -104,7 +104,7 @@ const FooterPage = () => {
                         }
                         {insta !== '' ? 
                             (
-                            <a href={`https://${insta}`} target="_blank">
+                            <a href={insta} target="_blank">
                                 <InstagramFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')
@@ -112,7 +112,7 @@ const FooterPage = () => {
                         
                         {twitter !== '' ? 
                             (
-                            <a href={`https://${twitter}`} target="_blank">
+                            <a href={twitter} target="_blank">
                                 <TwitterCircleFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')

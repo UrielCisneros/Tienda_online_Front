@@ -56,40 +56,12 @@ function ConsultaProductos(props) {
 			});
 	}
 
-	async function obtenerProductos(limit, page) {
-		setLoading(true);
-		await clienteAxios
-			.get(`/productos?limit=${limit}&page=${page}`)
-			.then((res) => {
-				setProductos(res.data.posts.docs);
-				setProductosPaginacion(res.data.posts);
-				setLoading(false);
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
-			});
-	}
-
 	const render = productos.map((productos) => (
-		<Col span={window.screen.width < 768 ? 12 : 4} key={productos._id}>
+		<Col key={productos._id} className="size-col col-lg-2 col-6">
 			<Link to={`/vista_producto/${productos._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card
-						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7'}}
+						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7', minHeight: 100}}
 						className="contenedor-card-body"
 						cover={
 							<div className="contenedor-imagen-producto-principal">
@@ -136,7 +108,7 @@ function ConsultaProductos(props) {
 			<div className="principal-productos"><p>NUESTROS PRODUCTOS</p></div>
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
-					<Row gutter={10} style={{ maxWidth: '90vw' }} className="mt-4">
+					<Row gutter={10} style={{ maxWidth: '95vw' }} className="mt-4">
 						{productos.length ? (
 							render
 						) : (
@@ -147,7 +119,7 @@ function ConsultaProductos(props) {
 					</Row>
 				</div>
 			</div>
-			<Pagination blogs={productosPaginacion} location={location} history={history} />
+			<Pagination blogs={productosPaginacion} location={location} history={history} limite={window.screen.width < 768 ? 12 : 40} />
 		</Spin>
 	);
 }

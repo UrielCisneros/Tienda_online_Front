@@ -31,18 +31,21 @@ export default function ShowBlog(props) {
 		[ url ]
 	);
 
-	var styleDivImagen = {
+	/* var styleDivImagen = {
 		height: '400px',
 		backgroundImage: `url(https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${infoBlog.imagen})`,
 		backgroundSize: 'cover cover',
 		backgroundRepeat: 'no-repeat',
 		backgroundPosition: '50% 50%'
-	};
+	}; */
 
 	return (
 		<Spin size="large" spinning={loading}>
 			<div className="info-blog bg-white shadow">
-				<div className="info-blog__div-imagen" style={styleDivImagen} />
+				{/* <div className="info-blog__div-imagen" style={styleDivImagen} /> */}
+				<div className="contenedor-imagen-blog-principal">
+					<img className="imagen-blog-principal" alt="imagen blog principal" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${infoBlog.imagen}`} />
+				</div>
 				<div className="p-5">
 					<h1 className="info-blog__titulo m-3"> {infoBlog.nombre} </h1>
 					<div className="info-blog__fecha m-3"> {formatoFecha(infoBlog.createdAt)} </div>
