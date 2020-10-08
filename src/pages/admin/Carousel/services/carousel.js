@@ -118,6 +118,7 @@ function CarouselImages(props) {
 			return;
 		}
 		obtenerTodosProductos((res) => {
+			setPage(res.data.posts.nextPage);
 			setData(data.concat(res.data.posts.docs));
 		});
 	};

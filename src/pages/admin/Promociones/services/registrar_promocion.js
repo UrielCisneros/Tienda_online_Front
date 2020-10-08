@@ -4,19 +4,10 @@ import { Button, Input, Slider, Upload, List, Avatar, notification, Result, Spin
 import { RollbackOutlined } from '@ant-design/icons';
 import './registrar_promocion.scss';
 import InfiniteScroll from 'react-infinite-scroller';
+import { formatoMexico } from '../../../../config/reuserFunction';
 
 const { Search } = Input;
 const demo = { height: '500px', overflow: 'auto' };
-
-const formatoMexico = (number) => {
-	if (!number) {
-		return null;
-	} else {
-		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-		const rep = '$1,';
-		return number.toString().replace(exp, rep);
-	}
-};
 
 const RegistrarPromocion = (props) => {
 	const token = localStorage.getItem('token');
@@ -101,6 +92,7 @@ const RegistrarPromocion = (props) => {
 			return;
 		}
 		obtenerProductos((res) => {
+			setPage(res.data.posts.nextPage);
 			setData(data.concat(res.data.posts.docs));
 		});
 	};
@@ -304,7 +296,7 @@ const RegistrarPromocion = (props) => {
 							<div style={demo}>
 								<InfiniteScroll
 									initialLoad={false}
-									pageStart={0}
+									pageStart={1}
 									loadMore={handleInfiniteOnLoad}
 									hasMore={!loading && hasMore}
 									useWindow={false}

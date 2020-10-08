@@ -259,7 +259,7 @@ function Inventario(props) {
 				scroll={{ x: 1200 }}
 			/>
 			<div className="mt-5">
-				<Pagination blogs={productos} location={location} history={history} />
+				<Pagination blogs={productos} location={location} history={history} limite={20} />
 			</div>
 		</Spin>
 	);

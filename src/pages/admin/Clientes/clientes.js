@@ -37,7 +37,7 @@ function Clientes(props) {
 
 	useEffect(
 		() => {
-			obtenerClientes(10, page);
+			obtenerClientes(20, page);
 		},
 		[ page ]
 	);
@@ -215,7 +215,7 @@ function Clientes(props) {
 				scroll={{ x: 1200 }}
 			/>
 			<div className="mt-5">
-				<Pagination blogs={clientesPaginados} location={location} history={history} />
+				<Pagination blogs={clientesPaginados} location={location} history={history} limite={20}/>
 			</div>
 		</Spin>
 	);

@@ -6,6 +6,7 @@ import ActualizarProducto from './services/actualizar_producto';
 import { Card, Col, Row, Input, Button, Modal, Drawer, Result, notification, Spin } from 'antd';
 import Pagination from '../../../components/Pagination/pagination';
 /* import { StepsContext, StepsProvider } from '../contexts/stepsContext'; */
+import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import { IdProductoContext } from '../contexts/ProductoContext';
 import {
 	ExclamationCircleOutlined,
@@ -21,16 +22,6 @@ import './productos.scss';
 const { Search } = Input;
 const { confirm } = Modal;
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
-
-const formatoMexico = (number) => {
-	if (!number) {
-		return null;
-	} else {
-		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-		const rep = '$1,';
-		return number.toString().replace(exp, rep);
-	}
-};
 
 function RegistrarProductos(props) {
 	//Tomar la paginacion actual
@@ -118,7 +109,11 @@ function RegistrarProductos(props) {
 					})
 					.then((res) => {
 						setLoading(false);
-						obtenerProductos(10, page);
+						if(window.screen.width < 768){
+							obtenerProductos(12, page)
+						}else{
+							obtenerProductos(28, page)
+						}
 						notification.success({
 							message: res.data.message,
 							duration: 2
@@ -148,7 +143,12 @@ function RegistrarProductos(props) {
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisibleButton('d-none');
-			obtenerProductos(10, page)
+			if(window.screen.width < 768){
+				obtenerProductos(12, page)
+			}else{
+				obtenerProductos(28, page)
+			}
+			
 		} else {
 			setVisibleButton('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
@@ -213,17 +213,21 @@ function RegistrarProductos(props) {
 
 	useEffect(
 		() => {
-			obtenerProductos(10, page);
+			if(window.screen.width < 768){
+				obtenerProductos(12, page)
+			}else{
+				obtenerProductos(28, page)
+			}
 			setReload(false);
 		},
 		[ page, reload, reloadData ]
 	);
 
 	const render = productosRender.map((productos) => (
-		<Col span={window.screen.width < 768 ? 32 : 6} key={productos._id}>
-			<Card.Grid hoverable style={gridStyle}>
+		<Col key={productos._id} className="col-lg-3">
+			<Card.Grid hoverable style={gridStyle} >
 				<Card
-					style={{ width: 300, maxHeight: 400 }}
+					style={{ /* width: 300,  */maxHeight: 420 }}
 					cover={
 						<div className="d-flex justify-content-center align-items-center" style={{ height: 250 }}>
 							<img
@@ -256,8 +260,27 @@ function RegistrarProductos(props) {
 					]}
 				>
 					<div className="contenedor-titulos-productos">
-						<h1 className="titulo-producto">{productos.nombre}</h1>
-						<h2 className="h5">$ {formatoMexico(productos.precio)}</h2>
+						<h1 className="titulo-producto titulo-producto-admin-responsivo">{productos.nombre}</h1>
+						{!productos.todos.length ? (
+							<h2 className="h5">$ {formatoMexico(productos.precio)}</h2>
+						) : (
+							productos.todos.map((promo) => {
+								return (
+									<div className="" key={promo._id}>
+										<h2 className="h5 precio-producto rebajado mr-2">
+											${formatoMexico(productos.precio)}
+										</h2>
+										<h2 className="h5 precio-rebaja d-inline mr-1">
+											${formatoMexico(promo.precioPromocion)}
+										</h2>
+										<p className="h4 porcentaje-descuento d-inline">
+											{agregarPorcentaje(promo.precioPromocion, productos.precio)}%OFF
+										</p>
+									</div>
+								);
+							})
+						)} 
+						
 					</div>
 				</Card>
 			</Card.Grid>
@@ -311,7 +334,11 @@ function RegistrarProductos(props) {
 					size="large"
 					className={`${visibleButton} mb-1`}
 					onClick={() => {
-						obtenerProductos(10, page);
+						if(window.screen.width < 768){
+							obtenerProductos(12, page)
+						}else{
+							obtenerProductos(28, page)
+						}
 					}}
 					icon={<RollbackOutlined style={{ fontSize: 24 }} />}
 				>
@@ -341,7 +368,7 @@ function RegistrarProductos(props) {
 					render
 				)}
 			</Row>
-			<Pagination blogs={productos} location={location} history={history} />
+			<Pagination blogs={productos} location={location} history={history} limite={window.screen.width < 768 ? 12 : 28} />
 		</Spin>
 	);
 }

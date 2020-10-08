@@ -1,10 +1,9 @@
 .contenedor-titulos-productos{
-    height: 100px;
+    height: 120px;
 }
 .titulo-producto{
     font-size: 20px;
     width: 100%!important;
-    word-break: break-all;
 }
 .search-width{
     width: 50%;
@@ -13,5 +12,10 @@
 @media(max-width: 768px){
     .search-width{
         width: 100%;
+    }
+    .titulo-producto-admin-responsivo{
+        overflow: hidden;
+        white-space:nowrap;
+        text-overflow: ellipsis;
     }
 }
