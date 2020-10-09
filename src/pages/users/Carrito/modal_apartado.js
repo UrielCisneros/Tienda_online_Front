@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { notification, Modal, Select, Divider } from 'antd';
+import { notification, Modal, Select, Divider, Alert } from 'antd';
 import { formatoMexico } from '../../../config/reuserFunction';
 import { AgregarApartado } from './services/consultas_individuales';
 import DatosCliente from '../Vista_Producto/subs/datos_cliente';
@@ -94,6 +94,11 @@ export default function ModalApartado(props) {
 							<Option value="REGOGIDO">Recoger a sucursal</Option>
 						</Select>
 					</div>
+					<Alert
+						description="Para apartar un producto necesitas tener completos tus datos"
+						type="info"
+						showIcon
+					/>
 				</div>
 				<div className="col-12 col-lg-6">
 					<div className="d-flex justify-content-center align-items-center" style={{ height: 220 }}>
@@ -107,7 +112,7 @@ export default function ModalApartado(props) {
 				</div>
 			</div>
 			<Divider>Tus datos</Divider>
-				<DatosCliente token={token} clienteID={cliente._id} tipoEnvio={tipoEnvio} /> : <div />
+				<DatosCliente token={token} clienteID={cliente._id} tipoEnvio={tipoEnvio} />
 		</Modal>
 	);
 }

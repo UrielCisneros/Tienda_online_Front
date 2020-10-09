@@ -8,19 +8,10 @@ import RegistrarPromocion from './services/registrar_promocion';
 import ActualizarPromocion from './services/actualizar_promocion';
 import { IdProductoContext } from '../contexts/ProductoContext';
 import './promociones.scss';
+import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 
 const { Search } = Input;
 const { confirm } = Modal;
-
-const formatoMexico = (number) => {
-	if (!number) {
-		return null;
-	} else {
-		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-		const rep = '$1,';
-		return number.toString().replace(exp, rep);
-	}
-};
 
 function Promociones(props) {
 	const token = localStorage.getItem('token');
@@ -79,11 +70,6 @@ function Promociones(props) {
 	function setRegistrar() {
 		setAccion(false);
 		setVisible(true);
-	}
-	function agregarPorcentaje(precio_descuento, precio_producto) {
-		var porcentaje = Math.round(precio_descuento / precio_producto * 100);
-		var descuento = 100 - porcentaje;
-		return descuento;
 	}
 
 	const obtenerProductos = async () => {

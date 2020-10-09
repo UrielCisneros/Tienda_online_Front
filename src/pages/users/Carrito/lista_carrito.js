@@ -16,6 +16,7 @@ const styles = { fontSize: 20 };
 const { confirm } = Modal;
 
 function ListaCarrito(props) {
+	const [ form ] = Form.useForm();
 	const [ medida, setMedida ] = useState([]);
 	const [ cantidad, setCantidad ] = useState();
 	const [ disponible, setDisponible ] = useState('');
@@ -37,15 +38,34 @@ function ListaCarrito(props) {
 						if (medida.talla === tallas.talla) {
 							setMedida([ medida.talla, tallas.cantidad ]);
 						}
+						if(tallas.cantidad === 0){
+							setValidateStatus('error');
+							setMedidaDisponible('No esta disponible');
+							setValidacion(true);
+						}else{
+							setValidacion(false);
+							setValidateStatus('validating');
+								setMedidaDisponible('');
+						}
 					});
 				}
 			});
 		} else if (carrito.idarticulo.numeros.length !== 0) {
 			carrito.idarticulo.numeros.forEach((numeros) => {
+				console.log(numeros)
 				if (carrito.medida) {
 					carrito.medida.forEach((medida) => {
 						if (medida.numero === numeros.numero) {
 							setMedida([ medida.numero, numeros.cantidad ]);
+							if(numeros.cantidad === 0){
+								setValidateStatus('error');
+								setMedidaDisponible('No esta disponible');
+								setValidacion(true);
+							}else{
+								setValidacion(false);
+								setValidateStatus('validating');
+								setMedidaDisponible('');
+							}
 						}
 					});
 				}
@@ -54,9 +74,9 @@ function ListaCarrito(props) {
 		if (carrito.idarticulo.activo === false) {
 			setValidateStatus('error');
 			setMedidaDisponible('No esta disponible');
-/* 			setValidacion(true); */
 			setDisponible('disponibilidad-carrito');
 		}
+
 		if (carrito.promocion) {
 			setPrecio(carrito.promocion.precioPromocion);
 		} else {
@@ -178,10 +198,10 @@ function ListaCarrito(props) {
 						<div className="col-lg-4">
 							<div className="justify-content-center">
 								<div className="col">
-									<Form initialValues={{ cantidad: carrito.cantidad }} className="row">
+									<Form form={form} initialValues={{ cantidad: carrito.cantidad }} className="row">
 										<Form.Item
 											className="inputs-carrito col-6 col-lg-12"
-											labelCol={{ span: 7 }}
+											labelCol={{ span: 8 }}
 											label="Cantidad"
 											name="cantidad"
 											id={carrito.idarticulo._id}
@@ -210,7 +230,7 @@ function ListaCarrito(props) {
 											<Form.Item
 												className="inputs-carrito-talla col-6 col-lg-12"
 												label="Talla"
-												labelCol={{ span: 7 }}
+												labelCol={{ span: 8 }}
 												validateStatus={validateStatus}
 											>
 												<Select

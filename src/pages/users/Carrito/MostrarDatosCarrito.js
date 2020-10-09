@@ -77,16 +77,17 @@ function MostrarDatosProductos(props) {
 
 	useEffect(
 		() => {
-			var suma = 0;
+			var subtotal = 0;
+			var total = 0;
+
 			nuevoCarrito.forEach((res) => {
-				var total;
 				if(res.promocion){
-					total = res.promocion.precioPromocion;
+					subtotal += res.promocion.precioPromocion * res.cantidad
 				}else{
-					total = res.idarticulo.precio;
+					subtotal += res.idarticulo.precio * res.cantidad
 				}
-				suma += total;
-				setTotal(suma);
+				total = subtotal;
+				setTotal(total);
 			});
 		},
 		[ nuevoCarrito ]

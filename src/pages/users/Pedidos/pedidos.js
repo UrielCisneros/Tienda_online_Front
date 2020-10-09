@@ -183,8 +183,6 @@ export default function PedidosUsuario(props) {
 function Pedido(props) {
 	const { pedido, showModal, setDetallePedido, setElige } = props;
 
-	console.log(pedido)
-
 	return (
 		<div>
 			<List.Item
@@ -372,15 +370,16 @@ function Apartado(props) {
 					avatar={
 						<div
 							className="d-flex justify-content-center align-items-center my-3"
-							style={{ width: 100, height: 100 }}
 						>
 							<p>Pedido del producto sdsdsdsd</p>
-							<img
-								className="img-fluid"
-								alt="producto"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${apartado.producto
-									.imagen}`}
-							/>
+							<div className="contenedor-imagen-mostrar-apartado">
+								<img
+									className="imagen-mostrar-apartado"
+									alt="producto"
+									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${apartado.producto
+										.imagen}`}
+								/>
+							</div>
 						</div>
 					}
 					title={

@@ -9,10 +9,6 @@ import { MenuContext } from '../../../../context/carritoContext';
 import DatosCliente from './datos_cliente';
 import clienteAxios from '../../../../config/axios';
 
-function onlyUnique(value, index, self) {
-	return self.indexOf(value) === index;
-}
-
 const formItemLayout = {
 	labelCol: {
 		xs: { span: 24 },

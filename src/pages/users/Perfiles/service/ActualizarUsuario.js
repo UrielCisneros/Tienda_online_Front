@@ -1,12 +1,14 @@
-import React,{useCallback,useEffect,useState} from 'react'
+import React,{useCallback,useEffect,useState, useContext} from 'react'
 import {Form,Input,Divider,Button,Avatar,notification,Upload} from 'antd'
 import {useDropzone} from 'react-dropzone';
 import clienteAxios from '../../../../config/axios';
+import { MenuContext } from '../../../../context/carritoContext';
+import jwt_decode from 'jwt-decode';
 
 import './ActualizarUsuario.scss';
 
 export default function ActualizarUsuario(props) {
-
+    const { active, setActive } = useContext(MenuContext);
     const {datosUser,decoded,token,setLoading,setAccion} = props;
 
     const [avatar, setAvatar] = useState(null);
@@ -104,7 +106,7 @@ export default function ActualizarUsuario(props) {
         formData.append('pais', datosFormulario.pais);
 
 
-        if(enviarFile.length !== 0){
+        if(decoded.tipoSesion === "APIRestAB"){
             formData.append('imagen', enviarFile);
         }
         setAccion(true);
@@ -118,7 +120,10 @@ export default function ActualizarUsuario(props) {
             setTimeout(() => {
                 localStorage.removeItem('token');
                 localStorage.setItem('token', res.data.token);
-                window.location.reload();
+                /* window.location.reload(); */
+                setActive(!active);
+                const decoded = jwt_decode(res.data.token)
+                setAvatar({preview:`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${decoded.imagen}`});
             },1000)
             setLoading(false)
             console.log(res);
@@ -178,9 +183,10 @@ export default function ActualizarUsuario(props) {
                     <div>
                         <div className="upload-user-perfil">
                         <img
-                            className=""
+                            className="rounded-circle"
                             alt="logotipo-tienda"
                             src={decoded.imagenFireBase}
+                            style={{width:"200px"}}
                         />
                         </div>
                     </div>

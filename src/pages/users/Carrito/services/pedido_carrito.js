@@ -31,7 +31,8 @@ export async function AgregarPedidoCarrito(idcliente, token) {
             }
             return null;
         });
-        var precio;
+		var precio;
+		
         if(!carrito.promocion){
             precio = carrito.idarticulo.precio
         }else{
@@ -72,10 +73,17 @@ export async function AgregarPedidoCarrito(idcliente, token) {
 				break;
         }
 	});
-	
+
+	var subtotal = 0;
 	var total = 0;
-		carrito.forEach((res) => {
-		total += res.subtotal;
+
+	carrito.forEach((res) => {
+		if(res.promocion){
+			subtotal += res.promocion.precioPromocion * res.cantidad
+		}else{
+			subtotal += res.idarticulo.precio * res.cantidad
+		}
+		total = subtotal;
 	});
 
 	await clienteAxios

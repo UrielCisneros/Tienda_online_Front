@@ -89,7 +89,7 @@ function SistemaApartado(props) {
     }
 
     useEffect(() => {
-		obtenerDatos(12,page);
+		obtenerDatos(24,page);
 		setLoading(true);
 		setEstado(false)
 	}, [page,filter,estado])
@@ -164,7 +164,7 @@ function SistemaApartado(props) {
 				>
 					<DetalleApartado detalleApartado={detalleApartado} setEstado={setEstado} setFilter={setFilter} />
 				</Modal>
-				<Pagination blogs={apartadoPaginacion} location={location} history={history} />
+				<Pagination blogs={apartadoPaginacion} location={location} history={history} limite={24}/>
 			</Spin>
        </div>
     )

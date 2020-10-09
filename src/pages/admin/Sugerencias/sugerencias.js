@@ -50,7 +50,7 @@ function Sugerencias(props) {
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisibleReload('d-none');
-			obtenerProductos();
+			obtenerProductos(20, page);
 		} else {
 			setVisibleReload('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
@@ -196,7 +196,7 @@ function Sugerencias(props) {
 			) : (
 				<div>
 					<List>{render}</List>
-					<Pagination blogs={productosPaginacion} location={location} history={history} />
+					<Pagination blogs={productosPaginacion} location={location} history={history} limite={20} />
 				</div>
 			)}
 			<Drawer

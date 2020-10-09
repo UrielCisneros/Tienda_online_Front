@@ -3,16 +3,7 @@ import clienteAxios from '../../../../config/axios';
 import { Button, Input, Space, Upload, Spin, notification, Form, Col, Slider, List, Alert } from 'antd';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import './registrar_promocion.scss';
-
-const formatoMexico = (number) => {
-	if (!number) {
-		return null;
-	} else {
-		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-		const rep = '$1,';
-		return number.toString().replace(exp, rep);
-	}
-};
+import { formatoMexico } from '../../../../config/reuserFunction';
 
 const ActualizarPromocion = (props) => {
 	const token = localStorage.getItem('token');

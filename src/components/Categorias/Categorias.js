@@ -83,8 +83,8 @@ const Categorias = (props) => {
 	});
 
 	return (
-		<div className="container-subcategorias-nav">
-			<Spin className="ml-5 d-inline" spinning={loading} />
+		<Layout className="container-subcategorias-nav d-lg-inline">
+			<Spin className="ml-5 d-inline spin-nav-categorias" spinning={loading} />
 			<Menu
 				className="categorias-navbar d-inline"
 				theme="light"
@@ -100,7 +100,7 @@ const Categorias = (props) => {
 					<Menu.Item className="d-none" />
 				)}
 			</Menu>
-		</div>
+		</Layout>
 	);
 };
 

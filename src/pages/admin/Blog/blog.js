@@ -151,6 +151,7 @@ function BlogAdmin(props) {
                     blogs={blogs} 
                     location={location}  
                     history={history}
+                    limite={20}
                 />
             </div>
     )

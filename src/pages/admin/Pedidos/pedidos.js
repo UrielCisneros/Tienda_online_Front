@@ -9,36 +9,9 @@ import DetallesPedido from './detalles_pedido';
 import EstadoPedido from './estado_pedido';
 import Pagination from '../../../components/Pagination/pagination';
 import queryString from 'query-string';
+import { formatoMexico, formatoFecha } from '../../../config/reuserFunction';
 
 const { Meta } = Card;
-
-const formatoMexico = (number) => {
-	if (!number) {
-		return null;
-	} else {
-		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-		const rep = '$1,';
-		return number.toString().replace(exp, rep);
-	}
-};
-
-const formatoFecha = (fecha) => {
-	if (!fecha) {
-		return null;
-	} else {
-		var newdate = new Date(fecha);
-		return newdate.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-	}
-};
-
-/* const formatoHora = (hora) => {
-	if (!hora) {
-		return null;
-	} else {
-		var newtime = new Date(hora);
-		return newtime.toLocaleTimeString('es-MX', { hour12: 'false' });
-	}
-}; */
 
 function Pedidos(props) {
 	const token = localStorage.getItem('token');
@@ -74,7 +47,7 @@ function Pedidos(props) {
 
 	useEffect(
 		() => {
-			obtenerPedidos(10, page);
+			obtenerPedidos(12, page);
 			setReload(false);
 		},
 		[ reload, page ]
@@ -326,7 +299,7 @@ function Pedidos(props) {
 			>
 				<EstadoPedido datosPedido={detallePedido} reload={setReload} />
 			</Modal>
-			<Pagination blogs={pedidosPaginacion} location={location} history={history} />
+			<Pagination blogs={pedidosPaginacion} location={location} history={history} limite={12} />
 		</Spin>
 	);
 }
