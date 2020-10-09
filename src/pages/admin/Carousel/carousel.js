@@ -217,6 +217,7 @@ function Carousel(props) {
 							setProducto(productos);
 							showModal();
 						}}
+						size={window.screen.width > 768 ? 'middle' : 'small'}
 					>
 						<EyeOutlined />
 						Ver
@@ -229,6 +230,7 @@ function Carousel(props) {
 							onClick={() => {
 								setProducto(productos.producto._id);
 							}}
+							size={window.screen.width > 768 ? 'middle' : 'small'}
 						>
 							<EditOutlined />
 							Editar
@@ -241,6 +243,7 @@ function Carousel(props) {
 						onClick={() => {
 							showDeleteConfirm(productos.producto._id);
 						}}
+						size={window.screen.width > 768 ? 'middle' : 'small'}
 					>
 						<DeleteOutlined />
 						Eliminar

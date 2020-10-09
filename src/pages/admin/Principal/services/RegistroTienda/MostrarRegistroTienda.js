@@ -156,10 +156,10 @@ import {Link} from 'react-router-dom';
                     <RegistroTienda datosNegocio={datosNegocio} token={token} setLoading={setLoading} setReloadInfo={setReloadInfo} />
                 </Drawer>
             
-            <div className="d-flex">
+            <div className="contenedor-boton-datostienda">
                 <Button
                     type="primary"
-                    className="mostrarRegistroTienda-button m-3"
+                    className="m-3"
                     size="large"
                     icon={action === false ? (<PlusCircleOutlined style={{ fontSize: 24 }} />):(<EditOutlined style={{ fontSize: 24 }} />) }
                     onClick={() => {

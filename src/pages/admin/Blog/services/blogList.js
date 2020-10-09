@@ -76,18 +76,18 @@ function Blog(props){
         <List.Item
             actions={[
                 <Link to={`/blog/${blog.url}`} target="_blank">
-                    <Button type="dashed">
+                    <Button type="dashed" size={window.screen.width > 768 ? 'middle' : 'small'}>
                         <EyeOutlined /> Ver
                     </Button>
                 </Link>,
-                <Button type="dashed" onClick={() => {
+                <Button type="dashed" size={window.screen.width > 768 ? 'middle' : 'small'} onClick={() => {
                     setInfoBlog(blog);
                     setAccion(true);
                     showDrawer();
                 }}>
                     <EditOutlined /> Editar
                 </Button>,
-                <Button type="dashed" danger onClick={() => deleteBlog(blog)}>
+                <Button type="dashed" danger onClick={() => deleteBlog(blog)} size={window.screen.width > 768 ? 'middle' : 'small'}>
                     <DeleteOutlined /> Eliminar
                 </Button>
             ]}

@@ -23,15 +23,17 @@ p{
     justify-content: center!important;
     align-items: center!important;
 }
-
-.mostrarRegistroTienda-button{
-    display: flex!important;
-    flex-direction: row!important;
-    flex-wrap: wrap!important;
-    justify-content: right!important;
-    align-items: right!important;
+.contenedor-boton-datostienda{
+    display: flex;
+    justify-content: flex-end;
 }
 .politicas-p > p {
     font-size: 18px;
     margin: 5px;
+}
+@media(max-width: 768px){
+    .contenedor-boton-datostienda{
+        display: flex;
+        justify-content: center;
+    } 
 }
