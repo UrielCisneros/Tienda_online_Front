@@ -46,9 +46,11 @@ h1, h2, h3, h4, h5, h6, p, a, li{
 /* NAVBAR CATEGORIAS STYLES */
 .container-subcategorias-nav{
     background-color: $bg-color-navbar-categorias;
+    /* border-bottom: none!important; */
 }
 .nav-font-color-categorias{
     color: $font-color-navbar-categorias;
+    /* border-bottom: none!important; */
 } 
 .nav-font-color-categorias:hover{
     color: $font-color-navbar-categorias-hover!important;
