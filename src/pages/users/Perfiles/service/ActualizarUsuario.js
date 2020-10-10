@@ -104,7 +104,7 @@ export default function ActualizarUsuario(props) {
         formData.append('pais', datosFormulario.pais);
 
 
-        if(enviarFile.length !== 0){
+        if(decoded.tipoSesion === "APIRestAB"){
             formData.append('imagen', enviarFile);
         }
         setAccion(true);
@@ -176,11 +176,12 @@ export default function ActualizarUsuario(props) {
             >
                 {decoded.tipoSesion !== "APIRestAB" ? (
                     <div>
-                        <div className="upload-user-perfil">
+                        <div className="d-flex justify-content-center align-items-center">
                         <img
-                            className=""
+                            className="img-fluid"
                             alt="logotipo-tienda"
                             src={decoded.imagenFireBase}
+                            style={{width:"200px"}}
                         />
                         </div>
                     </div>
