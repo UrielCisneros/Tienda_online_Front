@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Spin } from 'antd';
-import { Link, withRouter } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
+import { withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import './categorias.scss';
+import './preloading.scss';
 import clienteAxios from '../../config/axios';
 
 const { SubMenu } = Menu;
+const antIcon = <LoadingOutlined style={{ fontSize: 48 }} spin />;
 
 const Categorias = (props) => {
 	const token = localStorage.getItem('token');
@@ -81,6 +84,16 @@ const Categorias = (props) => {
 			</Menu.Item>
 		);
 	});
+
+	if (loading) {
+		return (
+			<div className="preloading">
+				<div className="contenedor-preloading" >
+					<Spin indicator={antIcon} tip="Cargando la tienda..." className="class-spin" />
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<Layout className="container-subcategorias-nav d-lg-inline">
