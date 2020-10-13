@@ -37,6 +37,7 @@ function TallasCantidades(props) {
 	const [ visible, setVisible ] = useState(false);
 	const [ disabled, setDisabled ] = useState(false);
 	const [ datosUser, setDatosUser ] = useState([]);
+
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
 	var total = 0;
@@ -51,8 +52,8 @@ function TallasCantidades(props) {
 	}
 
 	async function obtenerDatosUser() {
-		if(!decoded){
-			return null
+		if (!decoded) {
+			return null;
 		}
 		await clienteAxios
 			.get(`/cliente/${decoded._id}`, {
@@ -67,12 +68,12 @@ function TallasCantidades(props) {
 				console.log(err);
 			});
 	}
-	
+
 	useEffect(() => {
 		if (token) {
-			obtenerDatosUser()
+			obtenerDatosUser();
 		}
-	}, [])
+	}, []);
 
 	useEffect(
 		() => {
@@ -205,16 +206,15 @@ function TallasCantidades(props) {
 				duration: 2
 			});
 		} else {
-			if(datosUser.telefono.length === 0 || datosUser.direccion.length === 0) {
+			if (datosUser.telefono.length === 0 || datosUser.direccion.length === 0) {
 				notification.info({
 					message: 'Completa tus datos',
 					duration: 2
 				});
-			}else{
+			} else {
 				setVisible(false);
 				Apartado();
 			}
-			
 		}
 	};
 
@@ -381,7 +381,7 @@ function TallasCantidades(props) {
 					) : (
 						<p className="disponibilidad-p-disponible mb-3">articulos disponibles!</p>
 					)}
-					{categoria !== 'otros' ? <p className="mb-3">Tallas:</p> : <p />}
+					{categoria !== 'otros' ? <p className="mb-3 font-weight-bold">Tallas:</p> : <p />}
 					<div>{render}</div>
 				</div>
 
@@ -431,41 +431,46 @@ function TallasCantidades(props) {
 				</Form>
 
 				<Divider />
-				<div className="d-flex justify-content-center">
-					<div>
-						<Button
-							className="d-block"
-							type="primary"
-							size="large"
-							style={{ width: 200 }}
-							onClick={() => Pedido()}
-							disabled={disabled}
-						>
-							<TagsOutlined style={{ fontSize: 20 }} />
-							Comprar ahora
-						</Button>
-						<Button
-							className="mt-3 d-block"
-							size="large"
-							style={{ width: 200 }}
-							onClick={() => showModal()}
-							disabled={disabled}
-						>
-							<BellOutlined style={{ fontSize: 20 }} />
-							Apartar
-						</Button>
-						<Button
-							className="mt-3 d-block"
-							size="large"
-							style={{ width: 200 }}
-							disabled={disabled}
-							onClick={() => Carrito()}
-						>
-							<ShoppingCartOutlined style={{ fontSize: 20 }} />
-							Agregar al carrito
-						</Button>
+				{decoded && decoded.rol === true ? (
+					<Alert
+						description="Como Administrador tienes desabilitadas las opciones de comprar, apartar y agregar al carrito"
+						type="info"
+						showIcon
+					/>
+				) : (
+					<div className="contenedor-button-vista">
+						<div>
+							<Button
+								className="d-block size-button-vista"
+								type="primary"
+								size="large"
+								onClick={() => Pedido()}
+								disabled={disabled}
+							>
+								<TagsOutlined style={{ fontSize: 20 }} />
+								Comprar ahora
+							</Button>
+							<Button
+								className="mt-3 d-block size-button-vista"
+								size="large"
+								onClick={() => showModal()}
+								disabled={disabled}
+							>
+								<BellOutlined style={{ fontSize: 20 }} />
+								Apartar
+							</Button>
+							<Button
+								className="mt-3 d-block size-button-vista"
+								size="large"
+								disabled={disabled}
+								onClick={() => Carrito()}
+							>
+								<ShoppingCartOutlined style={{ fontSize: 20 }} />
+								Agregar al carrito
+							</Button>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 			<Modal
 				title="Nuevo Apartado"
@@ -539,7 +544,11 @@ function TallasCantidades(props) {
 					</div>
 				</div>
 				<Divider>Tus datos</Divider>
-				{ decoded && decoded._id ? <DatosCliente token={token} clienteID={decoded._id} tipoEnvio={tipoEnvio} /> : <div />}
+				{decoded && decoded._id ? (
+					<DatosCliente token={token} clienteID={decoded._id} tipoEnvio={tipoEnvio} />
+				) : (
+					<div />
+				)}
 			</Modal>
 		</Spin>
 	);

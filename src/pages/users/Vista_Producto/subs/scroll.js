@@ -72,7 +72,7 @@ function Scroll(props) {
 	return (
 		<Spin spinning={loading}>
 			<div className="mt-5">
-				<p className="titulos-vista-productos">Tambien te pueden interesar:</p>
+				<p className="titulos-vista-productos mb-3">Quienes vieron este producto también compraron</p>
 				<div className="contenedor-scroller">
 					{render}
 				</div>

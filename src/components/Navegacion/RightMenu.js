@@ -27,7 +27,7 @@ function RightMenu(props) {
 	return (
 		<Menu defaultSelectedKeys={[ window.location.pathname ]}>
 			<Menu.Item key="/">
-				Home<Link to="/" />
+				Inicio<Link to="/" />
 			</Menu.Item>
 			<Menu.Item key="/productos">
 				Productos<Link to="/productos" />
@@ -49,11 +49,11 @@ function RightMenu(props) {
 					Quiénes somos<Link to="/quienes_somos" />
 				</Menu.Item>
 			)}
-			{!decoded ? (
+			{!decoded || decoded.rol === true ? (
 				<Menu.Item className="d-none" />
 			) : (
 				<Menu.Item key="/pedidos">
-					Pedidos<Link to="/pedidos" />
+					Mis pedidos<Link to="/pedidos" />
 				</Menu.Item>
 			)}
 			{token && decoded['rol'] === false ? (
@@ -74,7 +74,7 @@ function RightMenu(props) {
 						)
 					}
 				>
-					<Menu.Item className="nav-font-color nav-border-color">
+					<Menu.Item className=" nav-border-color">
 						<SettingOutlined />Mi cuenta<Link to="/perfiles" />
 					</Menu.Item>
 					<Menu.Item>
@@ -110,7 +110,7 @@ function RightMenu(props) {
 						)
 					}
 				>
-					<Menu.Item className="nav-font-color nav-border-color">
+					<Menu.Item className=" nav-border-color">
 						<SettingOutlined />Panel de administrador<Link to="/admin" />
 					</Menu.Item>
 					<Menu.Item className="nav-font-color nav-border-color">

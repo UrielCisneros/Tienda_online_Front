@@ -64,6 +64,8 @@ function MostrarDatosProductos(props) {
 		[ activador ]
 	);
 
+	console.log("inifinite")
+
 	useEffect(
 		() => {
 			if (carrito.articulos) {
@@ -81,10 +83,10 @@ function MostrarDatosProductos(props) {
 			var total = 0;
 
 			nuevoCarrito.forEach((res) => {
-				if(res.promocion){
-					subtotal += res.promocion.precioPromocion * res.cantidad
-				}else{
-					subtotal += res.idarticulo.precio * res.cantidad
+				if (res.promocion) {
+					subtotal += res.promocion.precioPromocion * res.cantidad;
+				} else {
+					subtotal += res.idarticulo.precio * res.cantidad;
 				}
 				total = subtotal;
 				setTotal(total);
@@ -101,7 +103,7 @@ function MostrarDatosProductos(props) {
 		}
 	}
 
-	if (carrito.length === 0) {
+	if (carrito.length === 0 || carrito.articulos.length === 0) {
 		return (
 			<Spin size="large" spinning={loading}>
 				<Result
@@ -139,7 +141,7 @@ function MostrarDatosProductos(props) {
 								<p style={{ fontSize: 24, display: 'inline' }}>Total: </p>
 								<p style={{ fontSize: 24, display: 'inline', fontWeight: 'bold' }}>
 									{' '}
-									${formatoMexico(total)}
+									${total !== 0 ? formatoMexico(total) : 0}
 								</p>
 							</div>
 						</div>

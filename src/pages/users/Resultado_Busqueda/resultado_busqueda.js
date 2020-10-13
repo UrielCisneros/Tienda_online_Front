@@ -2,18 +2,9 @@ import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
 import { Card, Col, Row, Spin, notification, Result } from 'antd';
 import { Link } from 'react-router-dom';
+import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
-
-const formatoMexico = (number) => {
-	if (!number) {
-		return null;
-	} else {
-		const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-		const rep = '$1,';
-		return number.toString().replace(exp, rep);
-	}
-};
 
 function ResultadoBusqueda(props) {
 	const [ productos, setProductos ] = useState([]);
@@ -53,18 +44,12 @@ function ResultadoBusqueda(props) {
 		[ url ]
 	);
 
-	function agregarPorcentaje(precio_descuento, precio_producto) {
-		var porcentaje = Math.round(precio_descuento / precio_producto * 100);
-		var descuento = 100 - porcentaje;
-		return descuento;
-	}
-
 	const render = productos.map((productos) => (
 		<Col key={productos._id}>
 			<Link to={`/vista_producto/${productos._id}`}>
-				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
+				<Card.Grid hoverable style={gridStyle} className="contenedor-card-producto-principal">
 					<Card
-						bodyStyle={{ padding: 22, backgroundColor: '#F7F7F7'}}
+						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7', minHeight: 130}}
 						className="contenedor-card-body"
 						cover={
 							<div className="contenedor-imagen-producto-principal">
@@ -113,7 +98,7 @@ function ResultadoBusqueda(props) {
 			</h3>
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
-					<Row gutter={4} style={{ maxWidth: '90vw' }} className="mt-4">
+					<Row justify="center" gutter={10} style={{ maxWidth: '95vw' }} className="mt-4">
 						{productos.length ? (
 							render
 						) : (

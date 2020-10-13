@@ -1,14 +1,14 @@
 $color-blog: #ffff;
 
 /* NAVBAR VARIABLES */
-$bg-color-navbar: rgb(255, 255, 255);
+$bg-color-navbar: #383838;
 $border-color-navbar: rgb(255, 129, 129);
-$font-color-navbar: rgb(0, 0, 0);
+$font-color-navbar: rgb(255, 255, 255);
 $font-color-navbar-hover: rgb(0, 89, 255);
 
 /* NAVBAR CATEGORIAS VARIABLES */
-$bg-color-navbar-categorias: rgb(255, 255, 255);
-$font-color-navbar-categorias: rgb(0, 0, 0);
+$bg-color-navbar-categorias: #2222a8;
+$font-color-navbar-categorias: rgb(255, 255, 255);
 $font-color-navbar-categorias-hover: rgb(0, 89, 255);
 
 /* FOOTER VARIABLES */
@@ -44,9 +44,13 @@ h1, h2, h3, h4, h5, h6, p, a, li{
 }
 
 /* NAVBAR CATEGORIAS STYLES */
+.categorias-navbar{
+    background-color: $bg-color-navbar-categorias;
+}
 .container-subcategorias-nav{
     background-color: $bg-color-navbar-categorias;
-    /* border-bottom: none!important; */
+    border-bottom: solid $bg-color-navbar-categorias;
+    border-top: solid $bg-color-navbar-categorias;
 }
 .nav-font-color-categorias{
     color: $font-color-navbar-categorias;

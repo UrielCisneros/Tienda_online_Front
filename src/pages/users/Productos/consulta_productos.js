@@ -105,7 +105,7 @@ function ConsultaProductos(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<div className="principal-productos"><p>NUESTROS PRODUCTOS</p></div>
+			{/* <div className="principal-productos"><p>NUESTROS PRODUCTOS</p></div> */}
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
 					<Row gutter={10} style={{ maxWidth: '95vw' }} className="mt-4">

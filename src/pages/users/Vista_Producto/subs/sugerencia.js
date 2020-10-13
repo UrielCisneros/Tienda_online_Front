@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { notification, Spin, Button, Select, Card, Form, InputNumber, Modal } from 'antd';
+import { notification, Spin, Button, Select, Card, Form, InputNumber, Modal, Alert } from 'antd';
 import { IssuesCloseOutlined } from '@ant-design/icons';
 import { formatoMexico, agregarPorcentaje } from '../../../../config/reuserFunction';
 import { AgregarPedido } from './servicesSugerencia';
@@ -223,7 +223,7 @@ const Sugerencia = (props) => {
 
 	return (
 		<Spin spinning={loading}>
-			<div className="row">
+			<div className="row mw-100">
 				{!producto || !sugerencia ? (
 					<div />
 				) : (
@@ -532,15 +532,23 @@ const Sugerencia = (props) => {
 									</p>
 								</div>
 								<div className="d-flex justify-content-center align-items-center mt-4">
-									<Button
-										disabled={disabled}
-										type="primary"
-										size="large"
-										className="d-block m-1"
-										onClick={() => showConfirm()}
-									>
-										Comprar
-									</Button>
+									{decoded && decoded.rol === true ? (
+										<Alert
+											description="Como Administrador tienes desabilitadas las opciones de comprar, apartar y agregar al carrito"
+											type="info"
+											showIcon
+										/>
+									) : (
+										<Button
+											disabled={disabled}
+											type="primary"
+											size="large"
+											className="d-block m-1"
+											onClick={() => showConfirm()}
+										>
+											Comprar
+										</Button>
+									)}
 								</div>
 							</div>
 						</div>

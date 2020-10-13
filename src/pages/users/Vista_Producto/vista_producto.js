@@ -73,7 +73,7 @@ function VistaProductos(props) {
 							<Galeria id={producto} />
 						</div>
 						<div className="descripcion-lg">
-							<p className="titulos-vista-productos">Descripcion:</p>
+							<p className="titulos-vista-productos">Descripción</p>
 							<div
 								className={readMore}
 								dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productos.descripcion) }}
@@ -121,7 +121,13 @@ function VistaProductos(props) {
 								</p>
 								{costoEnvio.promocionEnvio ? (
 									<Alert
-										message={`Si supera $${costoEnvio.promocionEnvio} en su compra, se le descontraran $${costoEnvio.descuento} en su compra`}
+										message={
+											costoEnvio.descuento === 0 ? (
+												`En compras arriba de $${costoEnvio.promocionEnvio}, el envio sera GRATIS!`
+											) : (
+												`En compras arriba de $${costoEnvio.promocionEnvio}, se le descontraran $${costoEnvio.descuento} en su compra`
+											)
+										}
 										type="success"
 										showIcon
 									/>
@@ -135,18 +141,23 @@ function VistaProductos(props) {
 						<Divider />
 						<div className="row justify-content-center">
 							<div className="col-4">
-								<p style={{fontSize: 20, marginBottom: 10}}>Género:</p>
-								<Tag color="blue" style={{fontSize: 16}}>{productos.genero}</Tag>
+								<p style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Género:</p>
+								<Tag color="blue" style={{ fontSize: 16 }}>
+									{productos.genero}
+								</Tag>
 							</div>
 							<div className="col-6">
-								<p style={{fontSize: 20, marginBottom: 5}}>Color: {productos.color}</p>
-								<div className="rounded-circle ml-2" style={{ height: 30, width: 30, backgroundColor: productos.colorHex}}/>
+								<p style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>Color: {productos.color}</p>
+								<div
+									className="rounded-circle ml-2"
+									style={{ height: 30, width: 30, backgroundColor: productos.colorHex }}
+								/>
 							</div>
 						</div>
 						<Divider />
 						<TallasCantidades producto={productos} /> {/* Componente tallas */}
 						<Divider />
-						<p className="mb-3" style={{ fontSize: 20 }}>
+						<p className="mb-3" style={{ fontSize: 20, fontWeight: 'bold' }}>
 							<CreditCardOutlined style={{ fontSize: 25 }} className="mr-2" />
 							Formas de Pago
 						</p>
