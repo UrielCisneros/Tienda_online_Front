@@ -4,16 +4,28 @@ import Carousel from './Carusel_ofertas/carousel';
 import ConsultaProductos from './Productos/consulta_productos';
 import Ofertas from './Ofertas/ofertasHome';
 import Datos_tienda from './Datos_tienda/datos_tienda'
-import bannerProducto from '../../imagenes/Para_CAFI.png'
+import './home.scss'
 
 export default function Home(props) {
-
 
 	return (
 		<div>
 			<Carousel />
-			<div>
-				<img alt="banner-productos" src={bannerProducto} className="banner-producto" />
+			<div className="contenedor-home-background">
+				<div className="row contenedor-home-banner">
+					<div className="text-center textos-home col-lg-4 col-12">
+						<h2>REALIZA TU PAGO EN LÍNEA</h2>
+						<p>ACEPTAMOS PAGOS CON TARJETA</p>
+					</div>
+					<div className="text-center textos-home divider-home-banner col-lg-4 col-12 ">
+						<h2>ENVÍO GRATUITO</h2>
+						<p>EN PEDIDOS MAYORES A $1500.00</p>
+					</div>
+					<div className="text-center textos-home col-lg-4 col-12">
+						<h2>APARTA TU PRODUCTO FAVORITO</h2>
+						<p>PUEDES APARTAR TU PEDIDO Y PASAR POR EL</p>
+					</div>
+				</div>
 			</div>
 			<ConsultaProductos propiedades={props} />
             <Ofertas />

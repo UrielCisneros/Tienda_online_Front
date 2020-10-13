@@ -19,8 +19,13 @@ $font-color-footer: rgb(0, 0, 0);
 $bg-layout: rgb(255, 255, 255);
 
 /* FONT FAMILY STYLES */
-h1, h2, h3, h4, h5, h6, p, a, li{
+h1, h2, h3, h4, h5, h6{
     font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+p, a, li{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400; 
 }
 
 /* LAYOUT */
