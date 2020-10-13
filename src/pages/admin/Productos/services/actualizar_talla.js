@@ -69,6 +69,9 @@ function ActualizarTalla() {
 			});
 	}
 	async function nuevaTalla() {
+		if(datos.talla === "" || datos.cantidad === ""){
+			return null;
+		}
 		setLoading(true);
 		await clienteAxios
 			.post(`/productos/addTalla/${productoID}`, datos, {

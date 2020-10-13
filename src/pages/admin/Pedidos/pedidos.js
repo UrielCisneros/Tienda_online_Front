@@ -243,7 +243,7 @@ function Pedidos(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			<div>
-				<p className="text-center" style={{ fontSize: 20 }}>
+				<p className="text-center font-weight-bold" style={{ fontSize: 20 }}>
 						SISTEMA DE CONTROL DE PEDIDOS
 				</p>
 				<p className="text-center" style={{ fontSize: 15 }}>

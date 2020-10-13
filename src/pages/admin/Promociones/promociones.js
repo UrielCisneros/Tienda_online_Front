@@ -197,7 +197,7 @@ function Promociones(props) {
 				}
 				title={
 					<div className="mt-4 titulo-producto">
-						<h1 className="h5">{productos.productoPromocion.nombre}</h1>
+						<h1 className="h5 font-weight-bold">{productos.productoPromocion.nombre}</h1>
 						<p className="h4 precio-producto d-inline mr-2">
 							$ {formatoMexico(productos.productoPromocion.precio)}
 						</p>
@@ -213,7 +213,7 @@ function Promociones(props) {
 	return (
 		<Spin size="large" spinning={loading}>
 			<div>
-				<p className="text-center" style={{ fontSize: 20 }}>
+				<p className="text-center font-weight-bold" style={{ fontSize: 20 }}>
 					SISTEMA DE PROMOCIONES
 				</p>
 				<p className="text-center" style={{ fontSize: 15 }}>

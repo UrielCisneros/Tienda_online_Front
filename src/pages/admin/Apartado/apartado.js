@@ -112,7 +112,7 @@ function SistemaApartado(props) {
        <div>
 			<Spin size="large" spinning={loading}>
 				<div>
-					<p className="text-center" style={{ fontSize: 20 }}>
+					<p className="text-center font-weight-bold" style={{ fontSize: 20 }}>
 						SISTEMA DE CONTROL DE APARTADO
 					</p>
 					<Row justify="center mt-5">

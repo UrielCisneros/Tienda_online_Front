@@ -154,7 +154,7 @@ function Sugerencias(props) {
 				}
 				title={
 					<div className="mt-4 titulo-producto">
-						<h1 className="h5">{productos.nombre}</h1>
+						<h1 className="h5 font-weight-bold">{productos.nombre}</h1>
 					</div>
 				}
 			/>
@@ -163,7 +163,7 @@ function Sugerencias(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<p className="text-center" style={{ fontSize: 20 }}>
+			<p className="text-center font-weight-bold" style={{ fontSize: 20 }}>
 				PRODUCTOS SUGERIDOS
 			</p>
 			<p className="text-center" style={{ fontSize: 15 }}>

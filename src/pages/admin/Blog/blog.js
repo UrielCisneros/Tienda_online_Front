@@ -126,6 +126,9 @@ function BlogAdmin(props) {
                 </Drawer>
                 
                 <div className="blog__add-post">
+                <p className="text-center font-weight-bold" style={{ fontSize: 20 }}>
+                    Tus blogs
+                </p>
                     <Button 
                         type="primary"
                         size="large"
@@ -139,6 +142,7 @@ function BlogAdmin(props) {
                             Crear Blog
                     </Button>
                 </div>
+
                 <BlogsList 
                     blogs={blogs} 
                     setReloadBlog={setReloadBlog} 

@@ -260,9 +260,9 @@ function RegistrarProductos(props) {
 					]}
 				>
 					<div className="contenedor-titulos-productos">
-						<h1 className="titulo-producto titulo-producto-admin-responsivo">{productos.nombre}</h1>
+						<h1 className="titulo-producto titulo-producto-admin-responsivo font-weight-bold">{productos.nombre}</h1>
 						{!productos.todos.length ? (
-							<h2 className="h5">$ {formatoMexico(productos.precio)}</h2>
+							<h2 className="h5 ">$ {formatoMexico(productos.precio)}</h2>
 						) : (
 							productos.todos.map((promo) => {
 								return (

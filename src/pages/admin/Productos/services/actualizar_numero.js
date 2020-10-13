@@ -18,6 +18,7 @@ function ActualizarNumero() {
 		cantidad: ''
 	});
 
+
 	useEffect(
 		() => {
 			obtenerNumero();
@@ -43,6 +44,10 @@ function ActualizarNumero() {
 			.then((res) => {
 				setIdNumero('');
 				setLoading(false);
+				setDatos({
+					numero: '',
+					cantidad: ''
+				})
 				obtenerNumero();
 				form.resetFields();
 				notification.success({
@@ -70,6 +75,9 @@ function ActualizarNumero() {
 			});
 	}
 	async function nuevoNumero() {
+		if(datos.numero === "" || datos.cantidad === ""){
+			return null
+		}
 		setLoading(true);
 		await clienteAxios
 			.post(`/productos/addNumero/${productoID}`, datos, {
@@ -80,6 +88,10 @@ function ActualizarNumero() {
 			.then((res) => {
 				obtenerNumero();
 				setLoading(false);
+				setDatos({
+					numero: '',
+					cantidad: ''
+				})
 				form.resetFields();
 				notification.success({
 					message: 'Hecho!',
@@ -213,10 +225,10 @@ function ActualizarNumero() {
 				<div className="d-flex justify-content-center">
 					<Form form={form} ref={formRef.current} onFinish={actualizarNumero}>
 						<Row gutter={8}>
-							<Col span={5}>
+							<Col span={8}>
 								<Form.Item
 									name="numero"
-									label="numero"
+									label="Numero"
 									onChange={datosForm}
 									labelCol={{ offset: 1, span: 6 }}
 									wrapperCol={{ offset: 1, span: 16 }}
@@ -231,6 +243,7 @@ function ActualizarNumero() {
 									onChange={datosForm}
 									labelCol={{ offset: 1, span: 6 }}
 									wrapperCol={{ offset: 1, span: 12 }}
+									
 								>
 									<Input name="cantidad" />
 								</Form.Item>
@@ -254,7 +267,7 @@ function ActualizarNumero() {
 										</Space>
 									</div>
 								) : (
-									<Button type="dafault" onClick={nuevoNumero}>
+									<Button  type="dafault" onClick={nuevoNumero}>
 										Agregar
 									</Button>
 								)}

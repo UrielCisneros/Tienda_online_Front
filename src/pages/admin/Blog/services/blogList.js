@@ -95,8 +95,8 @@ function Blog(props){
         >
             <List.Item.Meta 
                 avatar={<Avatar src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${blog.imagen}`} />}
-                title={blog.nombre} 
-                description={blog.administrador}
+                title={<p className="h5 font-weight-bold">{blog.nombre}</p>} 
+                description={<p className="h6">{blog.administrador}</p>}
             />
         </List.Item>
     )

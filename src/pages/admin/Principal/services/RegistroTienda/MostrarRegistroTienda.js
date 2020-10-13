@@ -171,7 +171,7 @@ import {Link} from 'react-router-dom';
             </div>
 
             <div className="text-center mt-3">
-                <h2 className="text-center h2 mb-4">{action === false ? "Ey aún no agregas la información de tu negocio.":"Información de tu negocio"} </h2>
+                <p className="text-center mb-4 font-weight-bold" style={{ fontSize: 20 }}>{action === false ? "Ey aún no agregas la información de tu negocio.":"Información de tu negocio"} </p>
                 <div className="w-50" style={{margin: "auto"}} >
                     {action === false ? (
                         <Alert
@@ -186,7 +186,7 @@ import {Link} from 'react-router-dom';
                 </div>
                         {action === false ? "" : (
                             <div>
-                                <p>Logo del negocio:</p>
+                                <p className="h5">Logo del negocio:</p>
                                 <div className="mostrarRegistroTienda-imagen m-3">
                                     <img
                                         className="d-block img-fluid "
@@ -200,34 +200,34 @@ import {Link} from 'react-router-dom';
 
                     <div className="row m-4">
                             <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p>Nombre del negocio: <span className="h6"> {action === false ? "Nombre de tu negocio": datosNegocio.nombre} </span> </p>
+                                <p className="h5">Nombre del negocio: <span className="h5"> {action === false ? "Nombre de tu negocio": datosNegocio.nombre} </span> </p>
                             </div>
                             <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p>Teléfono:<span className="h6"> {action === false ? "Teléfono": datosNegocio.telefono} </span></p>
+                                <p className="h5">Teléfono:<span className="h5"> {action === false ? "Teléfono": datosNegocio.telefono} </span></p>
                             </div>
                             <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p>Código Postal:<span className="h6"> {action === false ? "Código Postal": datosNegocio.direccion[0].cp} </span></p>
+                                <p className="h5">Código Postal:<span className="h5"> {action === false ? "Código Postal": datosNegocio.direccion[0].cp} </span></p>
                             </div>
                     </div>
 
                     <div className="row m-4">
                             <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p>Calle:<span className="h6"> {action === false ? "Calle": datosNegocio.direccion[0].calle_numero} </span></p>
+                                <p className="h5">Calle:<span className="h5"> {action === false ? "Calle": datosNegocio.direccion[0].calle_numero} </span></p>
                             </div>
                             <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p>Colonia:<span className="h6"> {action === false ? "Colonia": datosNegocio.direccion[0].colonia} </span></p>
+                                <p className="h5">Colonia:<span className="h5"> {action === false ? "Colonia": datosNegocio.direccion[0].colonia} </span></p>
                             </div>
                             <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p>Ciudad:<span className="h6"> {action === false ? "Colonia": datosNegocio.direccion[0].ciudad} Ciudad</span></p>
+                                <p className="h5">Ciudad:<span className="h5"> {action === false ? "Colonia": datosNegocio.direccion[0].ciudad} Ciudad</span></p>
                             </div>
                     </div>
 
                     <div className="row">
                             <div className="col-lg-6 col-sm-12">
-                                <p>Estado:<span className="h6"> {action === false ? "Estado": datosNegocio.direccion[0].estado}</span></p>
+                                <p className="h5">Estado:<span className="h5"> {action === false ? "Estado": datosNegocio.direccion[0].estado}</span></p>
                             </div>
                             <div className="col-lg-6 col-sm-12">
-                                <p className="m-2" >Redes sociales:</p>
+                                <p className="m-2 h5" >Redes sociales:</p>
                                 {face !== '' ? 
                                     (
                                     <a href={face} className="m-2" target="_blank">
@@ -256,7 +256,7 @@ import {Link} from 'react-router-dom';
 
                     <div className="row">
                         <div className="col-12">
-                            <p className="m-3 ">Ubicación actual: </p>
+                            <p className="m-3 h5">Ubicación actual: </p>
                                 <Geolocalizacion 
                                     height="60vh"
                                     width="100%"
@@ -273,21 +273,21 @@ import {Link} from 'react-router-dom';
                         <div className="col-lg-4 col-sm-12">
                             <p className="m-3 h3">Políticas de envío</p>
                             {politicasEnvio.length === 0 ? (
-                                <Empty description={<p className="h6">Aún no hay información</p>} />
+                                <Empty description={<p className="h5">Aún no hay información</p>} />
                             ):(
                                 <div className="politicas-p mt-4">
-                                    <p>Costo por envío de paqueteria: <strong>${politicasEnvio.costoEnvio}</strong></p>
-                                    <p>Promoción de envío: <strong>${politicasEnvio.promocionEnvio}</strong></p>
-                                    <p>Costo de promocion de envío: <strong>${politicasEnvio.descuento}</strong></p>
+                                    <p className="h5">Costo por envío de paqueteria: <strong>${politicasEnvio.costoEnvio}</strong></p>
+                                    <p className="h5">Promoción de envío: <strong>${politicasEnvio.promocionEnvio}</strong></p>
+                                    <p className="h5">Costo de promocion de envío: <strong>${politicasEnvio.descuento}</strong></p>
                                 </div>
                             )}
                         </div>
                         <div className="col-lg-4 col-sm-12">
                             <p className="m-3 h3">Políticas de privacidad</p>
                             {action === false ? (
-                                <Empty description={<p className="h6">Aún no hay información</p>} />
+                                <Empty description={<p className="h5">Aún no hay información</p>} />
                             ):(
-                                <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<p className="h6">Información existente</p>} >
+                                <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<p className="h5">Información existente</p>} >
                                     <Link to={`/politicas`} target="_blank">
                                         <Button type="dashed">
                                             <EyeOutlined /> Ver
@@ -299,9 +299,9 @@ import {Link} from 'react-router-dom';
                         <div className="col-lg-4 col-sm-12">
                             <p className="m-3 h3">Imagen corporativa</p>
                             {action === false ? (
-                                <Empty description={<p className="h6">Aún no hay información</p>} />
+                                <Empty description={<p className="h5">Aún no hay información</p>} />
                             ):(
-                                <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<p className="h6">Información existente</p>} >
+                                <Empty image="https://es.seaicons.com/wp-content/uploads/2015/11/Review-Post-icon1.png" description={<p className="h5">Información existente</p>} >
                                     <Link to={`/quienes_somos`} target="_blank">
                                         <Button type="dashed">
                                             <EyeOutlined /> Ver
@@ -321,7 +321,7 @@ function AlertTienda(){
 
     return(
         <div>
-            <p className="h6">Recuerda que tener la información de tu negocio es importante, ya que esta informacion ayudará que tu negocio sea encontrado fácilmente.</p>
+            <p className="h5">Recuerda que tener la información de tu negocio es importante, ya que esta informacion ayudará que tu negocio sea encontrado fácilmente.</p>
         </div>
     )
 }

@@ -62,19 +62,19 @@ function Clientes(props) {
 			dataIndex: 'nombre',
 			key: 'nombre',
 			fixed: 'left',
-			render: (nombre) => <p>{nombre}</p>
+			render: (nombre) => <p className="h5">{nombre}</p>
 		},
 		{
 			title: 'Apellido',
 			dataIndex: 'apellido',
 			key: 'apellido',
-			render: (apellido) => (!apellido ? <p>-</p> : <p>{apellido}</p>)
+			render: (apellido) => (!apellido ? <p className="h5">-</p> : <p className="h5">{apellido}</p>)
 		},
 		{
 			title: 'Email',
 			dataIndex: 'email',
 			key: 'email',
-			render: (email) => <p>{email}</p>
+			render: (email) => <p className="h5">{email}</p>
 		},
 		{
 			title: 'Dirección',
@@ -84,7 +84,7 @@ function Clientes(props) {
 				return direccion.map((res) => {
 					return (
 						<div key={res._id}>
-							<p>
+							<p className="h5">
 								{res.calle_numero}, {res.colonia}
 							</p>
 						</div>
@@ -100,7 +100,7 @@ function Clientes(props) {
 				return ciudad.map((res) => {
 					return (
 						<div key={res._id}>
-							<p>
+							<p className="h5">
 								{res.ciudad}, {res.estado}, {res.pais}
 							</p>
 						</div>

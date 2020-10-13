@@ -266,7 +266,7 @@ function Carousel(props) {
 				}
 				title={
 					<div className="mt-4 titulo-producto">
-						<h1 className="h5">{productos.producto.nombre}</h1>
+						<h1 className="h5 font-weight-bold">{productos.producto.nombre}</h1>
 					</div>
 				}
 			/>
@@ -275,7 +275,7 @@ function Carousel(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<p className="text-center" style={{ fontSize: 20 }}>
+			<p className="text-center font-weight-bold" style={{ fontSize: 20 }}>
 				Publicidad
 			</p>
 			<p className="text-center" style={{ fontSize: 15 }}>

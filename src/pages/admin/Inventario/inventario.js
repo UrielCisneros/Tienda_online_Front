@@ -49,13 +49,13 @@ function Inventario(props) {
 			dataIndex: 'nombre',
 			key: 'nombre',
 			fixed: 'left',
-			render: (text) => <p>{text}</p>
+			render: (text) => <p className="h5">{text}</p>
 		},
 		{
 			title: 'Código',
 			dataIndex: 'codigo',
 			key: 'codigo',
-			render: (text) => (!text ? <p>-</p> : <p>{text}</p>)
+			render: (text) => (!text ? <p className="h5">-</p> : <p className="h5">{text}</p>)
 		},
 		/* {
 			title: 'tipo de Categoria',
@@ -67,13 +67,13 @@ function Inventario(props) {
 			title: 'Categoría',
 			dataIndex: 'categoria',
 			key: 'categoria',
-			render: (text) => (!text ? <p>-</p> : <p>{text.toLowerCase()}</p>)
+			render: (text) => (!text ? <p className="h5">-</p> : <p className="h5">{text.toLowerCase()}</p>)
 		},
 		{
 			title: 'Sub categoría',
 			dataIndex: 'subCategoria',
 			key: 'subCategoria',
-			render: (text) => (!text ? <p>-</p> : <p>{text.toLowerCase()}</p>)
+			render: (text) => (!text ? <p className="h5">-</p> : <p className="h5">{text.toLowerCase()}</p>)
 		},
 		{
 			title: 'Cantidad',
@@ -95,7 +95,7 @@ function Inventario(props) {
 			render: (tallas) => (
 				<div>
 					{!tallas.length ? (
-						<p>-</p>
+						<p className="h5">-</p>
 					) : (
 						tallas.map((talla) => {
 							return (
@@ -112,7 +112,7 @@ function Inventario(props) {
 										)
 									}
 								>
-									<p>{talla.talla}</p>
+									<p className="h5">{talla.talla}</p>
 								</Badge>
 							);
 						})
@@ -127,7 +127,7 @@ function Inventario(props) {
 			render: (numeros) => (
 				<div>
 					{!numeros.length ? (
-						<p>-</p>
+						<p className="h5">-</p>
 					) : (
 						numeros.map((numero) => {
 							return (
@@ -144,7 +144,7 @@ function Inventario(props) {
 										)
 									}
 								>
-									<p>{numero.numero}</p>
+									<p className="h5">{numero.numero}</p>
 								</Badge>
 							);
 						})
