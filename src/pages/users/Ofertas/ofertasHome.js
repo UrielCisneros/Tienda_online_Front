@@ -69,7 +69,11 @@ function OfertasHome(props) {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<div className="principal-ofertas">APROVECHA NUESTROS DESCUENTOS!</div>
+			<div className="contenedor-home-background">
+				<div className="row contenedor-home-banner">
+					<h2 className="mb-0 text-center font-weight-bold">ENCUENTRA GRANDES DESCUENTOS TODOS LOS DIAS</h2>	
+				</div>
+			</div>
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
 					<Row gutter={10} style={{ maxWidth: '95vw' }} className=" mt-4">

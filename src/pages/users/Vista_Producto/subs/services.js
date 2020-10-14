@@ -62,7 +62,7 @@ export async function AgregarApartado(idcliente, idproducto, cantidad, talla, nu
 			)
 			.then((res) => {
 				return notification.success({
-					message: res.data.message,
+					message: "Pedido apartado.",
 					duration: 2
 				});
 			})

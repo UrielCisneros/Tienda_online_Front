@@ -37,7 +37,7 @@ const DetallesPedido = (props) => {
 			<div className="row">
 				{detallePedido.pagado === false ? "":(
 					<div className="my-2 col-lg-4">
-						<h6 className="titulos-info-pedidos">El pedido esta:</h6>
+						<h6 className="titulos-info-pedidos">Estatus del pedido:</h6>
 						<p>										
 							<Tag
 								className="my-2"
@@ -81,7 +81,7 @@ const DetallesPedido = (props) => {
 									<p className="font-weight-bold">Dirección de envio:</p>
 									<p> {`${detallePedido.cliente.direccion[0].calle_numero} Colonia ${detallePedido.cliente.direccion[0].colonia} ${detallePedido.cliente.direccion[0].ciudad} ${detallePedido.cliente.direccion[0].estado} ${detallePedido.cliente.direccion[0].pais}.`} </p>
 									<p> {`Referencia: ${detallePedido.cliente.direccion[0].entre_calles}. CP: ${detallePedido.cliente.direccion[0].cp}`} </p>
-									<p> <span className="font-weight-bold">Codigó de seguimiento: </span></p>
+									<p><span className="font-weight-bold">Código de seguimiento: </span></p>
 									<p><a href={`${detallePedido.url}${detallePedido.codigo_seguimiento}`} target="_blank"> {detallePedido.codigo_seguimiento} </a></p>
 								</div>
 								}

@@ -379,7 +379,7 @@ function TallasCantidades(props) {
 					{disabled ? (
 						<p className="disponibilidad-p mb-3">En este momento no hay articulos disponibles</p>
 					) : (
-						<p className="disponibilidad-p-disponible mb-3">!Articulos disponibles!</p>
+						<p className="disponibilidad-p-disponible mb-3">¡Articulos disponibles!</p>
 					)}
 					{categoria !== 'otros' ? <p className="mb-3 font-weight-bold">Tallas:</p> : <p />}
 					<div>{render}</div>
@@ -473,7 +473,7 @@ function TallasCantidades(props) {
 				)}
 			</div>
 			<Modal
-				title="Nuevo Apartado"
+				title="Aparta tu producto"
 				visible={visible}
 				onOk={handleOk}
 				onCancel={handleCancel}
@@ -521,14 +521,14 @@ function TallasCantidades(props) {
 							})
 						)}
 						<div className="mb-3">
-							<h6>Elegir tipo de envío: </h6>
+							<h6 className="font-weight-bold">Elegir tipo de envío: </h6>
 							<Select style={{ width: 200 }} placeholder="Selecciona un tipo" onChange={obtenerTipoEnvio}>
 								<Option value="ENVIO">Envío por paquetería</Option>
 								<Option value="REGOGIDO">Recoger a sucursal</Option>
 							</Select>
 						</div>
 						<Alert
-							description="Para apartar un producto necesitas tener completos tus datos"
+							description="Para apartar un producto completa tus datos."
 							type="info"
 							showIcon
 						/>

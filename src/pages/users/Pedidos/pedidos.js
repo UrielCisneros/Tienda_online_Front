@@ -283,13 +283,13 @@ function Pedido(props) {
 					<div className="titulo-producto row mostrar-pedido">
 						<div className="col-lg-6 col-sm-12">
 							<p className="m-0 font-weight-bold" style={{ fontSize: '15px' }}>
-								Productos de la compra: <span className="text-primary"> x {pedido.pedido.length}</span>
+								Productos: <span className="text-primary"> x {pedido.pedido.length}</span>
 							</p>
 							{pedido.pagado === false ? (
 								''
 							) : (
 								<p className="m-0" style={{ fontSize: '15px' }}>
-									<span className="font-weight-bold">La compra esta:</span>
+									<span className="font-weight-bold">Estatus:</span>
 									<Tag
 										className="ml-2"
 										color={pedido.estado_pedido === 'En proceso' ? '#f0ad4e' : '#5cb85c'}
@@ -304,19 +304,19 @@ function Pedido(props) {
 								<span className="text-success"> $ {formatoMexico(pedido.total)}</span>{' '}
 							</p>
 							<p className="m-0" style={{ fontSize: '15px' }}>
-								<span className="font-weight-bold">Pedido el:</span> {formatoFecha(pedido.createdAt)}
+								<span className="font-weight-bold">Fecha de pedido:</span> {formatoFecha(pedido.createdAt)}
 							</p>
-							<p className="m-0" style={{ fontSize: '15px' }}>
+{/* 							<p className="m-0" style={{ fontSize: '15px' }}>
 								{pedido.pagado === false ? (
 									<div>
 										<p className="text-danger">Pedido no realizado </p>
-										{/* <Button
+										<Button
 												className="d-flex justify-content-center align-items-center"
 												style={{ fontSize: 16 }}
 												type="primary"
 											>
 												Comprar
-											</Button> */}
+											</Button>
 									</div>
 								) : (
 									<div>
@@ -339,7 +339,7 @@ function Pedido(props) {
 										)}
 									</div>
 								)}
-							</p>
+							</p> */}
 						</div>
 						{pedido.pagado === false ? (
 							''
@@ -428,7 +428,7 @@ function Apartado(props) {
 			<List.Item.Meta
 				avatar={
 					<div className="d-flex justify-content-center align-items-center my-3">
-						<p>Pedido del producto sdsdsdsd</p>
+						<p>Pedido del producto</p>
 						<div className="contenedor-imagen-mostrar-apartado">
 							<img
 								className="imagen-mostrar-apartado"
@@ -461,7 +461,7 @@ function Apartado(props) {
 							</p>
 
 							<p className="m-0" style={{ fontSize: '15px' }}>
-								<span className="font-weight-bold m-0">Pedido el:</span>{' '}
+								<span className="font-weight-bold m-0">Fecha de apartado:</span>{' '}
 								{formatoFecha(apartado.createdAt)}
 							</p>
 							<p className="m-0" style={{ fontSize: '15px' }}>

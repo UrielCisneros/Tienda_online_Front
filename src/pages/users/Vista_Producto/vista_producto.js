@@ -116,16 +116,16 @@ function VistaProductos(props) {
 						{costoEnvio ? (
 							<div>
 								<p style={{ fontSize: 20 }}>
-									<FontAwesomeIcon icon={faTruck} style={{ fontSize: 20, marginRight: 10 }} />Envío:{' '}
-									<strong>${costoEnvio.costoEnvio}</strong>
+									<FontAwesomeIcon icon={faTruck} style={{ fontSize: 20, marginRight: 10 }} /> <span className="font-weight-bold">Envío:</span>{' '}
+									<span>${costoEnvio.costoEnvio}</span>
 								</p>
 								{costoEnvio.promocionEnvio ?  costoEnvio.descuento !== 0 ? (
 									<Alert
 										message={
 											costoEnvio.descuento !== 0 ? (
-												`En compras arriba de $${costoEnvio.promocionEnvio}, el envio sera GRATIS!`
+												`¡En compras arriba de $${costoEnvio.promocionEnvio} el envío será GRATIS!`
 											) : (
-												`En compras arriba de $${costoEnvio.promocionEnvio}, el envio sera GRATIS!`
+												`¡En compras arriba de $${costoEnvio.promocionEnvio}, el envío será GRATIS!`
 											)
 										}
 										type="success"

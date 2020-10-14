@@ -170,7 +170,7 @@ const Navegacion = (props) => {
 									<Menu.Item className="d-none" />
 								) : (
 									<Menu.Item className="nav-font-color nav-border-color a6" key="/pedidos">
-										<p>Mis pedidos</p>
+										<p>Mis compras</p>
 										<Link to="/pedidos" />
 									</Menu.Item>
 								)}

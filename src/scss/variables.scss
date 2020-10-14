@@ -1,9 +1,9 @@
 $color-blog: #ffff;
 
 /* NAVBAR VARIABLES */
-$bg-color-navbar: #383838;
+$bg-color-navbar: #ffffff;
 $border-color-navbar: rgb(255, 129, 129);
-$font-color-navbar: rgb(255, 255, 255);
+$font-color-navbar: rgb(0, 0, 0);
 $font-color-navbar-hover: rgb(0, 89, 255);
 
 /* NAVBAR CATEGORIAS VARIABLES */
@@ -16,15 +16,15 @@ $bg-color-footer: rgb(248, 248, 248);
 $font-color-footer: rgb(0, 0, 0);
 
 /* BACKGROUND LAYOUT */
-$bg-layout: rgb(255, 255, 255);
+$bg-layout: #e4e4e4;
 
 /* FONT FAMILY STYLES */
 h1, h2, h3, h4, h5, h6{
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 400;
 }
 p, a, li{
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 400; 
 }
 
@@ -38,11 +38,11 @@ p, a, li{
     background-color: $bg-color-navbar;
 }
 .navbar-menu-general > .ant-menu-item-selected{
-    background-color: rgb(77, 77, 77)!important;
+    background-color: rgb(255, 255, 255)!important;
 }
 .drawer-background .ant-drawer-header, .ant-drawer-body{
     background-color: $bg-color-navbar;
-    border-color: rgb(73, 73, 73);
+    border-color: rgb(255, 255, 255);
 }
 .nav-font-color{
     color: $font-color-navbar;

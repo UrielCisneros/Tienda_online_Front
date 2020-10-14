@@ -303,7 +303,7 @@ const Sugerencia = (props) => {
 																medida.length !== 0 ? (
 																	<p>Solo hay {medida[1]} disponibles</p>
 																) : (
-																	<p>Elige una cantidad</p>
+																	<p>Cantidad</p>
 																)
 															}
 														>
@@ -451,7 +451,7 @@ const Sugerencia = (props) => {
 																medidaSugerencia.length !== 0 ? (
 																	<p>Solo hay {medidaSugerencia[1]} disponibles</p>
 																) : (
-																	<p>Elige una cantidad</p>
+																	<p>Cantidad</p>
 																)
 															}
 														>

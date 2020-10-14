@@ -25,7 +25,7 @@ export default function detalleApartado(props) {
 				</div>
 
 				<div className="my-2 col-lg-4">
-					<h6 className="titulos-info-pedidos">Tu apartdo esta:</h6>
+					<h6 className="titulos-info-pedidos">Estatus:</h6>
 					<p className="m-0" style={{ fontSize: '15px' }}>
 						<Tag
 							className="ml-2"
@@ -86,7 +86,7 @@ export default function detalleApartado(props) {
 				)}
 			</div>
 
-			<Divider className="text-center">Productos del pedido</Divider>
+			<Divider className="text-center">Productos del apartado</Divider>
 
 			<div className="row">
 				<Producto producto={detalleApartado.producto} />
