@@ -76,11 +76,7 @@ export default function DatosCliente(props) {
 					}
 				})
 				.then((res) => {
-					setTimeout(() => {
-						localStorage.removeItem('token');
-						localStorage.setItem('token', res.data.token);
-						window.location.reload();
-					}, 1000);
+					localStorage.setItem('token', res.data.token);
                     setLoading(false);
 			        setControlBoton(true);
 					notification.success({
@@ -225,7 +221,7 @@ export default function DatosCliente(props) {
 				</Row>
 				<Form.Item {...tailLayout}>
 					<Button htmlType="submit" type="primary" size="large" style={{ width: 150 }} >
-						{controlBoton ? 'Editar' : 'Guardar'}
+						{controlBoton ? 'Editar mis datos' : 'Guardar mis datos'}
 					</Button>
 				</Form.Item>
 			</Form>

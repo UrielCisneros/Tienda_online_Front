@@ -5,9 +5,11 @@ import DetallesPedido from './detalles';
 import { formatoFecha, formatoMexico } from '../../../config/reuserFunction';
 import './pedidos.scss';
 import DetalleApartado from './detalleApartado';
-import { Spin, Modal, Tag, Button, List, Result, Tabs, Divider } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Spin, Modal, Tag, Button, List, Result, Tabs, Divider,notification } from 'antd';
+import { EditOutlined, DeleteOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
 const { TabPane } = Tabs;
+
+const {confirm} = Modal;
 
 export default function PedidosUsuario(props) {
 	const [ pedidos, setPedidos ] = useState([]);
@@ -17,6 +19,7 @@ export default function PedidosUsuario(props) {
 	const [ Elige, setElige ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
 	const [ showInfo, setshowInfo ] = useState(false);
+	const [ estado, setEstado ] = useState(false);
 
 	//modal del pedido
 	const [ detallePedido, setDetallePedido ] = useState({});
@@ -86,9 +89,48 @@ export default function PedidosUsuario(props) {
 			setLoading(true);
 			setPedidos([]);
 			setshowInfo(false);
+			setEstado(false);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [estado]);
+
+	
+	const deleteApartado = (id) => {
+		console.log(token);
+        confirm({
+            title:"Eliminando Blog",
+            icon: <ExclamationCircleOutlined />,
+            content: `¿Estás seguro que deseas eliminar el aparetado ?`,
+            okText: "Eliminar",
+            okType:"danger",
+            cancelText:"Cancelar",
+            onOk(){
+                clienteAxios.put(`/apartado/estado/eliminado/${id}`,{
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						Authorization: `bearer ${token}`
+					}
+                })
+                .then((res) => {
+                    console.log(res);
+                    notification.success({
+                        message: 'Blog Eliminado',
+                        description:
+                        res.data.message,
+                    });
+					setEstado(true);
+                })
+                .catch((err) => {
+                    console.log(err.response)
+                    notification.error({
+                        message: 'Error del servidor',
+                        description:
+                        'Paso algo en el servidor, al parecer la conexion esta fallando.',
+                    });
+                });
+            }
+        })
+	}
 
 	return (
 		<Spin size="large" spinning={loading}>
@@ -140,6 +182,7 @@ export default function PedidosUsuario(props) {
 												showModal={showModal}
 												setDetalleApartado={setDetalleApartado}
 												setElige={setElige}
+												deleteApartado={deleteApartado}
 											/>
 										)}
 									/>
@@ -322,7 +365,7 @@ function Pedido(props) {
 }
 
 function Apartado(props) {
-	const { apartado, showModal, setDetalleApartado, setElige } = props;
+	const { apartado, showModal, setDetalleApartado, setElige , deleteApartado} = props;
 
 	return (
 		<List.Item
@@ -354,6 +397,9 @@ function Apartado(props) {
 						style={{ fontSize: 16 }}
 						danger
 						ghost
+						onClick={() => {
+							deleteApartado(apartado._id)
+						}}
 					>
 						<DeleteOutlined />
 						Eliminar apartado

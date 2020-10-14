@@ -1,24 +1,66 @@
 import React from 'react'
-import {Card, Col,Tag} from 'antd'
-import { ContainerOutlined } from '@ant-design/icons';
+import {Card, Col,Tag,Modal,notification} from 'antd'
+import { ContainerOutlined, DeleteOutlined,ExclamationCircleOutlined} from '@ant-design/icons';
 import {formatoFecha} from '../../../../config/reuserFunction'
+import clienteAxios from '../../../../config/axios';
 
 
 import './MostrarDatosTargeta.scss';
 
 const { Meta } = Card;
+const {confirm} = Modal;
 
 
 export default function MostrarDatosTargeta(props) {
 
-	const {setDetalleApartado,showModal,apartado} = props;
+	const {setDetalleApartado,showModal,apartado,setEstado,token} = props;
+
+
+	const deleteApartado = (id) => {
+		console.log(token);
+        confirm({
+            title:"Eliminando Blog",
+            icon: <ExclamationCircleOutlined />,
+            content: `¿Estás seguro que deseas eliminar el El aparetado ?`,
+            okText: "Eliminar",
+            okType:"danger",
+            cancelText:"Cancelar",
+            onOk(){
+                clienteAxios.put(`/apartado/estado/eliminado/${id}`,{
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						Authorization: `bearer ${token}`
+					}
+                })
+                .then((res) => {
+                    console.log(res);
+                    notification.success({
+                        message: 'Blog Eliminado',
+                        description:
+                        res.data.message,
+                    });
+					setEstado(true);
+                })
+                .catch((err) => {
+                    console.log(err.response)
+                    notification.error({
+                        message: 'Error del servidor',
+                        description:
+                        'Paso algo en el servidor, al parecer la conexion esta fallando.',
+                    });
+                });
+            }
+        })
+	}
+	
+
 
     return (
             <Col className="mb-3" span={window.screen.width > 990 ? 8 : 24} key={apartado._id}>
 				<Card
 					className="shadow-sm card-body-apartados"
 					actions={[
-						<div className="d-flex justify-content-center align-items-center">
+						<div className="d-flex ml-3 justify-content-center align-items-center">
 							<ContainerOutlined className="mr-2" style={{ fontSize: 20 }} />
 							<p
 								onClick={() => {
@@ -27,7 +69,18 @@ export default function MostrarDatosTargeta(props) {
 								}}
 								className="d-inline"
 							>
-								Detalle de solicitud de apartado
+								Detalle de apartado
+							</p>
+						</div>,
+						<div className="d-flex justify-content-center align-items-center text-danger">
+							<DeleteOutlined  className="mr-2" style={{ fontSize: 20 }}/>
+							<p
+								onClick={() => {
+									deleteApartado(apartado._id)
+								}}
+								className="d-inline"
+							>
+								Eliminar
 							</p>
 						</div>
 					]}

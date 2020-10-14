@@ -137,13 +137,16 @@ function SistemaApartado(props) {
 								<Result status="404" title="No hay resultados" />
 							</div>
 						) : (
-							<Row gutter={16}>{
+							<Row gutter={16}>
+								{
 								apartados.map((apartado) => (							
 									<MostrarDatosTargeta 
 										key={apartado._id}
 										setDetalleApartado={setDetalleApartado} 
 										showModal={showModal} 
 										apartado={apartado} 
+										setEstado={setEstado}
+										token={token}
 									/>
 								))
 								}
