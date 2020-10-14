@@ -22,3 +22,12 @@
     font-size: 16px;
     font-weight: 400;
 }
+@media(max-width: 768px){
+    .divider-home-banner{
+        padding: 10px 0;
+        border-right: none;
+        border-left: none;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+    }
+}

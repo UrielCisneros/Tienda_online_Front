@@ -25,34 +25,34 @@ function RightMenu(props) {
 	}
 
 	return (
-		<Menu defaultSelectedKeys={[ window.location.pathname ]}>
-			<Menu.Item key="/">
+		<Menu defaultSelectedKeys={[ window.location.pathname ]} className="navbar-menu-general">
+			<Menu.Item key="/" className="navbar-menu-general nav-font-color">
 				Inicio<Link to="/" />
 			</Menu.Item>
-			<Menu.Item key="/productos">
+			<Menu.Item key="/productos" className="navbar-menu-general nav-font-color">
 				Productos<Link to="/productos" />
 			</Menu.Item>
 			{ofertas.length ? (
-				<Menu.Item key="/ofertas">
+				<Menu.Item key="/ofertas" className="navbar-menu-general nav-font-color">
 					Ofertas<Link to="/ofertas" />
 				</Menu.Item>
 			) : (
 				<Menu.Item className="d-none" />
 			)}
-			<Menu.Item key="/blog">
+			<Menu.Item key="/blog" className="navbar-menu-general nav-font-color">
 				Blog<Link to="/blog" />
 			</Menu.Item>
 			{tienda.length === 0 ? (
 				<Menu.Item className="d-none" />
 			) : (
-				<Menu.Item key="/quienes_somos">
+				<Menu.Item key="/quienes_somos" className="navbar-menu-general nav-font-color">
 					Quiénes somos<Link to="/quienes_somos" />
 				</Menu.Item>
 			)}
 			{!decoded || decoded.rol === true ? (
 				<Menu.Item className="d-none" />
 			) : (
-				<Menu.Item key="/pedidos">
+				<Menu.Item key="/pedidos" className="navbar-menu-general nav-font-color">
 					Mis pedidos<Link to="/pedidos" />
 				</Menu.Item>
 			)}
@@ -133,7 +133,7 @@ function RightMenu(props) {
 			)}
 
 			{token === '' || token === null ? (
-				<Menu.Item>
+				<Menu.Item className="navbar-menu-general nav-font-color">
 					Entrar<Link to="/entrar" />
 				</Menu.Item>
 			) : (

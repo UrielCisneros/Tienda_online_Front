@@ -292,6 +292,7 @@ const Navegacion = (props) => {
 						)}
 					</div>
 					<Drawer
+						className="drawer-background"
 						title={
 							!tienda.imagenLogo ? (
 								<div className="d-none" />
