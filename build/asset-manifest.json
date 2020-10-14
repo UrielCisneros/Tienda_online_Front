@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.81fc20ad.chunk.css",
-    "main.js": "/static/js/main.14687e0d.chunk.js",
-    "main.js.map": "/static/js/main.14687e0d.chunk.js.map",
+    "main.css": "/static/css/main.5547ed83.chunk.css",
+    "main.js": "/static/js/main.e93d914a.chunk.js",
+    "main.js.map": "/static/js/main.e93d914a.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.5aecc905.js",
     "runtime-main.js.map": "/static/js/runtime-main.5aecc905.js.map",
     "static/css/2.5c87a850.chunk.css": "/static/css/2.5c87a850.chunk.css",
     "static/js/2.fecbed3e.chunk.js": "/static/js/2.fecbed3e.chunk.js",
     "static/js/2.fecbed3e.chunk.js.map": "/static/js/2.fecbed3e.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.889670af2fc91833c80ecd1b4842f88e.js": "/precache-manifest.889670af2fc91833c80ecd1b4842f88e.js",
+    "precache-manifest.22cb0e95f2ba08ae5baff014dd7fab3d.js": "/precache-manifest.22cb0e95f2ba08ae5baff014dd7fab3d.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.5c87a850.chunk.css.map": "/static/css/2.5c87a850.chunk.css.map",
-    "static/css/main.81fc20ad.chunk.css.map": "/static/css/main.81fc20ad.chunk.css.map",
+    "static/css/main.5547ed83.chunk.css.map": "/static/css/main.5547ed83.chunk.css.map",
     "static/js/2.fecbed3e.chunk.js.LICENSE.txt": "/static/js/2.fecbed3e.chunk.js.LICENSE.txt",
     "static/media/Animacion_Tarjeta.scss": "/static/media/bg-tarjeta-01.3c6258e5.jpg",
     "static/media/chip-tarjeta.png": "/static/media/chip-tarjeta.6611645b.png",
@@ -23,7 +23,7 @@
     "static/js/runtime-main.5aecc905.js",
     "static/css/2.5c87a850.chunk.css",
     "static/js/2.fecbed3e.chunk.js",
-    "static/css/main.81fc20ad.chunk.css",
-    "static/js/main.14687e0d.chunk.js"
+    "static/css/main.5547ed83.chunk.css",
+    "static/js/main.e93d914a.chunk.js"
   ]
 }
