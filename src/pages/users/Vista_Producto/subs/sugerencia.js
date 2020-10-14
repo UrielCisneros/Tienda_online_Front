@@ -228,7 +228,7 @@ const Sugerencia = (props) => {
 					<div />
 				) : (
 					<div className="col-lg-12">
-						<p className="my-3 text-center titulos-vista-productos">¡Llevalos juntos!</p>
+						<p className="my-3 text-center titulos-vista-productos">¡Llévalos juntos!</p>
 						<div className="row" style={{ justifyContent: 'center' }}>
 							<div className="d-lg-flex d-sm-block px-5">
 								<div className="d-sm-block">

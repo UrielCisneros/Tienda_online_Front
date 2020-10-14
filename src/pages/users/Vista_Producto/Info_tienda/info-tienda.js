@@ -43,7 +43,7 @@ const InfoTienda = (props) => {
 				</div>
 				{/* <Avatar size={64} src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${tienda.imagenLogo}`} /> */}
 				<div className="text-center">
-					<p style={{fontSize: 20}}>{tienda.nombre}</p>
+					<p className="font-weight-bold" style={{fontSize: 20}}>{tienda.nombre}</p>
 				</div>
 			</div>
 			{tienda.length !== 0 ? (
@@ -51,11 +51,11 @@ const InfoTienda = (props) => {
 					return (
 						<div key={direccion._id} className="container">
 							<p className="direccion-tienda-vista-producto">
-								Dirección: {direccion.calle_numero}, Col. {direccion.colonia}, {direccion.ciudad},{' '}
+								<span className="font-weight-bold">Dirección:</span> {direccion.calle_numero}, Col. {direccion.colonia}, {direccion.ciudad},{' '}
 								{direccion.cp}
 							</p>
 							<p className="direccion-tienda-vista-producto">
-								Telefono: {tienda.telefono}
+							<span className="font-weight-bold">Teléfono:</span> {tienda.telefono}
 							</p>
 						</div>
 					);

@@ -123,7 +123,7 @@ const Navegacion = (props) => {
 								)}
 								<div className="col-9">
 									<Search
-										placeholder="¿Qué estas buscando?"
+										placeholder="¿Qué estás buscando?"
 										onSearch={(value) => props.history.push(`/searching/${value}`)}
 										className="search-navbar"
 									/>

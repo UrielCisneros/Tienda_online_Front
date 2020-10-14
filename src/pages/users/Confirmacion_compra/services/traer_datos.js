@@ -138,7 +138,7 @@ export default function Traer_datos(props) {
                                 <div className="col-lg-12 col-sm-12">
                                     <div className="row">
                                         <div className="col-lg-2 col-sm-12">
-                                            <p>Nombre:</p>
+                                            <p className="font-weight-bold">Nombre:</p>
                                             <Form.Item name="nombre" onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Nombre obligatorio' }]}  noStyle name="nombre" >
                                                     <Input name="nombre" a placeholder="Nombre"  />
@@ -146,7 +146,7 @@ export default function Traer_datos(props) {
                                             </Form.Item>
                                         </div>
                                         <div className="col-lg-2 col-sm-12">
-                                            <p>Apellidos:</p>
+                                            <p className="font-weight-bold">Apellidos:</p>
                                             <Form.Item name="apellido" onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Apellidos obligatorios' }]}  noStyle name="apellido" >
                                                     <Input name="apellido" a placeholder="Apellidos"  />
@@ -154,7 +154,7 @@ export default function Traer_datos(props) {
                                             </Form.Item>
                                         </div>
                                         <div className="col-lg-2 col-sm-12">
-                                            <p>Telefono:</p>
+                                            <p className="font-weight-bold">Teléfono:</p>
                                             <Form.Item name="telefono" onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Telefono obligatorio' }]}  noStyle name="telefono" >
                                                     <Input name="telefono" a placeholder="+52 3171234567"  />
@@ -162,7 +162,7 @@ export default function Traer_datos(props) {
                                             </Form.Item>
                                         </div>
                                         <div className="col-lg-2 col-sm-12">
-                                            <p>Direccion:</p>
+                                            <p className="font-weight-bold">Direccion:</p>
                                             <Form.Item name="calle_numero"  onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="calle_numero" >
                                                     <Input name="calle_numero" a placeholder="Calle y numero de calle"  />
@@ -170,7 +170,7 @@ export default function Traer_datos(props) {
                                             </Form.Item>
                                         </div>
                                         <div className="col-lg-4 col-sm-12">
-                                            <p>Referencia:</p>
+                                            <p className="font-weight-bold">Referencia:</p>
                                             <Form.Item name="entre_calles" onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Referencia obligatoria' }]}  noStyle name="entre_calles" >
                                                     <Input name="entre_calles" a placeholder="Calles de referencia"  />
@@ -181,7 +181,7 @@ export default function Traer_datos(props) {
         
                                     <div className="row">
                                         <div className="col-lg-2 col-sm-12">
-                                            <p>Codigo postal:</p>
+                                            <p className="font-weight-bold">Código postal:</p>
                                             <Form.Item name="cp" onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Codigo postal obligatorio' }]}  noStyle name="cp" >
                                                     <Input name="cp" a placeholder="Codigo Postal"  />
@@ -189,7 +189,7 @@ export default function Traer_datos(props) {
                                             </Form.Item>
                                         </div>
                                         <div className="col-lg-2 col-sm-12">
-                                            <p>Colonia:</p>
+                                            <p className="font-weight-bold">Colonia:</p>
                                             <Form.Item name="colonia" onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Colonia obligatoria' }]}  noStyle name="colonia" >
                                                     <Input name="colonia" a placeholder="Colonia"  />
@@ -197,7 +197,7 @@ export default function Traer_datos(props) {
                                             </Form.Item>
                                         </div>
                                         <div className="col-lg-4 col-sm-12">
-                                            <p>Ciudad:</p>
+                                            <p className="font-weight-bold">Ciudad:</p>
                                             <Form.Item name="ciudad" onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Localidad obligatoria' }]}  noStyle name="ciudad" >
                                                     <Input name="ciudad" a placeholder="Localidad"  />
@@ -205,7 +205,7 @@ export default function Traer_datos(props) {
                                             </Form.Item>
                                         </div>
                                         <div className="col-lg-2 col-sm-12">
-                                            <p>Estado:</p>
+                                            <p className="font-weight-bold">Estado:</p>
                                             <Form.Item name="estado" onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Estado obligatoria' }]}  noStyle name="estado" >
                                                     <Input name="estado" a placeholder="Estado"  />
@@ -213,7 +213,7 @@ export default function Traer_datos(props) {
                                             </Form.Item>
                                         </div>
                                         <div className="col-lg-2 col-sm-12">
-                                            <p>País:</p>
+                                            <p className="font-weight-bold">País:</p>
                                             <Form.Item name="pais" onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'País obligatoria' }]}  noStyle name="pais" >
                                                     <Input name="pais" a placeholder="País"  />

@@ -105,7 +105,7 @@ export default function Confirmacion_Final(props) {
 				<div className="row">
 					<div className="col-lg-6">
 						<div className="mt-3">
-							<p className="text-center h3">Direccion de envio</p>
+							<p className="text-center h3 font-weight-bold">Dirección de envío</p>
 							<div className="row">
 								<div className="col-lg-3 col-sm-none text-lg-right text-center ">
 									<FontAwesomeIcon
@@ -115,14 +115,14 @@ export default function Confirmacion_Final(props) {
 									/>
 								</div>
 								<div className="col-lg-7 col-sm-12 text-left m-0 m-sm-2 ">
-									<p className="h6 font-weight-bold">
+									<p className="h6">
 										{direccion.calle_numero}, {direccion.entre_calles}, {direccion.colonia},{' '}
 										{direccion.ciudad}, {direccion.estado}, {direccion.pais}, CP {direccion.cp}
 									</p>
 								</div>
 							</div>
 						</div>
-						<p className="text-center h3 mt-5">Informacion de pago</p>
+						<p className="text-center h3 mt-5 font-weight-bold">Información de pago</p>
 						<div className="row my-3">
 							<div className="col-lg-3 col-sm-12 text-lg-right  text-center">
 								<FontAwesomeIcon

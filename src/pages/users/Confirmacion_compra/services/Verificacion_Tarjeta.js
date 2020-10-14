@@ -155,7 +155,7 @@ const CheckoutForm  = (props) => {
                                         </div>
 
                                         <div className="grupo" id="expiracion">
-                                            <p className="label">Expiracion</p>
+                                            <p className="label">Expiración</p>
                                             <p className="expiracion"><span className="mes"> {dateCard1} </span> {dateCard1 ? "/" : ""} <span className="year"> {dateCard2} </span></p>
                                         </div>
                                     </div>
@@ -182,7 +182,7 @@ const CheckoutForm  = (props) => {
                         <Form onFinish={handleSubmit} className="active mt-5">
                             <div className="row">
                                 <div className="col-lg-12">
-                                    <label htmlFor="cardNumber">Número Tarjeta</label>
+                                    <label htmlFor="cardNumber" className="font-weight-bold">Número Tarjeta</label>
                                     <CardNumberElement
                                         id="cardNumber"
                                         onChange={(e) => cardOnChage(e)}
@@ -200,7 +200,7 @@ const CheckoutForm  = (props) => {
                             </div>
                             <div className="row">
                                 <div className="col-lg-12">
-                                    <label htmlFor="name">Nombre</label>
+                                    <label htmlFor="name" className="font-weight-bold">Nombre</label>
                                     <input
                                         id="name"
                                         placeholder="Nombre del propietario"
@@ -216,7 +216,7 @@ const CheckoutForm  = (props) => {
                             </div>
                             <div className="row mt-3">
                                 <div className="col-lg-4 col-sm-12">
-                                    <label htmlFor="expiry">Expiracion</label>
+                                    <label htmlFor="expiry" className="font-weight-bold">Expiración</label>
                                     <CardExpiryElement
                                         id="expiry"
                                         onChange={(e) => cardDateOnChange(e)}
@@ -225,7 +225,7 @@ const CheckoutForm  = (props) => {
                                     />
                                 </div>
                                 <div className="col-lg-4 col-sm-12">
-                                    <label htmlFor="cvc">CVC</label>
+                                    <label htmlFor="cvc" className="font-weight-bold">CVC</label>
                                     <CardCvcElement
                                         id="cvc"
                                         onChange={(e) => {cvvChange(e)}}
@@ -234,7 +234,7 @@ const CheckoutForm  = (props) => {
                                     />
                                 </div>
                                 <div className="col-lg-4 col-sm-12">
-                                    <label htmlFor="postal">Codigo postal</label>
+                                    <label htmlFor="postal" className="font-weight-bold">Código postal</label>
                                     <input
                                         id="postal"
                                         className="form-control mt-0"

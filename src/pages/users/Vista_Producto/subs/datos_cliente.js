@@ -142,7 +142,7 @@ export default function DatosCliente(props) {
 								<Input name="email" placeholder="Correo electronico" disabled />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Telefono" name="telefono" >
+						<Form.Item label="Teléfono" name="telefono" >
 							<Form.Item
 								rules={[ { required: true, message: 'Telefono obligatorio' } ]}
 								noStyle
@@ -156,7 +156,7 @@ export default function DatosCliente(props) {
 				<Row>
 					<Divider>Datos de envío</Divider>
 					<Col>
-						<Form.Item label="Calle y numero" name="calle_numero" >
+						<Form.Item label="Calle y número" name="calle_numero" >
 							<Form.Item
 								rules={[ { required: true, message: 'Direccion obligatoria' } ]}
 								noStyle
@@ -212,7 +212,7 @@ export default function DatosCliente(props) {
 								<Input name="estado" placeholder="Estado" disabled={controlBoton} />
 							</Form.Item>
 						</Form.Item>
-						<Form.Item label="Pais" name="pais" >
+						<Form.Item label="País" name="pais" >
 							<Form.Item rules={[ { required: true, message: 'País obligatoria' } ]} noStyle name="pais">
 								<Input name="pais" placeholder="País" disabled={controlBoton} />
 							</Form.Item>

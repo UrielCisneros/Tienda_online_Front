@@ -119,19 +119,19 @@ function VistaProductos(props) {
 									<FontAwesomeIcon icon={faTruck} style={{ fontSize: 20, marginRight: 10 }} />Envío:{' '}
 									<strong>${costoEnvio.costoEnvio}</strong>
 								</p>
-								{costoEnvio.promocionEnvio ? (
+								{costoEnvio.promocionEnvio ?  costoEnvio.descuento !== 0 ? (
 									<Alert
 										message={
-											costoEnvio.descuento === 0 ? (
+											costoEnvio.descuento !== 0 ? (
 												`En compras arriba de $${costoEnvio.promocionEnvio}, el envio sera GRATIS!`
 											) : (
-												`En compras arriba de $${costoEnvio.promocionEnvio}, se le descontraran $${costoEnvio.descuento} en su compra`
+												`En compras arriba de $${costoEnvio.promocionEnvio}, el envio sera GRATIS!`
 											)
 										}
 										type="success"
 										showIcon
 									/>
-								) : (
+								): "" : (
 									<div />
 								)}
 							</div>

@@ -379,7 +379,7 @@ function TallasCantidades(props) {
 					{disabled ? (
 						<p className="disponibilidad-p mb-3">En este momento no hay articulos disponibles</p>
 					) : (
-						<p className="disponibilidad-p-disponible mb-3">articulos disponibles!</p>
+						<p className="disponibilidad-p-disponible mb-3">!Articulos disponibles!</p>
 					)}
 					{categoria !== 'otros' ? <p className="mb-3 font-weight-bold">Tallas:</p> : <p />}
 					<div>{render}</div>
@@ -478,43 +478,43 @@ function TallasCantidades(props) {
 				onOk={handleOk}
 				onCancel={handleCancel}
 				cancelText="Cancelar"
-				okText="Apartar"
+				okText="Apartar ahora"
 				width={700}
 			>
 				<div className="row">
 					<div className="col-12 col-lg-6">
 						<div className="mb-3">
-							<h6 className="d-inline">Porducto: </h6>
+							<h6 className="d-inline font-weight-bold">Producto: </h6>
 							<p className="d-inline">{productos.nombre}</p>
 						</div>
 
 						{numeros.length !== 0 ? (
 							<div className="mb-3">
-								<h6 className="d-inline">Medida: </h6>
+								<h6 className="d-inline font-weight-bold">Medida: </h6>
 								<p className="d-inline">{numeros.numero}</p>
 							</div>
 						) : tallas.length !== 0 ? (
 							<div className="mb-3">
-								<h6 className="d-inline">Talla: </h6>
+								<h6 className="d-inline font-weight-bold">Talla: </h6>
 								<p className="d-inline">{tallas.talla}</p>
 							</div>
 						) : (
 							<p className="d-inline" />
 						)}
 						<div className="mb-3">
-							<h6 className="d-inline">Cantidad: </h6>
+							<h6 className="d-inline font-weight-bold">Cantidad: </h6>
 							<p className="d-inline">{cantidadFinal}</p>
 						</div>
 						{!productos.promocion ? (
 							<div className="mb-3">
-								<h6 className="d-inline">Precio: </h6>
+								<h6 className="d-inline font-weight-bold">Precio: </h6>
 								<p className="d-inline">${formatoMexico(productos.precio)}</p>
 							</div>
 						) : (
 							productos.promocion.map((res) => {
 								return (
 									<div key={res._id} className="mb-3">
-										<h6 className="d-inline">Precio: </h6>
+										<h6 className="d-inline font-weight-bold">Precio: </h6>
 										<p className="d-inline">${formatoMexico(res.precioPromocion)}</p>
 									</div>
 								);
@@ -523,7 +523,7 @@ function TallasCantidades(props) {
 						<div className="mb-3">
 							<h6>Elegir tipo de envío: </h6>
 							<Select style={{ width: 200 }} placeholder="Selecciona un tipo" onChange={obtenerTipoEnvio}>
-								<Option value="ENVIO">Envio por paqueteria</Option>
+								<Option value="ENVIO">Envío por paquetería</Option>
 								<Option value="REGOGIDO">Recoger a sucursal</Option>
 							</Select>
 						</div>

@@ -70,7 +70,7 @@ const FooterPage = () => {
                             {imagenCorp !== '' ? (
                                 <Link  to="/quienes_somos" >
                                     <Button className="footer-font-color" id="is" type="link" style={Style} ><UserOutlined className="footer-font-color" style={{fontSize: 17}}/>
-                                        Conocenos
+                                        Conócenos
                                     </Button>
                                 </Link>
                             ): ""}
@@ -86,7 +86,7 @@ const FooterPage = () => {
 
                         <div className="mt-2 p-3 font-color-footer">
                             <h2 className="footer-font-color" style={{fontSize: 18}} >{nombreCorp !== '' ? nombreCorp : ""}</h2>
-                            {telefono !== '' ? (<p className="footer-font-color">Telefono: {telefono} </p>): ""}
+                            {telefono !== '' ? (<p className="footer-font-color">Teléfono: {telefono} </p>): ""}
                         </div>
                     </div>
 

@@ -27,30 +27,30 @@ export default function Traer_pedido(props) {
             </div>
             <div className="d-flex flex-row-reverse px-4 mr-2 mt-3" >
             <div className="px-5 __subs">
-              <p className="h5">Productos ({datosPedido.length})</p>
-              {datosEnvio.costoEnvio ? <p className="h5">Costo envio: $ {datosEnvio.costoEnvio} </p> : ""}
+              <p className="h6 font-weight-bold">Productos ({datosPedido.length})</p>
+              {datosEnvio.costoEnvio ? <p className="h6 font-weight-bold">Costo envio: $ {datosEnvio.costoEnvio} </p> : ""}
               {datosEnvio.descuento ? 
                 pedidoCompleto.total >= datosEnvio.promocionEnvio ? (
                 <div>
-                  <p className="h5">Descuento de: $ {datosEnvio.descuento}</p>
-                  <p className="h5">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
-                  <p className="text-success h6">El descuento si aplica</p>
+                  <p className="h6 font-weight-bold">Descuento de: $ {datosEnvio.descuento}</p>
+                  <p className="h6 font-weight-bold">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
+                  <p className="text-success h6 font-weight-bold">El descuento si aplica</p>
                 </div>
               ): 
               (
                 <div>
-                  <p className="h5">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
-                  <p className="text-danger h6">El descuento no aplica</p>
+                  <p className="h6 font-weight-bold">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
+                  <p className="text-danger h6 font-weight-bold">El descuento no aplica</p>
                 </div>
               )
               : (
                 <div>
-                  <p className="h5">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
-                  <p className="text-danger h6">El descuento no aplica</p>
+                  <p className="h6 font-weight-bold">Total sin descuento: $ {formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)} </p>
+                  <p className="text-danger h6 font-weight-bold">El descuento no aplica</p>
                 </div>
               )}
               
-              <p className="mt-4 h4 text-success">Total: $ {datosEnvio.descuento ? pedidoCompleto.total >= datosEnvio.promocionEnvio ? formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio - datosEnvio.descuento) : formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio) : formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)}</p>
+              <p className="mt-4 h4 text-success font-weight-bold">Total: $ {datosEnvio.descuento ? pedidoCompleto.total >= datosEnvio.promocionEnvio ? formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio - datosEnvio.descuento) : formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio) : formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)}</p>
             </div>
             </div>
         </div>
@@ -92,7 +92,7 @@ function Productos (props) {
             ): ""}
         </div> 
         <div className=" col-lg-2 d-flex flex-row-reverse" >
-          <p style={{fontSize: "20px", fontWeight: "bold"}}>$ {formatoMexico(pedido.cantidad * pedido.precio)}</p>
+          <p style={{fontSize: "20px", fontWeight: "bold"}}>${formatoMexico(pedido.cantidad * pedido.precio)}</p>
         </div>
       </div>
     </List.Item>
