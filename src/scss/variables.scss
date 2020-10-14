@@ -36,7 +36,14 @@ p, a, li{
 /* NAVBAR STYLES */
 .navbar-menu-general{
     background-color: $bg-color-navbar;
-  }
+}
+.navbar-menu-general > .ant-menu-item-selected{
+    background-color: rgb(77, 77, 77)!important;
+}
+.drawer-background .ant-drawer-header, .ant-drawer-body{
+    background-color: $bg-color-navbar;
+    border-color: rgb(73, 73, 73);
+}
 .nav-font-color{
     color: $font-color-navbar;
 } 

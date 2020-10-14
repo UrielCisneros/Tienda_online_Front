@@ -61,7 +61,7 @@ const Categorias = (props) => {
 				{categoria.subcCategoria.map((sub) => {
 					return (
 						<Menu.Item
-							className="nav-font-color-categorias"
+							/* className="nav-font-color-categorias" */
 							key={sub._id}
 							onClick={() => props.history.push(`/searching/${sub._id}`)}
 						>
