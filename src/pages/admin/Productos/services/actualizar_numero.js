@@ -18,7 +18,6 @@ function ActualizarNumero() {
 		cantidad: ''
 	});
 
-
 	useEffect(
 		() => {
 			obtenerNumero();
@@ -47,7 +46,7 @@ function ActualizarNumero() {
 				setDatos({
 					numero: '',
 					cantidad: ''
-				})
+				});
 				obtenerNumero();
 				form.resetFields();
 				notification.success({
@@ -75,47 +74,61 @@ function ActualizarNumero() {
 			});
 	}
 	async function nuevoNumero() {
-		if(datos.numero === "" || datos.cantidad === ""){
-			return null
-		}
-		setLoading(true);
-		await clienteAxios
-			.post(`/productos/addNumero/${productoID}`, datos, {
-				headers: {
-					Authorization: `bearer ${token}`
-				}
-			})
-			.then((res) => {
-				obtenerNumero();
-				setLoading(false);
-				setDatos({
-					numero: '',
-					cantidad: ''
-				})
-				form.resetFields();
-				notification.success({
-					message: 'Hecho!',
-					description: res.data.message,
-					duration: 2
-				});
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+		const resul = productos.map((numeros) => {
+			if (numeros.numero === datos.numero) {
+				return true;
+			}
+		});
+		const existe = resul.find((element) => element === true);
+
+		if (existe) {
+			notification.error({
+				message: 'Este numero ya esta registrado',
+				duration: 2
 			});
+		} else {
+			if (datos.numero === '' || datos.cantidad === '') {
+				return null;
+			}
+			setLoading(true);
+			await clienteAxios
+				.post(`/productos/addNumero/${productoID}`, datos, {
+					headers: {
+						Authorization: `bearer ${token}`
+					}
+				})
+				.then((res) => {
+					obtenerNumero();
+					setLoading(false);
+					setDatos({
+						numero: '',
+						cantidad: ''
+					});
+					form.resetFields();
+					notification.success({
+						message: 'Hecho!',
+						description: res.data.message,
+						duration: 2
+					});
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
 	}
 	async function eliminarNumero(idNumero) {
 		setLoading(true);
@@ -243,7 +256,6 @@ function ActualizarNumero() {
 									onChange={datosForm}
 									labelCol={{ offset: 1, span: 6 }}
 									wrapperCol={{ offset: 1, span: 12 }}
-									
 								>
 									<Input name="cantidad" />
 								</Form.Item>
@@ -267,7 +279,7 @@ function ActualizarNumero() {
 										</Space>
 									</div>
 								) : (
-									<Button  type="dafault" onClick={nuevoNumero}>
+									<Button type="dafault" onClick={nuevoNumero}>
 										Agregar
 									</Button>
 								)}

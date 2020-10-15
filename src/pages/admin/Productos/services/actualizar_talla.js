@@ -69,46 +69,64 @@ function ActualizarTalla() {
 			});
 	}
 	async function nuevaTalla() {
-		if(datos.talla === "" || datos.cantidad === ""){
-			return null;
-		}
-		setLoading(true);
-		await clienteAxios
-			.post(`/productos/addTalla/${productoID}`, datos, {
-				headers: {
-					Authorization: `bearer ${token}`
-				}
-			})
-			.then((res) => {
-				setIdTalla('');
-				setLoading(false);
-				obtenerTalla();
-				form.resetFields();
-				notification.success({
-					message: 'Hecho!',
-					description: res.data.message,
-					duration: 2
-				});
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					setIdTalla('');
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					setIdTalla('');
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+		const resul = productos.map((tallas) => {
+			if (tallas.talla === datos.talla) {
+				return true;
+			}
+		});
+		const existe = resul.find((element) => element === true);
+
+		if (existe) {
+			notification.error({
+				message: 'Esta talla ya esta registrada',
+				duration: 2
 			});
+		} else {
+			if (datos.talla === '' || datos.cantidad === '') {
+				return null;
+			}
+			setLoading(true);
+			await clienteAxios
+				.post(`/productos/addTalla/${productoID}`, datos, {
+					headers: {
+						Authorization: `bearer ${token}`
+					}
+				})
+				.then((res) => {
+					setIdTalla('');
+					setLoading(false);
+					obtenerTalla();
+					setDatos({
+						talla: '',
+						cantidad: ''
+					});
+					form.resetFields();
+					notification.success({
+						message: 'Hecho!',
+						description: res.data.message,
+						duration: 2
+					});
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						setIdTalla('');
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						setIdTalla('');
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
 	}
 	async function eliminarTalla(idTalla) {
 		setLoading(true);

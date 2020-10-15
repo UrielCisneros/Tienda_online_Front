@@ -28,41 +28,62 @@ function RegistrarNumero(props) {
 	};
 
 	const subirNumero = async () => {
-		setLoading(true);
-		await clienteAxios
-			.post(`/productos/addNumero/${productoContext}`, datos, {
-				headers: {
-					Authorization: `bearer ${token}`
-				}
-			})
-			.then((res) => {
-				setLoading(false);
-				setDisabled(false);
-				obtenerNumero();
-				form.resetFields();
-				notification.success({
-					message: 'Hecho!',
-					description: res.data.message,
-					duration: 2
-				});
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+		const resul = productos.map((numeros) => {
+			if (numeros.numero === datos.numero) {
+				return true;
+			}
+		});
+		const existe = resul.find((element) => element === true);
+
+		if (existe) {
+			notification.error({
+				message: 'Este numero ya esta registrado',
+				duration: 2
 			});
+		} else {
+			if (datos.numero === '' || datos.cantidad === '') {
+				return null;
+			}
+			setLoading(true);
+			await clienteAxios
+				.post(`/productos/addNumero/${productoContext}`, datos, {
+					headers: {
+						Authorization: `bearer ${token}`
+					}
+				})
+				.then((res) => {
+					setLoading(false);
+					setDisabled(false);
+					obtenerNumero();
+					setDatos({
+						numero: '',
+						cantidad: ''
+					});
+					form.resetFields();
+					notification.success({
+						message: 'Hecho!',
+						description: res.data.message,
+						duration: 2
+					});
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
 	};
 
 	const eliminarNumero = async (idnumero) => {
@@ -152,11 +173,21 @@ function RegistrarNumero(props) {
 		<Spin size="large" spinning={loading}>
 			{disabledForm === false ? (
 				<div className="d-flex justify-content-center m-2">
-					<Alert style={{ width: '60%'}} message="Ya puedes registrar numero de calzado" type="info" showIcon />
+					<Alert
+						style={{ width: '60%' }}
+						message="Ya puedes registrar numero de calzado"
+						type="info"
+						showIcon
+					/>
 				</div>
 			) : (
 				<div className="d-flex justify-content-center m-2">
-					<Alert style={{ width: '60%'}} message="Podrás registrar el numero de calzado después de registrar tu producto" type="info" showIcon />
+					<Alert
+						style={{ width: '60%' }}
+						message="Podrás registrar el numero de calzado después de registrar tu producto"
+						type="info"
+						showIcon
+					/>
 				</div>
 			)}
 			<p className="text-center mb-1">
@@ -170,7 +201,7 @@ function RegistrarNumero(props) {
 								name="numero"
 								label="Numero"
 								onChange={datosForm}
-								labelCol={{ offset: 1, span: 6 }}
+								labelCol={{ offset: 1, span: 8 }}
 								wrapperCol={{ offset: 1, span: 16 }}
 							>
 								<Input name="numero" disabled={disabledForm} />

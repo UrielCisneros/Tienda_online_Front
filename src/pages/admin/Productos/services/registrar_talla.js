@@ -28,41 +28,62 @@ function RegistrarTalla(props) {
 	};
 
 	const subirTalla = async () => {
-		setLoading(true);
-		await clienteAxios
-			.post(`/productos/addTalla/${productoContext}`, datos, {
-				headers: {
-					Authorization: `bearer ${token}`
-				}
-			})
-			.then((res) => {
-				setLoading(false);
-				setDisabled(false);
-				obtenerTalla();
-				form.resetFields();
-				notification.success({
-					message: 'Hecho!',
-					description: res.data.message,
-					duration: 2
-				});
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+		const resul = productos.map((tallas) => {
+			if (tallas.talla === datos.talla) {
+				return true;
+			}
+		});
+		const existe = resul.find((element) => element === true);
+
+		if (existe) {
+			notification.error({
+				message: 'Esta talla ya esta registrada',
+				duration: 2
 			});
+		} else {
+			if (datos.talla === '' || datos.cantidad === '') {
+				return null;
+			}
+			setLoading(true);
+			await clienteAxios
+				.post(`/productos/addTalla/${productoContext}`, datos, {
+					headers: {
+						Authorization: `bearer ${token}`
+					}
+				})
+				.then((res) => {
+					setLoading(false);
+					setDisabled(false);
+					obtenerTalla();
+					setDatos({
+						talla: '',
+						cantidad: ''
+					});
+					form.resetFields();
+					notification.success({
+						message: 'Hecho!',
+						description: res.data.message,
+						duration: 2
+					});
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
 	};
 
 	const eliminarTalla = async (idtalla) => {
@@ -152,11 +173,16 @@ function RegistrarTalla(props) {
 		<Spin size="large" spinning={loading}>
 			{disabledForm === false ? (
 				<div className="d-flex justify-content-center m-2">
-					<Alert style={{ width: '60%'}} message="Ya puedes registrar tallas" type="info" showIcon />
+					<Alert style={{ width: '60%' }} message="Ya puedes registrar tallas" type="info" showIcon />
 				</div>
 			) : (
 				<div className="d-flex justify-content-center m-2">
-					<Alert style={{ width: '60%'}} message="Podrás registrar tallas después de registrar tu producto" type="info" showIcon />
+					<Alert
+						style={{ width: '60%' }}
+						message="Podrás registrar tallas después de registrar tu producto"
+						type="info"
+						showIcon
+					/>
 				</div>
 			)}
 			<p className="text-center mb-1">Escribe la talla y la cantidad de productos disponibles de esa talla.</p>
