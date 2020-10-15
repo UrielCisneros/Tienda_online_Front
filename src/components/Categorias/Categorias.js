@@ -39,6 +39,10 @@ const Categorias = (props) => {
 			});
 	}
 
+	if(!generos || !categorias){
+		return null;
+	}
+
 	async function obtenerGeneros() {
 		await clienteAxios
 			.get('/productos/agrupar/generos')
@@ -95,7 +99,7 @@ const Categorias = (props) => {
 				defaultSelectedKeys={[ window.location.pathname ]}
 			>
 				{categorias_nav}
-				{loading === false ? (
+				{generos.length !== 0 ? (
 					<SubMenu title="Género" className="submenu-categoria nav-font-color-categorias container-subcategorias-nav size-submenu-cat">
 						{categorias_generos}
 					</SubMenu>
