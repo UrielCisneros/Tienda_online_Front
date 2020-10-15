@@ -53,12 +53,6 @@ function Ofertas(props) {
 							<div>
 								<div class="contenedor-oferta">
 									<h5 className="shadow">OFERTA</h5>
-									<p>
-										-{agregarPorcentaje(
-											productos.precioPromocion,
-											productos.productoPromocion.precio
-										)}%
-									</p>
 								</div>
 								<div className="contenedor-imagen-producto-principal">
 									<img

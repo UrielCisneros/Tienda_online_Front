@@ -70,7 +70,7 @@ function ConsultaProductos(props) {
 										return (
 											<div class="contenedor-oferta">
 												<h5 className="shadow">OFERTA</h5>
-												<p>-{agregarPorcentaje(promo.precioPromocion, productos.precio)}%</p>
+												{/* <p>-{agregarPorcentaje(promo.precioPromocion, productos.precio)}%</p> */}
 											</div>
 										);
 									})
