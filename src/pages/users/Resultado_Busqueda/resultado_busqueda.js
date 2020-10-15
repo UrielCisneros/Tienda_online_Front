@@ -16,7 +16,9 @@ function ResultadoBusqueda(props) {
 			async function obtenerProductosFiltrados() {
 				setLoading(true);
 				await clienteAxios
-					.get(`/productos/search?nombre=${url}&categoria=${url}&subcategoria=${url}&genero=${url}&color=${url}`)
+					.get(
+						`/productos/search?nombre=${url}&categoria=${url}&subcategoria=${url}&genero=${url}&color=${url}`
+					)
 					.then((res) => {
 						setProductos(res.data.posts);
 						setLoading(false);
@@ -49,20 +51,34 @@ function ResultadoBusqueda(props) {
 			<Link to={`/vista_producto/${productos._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="contenedor-card-producto-principal">
 					<Card
-						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7', minHeight: 130}}
+						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7', minHeight: 130 }}
 						className="contenedor-card-body"
 						cover={
-							<div className="contenedor-imagen-producto-principal">
-								<img
-									className="imagen-producto-principal"
-									alt="producto"
-									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
-								/>
+							<div>
+								{productos.todos.length !== 0 ? (
+									productos.todos.map((promo) => {
+										return (
+											<div class="contenedor-oferta">
+												<h5 className="shadow">OFERTA</h5>
+												<p>-{agregarPorcentaje(promo.precioPromocion, productos.precio)}%</p>
+											</div>
+										);
+									})
+								) : (
+									<div className="d-none" />
+								)}
+								<div className="contenedor-imagen-producto-principal">
+									<img
+										className="imagen-producto-principal"
+										alt="producto"
+										src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+									/>
+								</div>
 							</div>
 						}
 					>
 						<div className="contenedor-titulos-productos titulo-elipsis">
-								<h1 className="titulo-producto">{productos.nombre}</h1>
+							<h1 className="titulo-producto">{productos.nombre}</h1>
 						</div>
 						{!productos.todos.length ? (
 							<div className="contenedor-precios-productos">
