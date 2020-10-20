@@ -44,4 +44,18 @@
 .rebajado{
     font-size: 15px;
 }
-
+.contenedor-oferta{
+    position: absolute;
+}
+.contenedor-oferta > h5{
+    background-color: rgb(255, 210, 62);
+    color: rgb(255, 0, 0);
+    width: 75px;
+    margin: 0;
+}
+.contenedor-oferta > p{
+    font-weight: bold;
+    font-size: 18px;
+    color: rgb(238, 155, 0);
+    width: 45px;
+}

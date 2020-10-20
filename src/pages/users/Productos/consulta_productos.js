@@ -19,15 +19,15 @@ function ConsultaProductos(props) {
 
 	useEffect(
 		() => {
-			if(window.screen.width < 768){
+			if (window.screen.width < 768) {
 				obtenerProductos(12, page);
-			}else{
+			} else {
 				obtenerProductos(40, page);
 			}
 		},
 		[ page ]
 	);
-	
+
 	async function obtenerProductos(limit, page) {
 		setLoading(true);
 		await clienteAxios
@@ -61,20 +61,35 @@ function ConsultaProductos(props) {
 			<Link to={`/vista_producto/${productos._id}`}>
 				<Card.Grid hoverable style={gridStyle} className="border contenedor-card-producto-principal">
 					<Card
-						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7', minHeight: 100}}
+						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7', minHeight: 100 }}
 						className="contenedor-card-body"
 						cover={
-							<div className="contenedor-imagen-producto-principal">
-								<img
-									className="imagen-producto-principal"
-									alt="producto"
-									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
-								/>
+							<div>
+								{productos.todos.length !== 0 ? (
+									productos.todos.map((promo) => {
+										return (
+											<div class="contenedor-oferta">
+												<h5 className="shadow">OFERTA</h5>
+												{/* <p>-{agregarPorcentaje(promo.precioPromocion, productos.precio)}%</p> */}
+											</div>
+										);
+									})
+								) : (
+									<div className="d-none" />
+								)}
+
+								<div className="contenedor-imagen-producto-principal">
+									<img
+										className="imagen-producto-principal"
+										alt="producto"
+										src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+									/>
+								</div>
 							</div>
 						}
 					>
 						<div className="contenedor-titulos-productos titulo-elipsis">
-								<h1 className="titulo-producto">{productos.nombre}</h1>
+							<h1 className="titulo-producto">{productos.nombre}</h1>
 						</div>
 						{!productos.todos.length ? (
 							<div className="contenedor-precios-productos">
@@ -119,7 +134,12 @@ function ConsultaProductos(props) {
 					</Row>
 				</div>
 			</div>
-			<Pagination blogs={productosPaginacion} location={location} history={history} limite={window.screen.width < 768 ? 12 : 40} />
+			<Pagination
+				blogs={productosPaginacion}
+				location={location}
+				history={history}
+				limite={window.screen.width < 768 ? 12 : 40}
+			/>
 		</Spin>
 	);
 }
