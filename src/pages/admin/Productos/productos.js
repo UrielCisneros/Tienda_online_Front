@@ -224,7 +224,7 @@ function RegistrarProductos(props) {
 	);
 
 	const render = productosRender.map((productos) => (
-		<Col key={productos._id} className="col-lg-3">
+		<Col key={productos._id} className="col-lg-2">
 			<Card.Grid hoverable style={gridStyle} >
 				<Card
 					style={{ /* width: 300,  */maxHeight: 420 }}

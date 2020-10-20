@@ -2,7 +2,8 @@
     background: #ffffff ;
 }
 .titulo-principal{
-    font-size: 25px;
+    margin-top: 10px;
+    font-size: 22px;
     font-weight: bold;
 }
 .titulos-vista-productos{
@@ -10,11 +11,11 @@
     font-weight: bold;
 }
 .titulo-precio{
-    font-size: 25px;
+    font-size: 28px;
     display: inline;
 }
 .titulo-porcentaje{
-    font-size: 25px!important;
+    font-size: 18px!important;
 }
 .titulo-porcentaje-sugerencia{
     font-size: 18px!important;
@@ -73,6 +74,20 @@
 }
 .size-button-vista{
     width: 100%;
+}
+.envio-texto{
+    color: #22BB33;
+}
+.boton-compras-secun{
+    background: rgb(250, 250, 250);
+}
+.formas-pago{
+    display: flex!important;
+    align-items: center;
+}
+.producto-descripcion{
+    font-size: 26px;
+    color: #000;
 }
 @media(max-width: 768px){
     .descripcion-sm{

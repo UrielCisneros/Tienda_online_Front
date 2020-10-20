@@ -228,7 +228,7 @@ const Sugerencia = (props) => {
 					<div />
 				) : (
 					<div className="col-lg-12">
-						<p className="my-3 text-center titulos-vista-productos">¡Llévalos juntos!</p>
+						<p className="my-3 text-center titulos-vista-productos producto-descripcion">¡Llévalos juntos!</p>
 						<div className="row" style={{ justifyContent: 'center' }}>
 							<div className="d-lg-flex d-sm-block px-5">
 								<div className="d-sm-block">
@@ -527,7 +527,7 @@ const Sugerencia = (props) => {
 							</div>
 							<div className="mt-3">
 								<div className="d-block">
-									<p className="titulos-vista-productos">
+									<p className="titulos-vista-productos producto-descripcion">
 										Precio total: ${formatoMexico(total.toFixed(2))}
 									</p>
 								</div>

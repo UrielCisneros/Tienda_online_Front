@@ -34,7 +34,7 @@ export default function Datos_tienda() {
 				<div className="mt-5">
 				<div className="contenedor-home-background">
 					<div className="row contenedor-home-banner">
-						<h2 className="mb-0 text-center font-weight-bold">ENCUENTRA NUESTRA TIENDA</h2>	
+						<h4 className="mb-0 text-center font-weight-bold">¡Encuentra nuestra tienda!</h4>	
 					</div>
 				</div>
 					<div className="row w-100">

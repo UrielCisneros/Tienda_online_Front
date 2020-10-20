@@ -80,7 +80,7 @@ export default function Confirmacion_compra(props) {
 
     const steps = [
         {
-        title: 'Datos de envio',
+        title: 'Datos de envío',
         content: (
             <div className="">
                  <Traer_datos 
@@ -110,7 +110,7 @@ export default function Confirmacion_compra(props) {
         {
         title: 'Comprar',
         content: (
-            <div className="col-lg-7 mt-4">
+            <div>
                 <Confirmacion_Final 
                     idPago={idPago} 
                     datosPedido={datosPedido} 

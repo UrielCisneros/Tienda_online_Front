@@ -44,7 +44,7 @@ function Clientes(props) {
 
 	const columns = [
 		{
-			title: 'Imagen',
+			title: 'Foto de perfil',
 			dataIndex: 'imagen',
 			key: 'imagen',
 			render: (imagen) => {

@@ -220,8 +220,8 @@ export default function DatosCliente(props) {
 					</Col>
 				</Row>
 				<Form.Item {...tailLayout}>
-					<Button htmlType="submit" type="primary" size="large" style={{ width: 150 }} >
-						{controlBoton ? 'Actualizar datos' : 'Guardar mis datos'}
+					<Button htmlType="submit" type="default" size="large" style={{ width: 150 }} >
+						{controlBoton ? 'Editar datos' : 'Guardar'}
 					</Button>
 				</Form.Item>
 			</Form>

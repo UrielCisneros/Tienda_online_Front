@@ -13,7 +13,7 @@ const DetallesPedido = (props) => {
 				<p className="data-info-pedidos">{pedido._id}</p>
 			</div>
 			<div className="my-2">
-				<h6 className="titulos-info-pedidos">fecha de pedido:</h6>
+				<h6 className="titulos-info-pedidos">Fecha de pedido:</h6>
 				<p className="data-info-pedidos">{formatoFecha(pedido.createdAt)}</p>
 			</div>
 			<div className="my-2">
@@ -23,7 +23,7 @@ const DetallesPedido = (props) => {
 			{pedido.fecha_envio ? (
 				<div>
 					<div className="my-2">
-						<h6 className="titulos-info-pedidos">fecha de envío:</h6>
+						<h6 className="titulos-info-pedidos">Fecha de envío:</h6>
 						<p className="data-info-pedidos">{formatoFecha(pedido.fecha_envio)}</p>
 					</div>
 					<div className="my-2">
@@ -105,7 +105,7 @@ const DetallesPedido = (props) => {
 						</div>
 						{pedido.producto.categoria.toLowerCase() === 'ropa' ? (
 							<div className="my-2 contenedor-info-pedidos">
-								<h6 className="titulos-info-pedidos">talla:</h6>
+								<h6 className="titulos-info-pedidos">Talla:</h6>
 								<p className="data-info-pedidos">{pedido.talla}</p>
 							</div>
 						) : (
@@ -113,7 +113,7 @@ const DetallesPedido = (props) => {
 						)}
 						{pedido.producto.categoria.toLowerCase() === 'calzado' ? (
 							<div className="my-2 contenedor-info-pedidos">
-								<h6 className="titulos-info-pedidos">numero de calzado:</h6>
+								<h6 className="titulos-info-pedidos">Número de calzado:</h6>
 								<p className="data-info-pedidos">{pedido.numero}</p>
 							</div>
 						) : (

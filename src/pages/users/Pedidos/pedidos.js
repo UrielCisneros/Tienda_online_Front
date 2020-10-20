@@ -242,7 +242,7 @@ function Pedido(props) {
 					}}
 				>
 					<EditOutlined />
-					Detalle del pedido
+					Ver mi pedido
 				</Button>
 			]}
 		>
@@ -346,7 +346,7 @@ function Pedido(props) {
 						) : (
 							<div className="col-lg-6 col-sm-12">
 								<p className="m-0 font-weight-bold h3 text-primary" style={{ fontSize: '15px' }}>
-									Mensaje de la tienda:
+									¡Hola!
 								</p>
 								<p className="mt-2" style={{ fontSize: '15px' }}>
 									{pedido.mensaje_admin ? (
@@ -384,7 +384,7 @@ function Apartado(props) {
 						}}
 					>
 						<EditOutlined />
-						Detalle del apartado
+						Ver mi apartado
 					</Button>
 					<Button
 						className={
@@ -420,7 +420,7 @@ function Apartado(props) {
 				<p className="m-0" style={{ fontSize: '15px' }}>
 					<span className="font-weight-bold">Tipo de entrega:</span>
 					<Tag className="" color={apartado.tipoEntrega === 'RECOGIDO' ? '#f0ad4e' : '#5cb85c'}>
-						{apartado.tipoEntrega === 'ENVIO' ? 'Envio por paqueteria' : 'Recoger a sucursal'}
+						{apartado.tipoEntrega === 'ENVIO' ? 'Envío por paquetería' : 'Recoger a sucursal'}
 					</Tag>
 				</p>
 			</div>
@@ -505,7 +505,7 @@ function Apartado(props) {
 												style={{ fontSize: 16 }}
 												type="primary"
 											>
-												Seguir envio
+												Seguír envío
 											</Button>
 										</a>
 									</div>
@@ -517,7 +517,7 @@ function Apartado(props) {
 						{apartado.tipoEntrega === 'ENVIO' ? (
 							<div className="col-lg-6 col-sm-12">
 								<p className="m-0 font-weight-bold h3 text-primary" style={{ fontSize: '15px' }}>
-									Mensaje de la tienda:
+									¡Hola!
 								</p>
 								<p className="mt-2" style={{ fontSize: '15px' }}>
 									{apartado.mensaje_admin ? (

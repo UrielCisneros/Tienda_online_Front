@@ -162,7 +162,7 @@ export default function Traer_datos(props) {
                                             </Form.Item>
                                         </div>
                                         <div className="col-lg-2 col-sm-12">
-                                            <p className="font-weight-bold">Direccion:</p>
+                                            <p className="font-weight-bold">Dirección:</p>
                                             <Form.Item name="calle_numero"  onChange={datosForm}>
                                                 <Form.Item rules={[{ required: true, message: 'Direccion obligatoria' }]}  noStyle name="calle_numero" >
                                                     <Input name="calle_numero" a placeholder="Calle y numero de calle"  />

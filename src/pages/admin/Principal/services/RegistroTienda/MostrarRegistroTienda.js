@@ -186,7 +186,7 @@ import {Link} from 'react-router-dom';
                 </div>
                         {action === false ? "" : (
                             <div>
-                                <p className="h5">Logo del negocio:</p>
+                                <p className="h5 font-weight-bold">Logo del negocio:</p>
                                 <div className="mostrarRegistroTienda-imagen m-3">
                                     <img
                                         className="d-block img-fluid "
@@ -199,35 +199,35 @@ import {Link} from 'react-router-dom';
                         )}
 
                     <div className="row m-4">
-                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p className="h5">Nombre del negocio: <span className="h5"> {action === false ? "Nombre de tu negocio": datosNegocio.nombre} </span> </p>
+                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2 shadow">
+                                <p className="h5 font-weight-bold">Nombre del negocio: <span className="h5"> {action === false ? "Nombre de tu negocio": datosNegocio.nombre} </span> </p>
                             </div>
-                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p className="h5">Teléfono:<span className="h5"> {action === false ? "Teléfono": datosNegocio.telefono} </span></p>
+                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2 shadow">
+                                <p className="h5 font-weight-bold">Teléfono:<span className="h5"> {action === false ? "Teléfono": datosNegocio.telefono} </span></p>
                             </div>
-                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p className="h5">Código Postal:<span className="h5"> {action === false ? "Código Postal": datosNegocio.direccion[0].cp} </span></p>
+                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2 shadow">
+                                <p className="h5 font-weight-bold">Código Postal:<span className="h5"> {action === false ? "Código Postal": datosNegocio.direccion[0].cp} </span></p>
                             </div>
                     </div>
 
                     <div className="row m-4">
-                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p className="h5">Calle:<span className="h5"> {action === false ? "Calle": datosNegocio.direccion[0].calle_numero} </span></p>
+                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2 shadow">
+                                <p className="h5 font-weight-bold">Calle:<span className="h5"> {action === false ? "Calle": datosNegocio.direccion[0].calle_numero} </span></p>
                             </div>
-                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p className="h5">Colonia:<span className="h5"> {action === false ? "Colonia": datosNegocio.direccion[0].colonia} </span></p>
+                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2 shadow">
+                                <p className="h5 font-weight-bold">Colonia:<span className="h5"> {action === false ? "Colonia": datosNegocio.direccion[0].colonia} </span></p>
                             </div>
-                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2">
-                                <p className="h5">Ciudad:<span className="h5"> {action === false ? "Colonia": datosNegocio.direccion[0].ciudad} Ciudad</span></p>
+                            <div className="col-lg-4 col-md-4 col-sm-12 mb-2 shadow">
+                                <p className="h5 font-weight-bold">Ciudad:<span className="h5"> {action === false ? "Colonia": datosNegocio.direccion[0].ciudad} Ciudad</span></p>
                             </div>
                     </div>
 
-                    <div className="row">
-                            <div className="col-lg-6 col-sm-12">
-                                <p className="h5">Estado:<span className="h5"> {action === false ? "Estado": datosNegocio.direccion[0].estado}</span></p>
+                    <div className="row justify-content-around">
+                            <div className="col-lg-4 col-sm-12 shadow">
+                                <p className="h5 font-weight-bold">Estado:<span className="h5"> {action === false ? "Estado": datosNegocio.direccion[0].estado}</span></p>
                             </div>
-                            <div className="col-lg-6 col-sm-12">
-                                <p className="m-2 h5" >Redes sociales:</p>
+                            <div className="col-lg-4 col-sm-12 shadow">
+                                <p className="m-2 h5 font-weight-bold" >Redes sociales:</p>
                                 {face !== '' ? 
                                     (
                                     <a href={face} className="m-2" target="_blank">

@@ -101,47 +101,54 @@ export default function Confirmacion_Final(props) {
 
 	return (
 		<Spin spinning={loading} size="large">
+			<div className="d-flex justify-content-center">
+				<h3 className="font-weight-bold">Resumen de compra</h3>
+			</div>
 			<div className="shadow-lg bg-white rounded confirmacion_final">
 				<div className="row">
 					<div className="col-lg-6">
 						<div className="mt-3">
-							<p className="text-center h3 font-weight-bold">Dirección de envío</p>
-							<div className="row">
-								<div className="col-lg-3 col-sm-none text-lg-right text-center ">
-									<FontAwesomeIcon
-										className="text-success"
-										icon={faTruck}
-										style={{ fontSize: '50px' }}
-									/>
-								</div>
-								<div className="col-lg-7 col-sm-12 text-left m-0 m-sm-2 ">
-									<p className="h6">
-										{direccion.calle_numero}, {direccion.entre_calles}, {direccion.colonia},{' '}
-										{direccion.ciudad}, {direccion.estado}, {direccion.pais}, CP {direccion.cp}
-									</p>
+							<div className="contenedor-direccion-conf shadow-sm">
+								<p className="h4 font-weight-bold">Dirección de envío</p>
+								<div className="row m-0">
+									<div className="col-lg-3 col-sm-none text-center icono-info">
+										<FontAwesomeIcon
+											className="text-success"
+											icon={faTruck}
+											style={{ fontSize: '50px' }}
+										/>
+									</div>
+									<div className="col-lg-9 col-sm-12 m-sm-2 contenido-info">
+										<p className="h6">
+											{direccion.calle_numero}, {direccion.entre_calles}, {direccion.colonia},{' '}
+											{direccion.ciudad}, {direccion.estado}, {direccion.pais}, CP {direccion.cp}
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>
-						<p className="text-center h3 mt-5 font-weight-bold">Información de pago</p>
-						<div className="row my-3">
-							<div className="col-lg-3 col-sm-12 text-lg-right  text-center">
-								<FontAwesomeIcon
-									className={'visa'}
-									icon={idPago.card.brand === 'visa' ? faCcVisa : faCcMastercard}
-									style={{ fontSize: '50px' }}
-								/>
-							</div>
-							<div className="col-lg-7 m-2">
-								{console.log(idPago)}
-								<p className="h6">
-									<span className="font-weight-bold">Tipo tarjeta:</span> {idPago.card.funding}{' '}
-								</p>
-								<p className="h6">
-									<span className="font-weight-bold">Tarjeta:</span> *********{idPago.card.last4}{' '}
-								</p>
-								<p className="h6">
-									<span className="font-weight-bold">Expira:</span> {idPago.card.exp_month}/{idPago.card.exp_year}
-								</p>
+						<div className="shadow-sm contenedor-info-pago">
+							<p className="h4 font-weight-bold">Información de pago</p>
+							<div className="row my-3 mx-0">
+								<div className="col-lg-3 col-sm-12 text-center icono-info">
+									<FontAwesomeIcon
+										className={'visa'}
+										icon={idPago.card.brand === 'visa' ? faCcVisa : faCcMastercard}
+										style={{ fontSize: '50px' }}
+									/>
+								</div>
+								<div className="col-lg-7 m-2 contenido-info">
+									{console.log(idPago)}
+									<p className="h6">
+										<span className="font-weight-bold">Tipo tarjeta:</span> {idPago.card.funding}{' '}
+									</p>
+									<p className="h6">
+										<span className="font-weight-bold">Tarjeta:</span> *********{idPago.card.last4}{' '}
+									</p>
+									<p className="h6">
+										<span className="font-weight-bold">Expira:</span> {idPago.card.exp_month}/{idPago.card.exp_year}
+									</p>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -220,7 +220,7 @@ function Sugerencias(props) {
 								}}
 								type="primary"
 							>
-								Listo
+								Guardar
 							</Button>
 						</Space>
 					</div>

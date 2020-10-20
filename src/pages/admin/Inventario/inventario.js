@@ -63,7 +63,7 @@ function Inventario(props) {
 			key: 'tipoCategoria',
 			render: (text) => !text ? <p>-</p> : <p>{text.toLowerCase()}</p>
 		}, */
-		{
+		/* {
 			title: 'Categoría',
 			dataIndex: 'categoria',
 			key: 'categoria',
@@ -74,7 +74,7 @@ function Inventario(props) {
 			dataIndex: 'subCategoria',
 			key: 'subCategoria',
 			render: (text) => (!text ? <p className="h5">-</p> : <p className="h5">{text.toLowerCase()}</p>)
-		},
+		}, */
 		{
 			title: 'Cantidad',
 			dataIndex: 'cantidad',

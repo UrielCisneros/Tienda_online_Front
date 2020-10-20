@@ -263,7 +263,7 @@ function ActualizarTalla() {
 									<div>
 										<Space>
 											<Button type="dafault" htmlType="submit">
-												Actualizar
+												Guardar
 											</Button>
 											<Button
 												type="dafault"

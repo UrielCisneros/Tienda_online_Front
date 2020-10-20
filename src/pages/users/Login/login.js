@@ -52,7 +52,7 @@ function Login(props) {
 				</Form.Item>
 				<Form.Item {...tailLayout}>
 					<Button type="primary" htmlType="submit">
-						Acceder
+						Continuar
 					</Button>
 				</Form.Item>
 			</Form>

@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import { Link } from 'react-router-dom';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import './productos.scss';
+import DOMPurify from 'dompurify';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
@@ -90,10 +91,11 @@ function ConsultaProductos(props) {
 					>
 						<div className="contenedor-titulos-productos titulo-elipsis">
 							<h1 className="titulo-producto">{productos.nombre}</h1>
+							<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productos.descripcion) }} />
 						</div>
 						{!productos.todos.length ? (
 							<div className="contenedor-precios-productos">
-								<h2 className="h5 precio-rebaja">${formatoMexico(productos.precio)}</h2>
+								<h3 className="h5 precio-rebaja">${formatoMexico(productos.precio)}</h3>
 							</div>
 						) : (
 							productos.todos.map((promo) => {
@@ -102,9 +104,9 @@ function ConsultaProductos(props) {
 										<h2 className="h5 precio-producto rebajado mr-2">
 											${formatoMexico(productos.precio)}
 										</h2>
-										<h2 className="h5 precio-rebaja d-inline mr-1">
+										<h3 className="h5 precio-rebaja d-inline mr-1">
 											${formatoMexico(promo.precioPromocion)}
-										</h2>
+										</h3>
 										<p className="h4 porcentaje-descuento d-inline">
 											{agregarPorcentaje(promo.precioPromocion, productos.precio)}%OFF
 										</p>

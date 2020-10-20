@@ -73,7 +73,7 @@ function VistaProductos(props) {
 							<Galeria id={producto} />
 						</div>
 						<div className="descripcion-lg">
-							<p className="titulos-vista-productos">Descripción</p>
+							<p className="titulos-vista-productos producto-descripcion">Descripción</p>
 							<div
 								className={readMore}
 								dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productos.descripcion) }}
@@ -115,8 +115,8 @@ function VistaProductos(props) {
 						)}
 						{costoEnvio ? (
 							<div>
-								<p style={{ fontSize: 20 }}>
-									<FontAwesomeIcon icon={faTruck} style={{ fontSize: 20, marginRight: 10 }} /> <span className="font-weight-bold">Envío:</span>{' '}
+								<p style={{ fontSize: 15 }} className="envio-texto">
+									<FontAwesomeIcon icon={faTruck} style={{ fontSize: 15, marginRight: 10 }} /> <span>Costo del envío:</span>{' '}
 									<span>${costoEnvio.costoEnvio}</span>
 								</p>
 								{costoEnvio.promocionEnvio ?  costoEnvio.descuento !== 0 ? (
@@ -157,7 +157,7 @@ function VistaProductos(props) {
 						<Divider />
 						<TallasCantidades producto={productos} /> {/* Componente tallas */}
 						<Divider />
-						<p className="mb-3" style={{ fontSize: 20, fontWeight: 'bold' }}>
+						<p className="mb-3 formas-pago" style={{ fontSize: 20, fontWeight: 'bold' }}>
 							<CreditCardOutlined style={{ fontSize: 25 }} className="mr-2" />
 							Formas de Pago
 						</p>

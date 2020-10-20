@@ -403,12 +403,12 @@ function TallasCantidades(props) {
 						>
 							<InputNumber
 								type="number"
-								size="large"
+								size="middle"
 								min={1}
 								max={categoria === 'ropa' ? tallas.cantidad : numeros.cantidad}
 								defaultValue={1}
 								onChange={categoria === 'ropa' ? obtenerCantidadTalla : obtenerCantidadNumero}
-								style={{ width: 130 }}
+								style={{ width: 70 }}
 								disabled={tallas.length !== 0 || numeros.length !== 0 ? false : true}
 							/>
 						</Form.Item>
@@ -451,7 +451,7 @@ function TallasCantidades(props) {
 								Comprar ahora
 							</Button>
 							<Button
-								className="mt-3 d-block size-button-vista"
+								className="mt-3 d-block size-button-vista boton-compras-secun"
 								size="large"
 								onClick={() => showModal()}
 								disabled={disabled}
@@ -460,7 +460,7 @@ function TallasCantidades(props) {
 								Apartar
 							</Button>
 							<Button
-								className="mt-3 d-block size-button-vista"
+								className="mt-3 d-block size-button-vista boton-compras-secun"
 								size="large"
 								disabled={disabled}
 								onClick={() => Carrito()}

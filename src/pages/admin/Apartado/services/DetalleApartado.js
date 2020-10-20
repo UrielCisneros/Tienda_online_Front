@@ -124,8 +124,8 @@ export default function DetalleApartado(props) {
         <Spin size="large" spinning={loading}>
             <div className ="detalle-apartado">
                 <Row>
-                    <Col span={24} className="detalle-apartado__border d-block">
-                        <p className="h3 text-center">Datos Usuario</p>
+                    <Col span={24} className="detalle-apartado__border d-block detalle-apartados">
+                        <p className="h4 font-weight-bold">Datos Usuario</p>
                         <div className="col-sm-12 col-lg-6 m-2">
                             <h6 className=" m-2">Nombre: </h6>
                             <p className=" m-2">{detalleApartado.cliente[0].nombre}</p>
@@ -150,7 +150,7 @@ export default function DetalleApartado(props) {
                         </div>
                     </Col>
                     <Col span={24} className="detalle-apartado__border d-block m-2">
-                        <p className="h4 text-center">Datos producto</p>
+                        <p className="h4 font-weight-bold">Datos producto</p>
                         <div className="">
                             <div className="DetalleApartdado-imagen">
                                 <img
@@ -182,7 +182,7 @@ export default function DetalleApartado(props) {
                     <Col span={24} className="m-2">
                         <div>
                             <div>
-                            <p className="h3 text-center">Información por apartar</p>
+                            <p className="h4 font-weight-bold">Estatus del pedido</p>
                                 <h6 className=" m-2">{detalleApartado.producto[0].categoria === 'calzado' ? 'Numero a apartar:': detalleApartado.producto[0].categoria === 'ropa' ? 'Talla a apartar' : '' }</h6>
                                     {detalleApartado.producto[0].categoria === 'calzado' ? (
                                         <Badge className="m-2">
@@ -204,19 +204,19 @@ export default function DetalleApartado(props) {
                                         </Badge>
                                     ) : '' }
                             </div>
-                            <h6 className=" m-2">Cantidad de artículos por apartar: </h6>
-                            <p className=" m-2">{detalleApartado.cantidad}</p>
+                           {/*  <h6 className=" m-2">Cantidad de artículos por apartar: </h6>
+                            <p className=" m-2">{detalleApartado.cantidad}</p> */}
 
                             <h6 className=" m-2">Tipo de entrega:</h6>
                             <Tag
                                 style={{size:"50px",marginBottom: 10}}
                                 color={detalleApartado.tipoEntrega === 'ENVIO' ?  '#5cb85c' : '#0275d8'}
                             >
-                                {detalleApartado.tipoEntrega === 'ENVIO' ? 'Envio a domicilio' : 'Pasaran por el'}
+                                {detalleApartado.tipoEntrega === 'ENVIO' ? 'Envio a domicilio' : 'Recoger a sucursal'}
                             </Tag>
                             <p></p>
 
-                            
+                            <h6 className=" m-2">Actualiza el estado del pedido:</h6>
                             <Form 
                                 onFinish={guardarEstadoApartado}
                                 form={form}

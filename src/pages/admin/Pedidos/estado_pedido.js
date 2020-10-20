@@ -135,29 +135,29 @@ const EstadoPedido = (props) => {
 
 	return (
 		<Spin size="large" spinning={loading}>
-			<Divider orientation="left">Estado del pedido</Divider>
+			<Divider orientation="left">Actualiza el estado del pedido</Divider>
 			<Dropdown overlay={menu} disabled={IDpedido.estado_pedido === "Enviado" || disabled ? true : false}>
 				<Button>
 					{pedido.estado_pedido} <DownOutlined />
 				</Button>
 			</Dropdown>
 			<Divider orientation="left">Informacion de envio</Divider>
-			<p style={{fontSize: 16}}>Si el producto ya fue enviado puedes agregar la infoemacion de envio.</p>
+			<p style={{fontSize: 16}}>Si el producto ya fue enviado puedes agregar la información de envío.</p>
 
-			<Form onFinish={cambiarEstado} form={form}>
+			<Form onFinish={cambiarEstado} form={form} className="form-paqueteria">
 				<h6>Mensaje:</h6>
 				<Form.Item name="mensaje_admin">
 					<TextArea rows={4} name="mensaje_admin" placeholder="Mensaje para el usuario"  onChange={onChange}/>
 				</Form.Item>
-				<h6>Url de vinculacion:</h6>
+				<h6>Url de vinculación:</h6>
 				<Form.Item name="url" onChange={onChange}>
 					<Input name="url" placeholder="Url de vinculacion del paquete" />
 				</Form.Item>
-				<h6>Paqueteria:</h6>
+				<h6>Paquetería:</h6>
 				<Form.Item name="paqueteria" onChange={onChange}>
 					<Input name="paqueteria" placeholder="Nombre del Autor" />
 				</Form.Item>
-				<h6>Codigo de seguimiento:</h6>
+				<h6>Código de seguimiento:</h6>
 				<Form.Item name="codigo_seguimiento" onChange={onChange}>
 					<Input name="codigo_seguimiento" placeholder="Nombre del Autor" />
 				</Form.Item>

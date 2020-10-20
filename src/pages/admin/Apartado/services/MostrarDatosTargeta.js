@@ -69,7 +69,7 @@ export default function MostrarDatosTargeta(props) {
 								}}
 								className="d-inline"
 							>
-								Detalle de apartado
+								Detalle del pedido
 							</p>
 						</div>,
 						<div className="d-flex justify-content-center align-items-center text-danger">
@@ -117,7 +117,7 @@ export default function MostrarDatosTargeta(props) {
 										className="data-info-apartados"
 										color={apartado.tipoEntrega === 'ENVIO' ?  '#5cb85c' : '#0275d8'}
 									>
-										{apartado.tipoEntrega === 'ENVIO' ? 'Envio a domicilio' : 'Pasaran por el'}
+										{apartado.tipoEntrega === 'ENVIO' ? 'Envio a domicilio' : 'Recoger a sucursal'}
 									</Tag>
 								</div>
 

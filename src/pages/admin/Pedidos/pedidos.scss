@@ -17,6 +17,7 @@ p{
 .titulos-info-pedidos{
     line-height: 0;
     display: inline;
+    font-weight: bold;
 }
 .data-info-pedidos{
     float: right;
@@ -44,4 +45,7 @@ p{
 }
 .card-p-pedidos p {
     font-size: 16px;
+}
+.form-paqueteria h6{
+font-weight: bold;
 }
