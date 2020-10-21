@@ -5,6 +5,7 @@ import { ExclamationCircleOutlined, RollbackOutlined, CloseOutlined, CheckOutlin
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import InfiniteScroll from 'react-infinite-scroller';
 import './sugerencia.scss';
+import aws from '../../../../config/aws';
 
 const { Search } = Input;
 const { Meta } = Card;
@@ -155,7 +156,6 @@ const Sugerencia = (props) => {
 		await clienteAxios
 			.get(`/sugerencia/${productoContext}`)
 			.then((res) => {
-				console.log(res)
 				if(res.data.sugerencias){
 					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));	
 				}else {
@@ -363,7 +363,7 @@ const Sugerencia = (props) => {
 		>
 			<List.Item.Meta
 				avatar={
-					<Avatar src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`} />
+					<Avatar src={aws+productos.imagen} />
 				}
 				title={productos.nombre}
 			/>
@@ -481,7 +481,7 @@ const Sugerencia = (props) => {
 							<img
 								className="imagen-producto-sugerencia"
 								alt="producto actual"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
+								src={aws+producto.imagen}
 							/>
 						</div>
 					}
@@ -501,7 +501,7 @@ const Sugerencia = (props) => {
 								<img
 									className="imagen-producto-sugerencia"
 									alt="producto sugerido"
-									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${sugerencia.imagen}`}
+									src={aws+sugerencia.imagen}
 								/>
 							</div>
 						}

@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import './actualizar_galeria.scss';
+import aws from '../../../../config/aws';
 
 const { confirm } = Modal;
 
@@ -201,7 +202,7 @@ function RegistrarGaleria() {
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
 					<img
 						className="img"
-						src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenes.url}`}
+						src={aws+imagenes.url}
 						alt="preview-imagen"
 					/>
 					<div className="iconos rounded">
@@ -262,7 +263,7 @@ function RegistrarGaleria() {
 						) : (
 							<img
 								className="imagen-actualizar-galeria"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${prev}`}
+								src={aws+prev}
 								alt="preview-imagen"
 							/>
 						)}

@@ -10,6 +10,7 @@ import { actualizarCantidad } from './services/consultasCarrito';
 import { obtenerSubtotal } from './services/obtenerStock';
 import { AgregarPedido, EliminarArticuloCarrito } from './services/consultas_individuales';
 import ModalApartado from './modal_apartado';
+import aws from '../../../config/aws';
 
 const { Option } = Select;
 const styles = { fontSize: 20 };
@@ -52,7 +53,6 @@ function ListaCarrito(props) {
 			});
 		} else if (carrito.idarticulo.numeros.length !== 0) {
 			carrito.idarticulo.numeros.forEach((numeros) => {
-				console.log(numeros)
 				if (carrito.medida) {
 					carrito.medida.forEach((medida) => {
 						if (medida.numero === numeros.numero) {
@@ -149,8 +149,7 @@ function ListaCarrito(props) {
 						<img
 							alt="articulo producto"
 							className="imagen-vista-carrito"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${carrito.idarticulo
-								.imagen}`}
+							src={aws+carrito.idarticulo.imagen}
 						/>
 					</div>
 				</div>

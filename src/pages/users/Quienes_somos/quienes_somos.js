@@ -11,18 +11,13 @@ export default function QuienesSomos() {
     function peticionImagenCoorporativa(){
         clienteAxios.get('/tienda/')
             .then((res) => {
-                console.log(res)
                 setLoading(false)
                 if (res.data[0].politicas !== "") {
-                    console.log("Si hay datos")
                     setImagenCorp(res.data[0].imagenCorp)
-                }else{
-                    console.log("No hay datos")
                 }
             })
             .catch((err) => {
                 console.log(err);
-                console.log("No funciona");
             });
     }
     

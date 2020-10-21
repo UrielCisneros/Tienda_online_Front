@@ -11,19 +11,13 @@ function Politicas() {
     function peticionPoliticas(){
 		clienteAxios.get('/tienda/')
 			.then((res) => {
-                console.log(res)
                 setLoading(false);
                 if (res.data[0].politicas !== "") {
-                    console.log("Si hay datos")
                     setPoliticas(res.data[0].politicas)
-                }else{
-                    console.log("No hay datos")
-                    
                 }
 			})
 			.catch((err) => {
                 console.log(err);
-                console.log("No funciona");
 			});
     }
 

@@ -94,7 +94,6 @@ function RegistrarProducto(props) {
 
 	const handleChange = (color) => {
 		setColor(color.hex);
-		console.log(color)
 	};
 
 	const resetColor = () => {

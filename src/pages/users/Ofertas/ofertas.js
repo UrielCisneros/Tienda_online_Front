@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import { Link, withRouter } from 'react-router-dom';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import './ofertas.scss';
+import aws from '../../../config/aws';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
@@ -39,9 +40,7 @@ function Ofertas(props) {
 				props.history.push('/error500');
 			});
 	}
-	{
-		/* <div className="contenedor-card-ofertas" key={productos._id}> */
-	}
+
 	const render = productos.map((productos) => (
 		<Col key={productos._id} className="size-col col-lg-2 col-6">
 			<Link to={`/vista_producto/${productos.productoPromocion._id}`}>
@@ -58,8 +57,7 @@ function Ofertas(props) {
 									<img
 										className="imagen-producto-principal"
 										alt="producto"
-										src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos
-											.productoPromocion.imagen}`}
+										src={aws+productos.productoPromocion.imagen}
 									/>
 								</div>
 							</div>

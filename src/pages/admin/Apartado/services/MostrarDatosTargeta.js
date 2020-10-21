@@ -17,7 +17,6 @@ export default function MostrarDatosTargeta(props) {
 
 
 	const deleteApartado = (id) => {
-		console.log(token);
         confirm({
             title:"Eliminando Blog",
             icon: <ExclamationCircleOutlined />,
@@ -33,7 +32,6 @@ export default function MostrarDatosTargeta(props) {
 					}
                 })
                 .then((res) => {
-                    console.log(res);
                     notification.success({
                         message: 'Blog Eliminado',
                         description:

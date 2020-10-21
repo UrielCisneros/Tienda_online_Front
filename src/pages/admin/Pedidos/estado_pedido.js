@@ -23,7 +23,6 @@ const EstadoPedido = (props) => {
 
 	const cambiarEstado = async () => {
 		setLoading(true);
-		console.log(datos);
 		await clienteAxios
 			.put(`/pedidos/info/${pedidoID._id}`, datos,  {
 				headers: {
@@ -70,7 +69,6 @@ const EstadoPedido = (props) => {
 			.then((res) => {
 				setLoading(false);
 				setPedido(res.data);
-				console.log(res.data);
                 form.setFieldsValue({
 					estado_pedido: res.data.estado_pedido, 
 					mensaje_admin: res.data.mensaje_admin,

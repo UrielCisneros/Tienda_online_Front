@@ -48,7 +48,7 @@ const FooterPage = () => {
                 }
 			})
 			.catch((err) => {
-                console.log("No funciona");
+                console.log(err);
 			});
     }
 
@@ -96,7 +96,7 @@ const FooterPage = () => {
 
                         {face !== '' ? 
                             (
-                            <a href={face} target="_blank">
+                            <a href={face} target="_blank" rel="noopener noreferrer">
                                 <FacebookFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')
@@ -104,7 +104,7 @@ const FooterPage = () => {
                         }
                         {insta !== '' ? 
                             (
-                            <a href={insta} target="_blank">
+                            <a href={insta} target="_blank" rel="noopener noreferrer">
                                 <InstagramFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')
@@ -112,7 +112,7 @@ const FooterPage = () => {
                         
                         {twitter !== '' ? 
                             (
-                            <a href={twitter} target="_blank">
+                            <a href={twitter} target="_blank" rel="noopener noreferrer">
                                 <TwitterCircleFilled  id="is" style={{fontSize: 45, color:"gray"}} />
                             </a>
                             ):('')

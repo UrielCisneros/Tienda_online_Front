@@ -5,6 +5,7 @@ import { RollbackOutlined } from '@ant-design/icons';
 import './registrar_promocion.scss';
 import InfiniteScroll from 'react-infinite-scroller';
 import { formatoMexico } from '../../../../config/reuserFunction';
+import aws from '../../../../config/aws';
 
 const { Search } = Input;
 const demo = { height: '500px', overflow: 'auto' };
@@ -330,7 +331,7 @@ const RegistrarPromocion = (props) => {
 													avatar={
 														<Avatar
 															size={40}
-															src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+															src={aws+productos.imagen}
 														/>
 													}
 													title={productos.nombre}
@@ -361,7 +362,7 @@ const RegistrarPromocion = (props) => {
 											<img
 												className="imagen-promocion-principal"
 												alt="producto"
-												src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
+												src={aws+producto.imagen}
 											/>
 										</div>
 									}
@@ -441,7 +442,7 @@ const RegistrarPromocion = (props) => {
 										<img
 											className="img-producto-promocion"
 											alt="img-producto"
-											src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagen}`}
+											src={aws+imagen}
 										/>
 									</div>
 								) : (

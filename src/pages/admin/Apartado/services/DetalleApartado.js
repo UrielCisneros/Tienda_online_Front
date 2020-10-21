@@ -3,6 +3,7 @@ import {Col,Row,Badge,Select,Form, Button,Spin,notification,Typography,Tag,Input
 import './DetalleApartado.scss';
 import clienteAxios from '../../../../config/axios';
 import { formatoMexico } from '../../../../config/reuserFunction';
+import aws from '../../../../config/aws';
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -30,7 +31,6 @@ export default function DetalleApartado(props) {
 		})
         .then((res) => {
 			setLoading(false);
-            console.log(res);
             setpromocion(res.data.promocion)
         }).catch((err) => {
 			setLoading(false);
@@ -90,7 +90,6 @@ export default function DetalleApartado(props) {
         })
         .then((res) => {
             setEstado(true)
-            console.log(res);
             setLoading(false)
             notification.success({
                 message: 'Hecho!',
@@ -157,7 +156,7 @@ export default function DetalleApartado(props) {
                                     className="img-fluid"
                                     width="200"
                                     alt="imagen de base"
-                                    src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${detalleApartado.producto[0].imagen}`}
+                                    src={aws+detalleApartado.producto[0].imagen}
                                 />
                             </div>
                             <h6 className=" m-2">Nombre: </h6>
@@ -166,7 +165,6 @@ export default function DetalleApartado(props) {
                             {<p className=" m-2">{detalleApartado.producto[0].codigo}</p>}
                             <h6 className=" m-2">Categoría: </h6>
                             {<p className=" m-2">{detalleApartado.producto[0].categoria}</p>}
-                            {console.log(promocion.length)}
                             {promocion.length > 0 ? (
                                 <div className="">
                                     <h6 className="">Precio:</h6>

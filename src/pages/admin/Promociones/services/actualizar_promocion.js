@@ -4,6 +4,7 @@ import { Button, Input, Space, Upload, Spin, notification, Form, Col, Slider, Li
 import { IdProductoContext } from '../../contexts/ProductoContext';
 import './registrar_promocion.scss';
 import { formatoMexico } from '../../../../config/reuserFunction';
+import aws from '../../../../config/aws';
 
 const ActualizarPromocion = (props) => {
 	const token = localStorage.getItem('token');
@@ -275,7 +276,7 @@ const ActualizarPromocion = (props) => {
 										<img
 											className="imagen-promocion-principal"
 											alt="producto"
-											src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
+											src={aws+producto.imagen}
 										/>
 									</div>
 								}
@@ -368,7 +369,7 @@ const ActualizarPromocion = (props) => {
 									<img
 										className="img-producto-promocion"
 										alt="img-producto"
-										src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${promocion.imagenPromocion}`}
+										src={aws+promocion.imagenPromocion}
 									/>
 								)}
 							</div>

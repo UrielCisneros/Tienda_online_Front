@@ -3,6 +3,7 @@ import { notification, Modal, Select, Divider, Alert } from 'antd';
 import { formatoMexico } from '../../../config/reuserFunction';
 import { AgregarApartado } from './services/consultas_individuales';
 import DatosCliente from '../Vista_Producto/subs/datos_cliente';
+import aws from '../../../config/aws';
 
 const { Option } = Select;
 
@@ -105,8 +106,7 @@ export default function ModalApartado(props) {
 						<img
 							className="imagen-producto-principal"
 							alt="producto"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${carrito.idarticulo
-								.imagen}`}
+							src={aws+carrito.idarticulo.imagen}
 						/>
 					</div>
 				</div>

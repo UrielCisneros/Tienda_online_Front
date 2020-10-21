@@ -4,7 +4,7 @@ import { EyeOutlined,EditOutlined,DeleteOutlined,ExclamationCircleOutlined } fro
 import {Link} from 'react-router-dom';
 import clienteAxios from '../../../../config/axios';
 import './blogList.scss'
-
+import aws from '../../../../config/aws';
 
 const {confirm} = Modal;
 
@@ -14,7 +14,6 @@ export default function blogList(props) {
     const token = localStorage.getItem('token');
 
     const deleteBlog = blog => {
-        console.log(blog)
         confirm({
             title:"Eliminando Blog",
             icon: <ExclamationCircleOutlined />,
@@ -30,7 +29,6 @@ export default function blogList(props) {
                     }
                 })
                 .then((res) => {
-                    console.log(res);
                     notification.success({
                         message: 'Blog Eliminado',
                         description:
@@ -94,7 +92,7 @@ function Blog(props){
             
         >
             <List.Item.Meta 
-                avatar={<Avatar src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${blog.imagen}`} />}
+                avatar={<Avatar src={aws+blog.imagen} />}
                 title={<p className="h5 font-weight-bold">{blog.nombre}</p>} 
                 description={<p className="h6">{blog.administrador}</p>}
             />

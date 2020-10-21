@@ -6,6 +6,7 @@ import { Spin } from 'antd';
 import 'react-image-gallery/styles/scss/image-gallery.scss';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import './galeria_custom.scss';
+import aws from '../../../../config/aws';
 
 function Galeria(props) {
 	const [ count, setCount ] = useState(0);
@@ -48,8 +49,8 @@ function Galeria(props) {
 					setImagenZoom(res.data.imagen);
 					setImagen([
 						{
-							original: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${res.data.imagen}`,
-							thumbnail: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${res.data.imagen}`
+							original: aws+res.data.imagen,
+							thumbnail: aws+res.data.imagen
 						}
 					]);
 				});
@@ -77,8 +78,8 @@ function Galeria(props) {
 		() => {
 			galeria.forEach((res) => {
 				return imagen.push({
-					original: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${res.url}`,
-					thumbnail: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${res.url}`
+					original: aws+res.url,
+					thumbnail: aws+res.url
 				});
 			});
 		},
@@ -92,16 +93,16 @@ function Galeria(props) {
 	setZoomWidth(img.naturalWidth);
 	setZoomHeight(img.naturalHeight);
 	}
-	img.src = `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenZoom}`;
+	img.src = aws+imagenZoom;
 
 	const propiedadesImageMagnify= {
 		smallImage: {
 			alt: 'imagen-producto',
-			src: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenZoom}`,
+			src: aws+imagenZoom,
 			isFluidWidth: true
 		},
 		largeImage: {
-			src: `https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagenZoom}`,
+			src: aws+imagenZoom,
 			width: zoomWidth*1.5,
 			height: zoomHeight*1.5
 		},

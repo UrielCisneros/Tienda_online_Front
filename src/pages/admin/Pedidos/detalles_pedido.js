@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tag, Divider } from 'antd';
 import { formatoMexico, formatoFecha, formatoHora } from '../../../config/reuserFunction';
+import aws from '../../../config/aws';
 
 const DetallesPedido = (props) => {
 	const pedido = props.datosDetalle;
@@ -65,7 +66,7 @@ const DetallesPedido = (props) => {
 			</div>
 			{pedido.cliente.direccion.map((direccion) => {
 				return (
-					<div className="my-2">
+					<div className="my-2" key={direccion._id}>
 						<h6 className="titulos-info-pedidos">Dirección:</h6>
 						<p className="data-info-pedidos">
 							{direccion.calle_numero}, {direccion.ciudad}, {direccion.estado},{' CP '}
@@ -84,7 +85,7 @@ const DetallesPedido = (props) => {
 						</div>
 						<div className="d-flex justify-content-center">
 							<div className="contenedor-imagen-producto-detalle">
-								<img alt="imagen-producto-detalle" className="imagen-producto-detalle" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.producto.imagen}`} />
+								<img alt="imagen-producto-detalle" className="imagen-producto-detalle" src={aws+pedido.producto.imagen} />
 							</div>
 						</div>
 						<div className="my-2 contenedor-info-pedidos">

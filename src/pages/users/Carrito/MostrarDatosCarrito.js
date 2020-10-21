@@ -64,8 +64,6 @@ function MostrarDatosProductos(props) {
 		[ activador ]
 	);
 
-	console.log("inifinite")
-
 	useEffect(
 		() => {
 			if (carrito.articulos) {

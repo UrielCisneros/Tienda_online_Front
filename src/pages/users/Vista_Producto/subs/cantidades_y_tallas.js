@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { InputNumber, Button, Form, Badge, Divider, notification, Modal, Select, Spin, Alert } from 'antd';
-import { ShoppingCartOutlined, TagsOutlined, BellOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, TagsOutlined, BellOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
 import { AgregarCarrito, AgregarApartado, AgregarPedido } from './services';
 import { formatoMexico } from '../../../../config/reuserFunction';
@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 import { MenuContext } from '../../../../context/carritoContext';
 import DatosCliente from './datos_cliente';
 import clienteAxios from '../../../../config/axios';
+import aws from '../../../../config/aws';
 
 const formItemLayout = {
 	labelCol: {
@@ -37,6 +38,7 @@ function TallasCantidades(props) {
 	const [ visible, setVisible ] = useState(false);
 	const [ disabled, setDisabled ] = useState(false);
 	const [ datosUser, setDatosUser ] = useState([]);
+	const [ tienda, setTienda ] = useState([]);
 
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
@@ -49,6 +51,20 @@ function TallasCantidades(props) {
 		} catch (e) {
 			return null;
 		}
+	}
+
+	async function obtenerTienda() {
+		setLoading(true);
+		await clienteAxios
+			.get(`/tienda/`)
+			.then((res) => {
+				res.data.forEach((element) => setTienda(element));
+				setLoading(false);
+			})
+			.catch((res) => {
+				setLoading(false);
+				console.log(res);
+			});
 	}
 
 	async function obtenerDatosUser() {
@@ -72,6 +88,7 @@ function TallasCantidades(props) {
 	useEffect(() => {
 		if (token) {
 			obtenerDatosUser();
+			obtenerTienda();
 		}
 	}, []);
 
@@ -222,6 +239,33 @@ function TallasCantidades(props) {
 		setVisible(false);
 	};
 
+	function modalMensaje() {
+		Modal.success({
+			icon: '',
+			content: (
+				<div className="text-center">
+					<p style={{ fontSize: 18 }}>¡Tu apartado a sido recibido y sera despachado próximamente!</p>
+					{tienda.length !== 0 && tienda.telefono ? (
+						<div className="text-center">
+							<p style={{ fontSize: 18 }}>Si tienes dudas te puedes comunicar al</p>
+							<p
+								style={{ fontSize: 18 }}
+								className="d-flex justify-content-center align-items-center font-weight-bold"
+							>
+								<WhatsAppOutlined style={{ color: '#25d366' }} />
+								{tienda.telefono}
+							</p>
+							<Button className="mt-3" type="default" onClick={() => window.location.href = "/pedidos"}>Ver mis pedidos</Button>
+						</div>
+					) : (
+						<p />
+					)}
+				</div>
+			),
+			onOk() {}
+		});
+	}
+
 	async function Carrito() {
 		////AGREGAR CARRITO
 		if (!token) {
@@ -278,15 +322,18 @@ function TallasCantidades(props) {
 			const talla = '';
 			AgregarApartado(decoded._id, productos._id, cantidadFinal, talla, numeros.numero, tipoEnvio, token);
 			setLoading(false);
+			modalMensaje();
 		} else if (categoria === 'ropa') {
 			const numero = '';
 			setLoading(false);
 			AgregarApartado(decoded._id, productos._id, cantidadFinal, tallas.talla, numero, tipoEnvio, token);
+			modalMensaje();
 		} else if (categoria === 'otros') {
 			const talla = '';
 			const numero = '';
 			AgregarApartado(decoded._id, productos._id, cantidadFinal, talla, numero, tipoEnvio, token);
 			setLoading(false);
+			modalMensaje();
 		}
 	}
 
@@ -527,18 +574,14 @@ function TallasCantidades(props) {
 								<Option value="REGOGIDO">Recoger a sucursal</Option>
 							</Select>
 						</div>
-						<Alert
-							description="Para apartar un producto completa tus datos."
-							type="info"
-							showIcon
-						/>
+						<Alert description="Para apartar un producto completa tus datos." type="info" showIcon />
 					</div>
 					<div className="col-12 col-lg-6">
 						<div className="d-flex justify-content-center align-items-center" style={{ height: 220 }}>
 							<img
 								className="imagen-producto-principal"
 								alt="producto"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+								src={aws+productos.imagen}
 							/>
 						</div>
 					</div>

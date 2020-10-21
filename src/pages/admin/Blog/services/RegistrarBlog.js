@@ -54,7 +54,6 @@ export default function RegistrarBlog(props) {
                         Authorization: `bearer ${token}`
                     }
                 }).then((res) => {
-                    console.log(res);
                         notification.success({
                             message: 'Registro exitoso',
                             description: res.data.message,
@@ -83,7 +82,6 @@ export default function RegistrarBlog(props) {
     function obtenerUrl(text){
         const trim = text.trim();
         const datos = trim.split(" ");
-        console.log(datos.length);
         for(var i = 0; i < datos.length; i++ ){
             if(datos.length - 1 === i){
                 urlGuion += datos[i];

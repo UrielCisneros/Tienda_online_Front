@@ -32,6 +32,7 @@ function RegistrarTalla(props) {
 			if (tallas.talla === datos.talla) {
 				return true;
 			}
+			return null;
 		});
 		const existe = resul.find((element) => element === true);
 

@@ -4,6 +4,7 @@ import { PlusCircleOutlined, EditOutlined, UploadOutlined } from '@ant-design/ic
 import { Editor } from '@tinymce/tinymce-react';
 import clienteAxios from '../../../../../config/axios';
 import PoliticasEnvio from './politicas_envio';
+import aws from '../../../../../config/aws';
 
 export default function RegistroTienda(props) {
 	const { datosNegocio, token, setLoading, setReloadInfo } = props;
@@ -143,7 +144,6 @@ export default function RegistroTienda(props) {
 					.then((res) => {
 						setLoading(false);
 						setReloadInfo(true);
-						console.log(res);
 						notification.success({
 							message: 'Registro exitoso',
 							description: res.data.message
@@ -168,7 +168,6 @@ export default function RegistroTienda(props) {
 		} else {
 			setLoading(true);
 			if (files.length !== 0) {
-				console.log(files);
 				formData.append('imagen', files);
 			}
 			await clienteAxios
@@ -181,7 +180,6 @@ export default function RegistroTienda(props) {
 				.then((res) => {
 					setLoading(false);
 					setReloadInfo(true);
-					console.log(res);
 					notification.success({
 						message: 'Registro exitoso',
 						description: res.data.message
@@ -211,9 +209,14 @@ export default function RegistroTienda(props) {
 				<div className="row">
 					<div className="col-12">
 						<Divider>Logo del negocio</Divider>
-                        <div className="d-flex justify-content-center m-2">
-                            <Alert className="info-recomended-sizes" message="Tamaño recomendado para la imagen es: 900x300px" type="info" showIcon />
-                        </div>
+						<div className="d-flex justify-content-center m-2">
+							<Alert
+								className="info-recomended-sizes"
+								message="Tamaño recomendado para la imagen es: 900x300px"
+								type="info"
+								showIcon
+							/>
+						</div>
 						<div className="m-auto">
 							<Form.Item label="Logo">
 								<Upload {...propss} name="imagen">
@@ -232,7 +235,7 @@ export default function RegistroTienda(props) {
 											className="d-block img-fluid mt-2"
 											width="200"
 											alt="imagen de base"
-											src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagen}`}
+											src={aws+imagen}
 										/>
 									</div>
 								</div>
@@ -458,9 +461,7 @@ export default function RegistroTienda(props) {
 											'insertdatetime media table paste code help wordcount'
 										],
 										toolbar:
-											'undo redo | formatselect | bold italic backcolor | \
-                                            alignleft aligncenter alignright alignjustify | \
-                                            bullist numlist outdent indent | removeformat | help'
+											'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
 									}}
 									onEditorChange={capturarPoliticasEditor}
 								/>
@@ -488,9 +489,7 @@ export default function RegistroTienda(props) {
 											'insertdatetime media table paste code help wordcount'
 										],
 										toolbar:
-											'undo redo | formatselect | bold italic backcolor | \
-                                            alignleft aligncenter alignright alignjustify | \
-                                            bullist numlist outdent indent | removeformat | help'
+											'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
 									}}
 									onEditorChange={capturarImagenCorpEditor}
 								/>

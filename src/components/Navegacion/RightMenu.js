@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Menu, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import * as firebase from 'firebase/app';
@@ -7,7 +7,6 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import jwt_decode from 'jwt-decode';
-import clienteAxios from '../../config/axios';
 
 const { SubMenu } = Menu;
 

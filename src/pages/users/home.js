@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useState } from 'react';
+import React from 'react';
 import Carousel from './Carusel_ofertas/carousel';
 import ConsultaProductos from './Productos/consulta_productos';
 import Ofertas from './Ofertas/ofertasHome';

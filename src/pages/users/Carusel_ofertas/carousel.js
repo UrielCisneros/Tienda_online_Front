@@ -3,6 +3,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import './ofertas.scss';
 import clienteAxios from '../../../config/axios';
 import { withRouter } from 'react-router-dom';
+import aws from '../../../config/aws';
 
 function CarouselOfertas(props) {
 	const [ index, setIndex ] = useState(0);
@@ -48,9 +49,9 @@ function CarouselOfertas(props) {
 			<Carousel.Item key={carousel._id}>
 				<div className="carousel-home">
 					<div className="background-carousel" style={{
-						backgroundImage: `url(https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${esPromocion
-							? carousel.imagenPromocion
-							: carousel.imagen})`
+						backgroundImage: `url(${aws+esPromocion
+							? aws+carousel.imagenPromocion
+							: aws+carousel.imagen})`
 					}}/>
 					<div className="contenedor-imagen-principal-promociones">
 						<img
@@ -58,9 +59,9 @@ function CarouselOfertas(props) {
 								? carousel.productoPromocion._id
 								: carousel.producto._id}`)}
 							className="imagen-carousel-promociones-principal"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${esPromocion
-								? carousel.imagenPromocion
-								: carousel.imagen}`}
+							src={aws+esPromocion
+								? aws+carousel.imagenPromocion
+								: aws+carousel.imagen}
 							alt="img-oferta"
 							style={{cursor: 'pointer'}}
 						/>

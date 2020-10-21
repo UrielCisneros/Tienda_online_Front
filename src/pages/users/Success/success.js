@@ -5,6 +5,7 @@ import clienteAxios from '../../../config/axios';
 import { formatoMexico } from '../../../config/reuserFunction';
 import './success.scss';
 import { Link } from 'react-router-dom';
+import aws from '../../../config/aws';
 
 export default function Success(props) {
 	const pedidoID = props.match.params.id;
@@ -23,7 +24,6 @@ export default function Success(props) {
 			.then((res) => {
 				setPedido(res.data);
 				setLoading(false);
-				console.log(res)
 			})
 			.catch((res) => {
 				console.log(res)
@@ -59,7 +59,7 @@ export default function Success(props) {
 				<Avatar
 					size={75}
 					key={pedido._id}
-					src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.producto.imagen}`}
+					src={aws+pedido.producto.imagen}
 				/>
 			);
 		});

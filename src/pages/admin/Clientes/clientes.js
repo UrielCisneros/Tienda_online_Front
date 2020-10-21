@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
 import jwt_decode from 'jwt-decode';
-import { Table, Input, notification, Avatar, Spin, Col, Row, Button } from 'antd';
+import { Table, Input, notification, Avatar, Spin, Row, Button } from 'antd';
 import { RollbackOutlined, UserOutlined } from '@ant-design/icons';
 import Pagination from '../../../components/Pagination/pagination';
 import queryString from 'query-string';
-import './clientes.scss'
+import './clientes.scss';
+import aws from '../../../config/aws';
 
 const { Search } = Input;
 
@@ -53,7 +54,7 @@ function Clientes(props) {
 				) : imagen.includes('https') ? (
 					<Avatar src={imagen} />
 				) : (
-					<Avatar src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${imagen}`} />
+					<Avatar src={aws+imagen} />
 				);
 			}
 		},
@@ -61,7 +62,6 @@ function Clientes(props) {
 			title: 'Nombre',
 			dataIndex: 'nombre',
 			key: 'nombre',
-			fixed: 'left',
 			render: (nombre) => <p className="h5">{nombre}</p>
 		},
 		{
@@ -69,6 +69,12 @@ function Clientes(props) {
 			dataIndex: 'apellido',
 			key: 'apellido',
 			render: (apellido) => (!apellido ? <p className="h5">-</p> : <p className="h5">{apellido}</p>)
+		},
+		{
+			title: 'Telefono',
+			dataIndex: 'telefono',
+			key: 'telefono',
+			render: (telefono) => (!telefono ? <p className="h5">-</p> : <p className="h5">{telefono}</p>)
 		},
 		{
 			title: 'Email',
@@ -159,7 +165,6 @@ function Clientes(props) {
 					}
 				})
 				.then((res) => {
-					console.log(res);
 					setClientesPaginados(res.data.posts);
 					setClientes(res.data.posts);
 					setLoading(false);
@@ -215,7 +220,7 @@ function Clientes(props) {
 				scroll={{ x: 1200 }}
 			/>
 			<div className="mt-5">
-				<Pagination blogs={clientesPaginados} location={location} history={history} limite={20}/>
+				<Pagination blogs={clientesPaginados} location={location} history={history} limite={20} />
 			</div>
 		</Spin>
 	);

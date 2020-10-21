@@ -3,7 +3,7 @@ import clienteAxios from '../../../../config/axios';
 import {Spin,notification} from 'antd';
 import queryString from 'query-string';
 import Pagination from '../../../../components/Pagination/pagination';
-
+import aws from '../../../../config/aws';
 
 import {List} from 'antd'
 import { Link } from 'react-router-dom';
@@ -99,7 +99,7 @@ function Blog(props){
                     <img
                         className="imagen-blog-list"
                         alt={blog.nombre}
-                        src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${blog.imagen}`}
+                        src={aws+blog.imagen}
                     />
                 </div>
                 }
