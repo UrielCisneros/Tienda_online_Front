@@ -50,7 +50,7 @@ function Ofertas(props) {
 						bodyStyle={{ padding: 10, backgrounddivor: '#F7F7F7' }}
 						className="contenedor-card-body"
 						cover={
-							<div>
+							<div className="contenedor-imagen-oferta">
 								<div class="contenedor-oferta">
 									<h5 className="shadow">OFERTA</h5>
 								</div>

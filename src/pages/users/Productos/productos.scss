@@ -33,10 +33,14 @@
 .contenedor-card-producto-principal{
     cursor: pointer;
 }
-.contenedor-imagen-oferta:not(.contenedor-oferta){
+.contenedor-imagen-oferta{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.contenedor-oferta{
+    top: 0;
+    left: 0;
 }
 .contenedor-card-producto-principal:hover .titulo-elipsis{
     height: 100px;
