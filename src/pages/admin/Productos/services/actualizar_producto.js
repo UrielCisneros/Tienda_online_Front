@@ -9,6 +9,7 @@ import ActualizarNumero from './actualizar_numero';
 import { Editor } from '@tinymce/tinymce-react';
 import { SketchPicker } from 'react-color';
 import reactCSS from 'reactcss';
+import aws from '../../../../config/aws';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -93,7 +94,7 @@ function ActualizarProducto(props) {
 
 	const resetColor = () => {
 		setColor('');
-		form.setFieldsValue({color: ''})
+		form.setFieldsValue({ color: '' });
 		productos.color = '';
 	};
 
@@ -234,7 +235,7 @@ function ActualizarProducto(props) {
 				}
 			});
 	}
-console.log(productos.color)
+
 	const subirDatos = async () => {
 		const formData = new FormData();
 		if (productos.tipoCategoria === 'otros') {
@@ -466,7 +467,7 @@ console.log(productos.color)
 								className="d-block img-fluid mt-2"
 								width="200"
 								alt="imagen de base"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${files}`}
+								src={aws+files}
 							/>
 						</Form.Item>
 						<Form.Item className="d-flex justify-content-center align-items-center text-center">

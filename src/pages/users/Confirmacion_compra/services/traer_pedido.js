@@ -1,53 +1,58 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useState, useEffect } from 'react';
-import clienteAxios from '../../../../config/axios';
-import { List, InputNumber, Button } from 'antd';
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import React from 'react';
+import { List } from 'antd';
 import { formatoMexico } from '../../../../config/reuserFunction';
-
+import aws from '../../../../config/aws';
 import '../confirmacion.scss';
 
 export default function Traer_pedido(props) {
-	const { datosPedido, pedidoCompleto, datosEnvio, setTotal } = props;
+	const { datosPedido, pedidoCompleto, datosEnvio } = props;
 
 	return (
 		<div>
 			{/* <h1 className="text-center">Tu pedido:</h1> */}
-			<div className="d-flex justify-content-end text-right px-4 mr-2 mt-3">
+			<div className="d-flex justify-content-end text-right px-4 mr-2 mt-3 info-pedido">
 				<div className="__subs">
-					{datosEnvio.costoEnvio ? (
-						<p className="h6 font-weight-bold">Costo envio: $ {datosEnvio.costoEnvio} </p>
-					) : (
-						''
-					)}
 					{datosEnvio.descuento ? pedidoCompleto.total >= datosEnvio.promocionEnvio ? (
 						<div>
-							<p className="h6 font-weight-bold">Descuento de: $ {datosEnvio.descuento}</p>
 							<p className="h6 font-weight-bold">
-								Subtotal ({datosPedido.length}): $ {formatoMexico(
-									pedidoCompleto.total + datosEnvio.costoEnvio
-								)}{' '}
+								Subtotal ({datosPedido.length}): ${' '}
+								{formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)}{' '}
 							</p>
+							{/* <p className="h6 font-weight-bold">Descuento de: $ {datosEnvio.descuento}</p> */}
 							{/* <p className="text-success h6 font-weight-bold">El descuento si aplica</p> */}
 						</div>
 					) : (
 						<div>
 							<p className="h6 font-weight-bold">
-								Subtotal ({datosPedido.length}): $ {formatoMexico(
-									pedidoCompleto.total + datosEnvio.costoEnvio
-								)}{' '}
+								Subtotal ({datosPedido.length}): ${' '}
+								{formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)}{' '}
 							</p>
 							{/* <p className="text-danger h6 font-weight-bold">El descuento no aplica</p> */}
 						</div>
 					) : (
 						<div>
 							<p className="h6 font-weight-bold">
-								Subtotal ({datosPedido.length}): $ {formatoMexico(
-									pedidoCompleto.total + datosEnvio.costoEnvio
-								)}{' '}
+								Subtotal ({datosPedido.length}): ${' '}
+								{formatoMexico(pedidoCompleto.total + datosEnvio.costoEnvio)}{' '}
 							</p>
 							{/* <p className="text-danger h6 font-weight-bold">El descuento no aplica</p> */}
 						</div>
+					)}
+					{datosEnvio.costoEnvio ? pedidoCompleto.total >= datosEnvio.promocionEnvio ? (
+						<div>
+							<p className="h6 font-weight-bold d-inline">
+								Costo envío:{' '}
+								{/* <p className="d-inline" style={{ textDecoration: 'line-through' }}>
+									$ {datosEnvio.costoEnvio}
+								</p> */}
+								<p className="h6 font-weight-bold text-success d-inline">Envío gratis </p>
+							</p>
+						</div>
+					) : (
+						<p className="h6 font-weight-bold">Costo envío: $ {datosEnvio.costoEnvio} </p>
+					) : (
+						''
 					)}
 
 					<p className="mt-4 h4 font-weight-bold">
@@ -64,7 +69,7 @@ export default function Traer_pedido(props) {
 			</div>
 			<div>
 				<List
-					className="p-3"
+					className="p-3 info-pedido"
 					itemLayout="horizontal"
 					size="large"
 					dataSource={datosPedido}
@@ -78,15 +83,14 @@ export default function Traer_pedido(props) {
 function Productos(props) {
 	const { pedido } = props;
 	return (
-		<List.Item>
-			<div className="row">
-				<div className="col-lg-7 d-flex justify-content-lg-center">
+		<List.Item className="c0">
+			<div className="row c1">
+				<div className="col-lg-6">
 					<List.Item.Meta
 						avatar={
 							<img
 								className="img-fluid"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.producto
-									.imagen}`}
+								src={aws+pedido.producto.imagen}
 								height="80"
 								width="80"
 							/>
@@ -117,7 +121,7 @@ function Productos(props) {
 						''
 					)}
 				</div>
-				<div className=" col-lg-2 d-flex flex-row-reverse">
+				<div className=" col-lg-2">
 					<p style={{ fontSize: '20px', fontWeight: 'bold' }}>
 						${formatoMexico(pedido.cantidad * pedido.precio)}
 					</p>

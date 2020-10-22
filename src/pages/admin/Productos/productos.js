@@ -18,6 +18,7 @@ import {
 import jwt_decode from 'jwt-decode';
 import queryString from 'query-string';
 import './productos.scss';
+import aws from '../../../config/aws';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -233,7 +234,7 @@ function RegistrarProductos(props) {
 							<img
 								className="img-fluid"
 								alt="producto"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+								src={aws+productos.imagen}
 								style={{ maxHeight: '99%', maxWidth: '99%' }}
 							/>
 						</div>

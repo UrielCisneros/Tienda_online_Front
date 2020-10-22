@@ -31,11 +31,8 @@ export default function Confirmacion_Final(props) {
 			.then((res) => {
 				setLoading(false);
 				setDatosEnvio(res.data);
-				console.log(res.data);
 				if (res.data.descuento) {
 					if (pedidoCompleto.total >= res.data.promocionEnvio) {
-						console.log(pedidoCompleto.total);
-						console.log(res.data.costoEnvio);
 						setTotal(
 							parseFloat(pedidoCompleto.total) +
 								parseFloat(res.data.costoEnvio) -
@@ -55,7 +52,6 @@ export default function Confirmacion_Final(props) {
 
 	const crearPago = async () => {
 		setLoading(true);
-		console.log(total);
 		const datos = {
 			total
 		};
@@ -74,7 +70,6 @@ export default function Confirmacion_Final(props) {
 					pedidoCompleto: newPedido,
 					amount: centavo
 				};
-				console.log(datosPago);
 				await clienteAxios
 					.post('/pago/', datosPago, {
 						headers: {
@@ -83,7 +78,6 @@ export default function Confirmacion_Final(props) {
 					})
 					.then((res) => {
 						setLoading(false);
-						console.log(res);
 						history.push(`/success/${pedidoCompleto._id}`);
 						setActive(!active);
 					})
@@ -106,48 +100,51 @@ export default function Confirmacion_Final(props) {
 			</div>
 			<div className="shadow-lg bg-white rounded confirmacion_final">
 				<div className="row">
-					<div className="col-lg-6">
-						<div className="mt-3">
-							<div className="contenedor-direccion-conf shadow-sm">
-								<p className="h4 font-weight-bold">Dirección de envío</p>
-								<div className="row m-0">
-									<div className="col-lg-3 col-sm-none text-center icono-info">
-										<FontAwesomeIcon
-											className="text-success"
-											icon={faTruck}
-											style={{ fontSize: '50px' }}
-										/>
-									</div>
-									<div className="col-lg-9 col-sm-12 m-sm-2 contenido-info">
-										<p className="h6">
-											{direccion.calle_numero}, {direccion.entre_calles}, {direccion.colonia},{' '}
-											{direccion.ciudad}, {direccion.estado}, {direccion.pais}, CP {direccion.cp}
-										</p>
+					<div className="col-lg-6 info-domicilio">
+						<div>
+							<div className="mt-3">
+								<div className="contenedor-direccion-conf shadow-sm">
+									<p className="h4 font-weight-bold">Dirección de envío</p>
+									<div className="row m-0">
+										<div className="col-lg-3 col-sm-none text-center icono-info">
+											<FontAwesomeIcon
+												className="text-success"
+												icon={faTruck}
+												style={{ fontSize: '50px' }}
+											/>
+										</div>
+										<div className="col-lg-9 col-sm-12 m-sm-2 contenido-info">
+											<p className="h6">
+												{direccion.calle_numero}, {direccion.entre_calles}, {direccion.colonia},{' '}
+												{direccion.ciudad}, {direccion.estado}, {direccion.pais}, CP{' '}
+												{direccion.cp}
+											</p>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div className="shadow-sm contenedor-info-pago">
-							<p className="h4 font-weight-bold">Información de pago</p>
-							<div className="row my-3 mx-0">
-								<div className="col-lg-3 col-sm-12 text-center icono-info">
-									<FontAwesomeIcon
-										className={'visa'}
-										icon={idPago.card.brand === 'visa' ? faCcVisa : faCcMastercard}
-										style={{ fontSize: '50px' }}
-									/>
-								</div>
-								<div className="col-lg-7 m-2 contenido-info">
-									{console.log(idPago)}
-									<p className="h6">
-										<span className="font-weight-bold">Tipo tarjeta:</span> {idPago.card.funding}{' '}
-									</p>
-									<p className="h6">
-										<span className="font-weight-bold">Tarjeta:</span> *********{idPago.card.last4}{' '}
-									</p>
-									<p className="h6">
-										<span className="font-weight-bold">Expira:</span> {idPago.card.exp_month}/{idPago.card.exp_year}
-									</p>
+							<div className="shadow-sm contenedor-info-pago">
+								<p className="h4 font-weight-bold">Información de pago</p>
+								<div className="row my-3 mx-0">
+									<div className="col-lg-3 col-sm-12 text-center icono-info">
+										<FontAwesomeIcon
+											className={'visa'}
+											icon={idPago.card.brand === 'visa' ? faCcVisa : faCcMastercard}
+											style={{ fontSize: '50px' }}
+										/>
+									</div>
+									<div className="col-lg-7 m-2 contenido-info">
+										<p className="h6">
+											<span className="font-weight-bold">Tipo tarjeta:</span>{' '}
+											{idPago.card.funding}{' '}
+										</p>
+										<p className="h6">
+											<span className="font-weight-bold">Tarjeta:</span> *********{idPago.card.last4}{' '}
+										</p>
+										<p className="h6">
+											<span className="font-weight-bold">Expira:</span> {idPago.card.exp_month}/{idPago.card.exp_year}
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -161,7 +158,7 @@ export default function Confirmacion_Final(props) {
 						/>
 					</div>
 				</div>
-				<div className="d-flex flex-row-reverse justify-content-center align-items-center text-center pb-3 mr-5">
+				<div className="d-flex flex-row-reverse justify-content-center align-items-center text-center pb-3 mr-5 mt-5">
 					<Button size="large" type="primary" style={{ width: 200, textAlign: 'center' }} onClick={crearPago}>
 						<ShoppingCartOutlined /> COMPRAR AHORA
 					</Button>

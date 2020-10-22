@@ -4,6 +4,7 @@ import { Card, Spin, Result, Col, Row } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import './ofertas.scss';
+import aws from '../../../config/aws';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
@@ -28,9 +29,7 @@ function OfertasHome(props) {
 				props.history.push('/error500');
 			});
 	}
-	{
-		/* <div className="contenedor-card-ofertas" key={productos._id}> */
-	}
+
 	const render = productos.map((productos) => (
 		<Col key={productos._id} className="size-col col-lg-2 col-6">
 			<Link to={`/vista_producto/${productos.productoPromocion._id}`}>
@@ -47,8 +46,7 @@ function OfertasHome(props) {
 									<img
 										className="imagen-producto-principal"
 										alt="producto"
-										src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos
-											.productoPromocion.imagen}`}
+										src={aws+productos.productoPromocion.imagen}
 									/>
 								</div>
 							</div>
@@ -78,9 +76,7 @@ function OfertasHome(props) {
 		<Spin size="large" spinning={loading}>
 			<div className="contenedor-home-background">
 				<div className="row contenedor-home-banner">
-					<h4 className="mb-0 font-weight-bold">
-						¡Encuentra ofertas todos los días!
-					</h4>
+					<h4 className="mb-0 font-weight-bold">¡Encuentra ofertas todos los días!</h4>
 				</div>
 			</div>
 			<div className="d-flex justify-content-center align-items-center">

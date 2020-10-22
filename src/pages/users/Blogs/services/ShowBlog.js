@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import clienteAxios from '../../../../config/axios';
 import { Spin } from 'antd';
 import { formatoFecha } from '../../../../config/reuserFunction';
+import aws from '../../../../config/aws';
 
 import './ShowBlog.scss';
 
@@ -44,7 +45,7 @@ export default function ShowBlog(props) {
 			<div className="info-blog bg-white shadow">
 				{/* <div className="info-blog__div-imagen" style={styleDivImagen} /> */}
 				<div className="contenedor-imagen-blog-principal">
-					<img className="imagen-blog-principal" alt="imagen blog principal" src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${infoBlog.imagen}`} />
+					<img className="imagen-blog-principal" alt="imagen blog principal" src={aws+infoBlog.imagen} />
 				</div>
 				<div className="p-5">
 					<h1 className="info-blog__titulo m-3"> {infoBlog.nombre} </h1>

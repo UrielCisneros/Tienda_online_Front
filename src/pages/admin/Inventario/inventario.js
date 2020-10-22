@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../config/axios';
 import jwt_decode from 'jwt-decode';
-import { Table, Tag, Input, notification, Badge, Spin, Col, Row, Button } from 'antd';
+import { Table, Tag, Input, notification, Badge, Spin, Row, Button } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 import './inventario.scss';
 import Pagination from '../../../components/Pagination/pagination';
@@ -45,17 +45,16 @@ function Inventario(props) {
 
 	const columns = [
 		{
-			title: 'Producto',
-			dataIndex: 'nombre',
-			key: 'nombre',
-			fixed: 'left',
-			render: (text) => <p className="h5">{text}</p>
-		},
-		{
 			title: 'Código',
 			dataIndex: 'codigo',
 			key: 'codigo',
 			render: (text) => (!text ? <p className="h5">-</p> : <p className="h5">{text}</p>)
+		},
+		{
+			title: 'Producto',
+			dataIndex: 'nombre',
+			key: 'nombre',
+			render: (text) => <p className="h5">{text}</p>
 		},
 		/* {
 			title: 'tipo de Categoria',
@@ -165,7 +164,7 @@ function Inventario(props) {
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisible('d-none');
-			obtenerProductos(20, page)
+			obtenerProductos(20, page);
 		} else {
 			setVisible('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);

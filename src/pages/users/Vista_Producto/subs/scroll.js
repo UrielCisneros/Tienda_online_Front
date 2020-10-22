@@ -3,6 +3,7 @@ import clienteAxios from '../../../../config/axios';
 import '../vistas.scss';
 import { Card, Col, Spin } from 'antd';
 import { formatoMexico, agregarPorcentaje } from '../../../../config/reuserFunction'
+import aws from '../../../../config/aws';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
@@ -36,7 +37,7 @@ function Scroll(props) {
 								<img
 									className="imagen-producto-principal"
 									alt="producto"
-									src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+									src={aws+productos.imagen}
 								/>
 							</div>
 						}

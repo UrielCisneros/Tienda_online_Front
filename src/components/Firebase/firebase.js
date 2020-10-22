@@ -35,7 +35,6 @@ function Firebase() {
 		function onAuthStateChange() {
 			return firebase.auth().onAuthStateChanged(async (user) => {
 				if (user) {
-					console.log(user.photoURL)
 					const displayname = user.displayName.split(' ');
 					valores = {
 						nombre: displayname[0],

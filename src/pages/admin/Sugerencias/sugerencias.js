@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../config/axios';
-import { Col, Row, Input, Button, Drawer, notification, Space, List, Result, Spin } from 'antd';
+import { Row, Input, Button, Drawer, notification, Space, List, Result, Spin } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 import { IdProductoContext } from '../contexts/ProductoContext';
 import jwt_decode from 'jwt-decode';
@@ -9,6 +9,7 @@ import Sugerencia from './services/sugerencia';
 import Pagination from '../../../components/Pagination/pagination';
 import queryString from 'query-string';
 import './sugerencias.scss';
+import aws from '../../../config/aws';
 
 const { Search } = Input;
 
@@ -148,7 +149,7 @@ function Sugerencias(props) {
 						<img
 							className="imagen-promocion-principal"
 							alt="producto"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+							src={aws+productos.imagen}
 						/>
 					</div>
 				}

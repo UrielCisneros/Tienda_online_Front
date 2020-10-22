@@ -5,16 +5,16 @@ import DetallesPedido from './detalles';
 import { formatoFecha, formatoMexico } from '../../../config/reuserFunction';
 import './pedidos.scss';
 import DetalleApartado from './detalleApartado';
-import { Spin, Modal, Tag, Button, List, Result, Tabs, Divider,notification } from 'antd';
+import { Spin, Modal, Tag, Button, List, Result, Tabs, notification } from 'antd';
 import { EditOutlined, DeleteOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
-const { TabPane } = Tabs;
+import aws from '../../../config/aws';
 
+const { TabPane } = Tabs;
 const {confirm} = Modal;
 
 export default function PedidosUsuario(props) {
 	const [ pedidos, setPedidos ] = useState([]);
 	const [ apartados, setApartados ] = useState([]);
-	const [ promocion, setPromocion ] = useState({});
 	const [ visible, setVisible ] = useState(false);
 	const [ Elige, setElige ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
@@ -96,7 +96,6 @@ export default function PedidosUsuario(props) {
 
 	
 	const deleteApartado = (id) => {
-		console.log(token);
         confirm({
             title:"Eliminando Blog",
             icon: <ExclamationCircleOutlined />,
@@ -112,7 +111,6 @@ export default function PedidosUsuario(props) {
 					}
                 })
                 .then((res) => {
-                    console.log(res);
                     notification.success({
                         message: 'Blog Eliminado',
                         description:
@@ -274,8 +272,7 @@ function Pedido(props) {
 						<img
 							className="img-fluid"
 							alt="producto"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${pedido.pedido[0].producto
-								.imagen}`}
+							src={aws+pedido.pedido[0].producto.imagen}
 						/>
 					</div>
 				}
@@ -433,8 +430,7 @@ function Apartado(props) {
 							<img
 								className="imagen-mostrar-apartado"
 								alt="producto"
-								src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${apartado.producto
-									.imagen}`}
+								src={aws+apartado.producto.imagen}
 							/>
 						</div>
 					</div>
@@ -499,7 +495,7 @@ function Apartado(props) {
 											<span className="font-weight-bold">Seguimiento:</span>{' '}
 											{apartado.codigo_seguimiento}{' '}
 										</p>
-										<a href={`${apartado.url}${apartado.codigo_seguimiento}`} target="_blank">
+										<a href={`${apartado.url}${apartado.codigo_seguimiento}`} target="_blank" rel="noopener noreferrer">
 											<Button
 												className="d-flex justify-content-center align-items-center"
 												style={{ fontSize: 16 }}

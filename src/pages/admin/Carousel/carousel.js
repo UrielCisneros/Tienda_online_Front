@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../config/axios';
-import { Button, Input, Space, Modal, List, Row, Col, Upload, Result, notification, Spin, Alert } from 'antd';
+import { Button, Input, Space, Modal, List, Row, Upload, Result, notification, Spin, Alert } from 'antd';
 import {
 	EyeOutlined,
 	EditOutlined,
@@ -12,6 +12,7 @@ import {
 import jwt_decode from 'jwt-decode';
 import CarouselImages from './services/carousel';
 import './carousel.scss';
+import aws from '../../../config/aws';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -20,7 +21,7 @@ function Carousel(props) {
 	const token = localStorage.getItem('token');
 	var decoded = Jwt(token);
 
-	const [ prodcutoCarousel, setProductoCarousel ] = useState([]);
+	/* const [ productoCarousel, setProductoCarousel ] = useState([]); */
 	const [ producto, setProducto ] = useState([]);
 	const [ productos, setProductos ] = useState([]);
 	const [ search, setSearch ] = useState('');
@@ -57,7 +58,10 @@ function Carousel(props) {
 		() => {
 			setProductosFiltrados(
 				productos.filter((producto) => {
-					return producto.producto.nombre.toLowerCase().includes(search.toLowerCase());
+					if(producto.nombre){
+						return producto.nombre.toLowerCase().includes(search.toLowerCase());
+					}
+					return producto;
 				})
 			);
 		},
@@ -70,11 +74,18 @@ function Carousel(props) {
 		await clienteAxios
 			.get(`/carousel/`)
 			.then((res) => {
-				res.data.forEach((item) => setProductoCarousel(item.producto));
+				/* res.data.forEach((item) => {
+					if(item.producto){
+						setProductoCarousel(item.producto)
+					}else{
+						setProductoCarousel('')
+					}
+				}); */
 				setProductos(res.data);
 				setLoading(false);
 			})
 			.catch((res) => {
+				console.log(res)
 				if (res.response.status === 404 || res.response.status === 500) {
 					setLoading(false);
 					notification.error({
@@ -140,10 +151,10 @@ function Carousel(props) {
 	};
 
 	///ELIMINAR IMAGEN
-	const eliminarImagen = async (productoID) => {
+	const eliminarImagen = async (carouselID) => {
 		setLoading(true);
 		await clienteAxios
-			.delete(`/carousel/${productoID}/`, {
+			.delete(`/carousel/${carouselID}/`, {
 				headers: {
 					Authorization: `bearer ${token}`
 				}
@@ -191,7 +202,7 @@ function Carousel(props) {
 		setModalCrearVisible(true);
 	}
 
-	function showDeleteConfirm(productoID) {
+	function showDeleteConfirm(carouselID) {
 		confirm({
 			title: '¿Quieres eliminarla?',
 			icon: <ExclamationCircleOutlined />,
@@ -199,14 +210,14 @@ function Carousel(props) {
 			okType: 'danger',
 			cancelText: 'No',
 			onOk() {
-				eliminarImagen(productoID);
+				eliminarImagen(carouselID);
 			}
 		});
 	}
 
-	const render = productosFiltrados.map((productos) => (
+	const render = productosFiltrados.map((carousel) => (
 		<List.Item
-			key={productos._id}
+			key={carousel._id}
 			actions={[
 				<Space>
 					<Button
@@ -214,7 +225,7 @@ function Carousel(props) {
 						style={{ fontSize: 16 }}
 						type="primary"
 						onClick={() => {
-							setProducto(productos);
+							setProducto(carousel);
 							showModal();
 						}}
 						size={window.screen.width > 768 ? 'middle' : 'small'}
@@ -228,7 +239,7 @@ function Carousel(props) {
 							style={{ fontSize: 16 }}
 							type="primary"
 							onClick={() => {
-								setProducto(productos.producto._id);
+								setProducto(carousel._id);
 							}}
 							size={window.screen.width > 768 ? 'middle' : 'small'}
 						>
@@ -241,7 +252,7 @@ function Carousel(props) {
 						style={{ fontSize: 16 }}
 						danger
 						onClick={() => {
-							showDeleteConfirm(productos.producto._id);
+							showDeleteConfirm(carousel._id);
 						}}
 						size={window.screen.width > 768 ? 'middle' : 'small'}
 					>
@@ -260,13 +271,13 @@ function Carousel(props) {
 						<img
 							className="imagen-promocion-principal"
 							alt="producto"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+							src={aws+carousel.imagen}
 						/>
 					</div>
 				}
 				title={
 					<div className="mt-4 titulo-producto">
-						<h1 className="h5 font-weight-bold">{productos.producto.nombre}</h1>
+						<h1 className="h5 font-weight-bold">{carousel.nombre ? carousel.nombre : 'imagen sin nombre'}</h1>
 					</div>
 				}
 			/>
@@ -313,18 +324,20 @@ function Carousel(props) {
 				<List>{render}</List>
 			)}
 			<Modal
-				title={prodcutoCarousel.nombre}
+				title={producto.nombre ? producto.nombre : 'Imagen sin nombre'}
 				visible={modalVisible}
 				onCancel={closeModal}
 				footer={false}
 				width={1200}
 				style={{ top: 20 }}
 			>
-				<img
-					style={{ maxWidth: '100%', maxHeight: '100%' }}
-					alt="imagen-promocion-modal"
-					src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
-				/>
+				<div className="d-flex justify-content-center align-items-center">
+					<img
+						style={{ maxWidth: '100%', maxHeight: '100%' }}
+						alt="imagen-promocion-modal"
+						src={aws+producto.imagen}
+					/>
+				</div>
 			</Modal>
 
 			<Modal

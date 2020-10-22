@@ -6,14 +6,11 @@ import { formatoMexico, agregarPorcentaje } from '../../../../config/reuserFunct
 import { AgregarPedido } from './servicesSugerencia';
 import jwt_decode from 'jwt-decode';
 import { withRouter } from 'react-router-dom';
+import aws from '../../../../config/aws';
 
 const { Option } = Select;
 const { Meta } = Card;
 const { confirm } = Modal;
-
-function onlyUnique(value, index, self) {
-	return self.indexOf(value) === index;
-}
 
 const Sugerencia = (props) => {
 	const [ loading, setLoading ] = useState(false);
@@ -228,7 +225,9 @@ const Sugerencia = (props) => {
 					<div />
 				) : (
 					<div className="col-lg-12">
-						<p className="my-3 text-center titulos-vista-productos producto-descripcion">¡Llévalos juntos!</p>
+						<p className="my-3 text-center titulos-vista-productos producto-descripcion">
+							¡Llévalos juntos!
+						</p>
 						<div className="row" style={{ justifyContent: 'center' }}>
 							<div className="d-lg-flex d-sm-block px-5">
 								<div className="d-sm-block">
@@ -242,7 +241,7 @@ const Sugerencia = (props) => {
 												<img
 													className="imagen-producto-sugerencia"
 													alt="producto actual"
-													src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
+													src={aws+producto.imagen}
 												/>
 											</div>
 										}
@@ -390,7 +389,7 @@ const Sugerencia = (props) => {
 												<img
 													className="imagen-producto-sugerencia"
 													alt="producto actual"
-													src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${sugerencia.imagen}`}
+													src={aws+sugerencia.imagen}
 												/>
 											</div>
 										}

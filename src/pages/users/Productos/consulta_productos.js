@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import './productos.scss';
 import DOMPurify from 'dompurify';
+import aws from '../../../config/aws';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
 
@@ -83,7 +84,7 @@ function ConsultaProductos(props) {
 									<img
 										className="imagen-producto-principal"
 										alt="producto"
-										src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`}
+										src={aws+productos.imagen}
 									/>
 								</div>
 							</div>

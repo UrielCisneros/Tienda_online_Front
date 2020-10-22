@@ -32,6 +32,7 @@ function RegistrarNumero(props) {
 			if (numeros.numero === datos.numero) {
 				return true;
 			}
+			return null;
 		});
 		const existe = resul.find((element) => element === true);
 

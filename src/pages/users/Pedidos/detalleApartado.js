@@ -4,6 +4,7 @@ import { formatoFecha, formatoMexico } from '../../../config/reuserFunction';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { faBus } from '@fortawesome/free-solid-svg-icons';
+import aws from '../../../config/aws';
 
 const { Meta } = Card;
 
@@ -120,6 +121,7 @@ export default function detalleApartado(props) {
 									<a
 										href={`${detalleApartado.url}${detalleApartado.codigo_seguimiento}`}
 										target="_blank"
+										rel="noopener noreferrer"
 									>
 										{' '}
 										{detalleApartado.codigo_seguimiento}{' '}
@@ -155,12 +157,12 @@ function Producto(props) {
 						style={{ width: 250 }}
 						cover={
 							<div className="contenedor-imagen-detalle-apartado">
-                                <img
-                                    alt="example"
-                                    className="imagen-detalle-apartado"
-                                    src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${producto.imagen}`}
-                                />
-                            </div>
+								<img
+									alt="example"
+									className="imagen-detalle-apartado"
+									src={aws+producto.imagen}
+								/>
+							</div>
 						}
 					>
 						<Meta

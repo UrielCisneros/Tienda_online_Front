@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../../config/axios';
 import jwt_decode from 'jwt-decode';
-import { Button, Col, Row, Input, Drawer, Space, Modal, notification, List, Result, Spin } from 'antd';
+import { Button, Row, Input, Drawer, Space, Modal, notification, List, Result, Spin } from 'antd';
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import RegistrarPromocion from './services/registrar_promocion';
 import ActualizarPromocion from './services/actualizar_promocion';
 import { IdProductoContext } from '../contexts/ProductoContext';
 import './promociones.scss';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
+import aws from '../../../config/aws';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -190,8 +191,7 @@ function Promociones(props) {
 						<img
 							className="imagen-promocion-principal"
 							alt="producto"
-							src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos
-								.productoPromocion.imagen}`}
+							src={aws+productos.productoPromocion.imagen}
 						/>
 					</div>
 				}
@@ -220,23 +220,23 @@ function Promociones(props) {
 					En este apartado puedes agregar ofertas especiales a tu producto y aparecer en la página principal
 				</p>
 				<Row justify="center mt-5">
-						<Search
-							className="search-width"
-							placeholder="Busca un producto"
-							onChange={(e) => setSearch(e.target.value)}
-							style={{ height: 40, marginBottom: 10 }}
-							size="large"
-							enterButton="Buscar"
-						/>
-						<Button
-							type="primary"
-							size="large"
-							className="ml-3 mb-3 d-flex justify-content-center align-items-center mb-3"
-							onClick={setRegistrar}
-							icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
-						>
-							Crear nueva promocion
-						</Button>
+					<Search
+						className="search-width"
+						placeholder="Busca un producto"
+						onChange={(e) => setSearch(e.target.value)}
+						style={{ height: 40, marginBottom: 10 }}
+						size="large"
+						enterButton="Buscar"
+					/>
+					<Button
+						type="primary"
+						size="large"
+						className="ml-3 mb-3 d-flex justify-content-center align-items-center mb-3"
+						onClick={setRegistrar}
+						icon={<PlusCircleOutlined style={{ fontSize: 24 }} />}
+					>
+						Crear nueva promocion
+					</Button>
 				</Row>
 				<div>
 					{productos.length === 0 || productosFiltrados.length === 0 ? (

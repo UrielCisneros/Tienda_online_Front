@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../../config/axios';
-import { Upload, Button, List, Avatar, Input, Space, Result, notification, Spin, Alert } from 'antd';
+import { Upload, Button, List, Avatar, Input, Space, Result, notification, Spin, Alert, Form } from 'antd';
 import { UploadOutlined, PictureOutlined, RollbackOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroller';
 import './carousel.scss';
+import aws from '../../../../config/aws';
 
 const { Search } = Input;
+const layout = {
+	labelCol: { span: 10 },
+	wrapperCol: { span: 16 }
+};
 
 function CarouselImages(props) {
 	const token = localStorage.getItem('token');
@@ -24,6 +29,7 @@ function CarouselImages(props) {
 	const [ totalDocs, setTotalDocs ] = useState();
 	const [ loadingList, setLoadingList ] = useState(false);
 	const [ reloadData, setReloadData ] = useState(false);
+	const [ nombreImagen, setNombreImagen ] = useState('');
 
 	const reload = props.reload;
 
@@ -31,7 +37,7 @@ function CarouselImages(props) {
 
 	useEffect(
 		() => {
-			if(reload){
+			if (reload) {
 				setPage(1);
 				setHasMore(true);
 				setProducto([]);
@@ -56,7 +62,9 @@ function CarouselImages(props) {
 			setVisible('ml-1 d-flex justify-content-center align-items-center');
 			setLoading(true);
 			clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`)
+				.get(
+					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`
+				)
 				.then((res) => {
 					setData(res.data.posts);
 					setLoading(false);
@@ -134,45 +142,64 @@ function CarouselImages(props) {
 		}
 	};
 
+	const obtenerNombreImagen = (e) => {
+		setNombreImagen(e.target.value);
+	};
+
 	const crearCarousel = async () => {
 		setLoading(true);
-		formData.append('producto', producto._id);
-		formData.append('imagen', imagen);
-		await clienteAxios
-			.post(`/carousel/nuevo/${producto._id}`, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					Authorization: `bearer ${token}`
-				}
-			})
-			.then((res) => {
-				setLoading(false);
-				notification.success({
-					message: 'Hecho!',
-					description: res.data.message,
-					duration: 2
-				});
-				setTimeout(() => {
-					window.location.reload();
-				}, 1500);
-			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
-				}
+		if (producto.length !== 0) {
+			formData.append('producto', producto._id);
+			formData.append('nombre', producto.nombre);
+			formData.append('imagen', imagen);
+		} else {
+			formData.append('nombre', nombreImagen);
+			formData.append('imagen', imagen);
+		}
+		if (producto.length === 0 && nombreImagen === '') {
+			notification.error({
+				message: 'Error',
+				description: 'El nombre de la imagen no debe ir vacío',
+				duration: 2
 			});
+			setLoading(false);
+		} else {
+			await clienteAxios
+				.post('/carousel/nuevo/', formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						Authorization: `bearer ${token}`
+					}
+				})
+				.then((res) => {
+					setLoading(false);
+					notification.success({
+						message: 'Hecho!',
+						description: res.data.message,
+						duration: 2
+					});
+					setTimeout(() => {
+						window.location.reload();
+					}, 1500);
+				})
+				.catch((res) => {
+					if (res.response.status === 404 || res.response.status === 500) {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: res.response.data.message,
+							duration: 2
+						});
+					} else {
+						setLoading(false);
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				});
+		}
 	};
 
 	const render = data.map((productos) => (
@@ -189,17 +216,19 @@ function CarouselImages(props) {
 				</Button>
 			]}
 		>
-			<List.Item.Meta
-				avatar={
-					<Avatar src={`https://prueba-imagenes-uploads.s3.us-west-1.amazonaws.com/${productos.imagen}`} />
-				}
-				title={productos.nombre}
-			/>
+			<List.Item.Meta avatar={<Avatar src={aws + productos.imagen} />} title={productos.nombre} />
 		</List.Item>
 	));
 
 	return (
 		<Spin size="large" spinning={loading}>
+			<div className="d-flex justify-content-center m-2">
+				<Alert
+					message="Puedes subir una imagen de carousel ya sea que esta tenga referencia a un producto o no. Si hace referencia a un producto selecciona uno de la lista, si no hace referencia, la imagen debe llevar un nombre."
+					type="info"
+					showIcon
+				/>
+			</div>
 			<div className="row d-sm-block d-lg-flex">
 				<div className="col-12 col-lg-6">
 					<p className="text-center my-3">Elige un producto y después una imagen</p>
@@ -250,11 +279,25 @@ function CarouselImages(props) {
 					</div>
 				</div>
 				<div className="col-12 col-lg-6">
-					<h5>{producto.nombre}</h5>
+					{!producto.nombre ? (
+						<Form {...layout}>
+							<Form.Item label="Nombre de la imagen">
+								<Form.Item
+									name="nombreImagen"
+									rules={[ { required: true, message: 'El nombre de la imagen no puede ir vacío' } ]}
+									noStyle
+								>
+									<Input placeholder="nombre de la imagen" onChange={(e) => obtenerNombreImagen(e)} />
+								</Form.Item>
+							</Form.Item>
+						</Form>
+					) : (
+						<h5>{producto.nombre}</h5>
+					)}
 					<div className="d-flex justify-content-center align-items-center my-4">
 						<Space>
 							<Upload {...antdProps}>
-								<Button type="primary" disabled={producto.length !== 0 ? false : true}>
+								<Button type="primary" /* disabled={producto.length !== 0 ? false : true} */>
 									<UploadOutlined />Subir
 								</Button>
 							</Upload>
