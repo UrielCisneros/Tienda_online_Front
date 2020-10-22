@@ -18,7 +18,7 @@ import chip_tarjeta from '../img/chip-tarjeta.png';
 
 export default function Verificacion_Tarjeta(props) {
     const {setIdPago,prev,setCurrent,current} = props;
-    const stripePromise = loadStripe('pk_live_51HepqMCUpJnsv7ilaa6SWfZ3CA6jh6PdWklneofd5EnVImGih8fUs8HXLSdPPWdRsvCRo1hx06Ijpga29SncMVnW001cgMOPrq');
+    const stripePromise = loadStripe('pk_test_51HepqMCUpJnsv7ilMqt7ENjThxyxOuwzN6nMEWVozn2D4AwKf0ookzZ78ruY1DVyl0oH2gCDq4hDXfDswpcnhd9p00UT7tz4ag');
     return (
         <div>
             <Elements stripe={stripePromise}>
