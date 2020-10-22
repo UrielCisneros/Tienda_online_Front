@@ -11,6 +11,9 @@
 .banner-producto{
     max-width: 100%;
 }
+.titulo-producto{
+    width: 100%;
+}
 .titulo-elipsis{
     height: 25px;
     overflow: hidden;
@@ -30,6 +33,11 @@
 .contenedor-card-producto-principal{
     cursor: pointer;
 }
+.contenedor-imagen-oferta:not(.contenedor-oferta){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .contenedor-card-producto-principal:hover .titulo-elipsis{
     height: 100px;
     transition-duration: .2s;
@@ -38,6 +46,7 @@
 }
 .contenedor-imagen-producto-principal{
     height: 250px; 
+    width: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,4 +84,16 @@
 }
 .contenedor-precios-productos > p {
     font-size: 15px!important;
+}
+@media(max-width: 768px){
+    .titulo-elipsis{
+        width: 130px;
+    }
+    .contenedor-imagen-producto-principal{
+        height: 250px; 
+        width: 130px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }

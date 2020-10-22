@@ -11,7 +11,7 @@ import { IdProductoContext } from '../contexts/ProductoContext';
 import {
 	ExclamationCircleOutlined,
 	EditOutlined,
-/* 	DeleteOutlined, */
+	/* 	DeleteOutlined, */
 	PlusCircleOutlined,
 	RollbackOutlined
 } from '@ant-design/icons';
@@ -144,12 +144,11 @@ function RegistrarProductos(props) {
 	const obtenerProductosFiltrados = async (busqueda) => {
 		if (!busqueda) {
 			setVisibleButton('d-none');
-			if(window.screen.width < 768){
-				obtenerProductos(12, page)
-			}else{
-				obtenerProductos(28, page)
+			if (window.screen.width < 768) {
+				obtenerProductos(12, page);
+			} else {
+				obtenerProductos(28, page);
 			}
-			
 		} else {
 			setVisibleButton('ml-3 d-flex justify-content-center align-items-center');
 			setLoading(true);
@@ -214,10 +213,10 @@ function RegistrarProductos(props) {
 
 	useEffect(
 		() => {
-			if(window.screen.width < 768){
-				obtenerProductos(12, page)
-			}else{
-				obtenerProductos(28, page)
+			if (window.screen.width < 768) {
+				obtenerProductos(12, page);
+			} else {
+				obtenerProductos(28, page);
 			}
 			setReload(false);
 		},
@@ -225,18 +224,15 @@ function RegistrarProductos(props) {
 	);
 
 	const render = productosRender.map((productos) => (
-		<Col key={productos._id} className="col-lg-2">
-			<Card.Grid hoverable style={gridStyle} >
+		<div key={productos._id} className="size-col col-lg-2 col-6">
+			<Card.Grid hoverable style={gridStyle} className="card-card">
 				<Card
-					style={{ /* width: 300,  */maxHeight: 420 }}
+					style={{ /* width: 200, */ maxHeight: 420 }}
+					bodyStyle={{padding: 5}}
+					className="card-cover"
 					cover={
-						<div className="d-flex justify-content-center align-items-center" style={{ height: 250 }}>
-							<img
-								className="img-fluid"
-								alt="producto"
-								src={aws+productos.imagen}
-								style={{ maxHeight: '99%', maxWidth: '99%' }}
-							/>
+						<div className="d-flex justify-content-center align-items-center cont-imagen-producto-admin">
+							<img className="imagen-producto-admin" alt="producto" src={aws + productos.imagen} />
 						</div>
 					}
 					actions={[
@@ -249,7 +245,7 @@ function RegistrarProductos(props) {
 							className="text-decoration-none"
 						>
 							<EditOutlined style={{ fontSize: 22 }} />Editar
-						</Button>/* ,
+						</Button> /* ,
 
 						<Button
 							type="link"
@@ -261,7 +257,9 @@ function RegistrarProductos(props) {
 					]}
 				>
 					<div className="contenedor-titulos-productos">
-						<h1 className="titulo-producto titulo-producto-admin-responsivo font-weight-bold">{productos.nombre}</h1>
+						<h1 className="titulo-producto-admin titulo-producto-admin-responsivo font-weight-bold">
+							{productos.nombre}
+						</h1>
 						{!productos.todos.length ? (
 							<h2 className="h5 ">$ {formatoMexico(productos.precio)}</h2>
 						) : (
@@ -280,12 +278,11 @@ function RegistrarProductos(props) {
 									</div>
 								);
 							})
-						)} 
-						
+						)}
 					</div>
 				</Card>
 			</Card.Grid>
-		</Col>
+		</div>
 	));
 
 	return (
@@ -335,10 +332,10 @@ function RegistrarProductos(props) {
 					size="large"
 					className={`${visibleButton} mb-1`}
 					onClick={() => {
-						if(window.screen.width < 768){
-							obtenerProductos(12, page)
-						}else{
-							obtenerProductos(28, page)
+						if (window.screen.width < 768) {
+							obtenerProductos(12, page);
+						} else {
+							obtenerProductos(28, page);
 						}
 					}}
 					icon={<RollbackOutlined style={{ fontSize: 24 }} />}
@@ -355,21 +352,28 @@ function RegistrarProductos(props) {
 					Registrar un producto
 				</Button>
 			</Row>
+			<div className="d-flex justify-content-center align-items-center">
+				<Row style={{ maxWidth: '95vw' }} className="mt-4">
+					{productos.length === 0 ? (
+						<div className="w-100 d-flex justify-content-center align-items-center">
+							<Result
+								status="404"
+								title="Articulo no encontrado"
+								subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
+							/>
+						</div>
+					) : (
+						render
+					)}
+				</Row>
+			</div>
 
-			<Row gutter={16} className="mt-4 d-flex justify-content-center">
-				{productos.length === 0 ? (
-					<div className="w-100 d-flex justify-content-center align-items-center">
-						<Result
-							status="404"
-							title="Articulo no encontrado"
-							subTitle="Lo sentimo no pudimos encontrar lo que buscabas, intenta ingresar el nombre del producto."
-						/>
-					</div>
-				) : (
-					render
-				)}
-			</Row>
-			<Pagination blogs={productos} location={location} history={history} limite={window.screen.width < 768 ? 12 : 28} />
+			<Pagination
+				blogs={productos}
+				location={location}
+				history={history}
+				limite={window.screen.width < 768 ? 12 : 28}
+			/>
 		</Spin>
 	);
 }

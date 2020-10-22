@@ -4,6 +4,7 @@ import { Card, Spin, Result, Col, Row } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { formatoMexico, agregarPorcentaje } from '../../../config/reuserFunction';
 import './ofertas.scss';
+import DOMPurify from 'dompurify';
 import aws from '../../../config/aws';
 
 const gridStyle = { width: '100%', padding: 0, marginBottom: '1.5rem' };
@@ -54,6 +55,7 @@ function OfertasHome(props) {
 					>
 						<div className="contenedor-titulos-productos titulo-elipsis">
 							<h1 className="titulo-producto">{productos.productoPromocion.nombre}</h1>
+							<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productos.productoPromocion.descripcion) }} />
 						</div>
 						<div className="contenedor-precios-productos">
 							<h2 className="h5 precio-producto rebajado mr-2">

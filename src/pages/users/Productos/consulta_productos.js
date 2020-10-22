@@ -66,7 +66,7 @@ function ConsultaProductos(props) {
 						bodyStyle={{ padding: 10, backgroundColor: '#F7F7F7', minHeight: 100 }}
 						className="contenedor-card-body"
 						cover={
-							<div>
+							<div className="contenedor-imagen-oferta">
 								{productos.todos.length !== 0 ? (
 									productos.todos.map((promo) => {
 										return (
@@ -127,6 +127,7 @@ function ConsultaProductos(props) {
 			<div className="d-flex justify-content-center align-items-center">
 				<div className="">
 					<Row gutter={10} style={{ maxWidth: '95vw' }} className="mt-4">
+
 						{productos.length ? (
 							render
 						) : (
