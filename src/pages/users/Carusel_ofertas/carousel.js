@@ -44,8 +44,6 @@ function CarouselOfertas(props) {
 		setIndex(selectedIndex);
 	};
 
-	console.log(carousels)
-
 	const render = carousels.map((carousel) => {
 		return (
 			<Carousel.Item key={carousel._id}>
