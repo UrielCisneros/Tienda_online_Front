@@ -48,7 +48,7 @@ const FooterPage = () => {
                 }
 			})
 			.catch((err) => {
-                console.log(err);
+               
 			});
     }
 

@@ -34,7 +34,6 @@ const Categorias = (props) => {
 				window.scrollTo(0, 0);
 			})
 			.catch((res) => {
-				console.log(res);
 				setLoading(false);
 			});
 	}
@@ -50,7 +49,6 @@ const Categorias = (props) => {
 				setGeneros(res.data);
 			})
 			.catch((res) => {
-				console.log(res);
 			});
 	}
 

@@ -57,7 +57,6 @@ const Navegacion = (props) => {
 				setCarrito(res.data.articulos.length);
 			})
 			.catch((res) => {
-				console.log(res);
 				setCarrito(0);
 			});
 	}
@@ -70,7 +69,6 @@ const Navegacion = (props) => {
 				});
 			})
 			.catch((res) => {
-				console.log(res);
 			});
 	}
 	async function obtenerOfertas() {
@@ -80,7 +78,6 @@ const Navegacion = (props) => {
 				setOfertas(res.data);
 			})
 			.catch((res) => {
-				console.log(res);
 			});
 	}
 
