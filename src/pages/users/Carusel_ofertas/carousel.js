@@ -44,22 +44,24 @@ function CarouselOfertas(props) {
 		setIndex(selectedIndex);
 	};
 
+	console.log(carousels)
+
 	const render = carousels.map((carousel) => {
 		return (
 			<Carousel.Item key={carousel._id}>
 				<div className="carousel-home">
 					<div className="background-carousel" style={{
-						backgroundImage: `url(${aws+esPromocion
+						backgroundImage: `url(${esPromocion
 							? aws+carousel.imagenPromocion
 							: aws+carousel.imagen})`
 					}}/>
 					<div className="contenedor-imagen-principal-promociones">
 						<img
-							onClick={() => props.history.push(`/vista_producto/${esPromocion
-								? carousel.productoPromocion._id
-								: carousel.producto._id}`)}
+							onClick={() => props.history.push(esPromocion
+								? `/vista_producto/${carousel.productoPromocion._id}`
+								: carousel.producto ? `/vista_producto/${carousel.producto}` : '/')}
 							className="imagen-carousel-promociones-principal"
-							src={aws+esPromocion
+							src={esPromocion
 								? aws+carousel.imagenPromocion
 								: aws+carousel.imagen}
 							alt="img-oferta"

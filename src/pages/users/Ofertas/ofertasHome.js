@@ -74,6 +74,10 @@ function OfertasHome(props) {
 		</Col>
 	));
 
+	if(productos.length === 0){
+		return null;
+	}
+
 	return (
 		<Spin size="large" spinning={loading}>
 			<div className="contenedor-home-background">
@@ -88,7 +92,7 @@ function OfertasHome(props) {
 							render
 						) : (
 							<div className="w-100 d-flex justify-content-center align-items-center">
-								<Result status="404" title="Articulo no encontrado" />
+								<Result status="404" title="Aun no hay ofertas" />
 							</div>
 						)}
 					</Row>

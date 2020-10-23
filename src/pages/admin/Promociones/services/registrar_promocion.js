@@ -256,6 +256,12 @@ const RegistrarPromocion = (props) => {
 		}
 	};
 
+	const limpiar = () => {
+		setInputValue(0);
+		setImagen([]);
+		form.resetFields();
+	}
+
 	return (
 		<Spin size="large" spinning={loading}>
 			<div className="d-lg-flex d-sm-block mt-4">
@@ -316,6 +322,7 @@ const RegistrarPromocion = (props) => {
 															onClick={() => {
 																setProducto(productos);
 																setContent(true);
+																limpiar();
 															}}
 														>
 															Seleccionar
