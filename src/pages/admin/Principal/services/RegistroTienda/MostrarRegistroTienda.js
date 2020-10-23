@@ -83,15 +83,23 @@ function MostrarRegistroTienda(props) {
             } */
 			})
 			.catch((err) => {
-				console.log(err);
 				setLoading(false);
 				setLat('19.767980');
 				setLng('-104.358159');
 				setDatosNegocio({});
-				notification.error({
-					message: 'Error del servidor',
-					description: 'Paso algo en el servidor, al parecer la conexion esta fallando.'
-				});
+				if (err.response) {
+					notification.error({
+						message: 'Error',
+						description: err.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
+						duration: 2
+					});
+				}
 			});
 	}
 
@@ -106,19 +114,18 @@ function MostrarRegistroTienda(props) {
 				setLoading(false);
 				setPoliticasEnvio(res.data);
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}

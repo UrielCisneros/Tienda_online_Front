@@ -64,19 +64,18 @@ function Sugerencias(props) {
 					setProductos(res.data.posts);
 					setLoading(false);
 				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoading(false);
+				.catch((err) => {
+					setLoading(false);
+					if (err.response) {
 						notification.error({
 							message: 'Error',
-							description: res.response.data.message,
+							description: err.response.data.message,
 							duration: 2
 						});
 					} else {
-						setLoading(false);
 						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
 							duration: 2
 						});
 					}
@@ -94,19 +93,18 @@ function Sugerencias(props) {
 				setProductos(res.data.posts.docs);
 				setLoading(false);
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -146,11 +144,7 @@ function Sugerencias(props) {
 						className="d-flex justify-content-center align-items-center mr-2"
 						style={{ width: 100, height: 100 }}
 					>
-						<img
-							className="imagen-promocion-principal"
-							alt="producto"
-							src={aws+productos.imagen}
-						/>
+						<img className="imagen-promocion-principal" alt="producto" src={aws + productos.imagen} />
 					</div>
 				}
 				title={

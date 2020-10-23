@@ -120,19 +120,18 @@ function RegistrarProductos(props) {
 							duration: 2
 						});
 					})
-					.catch((res) => {
-						if (res.response.status === 404 || res.response.status === 500) {
-							setLoading(false);
+					.catch((err) => {
+						setLoading(false);
+						if (err.response) {
 							notification.error({
 								message: 'Error',
-								description: res.response.data.message,
+								description: err.response.data.message,
 								duration: 2
 							});
 						} else {
-							setLoading(false);
 							notification.error({
-								message: 'Error',
-								description: 'Hubo un error',
+								message: 'Error de conexion',
+								description: 'Al parecer no se a podido conectar al servidor.',
 								duration: 2
 							});
 						}
@@ -161,19 +160,18 @@ function RegistrarProductos(props) {
 					setProductos(res.data.posts);
 					setLoading(false);
 				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoading(false);
+				.catch((err) => {
+					setLoading(false);
+					if (err.response) {
 						notification.error({
 							message: 'Error',
-							description: res.response.data.message,
+							description: err.response.data.message,
 							duration: 2
 						});
 					} else {
-						setLoading(false);
 						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
 							duration: 2
 						});
 					}
@@ -192,19 +190,18 @@ function RegistrarProductos(props) {
 				setProductos(res.data.posts);
 				setLoading(false);
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -228,7 +225,7 @@ function RegistrarProductos(props) {
 			<Card.Grid hoverable style={gridStyle} className="card-card">
 				<Card
 					style={{ /* width: 200, */ maxHeight: 420 }}
-					bodyStyle={{padding: 5}}
+					bodyStyle={{ padding: 5 }}
 					className="card-cover"
 					cover={
 						<div className="d-flex justify-content-center align-items-center cont-imagen-producto-admin">

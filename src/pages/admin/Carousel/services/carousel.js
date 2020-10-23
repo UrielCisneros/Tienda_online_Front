@@ -69,19 +69,18 @@ function CarouselImages(props) {
 					setData(res.data.posts);
 					setLoading(false);
 				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoading(false);
+				.catch((err) => {
+					setLoading(false);
+					if (err.response) {
 						notification.error({
 							message: 'Error',
-							description: res.response.data.message,
+							description: err.response.data.message,
 							duration: 2
 						});
 					} else {
-						setLoading(false);
 						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
 							duration: 2
 						});
 					}
@@ -100,19 +99,18 @@ function CarouselImages(props) {
 				callback(res);
 				setLoadingList(false);
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoadingList(false);
+			.catch((err) => {
+				setLoadingList(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoadingList(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -182,19 +180,18 @@ function CarouselImages(props) {
 						window.location.reload();
 					}, 1500);
 				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoading(false);
+				.catch((err) => {
+					setLoading(false);
+					if (err.response) {
 						notification.error({
 							message: 'Error',
-							description: res.response.data.message,
+							description: err.response.data.message,
 							duration: 2
 						});
 					} else {
-						setLoading(false);
 						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
 							duration: 2
 						});
 					}

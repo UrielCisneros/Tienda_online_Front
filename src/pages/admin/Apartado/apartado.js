@@ -52,11 +52,19 @@ function SistemaApartado(props) {
 			})
 			.catch((err) => {
 				setLoading(false);
-				console.log(err.response);
-				notification.error({
-					message: 'Error del servidor',
-					description: 'Paso algo en el servidor, al parecer la conexion esta fallando.'
-				});
+				if (err.response) {
+					notification.error({
+						message: 'Error',
+						description: err.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
+						duration: 2
+					});
+				}
 			});
 	}
 
@@ -76,11 +84,19 @@ function SistemaApartado(props) {
 			})
 			.catch((err) => {
 				setLoading(false);
-				console.log(err.response);
-				notification.error({
-					message: 'Error del servidor',
-					description: 'Paso algo en el servidor, al parecer la conexion esta fallando.'
-				});
+				if (err.response) {
+					notification.error({
+						message: 'Error',
+						description: err.response.data.message,
+						duration: 2
+					});
+				} else {
+					notification.error({
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
+						duration: 2
+					});
+				}
 			});
 	}
 

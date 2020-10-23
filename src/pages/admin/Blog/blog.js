@@ -54,11 +54,20 @@ function BlogAdmin(props) {
                 setLoading(false);
         })
         .catch((err) => {
-            notification.error({
-                message: 'Error del servidor',
-                description:
-                  'Paso algo en el servidor, al parecer la conexion esta fallando.',
-              });
+            setLoading(false)
+            if(err.response){
+                notification.error({
+                    message: 'Error',
+                    description: err.response.data.message,
+                    duration: 2
+                });
+            }else{
+                notification.error({
+                    message: 'Error de conexion',
+                    description: 'Al parecer no se a podido conectar al servidor.',
+                    duration: 2
+                });
+            }
         });
     }
     //Ejecutar funcion traer blogs

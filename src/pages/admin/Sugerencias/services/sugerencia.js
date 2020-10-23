@@ -62,24 +62,25 @@ const Sugerencia = (props) => {
 			setVisible('ml-1 d-flex justify-content-center align-items-center');
 			setLoadingList(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`)
+				.get(
+					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`
+				)
 				.then((res) => {
 					setData(res.data.posts);
 					setLoadingList(false);
 				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoadingList(false);
+				.catch((err) => {
+					setLoadingList(false);
+					if (err.response) {
 						notification.error({
 							message: 'Error',
-							description: res.response.data.message,
+							description: err.response.data.message,
 							duration: 2
 						});
 					} else {
-						setLoadingList(false);
 						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
 							duration: 2
 						});
 					}
@@ -97,19 +98,18 @@ const Sugerencia = (props) => {
 				callback(res);
 				setLoadingList(false);
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoadingList(false);
+			.catch((err) => {
+				setLoadingList(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoadingList(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -134,17 +134,17 @@ const Sugerencia = (props) => {
 			.then((res) => {
 				setProducto(res.data);
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
+			.catch((err) => {
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -156,30 +156,29 @@ const Sugerencia = (props) => {
 		await clienteAxios
 			.get(`/sugerencia/${productoContext}`)
 			.then((res) => {
-				if(res.data.sugerencias){
-					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));	
-				}else {
+				if (res.data.sugerencias) {
+					res.data.sugerencias.forEach((item) => setSugerencia(item.producto));
+				} else {
 					setSugerencia('No hay sugerencia');
 				}
 				setLoading(false);
 			})
-			.catch((res) => {
-				console.log(res)
-				if (res.response.status === 404) {
-					setLoading(false);
-					setSugerencia('No hay sugerencia');
-				} else if (res.response.status === 500) {
-					setLoading(false);
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
+					if (err.response.status === 404) {
+						setSugerencia('No hay sugerencia');
+					} else {
+						notification.error({
+							message: 'Error',
+							description: err.response.data.message,
+							duration: 2
+						});
+					}
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -215,19 +214,18 @@ const Sugerencia = (props) => {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -263,19 +261,18 @@ const Sugerencia = (props) => {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -299,19 +296,18 @@ const Sugerencia = (props) => {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -349,7 +345,7 @@ const Sugerencia = (props) => {
 
 	const render = data.map((productos) => (
 		<List.Item
-			className={productoSugerido._id === productos._id ? "list-item-sugerencia": ''}
+			className={productoSugerido._id === productos._id ? 'list-item-sugerencia' : ''}
 			key={productos._id}
 			actions={[
 				<Button
@@ -361,12 +357,7 @@ const Sugerencia = (props) => {
 				</Button>
 			]}
 		>
-			<List.Item.Meta
-				avatar={
-					<Avatar src={aws+productos.imagen} />
-				}
-				title={productos.nombre}
-			/>
+			<List.Item.Meta avatar={<Avatar src={aws + productos.imagen} />} title={productos.nombre} />
 		</List.Item>
 	));
 
@@ -379,15 +370,21 @@ const Sugerencia = (props) => {
 				visible={modalVisible}
 				footer={[
 					<Button danger key="back" onClick={handleCancel}>
-						<div className="d-flex align-items-center"><CloseOutlined className="mr-1" />Cerrar</div>
+						<div className="d-flex align-items-center">
+							<CloseOutlined className="mr-1" />Cerrar
+						</div>
 					</Button>,
 					actualizar === false ? (
 						<Button key="crear" type="primary" onClick={crearSugerencia}>
-							<div className="d-flex align-items-center"><CheckOutlined className="mr-1" />Crear</div>
+							<div className="d-flex align-items-center">
+								<CheckOutlined className="mr-1" />Crear
+							</div>
 						</Button>
 					) : (
 						<Button key="actualizar" type="primary" onClick={actualizarSugerencia}>
-							<div className="d-flex align-items-center"><CheckOutlined className="mr-1" />Actualizar</div>
+							<div className="d-flex align-items-center">
+								<CheckOutlined className="mr-1" />Actualizar
+							</div>
 						</Button>
 					)
 				]}
@@ -481,7 +478,7 @@ const Sugerencia = (props) => {
 							<img
 								className="imagen-producto-sugerencia"
 								alt="producto actual"
-								src={aws+producto.imagen}
+								src={aws + producto.imagen}
 							/>
 						</div>
 					}
@@ -501,7 +498,7 @@ const Sugerencia = (props) => {
 								<img
 									className="imagen-producto-sugerencia"
 									alt="producto sugerido"
-									src={aws+sugerencia.imagen}
+									src={aws + sugerencia.imagen}
 								/>
 							</div>
 						}

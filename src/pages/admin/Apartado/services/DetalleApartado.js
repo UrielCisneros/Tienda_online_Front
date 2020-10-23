@@ -33,13 +33,20 @@ export default function DetalleApartado(props) {
 			setLoading(false);
             setpromocion(res.data.promocion)
         }).catch((err) => {
-			setLoading(false);
-			console.log(err.response);
-            notification.error({
-                message: 'Error del servidor',
-                description:
-                  'Paso algo en el servidor, al parecer la conexion esta fallando.',
-              });
+            setLoading(false)
+            if(err.response){
+                notification.error({
+                    message: 'Error',
+                    description: err.response.data.message,
+                    duration: 2
+                });
+            }else{
+                notification.error({
+                    message: 'Error de conexion',
+                    description: 'Al parecer no se a podido conectar al servidor.',
+                    duration: 2
+                });
+            }
         })
     }
 
@@ -99,18 +106,17 @@ export default function DetalleApartado(props) {
             
         })
         .catch((err) => {
-            console.log(err.response);
             setLoading(false)
-            if (err.response.status === 404 || err.response.status === 500) {
+            if(err.response){
                 notification.error({
                     message: 'Error',
                     description: err.response.data.message,
                     duration: 2
                 });
-            } else {
+            }else{
                 notification.error({
-                    message: 'Error',
-                    description: 'Hubo un error',
+                    message: 'Error de conexion',
+                    description: 'Al parecer no se a podido conectar al servidor.',
                     duration: 2
                 });
             }
