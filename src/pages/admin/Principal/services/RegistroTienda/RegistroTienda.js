@@ -151,16 +151,17 @@ export default function RegistroTienda(props) {
 					})
 					.catch((err) => {
 						setLoading(false);
-						console.log(err.response);
-						if (err.response.status === 500 || err.response.status === 404) {
+						if (err.response) {
 							notification.error({
-								message: 'Error de conexion',
-								description: err.response.data.message
+								message: 'Error',
+								description: err.response.data.message,
+								duration: 2
 							});
 						} else {
 							notification.error({
 								message: 'Error de conexion',
-								description: 'Parece que algo salio mal, favor de intentarlo de nuevo'
+								description: 'Al parecer no se a podido conectar al servidor.',
+								duration: 2
 							});
 						}
 					});
@@ -187,16 +188,17 @@ export default function RegistroTienda(props) {
 				})
 				.catch((err) => {
 					setLoading(false);
-					console.log(err.response);
-					if (err.response.status === 500 || err.response.status === 404) {
+					if (err.response) {
 						notification.error({
-							message: 'Error de conexion',
-							description: err.response.data.message
+							message: 'Error',
+							description: err.response.data.message,
+							duration: 2
 						});
 					} else {
 						notification.error({
 							message: 'Error de conexion',
-							description: 'Parece que algo salio mal, favor de intentarlo de nuevo'
+							description: 'Al parecer no se a podido conectar al servidor.',
+							duration: 2
 						});
 					}
 				});
@@ -235,7 +237,7 @@ export default function RegistroTienda(props) {
 											className="d-block img-fluid mt-2"
 											width="200"
 											alt="imagen de base"
-											src={aws+imagen}
+											src={aws + imagen}
 										/>
 									</div>
 								</div>

@@ -67,19 +67,18 @@ function RegistrarGaleria() {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -104,19 +103,18 @@ function RegistrarGaleria() {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -129,19 +127,21 @@ function RegistrarGaleria() {
 				setGaleria(res.data.imagenes);
 				setExisteGaleria(true);
 			})
-			.catch((res) => {
-				if (res.response.status === 404) {
-					setExisteGaleria(false);
-				} else if (res.response.status === 500) {
-					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
+			.catch((err) => {
+				if (err.response) {
+					if (err.response.status === 404) {
+						setExisteGaleria(false);
+					} else {
+						notification.error({
+							message: 'Error',
+							description: err.response.data.message,
+							duration: 2
+						});
+					}
 				} else {
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -164,19 +164,18 @@ function RegistrarGaleria() {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -200,11 +199,7 @@ function RegistrarGaleria() {
 		var render = galeria.map((imagenes) => (
 			<div className="shadow rounded imgStyle d-inline-block " key={imagenes._id}>
 				<div className="padre-iconos d-flex justify-content-around align-items-center">
-					<img
-						className="img"
-						src={aws+imagenes.url}
-						alt="preview-imagen"
-					/>
+					<img className="img" src={aws + imagenes.url} alt="preview-imagen" />
 					<div className="iconos rounded">
 						<EyeOutlined
 							style={{ fontSize: 20 }}
@@ -261,11 +256,7 @@ function RegistrarGaleria() {
 						{existeGaleria === false || prev === '' || galeria.length === 0 ? (
 							<PictureOutlined style={{ fontSize: 80 }} />
 						) : (
-							<img
-								className="imagen-actualizar-galeria"
-								src={aws+prev}
-								alt="preview-imagen"
-							/>
+							<img className="imagen-actualizar-galeria" src={aws + prev} alt="preview-imagen" />
 						)}
 					</div>
 				</div>

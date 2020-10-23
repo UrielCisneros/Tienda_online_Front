@@ -58,7 +58,7 @@ function Carousel(props) {
 		() => {
 			setProductosFiltrados(
 				productos.filter((producto) => {
-					if(producto.nombre){
+					if (producto.nombre) {
 						return producto.nombre.toLowerCase().includes(search.toLowerCase());
 					}
 					return producto;
@@ -84,20 +84,18 @@ function Carousel(props) {
 				setProductos(res.data);
 				setLoading(false);
 			})
-			.catch((res) => {
-				console.log(res)
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -131,19 +129,18 @@ function Carousel(props) {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -168,19 +165,18 @@ function Carousel(props) {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -268,16 +264,14 @@ function Carousel(props) {
 						className="d-flex justify-content-center align-items-center mr-2"
 						style={{ width: 100, height: 100 }}
 					>
-						<img
-							className="imagen-promocion-principal"
-							alt="producto"
-							src={aws+carousel.imagen}
-						/>
+						<img className="imagen-promocion-principal" alt="producto" src={aws + carousel.imagen} />
 					</div>
 				}
 				title={
 					<div className="mt-4 titulo-producto">
-						<h1 className="h5 font-weight-bold">{carousel.nombre ? carousel.nombre : 'imagen sin nombre'}</h1>
+						<h1 className="h5 font-weight-bold">
+							{carousel.nombre ? carousel.nombre : 'imagen sin nombre'}
+						</h1>
 					</div>
 				}
 			/>
@@ -335,7 +329,7 @@ function Carousel(props) {
 					<img
 						style={{ maxWidth: '100%', maxHeight: '100%' }}
 						alt="imagen-promocion-modal"
-						src={aws+producto.imagen}
+						src={aws + producto.imagen}
 					/>
 				</div>
 			</Modal>

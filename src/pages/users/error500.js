@@ -1,7 +1,7 @@
 import React from 'react'
 import { Result } from 'antd';
 
-export default function Error404 () {
+export default function Error500 () {
     return (
         <Result
         status="500"

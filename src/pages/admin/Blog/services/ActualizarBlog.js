@@ -123,16 +123,17 @@ export default function ActualizarBlog(props) {
 				})
 				.catch((err) => {
 					setAccion(true);
-					console.log(err.response);
-					if (err.response.status === 500 || err.response.status === 400) {
+					if (err.response) {
 						notification.error({
-							message: 'Error de conexion',
-							description: err.response.data.message
+							message: 'Error',
+							description: err.response.data.message,
+							duration: 2
 						});
 					} else {
 						notification.error({
-							message: 'Error',
-							description: 'Parece que algo salio mal, favor de intentaro de nuevo'
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
+							duration: 2
 						});
 					}
 				});
@@ -204,7 +205,7 @@ export default function ActualizarBlog(props) {
 						className="d-block img-fluid mt-2"
 						width="200"
 						alt="imagen de base"
-						src={aws+blogContext.imagen}
+						src={aws + blogContext.imagen}
 					/>
 				</Form.Item>
 				<Form.Item className="d-flex justify-content-center align-items-center text-center">

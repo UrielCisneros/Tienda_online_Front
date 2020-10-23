@@ -23,14 +23,17 @@ export default function PoliticasEnvio(props) {
 		}
 	}
 
-	useEffect(() => {
-		obtenerDatos();
-		if (!datosNegocio) {
-			setDisabled(true);
-		}else{
-			setDisabled(false);
-		}
-	}, [ datosNegocio ]);
+	useEffect(
+		() => {
+			obtenerDatos();
+			if (!datosNegocio) {
+				setDisabled(true);
+			} else {
+				setDisabled(false);
+			}
+		},
+		[ datosNegocio ]
+	);
 
 	async function obtenerDatos() {
 		await clienteAxios
@@ -58,26 +61,25 @@ export default function PoliticasEnvio(props) {
 					setIdTienda(res.data._id);
 				}
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
 			});
 	}
 
-	async function SendForm(){
+	async function SendForm() {
 		if (control === false) {
 			setLoading(true);
 			await clienteAxios
@@ -105,19 +107,18 @@ export default function PoliticasEnvio(props) {
 						duration: 2
 					});
 				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoading(false);
+				.catch((err) => {
+					setLoading(false);
+					if (err.response) {
 						notification.error({
 							message: 'Error',
-							description: res.response.data.message,
+							description: err.response.data.message,
 							duration: 2
 						});
 					} else {
-						setLoading(false);
 						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
 							duration: 2
 						});
 					}
@@ -147,25 +148,24 @@ export default function PoliticasEnvio(props) {
 						duration: 2
 					});
 				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoading(false);
+				.catch((err) => {
+					setLoading(false);
+					if (err.response) {
 						notification.error({
 							message: 'Error',
-							description: res.response.data.message,
+							description: err.response.data.message,
 							duration: 2
 						});
 					} else {
-						setLoading(false);
 						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
 							duration: 2
 						});
 					}
 				});
 		}
-	};
+	}
 
 	return (
 		<Spin spinning={loading}>

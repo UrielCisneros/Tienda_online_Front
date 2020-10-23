@@ -66,19 +66,18 @@ const RegistrarPromocion = (props) => {
 				callback(res);
 				setLoadingList(false);
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoadingList(false);
+			.catch((err) => {
+				setLoadingList(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoadingList(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -157,19 +156,18 @@ const RegistrarPromocion = (props) => {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -202,19 +200,18 @@ const RegistrarPromocion = (props) => {
 				setHasMore(true);
 				setReloadData(true);
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				setLoading(false);
+				if (err.response) {
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
 				} else {
-					setLoading(false);
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}
@@ -231,24 +228,25 @@ const RegistrarPromocion = (props) => {
 			setVisible('ml-1 d-flex justify-content-center align-items-center');
 			setLoadingList(true);
 			await clienteAxios
-				.get(`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`)
+				.get(
+					`/productos/search?nombre=${busqueda}&categoria=${busqueda}&subcategoria=${busqueda}&genero=${busqueda}&color=${busqueda}`
+				)
 				.then((res) => {
 					setData(res.data.posts);
 					setLoadingList(false);
 				})
-				.catch((res) => {
-					if (res.response.status === 404 || res.response.status === 500) {
-						setLoadingList(false);
+				.catch((err) => {
+					setLoadingList(false);
+					if (err.response) {
 						notification.error({
 							message: 'Error',
-							description: res.response.data.message,
+							description: err.response.data.message,
 							duration: 2
 						});
 					} else {
-						setLoadingList(false);
 						notification.error({
-							message: 'Error',
-							description: 'Hubo un error',
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
 							duration: 2
 						});
 					}
@@ -260,7 +258,7 @@ const RegistrarPromocion = (props) => {
 		setInputValue(0);
 		setImagen([]);
 		form.resetFields();
-	}
+	};
 
 	return (
 		<Spin size="large" spinning={loading}>
@@ -335,12 +333,7 @@ const RegistrarPromocion = (props) => {
 												]}
 											>
 												<List.Item.Meta
-													avatar={
-														<Avatar
-															size={40}
-															src={aws+productos.imagen}
-														/>
-													}
+													avatar={<Avatar size={40} src={aws + productos.imagen} />}
 													title={productos.nombre}
 												/>
 											</List.Item>
@@ -352,9 +345,7 @@ const RegistrarPromocion = (props) => {
 					</Spin>
 				</div>
 				{content === false ? (
-					<div className="col-12 col-lg-6 d-flex justify-content-center mt-5">
-						
-					</div>
+					<div className="col-12 col-lg-6 d-flex justify-content-center mt-5" />
 				) : (
 					<div className="col-12 col-lg-6">
 						<List className="shadow contenedor-articulo-detalles">
@@ -369,7 +360,7 @@ const RegistrarPromocion = (props) => {
 											<img
 												className="imagen-promocion-principal"
 												alt="producto"
-												src={aws+producto.imagen}
+												src={aws + producto.imagen}
 											/>
 										</div>
 									}
@@ -439,18 +430,18 @@ const RegistrarPromocion = (props) => {
 									promociones
 								</p>
 								<div className="d-flex justify-content-center m-2">
-									<Alert message="Tamaño recomendado para la imagen es: 1650x565px" type="info" showIcon />
+									<Alert
+										message="Tamaño recomendado para la imagen es: 1650x565px"
+										type="info"
+										showIcon
+									/>
 								</div>
 								<Upload {...propsUpload} className="d-flex justify-content-center mt-3 mr-3">
 									<Button disabled={disabled}>Subir</Button>
 								</Upload>
 								{imagen.length !== 0 ? (
 									<div className="imagen-box-promocion shadow-sm border">
-										<img
-											className="img-producto-promocion"
-											alt="img-producto"
-											src={aws+imagen}
-										/>
+										<img className="img-producto-promocion" alt="img-producto" src={aws + imagen} />
 									</div>
 								) : (
 									<div />
