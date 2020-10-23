@@ -68,7 +68,7 @@ export default function Confirmacion_compra(props) {
 				setPedidoCompleto(res.data);
 			})
 			.catch((err) => {
-				console.log(err);
+				
 			});
 		setLoading(false);
 	}

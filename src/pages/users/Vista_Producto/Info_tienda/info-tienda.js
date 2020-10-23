@@ -22,9 +22,8 @@ const InfoTienda = (props) => {
 				res.data.forEach((element) => setTienda(element));
 				setLoading(false);
 			})
-			.catch((res) => {
+			.catch((err) => {
 				setLoading(false);
-				console.log(res);
 			});
 	}
 

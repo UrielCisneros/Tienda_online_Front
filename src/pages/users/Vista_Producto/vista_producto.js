@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../../config/axios';
-import { Divider, Row, Col, Tag, Spin, Alert } from 'antd';
+import { Divider, Row, Col, Tag, Spin, Alert, notification } from 'antd';
 import { CreditCardOutlined } from '@ant-design/icons';
 import Scroll from './subs/scroll';
 import Sugerencia from './subs/sugerencia';
@@ -35,8 +35,20 @@ function VistaProductos(props) {
 			.then((res) => {
 				setCostoEnvio(res.data);
 			})
-			.catch((res) => {
-				console.log(res);
+			.catch((err) => {
+				if(err.response){
+					notification.error({
+						message: 'Error',
+						description: err.response.data.message,
+						duration: 2
+					});
+				}else{
+					notification.error({
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
+						duration: 2
+					});
+				}
 			});
 	}
 
@@ -49,9 +61,21 @@ function VistaProductos(props) {
 				res.data.promocion.forEach((res) => setPromocion(res));
 				setLoading(false);
 			})
-			.catch((res) => {
-				console.log(res);
+			.catch((err) => {
 				props.history.push('/error500');
+				if(err.response){
+					notification.error({
+						message: 'Error',
+						description: err.response.data.message,
+						duration: 2
+					});
+				}else{
+					notification.error({
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
+						duration: 2
+					});
+				}
 			});
 	}
 

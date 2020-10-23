@@ -25,8 +25,7 @@ function OfertasHome(props) {
 				setProductos(res.data.posts.docs);
 				setLoading(false);
 			})
-			.catch((res) => {
-				console.log(res);
+			.catch((err) => {
 				props.history.push('/error500');
 			});
 	}

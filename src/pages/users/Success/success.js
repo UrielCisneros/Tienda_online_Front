@@ -25,20 +25,17 @@ export default function Success(props) {
 				setPedido(res.data);
 				setLoading(false);
 			})
-			.catch((res) => {
-				console.log(res)
-				if (res.response.status === 404 || res.response.status === 500) {
-					setLoading(false);
+			.catch((err) => {
+				if(err.response){
 					notification.error({
 						message: 'Error',
-						description: res.response.data.message,
+						description: err.response.data.message,
 						duration: 2
 					});
-				} else {
-					setLoading(false);
+				}else{
 					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}

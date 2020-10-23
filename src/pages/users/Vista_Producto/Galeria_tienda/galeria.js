@@ -63,8 +63,7 @@ function Galeria(props) {
 						setGaleria(res.data.imagenes);
 						setLoading(false);
 					})
-					.catch((res) => {
-						console.log(res)
+					.catch((err) => {
 						setLoading(false);
 					});
 			}

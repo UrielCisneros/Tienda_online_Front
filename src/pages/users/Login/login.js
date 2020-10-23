@@ -20,19 +20,27 @@ function Login(props) {
 				localStorage.setItem('token', token);
 				props.history.push('/admin');
 			})
-			.catch((res) => {
-				if (res.response.status === 404 || res.response.status === 500) {
+			.catch((err) => {
+				if(err.response){
+					if (err.response.status === 404 || err.response.status === 500) {
+						notification.error({
+							message: 'Error',
+							description: err.response.data.message,
+							duration: 2
+						});
+					} else {
+						notification.error({
+							message: 'Error',
+							description: 'Hubo un error',
+							duration: 2
+						});
+					}
+				}else{
 					notification.error({
-						message: 'Error',
-						description: res.response.data.message,
-						duration: 2
-					});
-				} else {
-					notification.error({
-						message: 'Error',
-						description: 'Hubo un error',
-						duration: 2
-					});
+						message: 'Error de conexion.',
+						description:
+						  'Al parecer no se a podido conectar al servidor.',
+					  });
 				}
 			});
 	};

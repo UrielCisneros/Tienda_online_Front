@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { useState, useEffect, useContext } from 'react';
 import Traer_pedido from './traer_pedido';
-import { Button, Spin } from 'antd';
+import { Button, Spin ,notification} from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import clienteAxios from '../../../../config/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -46,7 +46,7 @@ export default function Confirmacion_Final(props) {
 				}
 			})
 			.catch((error) => {
-				console.log(error.response);
+				
 			});
 	};
 
@@ -83,8 +83,15 @@ export default function Confirmacion_Final(props) {
 					})
 					.catch((error) => {
 						setLoading(false);
-						console.log(error.response);
-						history.push(`/error/${pedidoCompleto._id}/${error.response.data.err.code}`);
+						if(error.response){
+							history.push(`/error/${pedidoCompleto._id}/${error.response.data.err.code}`);
+						}else{
+							notification.error({
+								message: 'Error de conexion.',
+								description:
+								  'Al parecer no se a podido conectar al servidor.',
+							  });
+						}
 					});
 			})
 			.catch((error) => {

@@ -85,22 +85,30 @@ export default function Traer_datos(props) {
 				setLoading(false);
 				setCurrent(current + 1);
 			})
-			.catch((res) => {
-				console.log(res.response);
+			.catch((error) => {
 				setLoading(false);
-				if (res.response.status === 404 || res.response.status === 500) {
+				if(error.response){
+					if (error.response.status === 404 || error.response.status === 500) {
+						notification.error({
+							message: 'Error',
+							description: `${error.response.data.message}`,
+							duration: 2
+						});
+					} else {
+						notification.error({
+							message: 'Error',
+							description: 'Error de conexion',
+							duration: 2
+						});
+					}
+				}else{
 					notification.error({
-						message: 'Error',
-						description: `${res.response.data.message}`,
-						duration: 2
-					});
-				} else {
-					notification.error({
-						message: 'Error',
-						description: 'Error de conexion',
-						duration: 2
-					});
+						message: 'Error de conexion.',
+						description:
+						  'Al parecer no se a podido conectar al servidor.',
+					  });
 				}
+
 			});
 	}
 

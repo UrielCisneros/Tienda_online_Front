@@ -36,8 +36,7 @@ function Ofertas(props) {
 				setProductosPaginacion(res.data.posts);
 				setLoading(false);
 			})
-			.catch((res) => {
-				console.log(res);
+			.catch((err) => {
 				props.history.push('/error500');
 			});
 	}

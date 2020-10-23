@@ -34,6 +34,7 @@ export default function ActualizarUsuario(props) {
 			}
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[ datosUser ]
 	);
 
@@ -74,6 +75,7 @@ export default function ActualizarUsuario(props) {
 			}
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[ datosUser ]
 	);
 
@@ -137,19 +139,18 @@ export default function ActualizarUsuario(props) {
 					duration: 2
 				});
 			})
-			.catch((res) => {
-				console.log(res.response);
+			.catch((err) => {
 				setLoading(false);
-				if (res.response.status === 404 || res.response.status === 500) {
+				if(err.response){
 					notification.error({
 						message: 'Error',
-						description: `${res.response.data.message}`,
+						description: err.response.data.message,
 						duration: 2
 					});
-				} else {
+				}else{
 					notification.error({
-						message: 'Error',
-						description: 'Error de conexion',
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
 						duration: 2
 					});
 				}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode';
 import clienteAxios from '../../../config/axios';
-import { Spin } from 'antd';
+import { Spin,notification } from 'antd';
 import ActualizarUsuario from './service/ActualizarUsuario';
 
 export default function Perfiles(props) {
@@ -44,7 +44,19 @@ export default function Perfiles(props) {
 				setDatosUser(res.data);
 			})
 			.catch((err) => {
-				console.log(err);
+				if(err.response){
+					notification.error({
+						message: 'Error',
+						description: err.response.data.message,
+						duration: 2
+					});
+				}else{
+					notification.error({
+						message: 'Error de conexion',
+						description: 'Al parecer no se a podido conectar al servidor.',
+						duration: 2
+					});
+				}
 			});
 		setLoading(false);
 	}

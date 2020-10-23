@@ -59,7 +59,6 @@ export default function DatosCliente(props) {
 				setLoading(false);
 			})
 			.catch((err) => {
-				console.log(err);
 				setLoading(false);
 			});
 	}
@@ -85,18 +84,18 @@ export default function DatosCliente(props) {
 						duration: 2
 					});
 				})
-				.catch((res) => {
+				.catch((err) => {
 					setLoading(false);
-					if (res.response.status === 404 || res.response.status === 500) {
+					if(err.response){
 						notification.error({
 							message: 'Error',
-							description: `${res.response.data.message}`,
+							description: err.response.data.message,
 							duration: 2
 						});
-					} else {
+					}else{
 						notification.error({
-							message: 'Error',
-							description: 'Error de conexion',
+							message: 'Error de conexion',
+							description: 'Al parecer no se a podido conectar al servidor.',
 							duration: 2
 						});
 					}

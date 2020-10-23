@@ -18,7 +18,7 @@ export default function Datos_tienda() {
 				setDireccion(res.data[0].direccion[0]);
 			})
 			.catch((err) => {
-				console.log(err);
+				
 			});
 	}
 

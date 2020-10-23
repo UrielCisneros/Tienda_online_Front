@@ -63,7 +63,6 @@ function TallasCantidades(props) {
 			})
 			.catch((res) => {
 				setLoading(false);
-				console.log(res);
 			});
 	}
 
@@ -81,7 +80,7 @@ function TallasCantidades(props) {
 				setDatosUser(res.data);
 			})
 			.catch((err) => {
-				console.log(err);
+
 			});
 	}
 
