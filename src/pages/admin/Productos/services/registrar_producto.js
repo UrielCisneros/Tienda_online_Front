@@ -173,7 +173,7 @@ function RegistrarProducto(props) {
 		if (value === 'Calzado' || value === 'Ropa') {
 			setTipoCategoria(value);
 		} else {
-			setTipoCategoria('otros');
+			setTipoCategoria('Otros');
 		}
 		if (value) {
 			setDisabled(false);
@@ -232,7 +232,7 @@ function RegistrarProducto(props) {
 					description: res.data.message,
 					duration: 2
 				});
-				if(tipoCategoria === 'otros'){
+				if(tipoCategoria === 'Otros'){
 					next();
 				}
 			})
@@ -313,7 +313,7 @@ function RegistrarProducto(props) {
 	const addItemCategoria = () => {
 		setCategoriasDefault([ ...categoriasDefault, item ]);
 		setSelect(item);
-		setTipoCategoria('otros');
+		setTipoCategoria('Otros');
 		setDisabled(false);
 		setValueSelect(item);
 	};
@@ -473,7 +473,7 @@ function RegistrarProducto(props) {
 										<Input name="nombre" disabled={disabledformProductos} />
 									</Form.Item>
 								</Form.Item>
-								{tipoCategoria === 'otros' ? (
+								{tipoCategoria === 'Otros' ? (
 									<Form.Item label="Cantidad" onChange={datosForm}>
 										<Form.Item
 											rules={[ { required: true, message: 'Este campo es requerido' } ]}
