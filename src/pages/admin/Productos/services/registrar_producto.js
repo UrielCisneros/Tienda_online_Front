@@ -589,7 +589,7 @@ function RegistrarProducto(props) {
 								</Form.Item>
 								<div className="d-flex justify-content-center m-2">
 									<Alert
-										message="Tamaño recomendado para la imagen es: 850x550px"
+										message="Tamaño recomendado para la imagen es: 800x800px"
 										type="info"
 										showIcon
 									/>
@@ -647,7 +647,7 @@ function RegistrarProducto(props) {
 						<div className="d-flex justify-content-center m-2">
 							<Alert
 								className="info-recomended-sizes"
-								message="Tamaño recomendado para la imagen es: 850x550px"
+								message="Tamaño recomendado para la imagen es: 800x800px"
 								type="info"
 								showIcon
 							/>

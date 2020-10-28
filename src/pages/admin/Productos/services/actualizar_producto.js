@@ -463,7 +463,7 @@ function ActualizarProducto(props) {
 							</Form.Item>
 						</Form.Item>
 						<div className="d-flex justify-content-center m-2">
-							<Alert message="Tamaño recomendado para la imagen es: 850x550px" type="info" showIcon />
+							<Alert message="Tamaño recomendado para la imagen es: 800x800px" type="info" showIcon />
 						</div>
 						<Form.Item label="Imagen principal" name="imagen" valuePropName="filelist">
 							<Upload {...antprops} name="imagen">
