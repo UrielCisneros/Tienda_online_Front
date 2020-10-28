@@ -150,7 +150,7 @@ function TallasCantidades(props) {
 						);
 					})
 				);
-			} else if (productos.tipoCategoria === 'otros') {
+			} else if (productos.tipoCategoria === 'Otros') {
 				setCategoria('otros');
 			}
 			if (productos && productos.activo === false) {
