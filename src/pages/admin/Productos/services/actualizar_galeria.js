@@ -62,7 +62,7 @@ function RegistrarGaleria() {
 				obtenerBD();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -98,7 +98,7 @@ function RegistrarGaleria() {
 				obtenerBD();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -159,7 +159,7 @@ function RegistrarGaleria() {
 				obtenerBD();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});

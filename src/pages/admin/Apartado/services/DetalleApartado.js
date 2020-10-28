@@ -11,7 +11,7 @@ const { Option } = Select;
 
 export default function DetalleApartado(props) {
 
-    const {detalleApartado,setEstado} = props;
+    const {detalleApartado,setEstado, setVisible} = props;
     
     const [selectEstado, setSelectEstado] = useState('')
     const [promocion, setpromocion] = useState([])
@@ -103,7 +103,7 @@ export default function DetalleApartado(props) {
                 description: res.data.message,
                 duration: 2
             });
-            
+            setVisible(false);
         })
         .catch((err) => {
             setLoading(false)

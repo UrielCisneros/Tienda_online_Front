@@ -172,7 +172,7 @@ function CarouselImages(props) {
 				.then((res) => {
 					setLoading(false);
 					notification.success({
-						message: 'Hecho!',
+						message: '¡Hecho!',
 						description: res.data.message,
 						duration: 2
 					});

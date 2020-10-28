@@ -23,6 +23,16 @@ export default function RegistrarBlog(props) {
 		wrapperCol: { span: 16 }
 	};
 
+	const onError = (error) => {
+		error.errorFields.map((err) => {
+			notification.error({
+				message: `[${err.name}]`,
+				description: err.errors,
+				duration: 5
+			});
+		});
+	};
+
 	const processPost = async (e) => {
 		if (blogData.descripcion === undefined) {
 			notification.info({
@@ -121,7 +131,7 @@ export default function RegistrarBlog(props) {
 
 	return (
 		<div className="formulario-blog">
-			<Form name="nest-messages" {...layout} onFinish={processPost}>
+			<Form name="nest-messages" {...layout} onFinish={processPost} onFinishFailed={onError}>
 				<Form.Item
 					label="Crea un título llamativo: "
 					onChange={(e) => setBlogData({ ...blogData, nombre: e.target.value })}

@@ -79,9 +79,7 @@ function TallasCantidades(props) {
 			.then((res) => {
 				setDatosUser(res.data);
 			})
-			.catch((err) => {
-
-			});
+			.catch((err) => {});
 	}
 
 	useEffect(() => {
@@ -215,22 +213,15 @@ function TallasCantidades(props) {
 		}
 	};
 
-	const handleOk = (e) => {
+	const handleOk = () => {
 		if (!tipoEnvio) {
 			notification.info({
 				message: 'Selecciona un tipo de envio',
 				duration: 2
 			});
 		} else {
-			if (datosUser.telefono.length === 0 || datosUser.direccion.length === 0) {
-				notification.info({
-					message: 'Completa tus datos',
-					duration: 2
-				});
-			} else {
-				setVisible(false);
-				Apartado();
-			}
+			setVisible(false);
+			Apartado();
 		}
 	};
 
@@ -254,7 +245,9 @@ function TallasCantidades(props) {
 								<WhatsAppOutlined style={{ color: '#25d366' }} />
 								{tienda.telefono}
 							</p>
-							<Button className="mt-3" type="default" onClick={() => window.location.href = "/pedidos"}>Ver mis pedidos</Button>
+							<Button className="mt-3" type="default" onClick={() => (window.location.href = '/pedidos')}>
+								Ver mis pedidos
+							</Button>
 						</div>
 					) : (
 						<p />
@@ -521,10 +514,11 @@ function TallasCantidades(props) {
 			<Modal
 				title="Aparta tu producto"
 				visible={visible}
-				onOk={handleOk}
+				/* onOk={handleOk} */
 				onCancel={handleCancel}
-				cancelText="Cancelar"
-				okText="Apartar ahora"
+				/* cancelText="Cancelar" */
+				/* okText="Apartar ahora" */
+				footer={null}
 				width={700}
 			>
 				<div className="row">
@@ -577,17 +571,18 @@ function TallasCantidades(props) {
 					</div>
 					<div className="col-12 col-lg-6">
 						<div className="d-flex justify-content-center align-items-center" style={{ height: 220 }}>
-							<img
-								className="imagen-producto-principal"
-								alt="producto"
-								src={aws+productos.imagen}
-							/>
+							<img className="imagen-producto-principal" alt="producto" src={aws + productos.imagen} />
 						</div>
 					</div>
 				</div>
 				<Divider>Tus datos</Divider>
 				{decoded && decoded._id ? (
-					<DatosCliente token={token} clienteID={decoded._id} tipoEnvio={tipoEnvio} />
+					<DatosCliente
+						token={token}
+						clienteID={decoded._id}
+						tipoEnvio={tipoEnvio}
+						enviarDatos={[ handleOk ]}
+					/>
 				) : (
 					<div />
 				)}

@@ -111,7 +111,7 @@ function Promociones(props) {
 				obtenerProductos();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});

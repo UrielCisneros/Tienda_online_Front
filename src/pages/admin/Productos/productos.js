@@ -41,6 +41,7 @@ function RegistrarProductos(props) {
 	const token = localStorage.getItem('token');
 	const [ reloadData, setReloadData ] = useState(false);
 	const [ visibleButton, setVisibleButton ] = useState('d-none');
+	const [ closeDraw, setCloseDraw ] = useState(false);
 
 	var decoded = Jwt(token);
 
@@ -91,6 +92,11 @@ function RegistrarProductos(props) {
 			closeConfirm();
 		}
 	};
+	
+	if(closeDraw){
+		drawnerClose();
+		setCloseDraw(false);
+	}
 
 	/* function showDeleteConfirm(idproducto) {
 		confirm({
@@ -306,10 +312,10 @@ function RegistrarProductos(props) {
 			>
 				{accion === true ? (
 					<IdProductoContext.Provider value={productoID}>
-						<ActualizarProducto reloadProductos={reload} />
+						<ActualizarProducto reloadProductos={reload} closeDraw={setCloseDraw} />
 					</IdProductoContext.Provider>
 				) : (
-					<RegistrarProducto reloadProductos={reload} disabledButtons={[ disabled, setDisabled ]} />
+					<RegistrarProducto reloadProductos={reload} disabledButtons={[ disabled, setDisabled ]} closeDraw={setCloseDraw}/>
 					/* <StepsProvider value={[ disabled, setDisabled ]}>
 						<RegistrarProducto reloadProductos={reload} disabledButtons={[ disabled, setDisabled ]} />
 					</StepsProvider> */

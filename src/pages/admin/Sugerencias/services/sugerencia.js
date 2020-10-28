@@ -209,7 +209,7 @@ const Sugerencia = (props) => {
 				obtenerSugerencia();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -256,7 +256,7 @@ const Sugerencia = (props) => {
 				obtenerSugerencia();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -291,7 +291,7 @@ const Sugerencia = (props) => {
 				setLoading(false);
 				obtenerSugerencia();
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});

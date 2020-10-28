@@ -22,13 +22,14 @@ const layout = {
 };
 
 String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
+	return this.charAt(0).toUpperCase() + this.slice(1);
+};
 
 function RegistrarProducto(props) {
 	const formRef = useRef(null);
 	const [ form ] = Form.useForm();
 	const [ disabled, setDisabled ] = props.disabledButtons;
+	const setCloseDraw = props.closeDraw;
 	///Autorizacion a la pagina con Token
 	const token = localStorage.getItem('token');
 	/// Declaracion de variables para los pasos
@@ -53,7 +54,7 @@ function RegistrarProducto(props) {
 	const [ color, setColor ] = useState('FFFFFF');
 	const [ valueSelect, setValueSelect ] = useState();
 	const [ valueSelectSubCat, setValueSelectSubCat ] = useState();
-	
+
 	const styles = reactCSS({
 		default: {
 			color: {
@@ -98,7 +99,7 @@ function RegistrarProducto(props) {
 
 	const resetColor = () => {
 		setColor('');
-		form.setFieldsValue({color: ''})
+		form.setFieldsValue({ color: '' });
 	};
 
 	useEffect(
@@ -108,7 +109,7 @@ function RegistrarProducto(props) {
 				setCurrent(0);
 				setDisabledFormProductos(false);
 			}
-			setUpload(false)
+			setUpload(false);
 			setValueSelect();
 			setCurrent(0);
 			setDisabledFormProductos(false);
@@ -197,6 +198,16 @@ function RegistrarProducto(props) {
 	/// Guardar y almacenar en la api REST
 	const [ productoID, setProductoID ] = useState('');
 
+	const onError = (error) => {
+		error.errorFields.map((err) => {
+			notification.error({
+				message: `[${err.name}]`,
+				description: err.errors,
+				duration: 5
+			});
+		});
+	};
+
 	async function onFinish() {
 		setLoading(true);
 		const formData = new FormData();
@@ -228,11 +239,11 @@ function RegistrarProducto(props) {
 				setDisabledForm(false);
 				setProductoID(res.data.userStored._id);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
-				if(tipoCategoria === 'Otros'){
+				if (tipoCategoria === 'Otros') {
 					next();
 				}
 			})
@@ -357,7 +368,7 @@ function RegistrarProducto(props) {
 							placeholder="Seleciona una categoria"
 							onChange={onSelect}
 							dropdownRender={(menu) => (
-								<div >
+								<div>
 									{menu}
 									<Divider style={{ margin: '4px 0' }} />
 									<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
@@ -397,6 +408,7 @@ function RegistrarProducto(props) {
 								{...layout}
 								name="nest-messages"
 								onFinish={onFinish}
+								onFinishFailed={onError}
 								initialValues={{ categoria: select }}
 								form={form}
 								ref={formRef.current}
@@ -409,7 +421,11 @@ function RegistrarProducto(props) {
 									/>
 								</Form.Item>
 								<Form.Item label="Subcategoria" onChange={datosForm}>
-									<Form.Item name="subCategoria">
+									<Form.Item
+										name="subCategoria"
+										/* rules={[ { required: true, message: 'Este campo es requerido' } ]}
+										noStyle */
+									>
 										{console.log()}
 										<Select
 											value={valueSelectSubCat}
@@ -448,7 +464,11 @@ function RegistrarProducto(props) {
 									</Form.Item>
 								</Form.Item>
 								<Form.Item label="Género" onChange={datosForm}>
-									<Form.Item name="genero">
+									<Form.Item
+										name="genero"
+										rules={[ { required: true, message: 'Este campo es requerido' } ]}
+										noStyle
+									>
 										<Select
 											name="genero"
 											placeholder="Selecciona un género"
@@ -474,13 +494,18 @@ function RegistrarProducto(props) {
 									</Form.Item>
 								</Form.Item>
 								{tipoCategoria === 'Otros' ? (
-									<Form.Item label="Cantidad" onChange={datosForm}>
+									<Form.Item label="Stock actual" onChange={datosForm}>
 										<Form.Item
 											rules={[ { required: true, message: 'Este campo es requerido' } ]}
 											noStyle
 											name="cantidad"
 										>
-											<Input min="1" type="number" name="cantidad" disabled={disabledformProductos} />
+											<Input
+												min="1"
+												type="number"
+												name="cantidad"
+												disabled={disabledformProductos}
+											/>
 										</Form.Item>
 									</Form.Item>
 								) : (
@@ -492,34 +517,50 @@ function RegistrarProducto(props) {
 										noStyle
 										name="precio"
 									>
-										<Input min="1" type="number" disabled={disabledformProductos} name="precio" />
+										<Input min="1" type="number" disabled={disabledformProductos} name="precio" step=".01" />
 									</Form.Item>
 								</Form.Item>
 								<Form.Item label="Color del producto" onChange={datosForm}>
 									<Input.Group compact>
-									<Form.Item name="colorHex">
-										<div className="d-flex align-items-center">
-											<div className="d-inline">
-												<div style={styles.swatch} onClick={handleClick}>
-													<div style={styles.color} />
-												</div>
-												{displayColorPicker ? (
-													<div style={styles.popover}>
-														<div style={styles.cover} onClick={handleClose} />
-														<SketchPicker color={color} onChange={handleChange} />
+										<Form.Item name="colorHex">
+											<div className="d-flex align-items-center">
+												<div className="d-inline">
+													<div style={styles.swatch} onClick={handleClick}>
+														<div style={styles.color} />
 													</div>
-												) : null}
+													{displayColorPicker ? (
+														<div style={styles.popover}>
+															<div style={styles.cover} onClick={handleClose} />
+															<SketchPicker color={color} onChange={handleChange} />
+														</div>
+													) : null}
+												</div>
 											</div>
-										</div>
-									</Form.Item>
-									<Form.Item wrapperCol={{span: 22, offset: 0}} name="color">
-										<Input className="d-inline ml-2" type="text" disabled={disabledformProductos} name="color" placeholder="Escribe el color, por ejemplo: Verde"/>
-									</Form.Item>
-									<Form.Item>
-										<Button className="d-inline ml-2" size="middle" type="text" onClick={resetColor}>
-											Quitar color
-										</Button>
-									</Form.Item>
+										</Form.Item>
+										<Form.Item
+											name="color"
+											rules={[ { required: true, message: 'Este campo es requerido' } ]}
+											noStyle
+										>
+											<Input
+												className="d-inline ml-2"
+												type="text"
+												disabled={disabledformProductos}
+												name="color"
+												placeholder="Escribe el color, por ejemplo: Verde"
+												style={{ width: 300 }}
+											/>
+										</Form.Item>
+										<Form.Item>
+											<Button
+												className="d-inline ml-2"
+												size="middle"
+												type="text"
+												onClick={resetColor}
+											>
+												Quitar color
+											</Button>
+										</Form.Item>
 									</Input.Group>
 								</Form.Item>
 								<Form.Item label="Descripción del producto">
@@ -547,7 +588,11 @@ function RegistrarProducto(props) {
 									</Form.Item>
 								</Form.Item>
 								<div className="d-flex justify-content-center m-2">
-									<Alert message="Tamaño recomendado para la imagen es: 850x550px" type="info" showIcon />
+									<Alert
+										message="Tamaño recomendado para la imagen es: 850x550px"
+										type="info"
+										showIcon
+									/>
 								</div>
 								<Form.Item label="Imagen principal">
 									<Form.Item
@@ -600,7 +645,12 @@ function RegistrarProducto(props) {
 						<h2>Agrega más imágenes para tu producto</h2>
 						<p>Puedes agregar más imágenes de tu producto para que tus clientes puedan verlas.</p>
 						<div className="d-flex justify-content-center m-2">
-							<Alert className="info-recomended-sizes" message="Tamaño recomendado para la imagen es: 850x550px" type="info" showIcon />
+							<Alert
+								className="info-recomended-sizes"
+								message="Tamaño recomendado para la imagen es: 850x550px"
+								type="info"
+								showIcon
+							/>
 						</div>
 						<ProductoContext.Provider value={productoID}>
 							<RegistrarGaleria />
@@ -634,12 +684,10 @@ function RegistrarProducto(props) {
 						type="primary"
 						onClick={() => {
 							notification.success({
-								message: 'su producto ha sido creado!',
+								message: 'Su producto ha sido guardado',
 								duration: 2
 							});
-							setTimeout(() => {
-								window.location.reload();
-							}, 2000);
+							setCloseDraw(true);
 						}}
 					>
 						Finalizar

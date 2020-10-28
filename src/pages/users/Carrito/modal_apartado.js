@@ -36,10 +36,10 @@ export default function ModalApartado(props) {
 		<Modal
 			title="Nuevo Apartado"
 			visible={visible}
-			onOk={handleOk}
+			/* onOk={handleOk} */
 			onCancel={handleCancel}
-			cancelText="Cancelar"
-			okText="Apartar"
+			/* cancelText="Cancelar"
+			okText="Apartar" */
 			width={700}
 		>
 			<div className="row">
@@ -112,7 +112,7 @@ export default function ModalApartado(props) {
 				</div>
 			</div>
 			<Divider>Tus datos</Divider>
-				<DatosCliente token={token} clienteID={cliente._id} tipoEnvio={tipoEnvio} />
+				<DatosCliente token={token} clienteID={cliente._id} tipoEnvio={tipoEnvio} enviarDatos={[ handleOk ]} />
 		</Modal>
 	);
 }

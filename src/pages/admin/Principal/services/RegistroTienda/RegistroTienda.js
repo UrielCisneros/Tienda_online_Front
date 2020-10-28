@@ -108,6 +108,16 @@ export default function RegistroTienda(props) {
 		}
 	};
 
+	const onError = (error) => {
+		error.errorFields.map((err) => {
+			notification.error({
+				message: `[${err.name}]`,
+				description: err.errors,
+				duration: 5
+			});
+		});
+	};
+
 	const SendForm = async () => {
 		const formData = new FormData();
 		formData.append('nombre', datos.nombre);
@@ -207,7 +217,7 @@ export default function RegistroTienda(props) {
 
 	return (
 		<div>
-			<Form onFinish={SendForm} form={form}>
+			<Form onFinish={SendForm} form={form} onFinishFailed={onError}>
 				<div className="row">
 					<div className="col-12">
 						<Divider>Logo del negocio</Divider>
@@ -476,8 +486,8 @@ export default function RegistroTienda(props) {
 					<div className="col-12">
 						<Form.Item className="m-2">
 							<Form.Item
-								rules={[ { required: true, message: 'Imagen corporativa es obligatoria' } ]}
-								noStyle
+								/* rules={[ { required: true, message: 'Imagen corporativa es obligatoria' } ]}
+								noStyle */
 								name="imagenCorp"
 							>
 								<Editor

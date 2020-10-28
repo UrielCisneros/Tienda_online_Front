@@ -50,7 +50,7 @@ function ActualizarNumero() {
 				obtenerNumero();
 				form.resetFields();
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -106,7 +106,7 @@ function ActualizarNumero() {
 					});
 					form.resetFields();
 					notification.success({
-						message: 'Hecho!',
+						message: '¡Hecho!',
 						description: res.data.message,
 						duration: 2
 					});
@@ -141,7 +141,7 @@ function ActualizarNumero() {
 				setLoading(false);
 				obtenerNumero();
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -250,7 +250,7 @@ function ActualizarNumero() {
 							<Col span={8}>
 								<Form.Item
 									name="cantidad"
-									label="Cantidad"
+									label="Stock actual"
 									onChange={datosForm}
 									labelCol={{ offset: 1, span: 6 }}
 									wrapperCol={{ offset: 1, span: 12 }}

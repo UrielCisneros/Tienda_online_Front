@@ -102,8 +102,8 @@ function Galeria(props) {
 		},
 		largeImage: {
 			src: aws+imagenZoom,
-			width: zoomWidth*1.5,
-			height: zoomHeight*1.5
+			width: zoomWidth*1.6,
+			height: zoomHeight*1.6
 		},
 		enlargedImagePortalId: 'zoom-render'
 	}

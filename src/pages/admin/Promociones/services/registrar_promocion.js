@@ -151,7 +151,7 @@ const RegistrarPromocion = (props) => {
 				setLoading(false);
 				setDisabled(true);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -192,7 +192,7 @@ const RegistrarPromocion = (props) => {
 				setDisabledSumit(true);
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});

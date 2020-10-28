@@ -62,7 +62,7 @@ function RegistrarNumero(props) {
 					});
 					form.resetFields();
 					notification.success({
-						message: 'Hecho!',
+						message: '¡Hecho!',
 						description: res.data.message,
 						duration: 2
 					});
@@ -98,7 +98,7 @@ function RegistrarNumero(props) {
 				obtenerNumero();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -174,7 +174,7 @@ function RegistrarNumero(props) {
 				<div className="d-flex justify-content-center m-2">
 					<Alert
 						style={{ width: '60%' }}
-						message="Ya puedes registrar numero de calzado"
+						message="Ya puedes registrar número de calzado"
 						type="info"
 						showIcon
 					/>
@@ -183,7 +183,7 @@ function RegistrarNumero(props) {
 				<div className="d-flex justify-content-center m-2">
 					<Alert
 						style={{ width: '60%' }}
-						message="Podrás registrar el numero de calzado después de registrar tu producto"
+						message="Podrás registrar el número de calzado después de registrar tu producto"
 						type="info"
 						showIcon
 					/>
@@ -209,7 +209,7 @@ function RegistrarNumero(props) {
 						<Col span={8}>
 							<Form.Item
 								name="cantidad"
-								label="Cantidad"
+								label="Stock actual"
 								onChange={datosForm}
 								labelCol={{ offset: 1, span: 8 }}
 								wrapperCol={{ offset: 1, span: 12 }}

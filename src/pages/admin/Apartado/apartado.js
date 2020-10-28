@@ -175,7 +175,7 @@ function SistemaApartado(props) {
 					onCancel={handleCancel}
 					footer={[ '' ]}
 				>
-					<DetalleApartado detalleApartado={detalleApartado} setEstado={setEstado} setFilter={setFilter} />
+					<DetalleApartado detalleApartado={detalleApartado} setEstado={setEstado} setFilter={setFilter} setVisible={setVisible}/>
 				</Modal>
 				<Pagination blogs={apartadoPaginacion} location={location} history={history} limite={24} />
 			</Spin>

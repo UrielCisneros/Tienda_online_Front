@@ -102,7 +102,7 @@ export default function PoliticasEnvio(props) {
 					setLoading(false);
 					setReloadInfo(true);
 					notification.success({
-						message: 'Listo!',
+						message: '¡Listo!',
 						description: res.data.message,
 						duration: 2
 					});
@@ -143,7 +143,7 @@ export default function PoliticasEnvio(props) {
 					setLoading(false);
 					setReloadInfo(true);
 					notification.success({
-						message: 'Listo!',
+						message: '¡Listo!',
 						description: res.data.message,
 						duration: 2
 					});

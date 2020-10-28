@@ -115,7 +115,7 @@ export default function ActualizarBlog(props) {
 				})
 				.then((res) => {
 					notification.success({
-						message: 'Actualizacion exitosa',
+						message: 'Actualización exitosa',
 						description: res.data.message
 					});
 					setReloadBlog(true);

@@ -124,7 +124,7 @@ const ActualizarPromocion = (props) => {
 				obtenerPromocion();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -160,7 +160,7 @@ const ActualizarPromocion = (props) => {
 				obtenerPromocion();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -195,7 +195,7 @@ const ActualizarPromocion = (props) => {
 				obtenerPromocion();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -233,7 +233,7 @@ const ActualizarPromocion = (props) => {
 				setLoading(false);
 				obtenerPromocion();
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});

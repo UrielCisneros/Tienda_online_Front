@@ -45,7 +45,7 @@ function ActualizarTalla() {
 				setLoading(false);
 				form.resetFields();
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -102,7 +102,7 @@ function ActualizarTalla() {
 					});
 					form.resetFields();
 					notification.success({
-						message: 'Hecho!',
+						message: '¡Hecho!',
 						description: res.data.message,
 						duration: 2
 					});
@@ -138,7 +138,7 @@ function ActualizarTalla() {
 				obtenerTalla();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -247,7 +247,7 @@ function ActualizarTalla() {
 							<Col span={8}>
 								<Form.Item
 									name="cantidad"
-									label="Cantidad"
+									label="Stock actual"
 									onChange={datosForm}
 									labelCol={{ offset: 1, span: 6 }}
 									wrapperCol={{ offset: 1, span: 12 }}

@@ -62,7 +62,7 @@ function RegistrarTalla(props) {
 					});
 					form.resetFields();
 					notification.success({
-						message: 'Hecho!',
+						message: '¡Hecho!',
 						description: res.data.message,
 						duration: 2
 					});
@@ -98,7 +98,7 @@ function RegistrarTalla(props) {
 				setLoading(false);
 				obtenerTalla();
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -202,7 +202,7 @@ function RegistrarTalla(props) {
 						<Col span={8}>
 							<Form.Item
 								name="cantidad"
-								label="Cantidad"
+								label="Stock actual"
 								onChange={datosForm}
 								labelCol={{ offset: 1, span: 8 }}
 								wrapperCol={{ offset: 1, span: 12 }}

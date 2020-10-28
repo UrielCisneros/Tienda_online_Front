@@ -124,7 +124,7 @@ function Carousel(props) {
 				obtenerCarouseles();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -160,7 +160,7 @@ function Carousel(props) {
 				obtenerCarouseles();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
@@ -284,8 +284,8 @@ function Carousel(props) {
 				Publicidad
 			</p>
 			<p className="text-center" style={{ fontSize: 15 }}>
-				En esta sección puedes subir una imagen promocional de tu producto al carrusel principal en caso de que
-				no existan promociones, si no existen promociones apareceran esta imagen
+				En esta sección puedes subir una imagen promocional de tu producto al banner en la pagina principal en caso de que
+				no existan promociones, si no existen promociones apareceran estas imagenes.
 			</p>
 			<div className="d-flex justify-content-center m-2">
 				<Alert message="Tamaño recomendado para la imagen es: 1650x565px" type="info" showIcon />

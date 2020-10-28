@@ -28,6 +28,7 @@ function ActualizarProducto(props) {
 	const [ editor, setEditor ] = useState();
 	const [ loading, setLoading ] = useState(false);
 	const reload = props.reloadProductos;
+	const setCloseDraw = props.closeDraw;
 	const [ upload, setUpload ] = useState(false);
 
 	const [ item, setItem ] = useState();
@@ -235,6 +236,16 @@ function ActualizarProducto(props) {
 			});
 	}
 
+	const onError = (error) => {
+		error.errorFields.map((err) => {
+			notification.error({
+				message: `[${err.name}]`,
+				description: err.errors,
+				duration: 5
+			});
+		});
+	};
+
 	const subirDatos = async () => {
 		const formData = new FormData();
 		if (productos.tipoCategoria === 'otros') {
@@ -274,10 +285,11 @@ function ActualizarProducto(props) {
 				obtenerDatos();
 				setLoading(false);
 				notification.success({
-					message: 'Hecho!',
+					message: '¡Hecho!',
 					description: res.data.message,
 					duration: 2
 				});
+				setCloseDraw(true);
 			})
 			.catch((err) => {
 				setLoading(false);
@@ -307,7 +319,7 @@ function ActualizarProducto(props) {
 						<div />
 					)}
 					{productos.categoria === 'Calzado' ? <div>{<ActualizarNumero />}</div> : <div />}
-					<Form {...layout} name="nest-messages" onFinish={subirDatos} form={form}>
+					<Form {...layout} name="nest-messages" onFinish={subirDatos} onFinishFailed={onError} form={form}>
 						<Form.Item name="codigo" label="Código de barras" onChange={obtenerValores}>
 							<Input name="codigo" placeholder="Campo opcional" />
 						</Form.Item>
@@ -404,7 +416,7 @@ function ActualizarProducto(props) {
 							</Input.Group>
 						</Form.Item>
 						{productos.tipoCategoria === 'otros' ? (
-							<Form.Item label="Cantidad" onChange={obtenerValores}>
+							<Form.Item label="Stock actual" onChange={obtenerValores}>
 								<Form.Item
 									rules={[ { required: true, message: 'Este campo es requerido' } ]}
 									noStyle
