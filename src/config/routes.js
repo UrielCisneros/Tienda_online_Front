@@ -28,6 +28,9 @@ import Perfiles from '../pages/users/Perfiles/perfiles'
 import Confirmacion_compra from '../pages/users/Confirmacion_compra/confirmacion_compra'
 
 
+import Excel from '../components/excel';
+
+
 
 import Politicas from '../pages/users/Politicas/politicas'
 //Secondary Component
@@ -194,6 +197,11 @@ const routes = [
 			{
 				path: '/success/:id',
 				component: Success,
+				exact: true
+			},
+			{
+				path: '/excel/',
+				component: Excel,
 				exact: true
 			},
 			{
